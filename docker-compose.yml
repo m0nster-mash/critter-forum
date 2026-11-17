@@ -3,11 +3,11 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     ports:
-      - "5434:5432"
+      - "5436:5432"
     environment:
-      POSTGRES_USER: project_user
-      POSTGRES_PASSWORD: project_password
-      POSTGRES_DB: project_name
+      POSTGRES_USER: critter_user
+      POSTGRES_PASSWORD: critter_password
+      POSTGRES_DB: critter_forum
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
