@@ -1,6 +1,7 @@
 {
   "name": "critter_forum",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3102",
@@ -15,7 +16,7 @@
     "db:check": "tsx src/lib/db/check-connection.ts"
   },
   "dependencies": {
-    "dotenv": "^18.0.10",
+    "better-auth": "1.8.0-beta.5",
     "drizzle-orm": "^0.45.4",
     "next": "16.4.6",
     "pg": "^8.23.1",
@@ -27,6 +28,7 @@
     "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^18.0.10",
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
