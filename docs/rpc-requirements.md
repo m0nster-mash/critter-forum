@@ -47,11 +47,11 @@
 | 7 | Direct Messages | A simple DM system between users, respecting blocks | TBD | Notes captured |
 | 8 | Admin | An admin panel for users, permissions, forum, shoutbox, site, reports, and audit log | TBD | Notes captured |
 | 9 | Creatures | Space reserved; to be defined later | TBD | Not started |
-| 10 | User Interactions | Friending and blocking between users | TBD | Notes captured |
+| 10 | User Interactions | Account-level friendships, blocking, follows, bookmarks, mentions, and thread read tracking | TBD | Notes captured |
 | 11 | User Profiles | Profile pages with a bio, activity feed, counts, avatar, creature, blog, and comments | TBD | Notes captured |
 | 12 | Blogs | A simple per-user blog with tags, visibility controls, and comments | TBD | Notes captured |
-| 13 | Comments | Comments on blogs and profiles, with owner controls | TBD | Notes captured |
-| 14 | Reactions | Likes on shoutbox messages, posts, comments, and DMs | TBD | Notes captured |
+| 13 | Comments | Flat actor-authored comments on supported profiles and content, with owner soft-delete controls | TBD | Notes captured |
+| 14 | Reactions | Configurable account-level reactions across supported content and messaging targets | TBD | Notes captured |
 | 15 | Taxonomy & Discovery | Shared taxonomy/tagging, tag administration, aliases, and permission-aware global search/browse | TBD | Notes captured |
 | 16 | Actors | OOC player and IC character/hub identities, handles, ownership, lifecycle, and authorship | TBD | Notes captured |
 | 17 | Content System | Lore library, shared editor drafts, data exports, and central media/gallery assets | TBD | Notes captured |
@@ -705,7 +705,7 @@ Creatures are referenced elsewhere in the notes: a user can create a creature at
 
 ### 10.1 Overview
 
-Users can friend and block each other.
+The Interactions module consolidates account relationships and shared engagement features: friendships, blocking, follows, bookmarks, mentions, and forum thread read tracking. Relationship state is bound to user accounts; authored comments and mention source content use actors. Comments and reactions are specified in Features 13 and 14.
 
 ### 10.2 Use Cases
 
@@ -713,28 +713,49 @@ Users can friend and block each other.
 
 ### 10.3 Requirements
 
-Draft requirements from the notes:
-
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| F10-FR-01 | Users can friend each other | TBD |
-| F10-FR-02 | Users can block each other | TBD |
+| F10-FR-01 | Users can send friend requests and accept or decline requests; declined requests remain stored. Friendship is an OOC account-to-account relationship, unique per unordered user pair. (D-093) | TBD |
+| F10-FR-02 | Users can block other accounts. Blocking operates across all linked actors and cleans up applicable friendships, pending requests, and follows in both directions; future social requests between the accounts are prevented. (D-096) | TBD |
+| F10-FR-03 | Users can follow supported users and content through one-way polymorphic subscriptions. Following a user or character notifies the owning account in-app, subject to `notify_in_app`; email delivery is out of scope. (D-094) | TBD |
+| F10-FR-04 | Users can bookmark supported content. Bookmarks are unique per user and target; bookmarking another user's content may notify the content owner in-app. (D-095) | TBD |
+| F10-FR-05 | Mentions resolve globally unique `actor.handle` values and store actor references, rather than relying on display names as identifiers. (D-083) | TBD |
+| F10-FR-06 | Forum thread read tracking stores one `last_read_at` per user/thread and derives unread state and the first-unread anchor from post timestamps. (D-068) | TBD |
+| F10-FR-07 | Inactive thread read-tracker rows are pruned after 180 days by a background worker. | TBD |
+| F10-FR-08 | Friend-list presence is deferred. Future presence controls must support global visibility and an option allowing friends to see active status. (D-097) | TBD |
+| F10-FR-09 | Player settings `allow_friend_requests` and `allow_follows` govern the corresponding actions; disabled actions are suppressed in the UI and rejected by the API. | TBD |
 
-Related behavior is noted in Feature 7 (blocked users cannot DM) and Feature 11 (users can display or hide their friend list).
+Related behavior is noted in Feature 7 (blocked users cannot DM) and Feature 11 (users can display or hide their friend list). Direct-message read tracking remains owned by Messaging and stored on `rpc.dm_participant.last_read_at`.
 
 ### 10.4 Data Layer
 
-Candidate data from the notes:
+- `rpc.user_friend`: account-to-account friendship/request records, with `pending`, `accepted`, and `declined` status and uniqueness on the unordered user pair.
+- `rpc.user_block`: account-level block records. Verify its exact fields and constraints against `project.puml` before implementation.
+- `rpc.user_follow`: one-way subscriptions using `follower_user_id` and polymorphic `target_type` / `target_id`; current targets are `user`, `character`, `forum_thread`, `forum_board`, `blog_post`, `lore_folder`, and `lore_article`. Unique by follower and target.
+- `rpc.user_bookmark`: polymorphic bookmarks, unique by `(user_id, target_type, target_id)`; supported targets are `forum_post`, `forum_thread`, `blog_post`, and `lore_article`.
+- `rpc.mention`: polymorphic source reference, mentioned actor, author actor, and creation timestamp. Supported sources are `comment`, `forum_post`, `blog_post`, `shoutbox_message`, and `lore_article`.
+- `rpc.thread_read_tracker`: one `last_read_at` per `(user_id, thread_id)`; no `last_read_post_id` foreign key.
+- Reactions are covered by Feature 14; comments are covered by Feature 13. Their target vocabularies remain table-specific.
 
-- Friendship between two users
-- Block between two users
+### 10.5 Security and Privacy
 
-*Entities, fields, and relationships to be mapped.*
+- Guests may read public content but cannot perform interactive actions; enforce this server-side for every protected operation. (R-002)
+- Friendships, follows, bookmarks, and blocks are account-bound, not actor-persona-bound. Mention source content is actor-authored and validates that the author actor belongs to the authenticated account.
+- Blocking and its relationship cleanup are application-level coordinated behavior; do not assume database cascades provide the complete contract. (D-096)
+- Follow/bookmark notifications identify the recipient account and respect in-app preferences; email delivery is not included. (D-094, D-095)
+- Do not expose inaccessible content or actor details through mentions, relationship lists, or polymorphic target metadata.
+- Reject `character_dossier` as a bookmark target; do not introduce a replacement player/character target under D-142.
 
-### 10.5 Open Questions
+### 10.6 Open Questions
 
-- Does friending require acceptance from the other user?
-- What else does a block affect besides DMs (comments, profile visibility, shoutbox pings)?
+- **P-055:** Confirm the shared actor-resolution helper contract, including handle, display name, and avatar; deleted actors use the established masked-name pattern.
+- **P-058:** Align follow/bookmark polymorphic target vocabularies where practical without reopening the settled reaction schema; clarify actor versus user/character targets.
+- **P-062:** Decide whether bookmarks to deleted targets are removed or retained with a “This item no longer exists” placeholder.
+- **P-063:** Define online visibility settings, including global visibility and allowing friends to see active status.
+- **P-075:** Define cross-surface visibility for hidden, shadow-banned, and soft-deleted content, including reactions, bookmarks, feeds, search, and notifications.
+- Verify the exact `rpc.user_block` fields and uniqueness/check constraints against the full schema.
+- Confirm the `comment_poster_restriction` vocabulary against the source definition (also relevant to Feature 13).
+- Direct-message read tracking remains out of scope for this feature; see Feature 7.
 
 ## Feature 11: User Profiles
 
@@ -830,7 +851,7 @@ Candidate data from the notes:
 
 ### 13.1 Overview
 
-Users can comment on other users' blogs and profiles. Owners control who can see and use the comment section.
+Comments are flat chronological feeds on supported actor profiles and content targets. Content owners can remove comments on their supported content through soft deletion; target visibility and posting restrictions remain governed by the owning entity.
 
 ### 13.2 Use Cases
 
@@ -847,29 +868,34 @@ Draft requirements from the notes:
 | F13-FR-03 | Users can disable or enable comments on their own blogs or profiles | TBD |
 | F13-FR-04 | Users can control who can see the comment section on their own blogs or profiles | TBD |
 | F13-FR-05 | Users can control who can comment on their blog or profile | TBD |
-| F13-FR-06 | Comments on supported targets are flat chronological feeds, not nested reply trees | TBD |
-| F13-FR-07 | Content owners can toggle comments through `allow_comments` on supported content | TBD |
+| F13-FR-06 | Comments on supported targets are flat chronological feeds, not nested reply trees. (D-080) | TBD |
+| F13-FR-07 | Content owners can toggle comments through `allow_comments` on supported content. (D-082) | TBD |
+| F13-FR-08 | Comments support only `actor`, `blog_post`, `gallery_media`, and `lore_article` targets; `actor` covers player and character profiles. (D-086) | TBD |
+| F13-FR-09 | Comment creation and editing validate that `author_actor_id` belongs to the authenticated account. (R-010) | TBD |
+| F13-FR-10 | Content owners can remove comments on their supported content by setting `deleted` and `deleted_at` consistently; there is no separate owner-hide state. (D-084, D-138) | TBD |
+| F13-FR-11 | Comment poster restrictions are enforced server-side using the target's `comment_poster_restriction` setting. (D-082) | TBD |
 
 ### 13.4 Data Layer
 
 Candidate data from the notes:
 
-- Comment (author, target, body, timestamp)
-- Supported targets include blogs and profiles; other supported content targets follow the relevant interaction contracts
-- `allow_comments` on supported content controls whether comments are enabled
-- Comments are flat and chronological, not nested
-
-*Entities, fields, and relationships to be mapped.*
+- `rpc.comment`: author actor, polymorphic target, body, timestamps, and soft-delete fields.
+- Supported `target_type` values are `actor`, `blog_post`, `gallery_media`, and `lore_article`; `actor` covers player and character profiles.
+- Commentable entities support `allow_comments` and `comment_poster_restriction`; confirm the complete allowed-value vocabulary against the source schema before implementation.
+- Comments are flat and chronological, not nested. Content-owner removal uses soft deletion, with no separate owner-hide state.
+- Staff soft-deletes are centrally audit logged; routine author self-deletion is not. (D-141)
 
 ### 13.5 Open Questions
 
-- Can comments be edited or deleted, and by whom?
+- **P-056:** Does the UI need to distinguish a comment removed by the target owner from one removed by its author? The current comment row does not record which party removed it.
+- Confirm the exact full allowed-value vocabulary for `comment_poster_restriction` against the source definition.
+- Comment target visibility and moderation behavior must follow the owning entity's access rules; cross-surface handling remains under P-075.
 
 ## Feature 14: Reactions
 
 ### 14.1 Overview
 
-A standard reaction system.
+A configurable, account-level reaction system. A user may have one active reaction per target across all actor personas; reaction changes replace the previous reaction, and selecting the current reaction removes it.
 
 ### 14.2 Use Cases
 
@@ -881,21 +907,29 @@ Draft requirements from the notes:
 
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| F14-FR-01 | The system provides a standard reaction system | TBD |
-| F14-FR-02 | Users can like shoutbox messages, posts, comments, and DMs | TBD |
+| F14-FR-01 | The system provides configurable reaction codes; the palette is not fixed by a database enum. (D-085) | TBD |
+| F14-FR-02 | Users can react to supported shoutbox messages, direct messages, forum posts/threads, gallery media, characters, lore articles, blog posts, and comments. | TBD |
+| F14-FR-03 | Reactions are unique per OOC user account and target, allowing at most one active reaction per account/item across alternate characters. (D-081) | TBD |
+| F14-FR-04 | Users can add, switch, or remove their reaction by selecting a reaction code; switching replaces the previous reaction. | TBD |
+| F14-FR-05 | Users cannot react to their own content; ownership is determined through the target/actor relationship, not the selected persona. | TBD |
+| F14-FR-06 | Reaction displays may show multiple reaction codes with counts and reacting member handles. | TBD |
+| F14-FR-07 | Reaction-triggered notifications are queued/debounced or bundled according to the notification contract; grouping and read-state behavior remain open. (P-059, P-060) | TBD |
 
 ### 14.4 Data Layer
 
 Candidate data from the notes:
 
-- Reaction (user, target, reaction type)
-- Targets: shoutbox messages, posts, comments, DMs
-
-*Entities, fields, and relationships to be mapped.*
+- `rpc.entity_reaction`: polymorphic target and reacting `user_id`; composite uniqueness on `(target_type, target_id, user_id)`.
+- Supported targets: `shoutbox_message`, `direct_message`, `forum_post`, `forum_thread`, `gallery_media`, `character`, `lore_article`, `blog_post`, and `comment`. Do not silently replace `character` with a generic `actor` target.
+- Reaction codes are configurable application values, not a fixed schema enum. Retired-code handling remains open under P-057.
+- The reaction palette may display counts and reacting member handles. Notification bundling behavior is owned jointly with Notifications and remains open under P-059/P-060.
 
 ### 14.5 Open Questions
 
-- Is "like" the only reaction, or are there others?
+- **P-057:** When an emoji leaves the reaction palette, should existing reactions using that code be hidden, retained, or removed?
+- **P-059:** Decide the grouping key and time window for bundling reaction notifications from multiple users on the same item.
+- **P-060:** Decide whether a new reaction updates an existing read notification bundle or creates a new unread notification.
+- **P-075:** Define visibility and recalculation rules for reactions attached to hidden, shadow-banned, or soft-deleted content.
 
 ## Feature 15: Taxonomy & Discovery
 
@@ -1261,10 +1295,14 @@ The Guilds module supports user-owned community groups, membership applications 
 | `rpc.taxonomy_group`, `rpc.taxonomy_group_scope` | 15 | Admin-defined taxonomy groups and content-type scopes. |
 | `rpc.tag`, `rpc.tag_alias`, `rpc.entity_tag` | 15 | Canonical tags, aliases, and polymorphic tag associations. |
 | `rpc.category`, `rpc.board`, `rpc.thread`, `rpc.thread_metadata`, `rpc.thread_participant`, `rpc.post`, `rpc.advertisement`, `rpc.guild_board_link` | 6 | Forum hierarchy, thread ownership/metadata/participants, actor-authored posts, advertisements, and guild-linked boards. |
-| `rpc.thread_read_tracker` | 6 | Per-user/per-thread read timestamps and unread tracking. |
+| `rpc.thread_read_tracker` | 6, 10 | Per-user/per-thread read timestamps and unread tracking; direct-message read state remains separate in Messaging. |
 | `rpc.guild`, `rpc.guild_membership`, `rpc.guild_character_link` | 18 | Guild identity, membership/leadership, and character affiliations. |
 | `rpc.guild_board_link`, `rpc.guild_blog_link` | 6, 12, 18 | Typed bridges linking ordinary forum boards and blog posts to guilds. |
-| `rpc.moderation_report`, `rpc.audit_log`, `rpc.user_bookmark` | 6, 8, 10 | Forum report snapshots, central staff-action audit events, and thread/post bookmarks. |
+| `rpc.user_friend`, `rpc.user_block`, `rpc.user_follow` | 10 | Account-level friendships, blocks, and polymorphic follows/subscriptions. |
+| `rpc.mention` | 10 | Polymorphic actor-handle mention records. |
+| `rpc.comment` | 13 | Flat chronological actor-authored comments with polymorphic targets and soft deletion. |
+| `rpc.entity_reaction` | 14 | Account-level unique reactions on supported polymorphic targets. |
+| `rpc.moderation_report`, `rpc.audit_log`, `rpc.user_bookmark` | 6, 8, 10 | Forum report snapshots, central staff-action audit events, and polymorphic bookmarks. |
 | \[Entity\] | \[1, 2\] | \[Shared / owned by which feature\] |
 
 ## Global Open Questions and Risks
