@@ -10,10 +10,10 @@ export interface PageHeaderProps {
 }
 
 /**
- * Properties for login handling.
+ * Properties for authentication (login and registration) handling.
  *
  * @property    {void}  onSuccess   Optional; behaviour on successful login attempt
  */
-export interface LoginPanelProps {
+export interface AuthFlowProps {
     onSuccess?: () => void;
 }

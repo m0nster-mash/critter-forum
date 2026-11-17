@@ -2,11 +2,11 @@
 
 import {signIn} from "@/lib/auth-client";
 import {ERROR_MESSAGES, USER_ALERTS} from "@/lib/constants/messages";
-import {LoginPanelProps} from "@/lib/types";
+import {AuthFlowProps} from "@/lib/types";
 import {useRouter} from "next/navigation";
 import {type SubmitEvent, useState} from "react";
 
-export function LoginPanel({onSuccess}: LoginPanelProps) {
+export function LoginPanel({onSuccess}: AuthFlowProps) {
 
     const router = useRouter();
     const [email, setEmail] = useState("");
