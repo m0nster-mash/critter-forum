@@ -55,6 +55,7 @@
 | 15 | Taxonomy & Discovery | Shared taxonomy/tagging, tag administration, aliases, and permission-aware global search/browse | TBD | Notes captured |
 | 16 | Actors | OOC player and IC character/hub identities, handles, ownership, lifecycle, and authorship | TBD | Notes captured |
 | 17 | Content System | Lore library, shared editor drafts, data exports, and central media/gallery assets | TBD | Notes captured |
+| 18 | Guilds | User-owned community groups, membership and roles, character affiliations, guild-linked boards/news, and guild-scoped activity | TBD | Notes captured |
 
 ## Feature 1: Authentication
 
@@ -1124,6 +1125,127 @@ As a user, I should be able to:
 - Reconcile `media_link.target_type`, `usage_type`, and `lore_article.hidden_reason` as shared contracts.
 - Confirm media purge handling for album membership and active avatar references before purge implementation.
 
+## Feature 18: Guilds
+
+### 18.1 Overview
+
+The Guilds module supports user-owned community groups, membership applications and roles, character affiliations, guild-linked forum boards, guild blog/news posts, and guild-scoped activity within the existing activity feed. Guild identity, description, theme configuration, status, and soft deletion are managed by this feature. Guild boards reuse `rpc.board`, guild news reuses `rpc.blog_post`, and activity reuses the existing feed; no separate guild forum or activity-feed schema is introduced.
+
+### 18.2 Functional Behaviour
+
+**Guild identity and lifecycle**
+
+- `rpc.guild` stores `owner_user_id`, name, slug, description, `theme_config`, status, soft-delete fields, and timestamps. Names and slugs are unique.
+- `status` is `active` or `frozen_pending_review`; it is the guild visibility/moderation state, separate from soft deletion.
+- Soft deletion uses `deleted` and `deleted_at` together, with a schema consistency check.
+- Member count is computed from membership rows when displayed; do not store `rpc.guild.member_count`.
+- `theme_config` remains text in the current schema. Its representation is a development follow-up under P-007; do not silently change its type.
+
+**Membership and leadership**
+
+- `rpc.guild_membership` has composite key `(guild_id, user_id)`, allowing at most one membership row per account and guild.
+- Membership statuses are `pending_approval`, `active`, `declined`, and `banned`; roles are `leader`, `officer`, and `member`.
+- Each guild must have exactly one active leader, and `owner_user_id` must match that leader's user account. Leadership transfer must update ownership and membership role/status values consistently.
+- Only active memberships qualify for participation rules requiring guild membership. Application text and join/create timestamps are captured; detailed application workflows and remaining roster constraints follow source decisions and P-007 rather than assumptions from legacy prose.
+
+**Character affiliations**
+
+- `rpc.guild_character_link` links a guild and character and records the associated user and optional `title_in_guild`.
+- The linked character must belong to the specified user, and that user must be an active guild member. Character affiliations cannot bypass account ownership or membership checks.
+- Character soft deletion and actor attribution remain owned by Actors.
+
+**Guild-linked forum boards**
+
+- Guild boards reuse `rpc.board` and `rpc.guild_board_link`; there is no guild-specific board table. A board can be linked to at most one guild; the bridge has composite primary key `(guild_id, board_id)` and unique `board_id`.
+- A linked board may use `public` or `guild_restricted` access. A `guild_restricted` board must have a link row and is readable only by active members of the linked guild, with staff/admin read bypass.
+- Only active guild members may post on any guild-linked board, including public boards.
+- `group_restricted` remains the approved-user reply mechanism for private roleplay and is distinct from guild membership restrictions. Read and write boundary checks must be tested.
+
+**Guild blog and news**
+
+- Guild blog/news posts reuse `rpc.blog_post` and `rpc.guild_blog_link`; a blog post can be linked to at most one guild. The bridge has composite primary key `(guild_id, blog_post_id)` and unique `blog_post_id`.
+- Guild staff may choose public or private visibility for guild-linked posts. Only active guild members may comment, even when a post is public.
+- General blog publication lifecycle, visibility semantics, comment settings, and soft deletion remain governed by Content and D-104; guild-specific comment restrictions are an additional contract.
+
+**Recruitment advertisements and activity feed**
+
+- `rpc.advertisement.guild_id` remains nullable; not every advertisement belongs to a guild.
+- Guild activity reuses the existing Widgets activity feed. Do not add a separate guild activity-feed table.
+- Feed queries must be scoped to the guild and relevant activity/users, enforce viewer authorization, and prevent guild-restricted activity leaking to non-members. Staff/admin bypass, where applicable, follows shared authorization policy. Implementation and testing remain under P-007.
+
+### 18.3 Requirements
+
+| ID | Requirement | Status |
+| --- | --- | --- |
+| R-117 | Each guild has exactly one active leader; `owner_user_id` matches that active membership with role `leader`. Leadership transfers update ownership and membership consistently. | TBD |
+| R-117 | A user has at most one membership row per guild. A linked character must belong to the specified user, and that user must be an active guild member. | TBD |
+| D-123 | Guild-linked boards are ordinary `rpc.board` records linked through `rpc.guild_board_link`. Linked boards may be public or guild-restricted, but only active guild members may post regardless of read visibility. | TBD |
+| D-124 | `group_restricted` means approved-user reply access for private roleplay; it is not the guild access mechanism. | TBD |
+| D-125 | Guild blog/news posts reuse `rpc.blog_post` through `rpc.guild_blog_link`. Guild staff choose public/private visibility, but only active guild members may comment, even on public posts. | TBD |
+| D-126 | Guild activity reuses the existing Widgets activity feed; no separate guild activity feed is created solely for this purpose. | TBD |
+| D-127 | Guild member count is computed from membership records and is not stored as `rpc.guild.member_count`. | TBD |
+| D-128 | Guild visibility/hiding uses `guild.status`; do not add a separate `is_hidden` field. | TBD |
+| D-129 | Keep nullable `rpc.advertisement.guild_id` for guild-linked recruitment advertisements. | TBD |
+| D-136 | Confirmed guild model includes leader consistency, unique membership per guild/user, character ownership and active-membership checks, typed board/blog bridges, guild-member posting/commenting restrictions, and use of `status` for guild visibility. | TBD |
+| D-137 | `rpc.board.board_access` includes `guild_restricted`. Such a board is readable only by active members of its linked guild, with staff/admin bypass; it must have a guild link. Any guild-linked board requires active membership to post. | TBD |
+| D-138 | Guild soft deletion uses `deleted` plus nullable `deleted_at`, with a consistency check; `guild.status` remains `active` or `frozen_pending_review`. | TBD |
+
+### 18.4 Security and Privacy
+
+- Enforce account ownership, active membership, and character ownership when creating or changing guild membership and character affiliations (R-117, D-136).
+- Maintain exactly one active leader and keep `owner_user_id` consistent with that membership (R-117, D-136).
+- Only active guild members may post to guild-linked boards, regardless of public or guild-restricted read visibility (D-123, D-137).
+- A guild-restricted board is readable only by active members; pending, declined, and banned memberships do not qualify. Staff/admin read bypass is permitted under D-137.
+- Only active guild members may comment on guild-linked blog/news posts, including public posts (D-125, D-136).
+- Guild visibility/hiding is controlled by `guild.status`; do not introduce a separate `is_hidden` flag (D-128, P-050).
+- Soft-delete state must use `deleted` and `deleted_at` consistently (D-138). Staff-initiated soft deletion is recorded in `rpc.audit_log` under D-141; ordinary user self-deletion is not audit logged.
+- Guild activity feed queries must enforce guild scoping and viewer authorization (D-126, P-007). Recruitment ads may have no guild; retain nullable `advertisement.guild_id` (D-129).
+
+### 18.5 Data Model
+
+- **Entities:** `rpc.guild`, `rpc.guild_membership`, `rpc.guild_character_link`, `rpc.guild_board_link`, `rpc.guild_blog_link`, `rpc.board`, `rpc.blog_post`, `rpc.advertisement`, `rpc.activity_tracker`, and `rpc.audit_log`.
+- **Relationships:** `guild.owner_user_id` references `rpc.user`; membership links users and guilds; character links connect guilds, characters, and users; bridge tables join guilds to boards and blog posts; advertisements may optionally reference a guild.
+- **Constraints:** Membership primary key `(guild_id, user_id)`; guild-board link primary key `(guild_id, board_id)` and unique `board_id`; guild-blog link primary key `(guild_id, blog_post_id)` and unique `blog_post_id`; guild status is `active`/`frozen_pending_review`; soft deletion uses `deleted`/`deleted_at` with a consistency check.
+- Exactly-one-active-leader and owner/membership consistency require application-level transactional enforcement unless additional database enforcement is separately approved. Character ownership/active membership, board access restrictions, guild-blog comment restrictions, and feed scoping are application contracts. `theme_config` remains text pending P-007. Guild visibility policy requires broader reconciliation under P-050 without adding `is_hidden`.
+
+### 18.6 Cross-Module Dependencies and Open Questions
+
+- **Forum:** Guild boards reuse `rpc.board`; active membership is required to post, and guild-restricted boards require a guild link (D-123, D-124, D-137). `group_restricted` remains private-RP approved-user access.
+- **Content:** Guild news reuses `rpc.blog_post`; only active members may comment (D-125, D-136). Public visibility does not make comments public.
+- **Discovery:** Guilds are taggable and searchable under shared taxonomy (D-116, D-117); Discovery must respect guild visibility and viewer authorization.
+- **Actors & Hubs:** Guild character links require character ownership by the linked user and active guild membership (R-117, D-136). Character ownership stays account-based.
+- **Moderation, Governance & Admin:** Guild status handles hiding/frozen review; staff deletion is audited (D-128, D-138, D-141, P-050). Do not add a separate guild hiding flag.
+- **Live Widgets:** Guild activity uses the existing activity feed with guild scoping and authorization (D-126, P-007); no separate guild feed table.
+- **Forum / Advertising:** Recruitment advertisements may optionally link to a guild (D-129); `advertisement.guild_id` remains nullable.
+- **Media & Gallery:** Album/media ownership and inherited visibility may intersect guilds (P-032, P-034); resolve parent/ownership contract before implementing guild-scoped galleries.
+
+| ID | Open question / follow-up | Required next step |
+| --- | --- | --- |
+| P-007 | Implement guild-scoped activity filtering and authorization; revisit `theme_config` representation and remaining roster constraints. | Implement and test; keep `theme_config` as text until a change is approved. |
+| P-032 / P-034 | Settle album ownership, parent-child integrity, and inherited gallery visibility. | Resolve parent/ownership contract before implementing guild-scoped galleries. |
+| P-050 | Reconcile guild visibility with the cross-module hiding policy. | Keep `guild.status` as the visibility/hiding state; do not add `is_hidden`. |
+| P-075 | Ensure hidden/frozen/deleted guild content is treated consistently across search, feeds, notifications, and other surfaces. | Validate cross-surface policy during development. |
+
+### 18.7 Acceptance Criteria
+
+- [ ] Every guild has exactly one active leader, and owner identity matches the active leader membership (R-117, D-136).
+- [ ] Member counts are derived from membership rows rather than stored in `rpc.guild` (D-127).
+- [ ] Only active guild members can post on guild-linked boards; guild-restricted boards require a guild link and enforce active-member read access, with staff/admin bypass (D-123, D-137).
+- [ ] `group_restricted` continues to represent approved-user replies for private roleplay, not guild membership (D-124).
+- [ ] Guild-linked blog posts support public/private visibility while comments remain restricted to active guild members (D-125).
+- [ ] Guild activity reuses the existing feed and enforces guild-scoped filtering and viewer authorization (D-126, P-007).
+- [ ] Guild visibility uses status and soft deletion uses consistent `deleted`/`deleted_at` values (D-128, D-138).
+- [ ] Recruitment advertisements can have a nullable guild link (D-129).
+- [ ] Gallery ownership, guild visibility, and cross-surface access questions are explicitly resolved and tested before related functionality is considered complete (P-032, P-034, P-050, P-075).
+
+### 18.8 Source Traceability
+
+- **Requirements source:** `DECISION_LOG.md` — R-117 and D-123–D-129, D-136–D-138, D-141.
+- **Decision source:** `DECISION_LOG.md` — D-123–D-129, D-136–D-138, D-141; open items P-007, P-032, P-034, P-050, P-075.
+- **Schema source:** `project.puml` — Guild System, Forum System, Blog & Journal System, and existing Widgets/activity and moderation relationships.
+- **Legacy documentation:** `rpc_temp_bundle.md` — Guilds, forum integration, guild news, and activity feed material.
+- **Traceability note:** Current schema and settled decisions override legacy proposals. Application-level invariants are called out explicitly; unresolved work remains in the open questions above.
+
 ## Cross-Cutting Data Model
 
 *(Filled in once the features are complete. Consolidates the entities from each feature, resolves overlaps, and shows the full set of relationships.)*
@@ -1140,6 +1262,8 @@ As a user, I should be able to:
 | `rpc.tag`, `rpc.tag_alias`, `rpc.entity_tag` | 15 | Canonical tags, aliases, and polymorphic tag associations. |
 | `rpc.category`, `rpc.board`, `rpc.thread`, `rpc.thread_metadata`, `rpc.thread_participant`, `rpc.post`, `rpc.advertisement`, `rpc.guild_board_link` | 6 | Forum hierarchy, thread ownership/metadata/participants, actor-authored posts, advertisements, and guild-linked boards. |
 | `rpc.thread_read_tracker` | 6 | Per-user/per-thread read timestamps and unread tracking. |
+| `rpc.guild`, `rpc.guild_membership`, `rpc.guild_character_link` | 18 | Guild identity, membership/leadership, and character affiliations. |
+| `rpc.guild_board_link`, `rpc.guild_blog_link` | 6, 12, 18 | Typed bridges linking ordinary forum boards and blog posts to guilds. |
 | `rpc.moderation_report`, `rpc.audit_log`, `rpc.user_bookmark` | 6, 8, 10 | Forum report snapshots, central staff-action audit events, and thread/post bookmarks. |
 | \[Entity\] | \[1, 2\] | \[Shared / owned by which feature\] |
 
