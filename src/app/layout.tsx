@@ -1,3 +1,4 @@
+import layoutStyle from "@/components/styles/layout.module.css"
 import type {Metadata} from "next";
 import "./globals.css";
 import React from "react";
@@ -13,16 +14,21 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
+        <html lang="en">
         <body>
         <div className="layout">
             <nav>
+                <h3>Navigation</h3>
                 <a href="#">Home</a>
-                <a href="#">About</a>
-                <a href="#">Settings</a>
+                <h4>Authentication</h4>
+                <a href="/register">Register</a>
+                <a href="/login">Login</a>
             </nav>
-
-            {children}
+            <div className={layoutStyle.contentArea}>
+                {children}
+            </div>
         </div>
         </body>
+        </html>
     );
 }
