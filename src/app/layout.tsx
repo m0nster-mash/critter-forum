@@ -3,8 +3,8 @@ import "./globals.css";
 import React from "react";
 
 export const metadata: Metadata = {
-    title: "empty-next",
-    description: "A reusable Next.js starter project.",
+    title: "critter-forum",
+    description: "critters: pangaea, maybe?",
 };
 
 export default function RootLayout({
@@ -13,8 +13,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-        <body>{children}</body>
-        </html>
+        <body>
+        <div className="layout">
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Settings</a>
+            </nav>
+
+            {children}
+        </div>
+        </body>
     );
 }
