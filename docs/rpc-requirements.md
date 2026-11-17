@@ -41,7 +41,7 @@
 | 1 | Authentication | Login, logout, registration, email confirmation, account pages, and role-based access, built on BetterAuth | TBD | Partially implemented |
 | 2 | Activity Tracker | An /activity page and a Who's Online sidebar widget, with user privacy controls | TBD | Notes captured |
 | 3 | Avatars | Per-actor layered SVG avatars, with optional static images for character/hub actors | TBD | Notes captured |
-| 4 | Shoutbox | A header-activated dropdown chat for guests and users, updated live | TBD | Notes captured |
+| 4 | Shoutbox | Live short-form messaging with authenticated posting, guest read access, and a paginated archive | TBD | Notes captured |
 | 5 | Notifications | Shared account-level on-site inbox, preferences, unread counts, event alerts, and notification navigation | TBD | Notes captured |
 | 6 | Forum | Forum > Category > Board > (optional one-level sub-board) > Thread > Post, updated in real time | TBD | Notes captured |
 | 7 | Direct Messages | Private OOC one-to-one account messaging, with a shared inbox for Forum private threads | TBD | Notes captured |
@@ -298,7 +298,10 @@ by the current `rpc.avatar` and `rpc.character.static_avatar_media_id` model.
 
 ### 4.1 Overview
 
-A floating chat box, opened from a button in the header, where guests and registered users post short messages. Messages appear live for everyone viewing it.
+A floating chat box, opened from a button in the header, for short OOC/IC community messages. Messages appear live for
+viewers and are durably stored in PostgreSQL. Guests may read the live buffer and archive but must authenticate to post.
+The archive is an application-rendered paginated thread-like page; it does not require a separate archive table.
+Shoutbox messaging is separate from Live Widgets presence tracking.
 
 ### 4.2 Use Cases
 
@@ -311,17 +314,22 @@ A floating chat box, opened from a button in the header, where guests and regist
 | UC-4.5 | User | I should be able to delete my posts if I am a registered user |
 | UC-4.6 | User | I should be able to report any post via a report button beneath the post |
 | UC-4.7 | User | I should be able to ping users and quote other messages in my posts |
-| UC-4.8 | Guest | I should be able to post short messages in the shoutbox |
-| UC-4.9 | Guest | I should have a cooldown period between posts; this cooldown is longer for guests |
-| UC-4.10 | Guest | I should be given a placeholder avatar when I post, visible beside my post |
+| UC-4.8 | Guest | I should be able to post short messages in the shoutbox (superseded: guests are read-only under the current contract) |
+| UC-4.9 | Guest | I should have a cooldown period between posts; this cooldown is longer for guests (superseded: guests cannot post) |
+| UC-4.10 | Guest | I should be given a placeholder avatar when I post, visible beside my post (superseded: guests cannot post) |
 | UC-4.11 | Guest | I should not be able to edit or remove my posts |
-| UC-4.12 | Guest | I should not be able to ping users or quote posts in my post |
+| UC-4.12 | Guest | I should not be able to ping users or quote posts in my post (superseded: guests cannot post) |
 | UC-4.13 | Admin | I should be able to post short messages in the shoutbox |
 | UC-4.14 | Admin | I should not have a cooldown between posts |
 | UC-4.15 | Admin | I should be able to see my avatar beside my message when I post |
 | UC-4.16 | Admin | I should be able to edit and delete my posts |
 | UC-4.17 | Admin | I should be able to edit and delete any other user's or guest's post |
 | UC-4.18 | Admin | I should receive a notification when a report is made |
+| UC-4.19 | Guest | Read the live shoutbox buffer and paginated archive without authentication |
+| UC-4.20 | Authenticated user | Edit their own shoutbox messages |
+| UC-4.21 | Staff | View soft-deleted messages and perform authorized moderation actions |
+| UC-4.22 | User | React to, mention actors in, and attach supported media to shoutbox messages |
+| UC-4.23 | User | View their actor's shoutbox contribution count, computed from active messages |
 
 ### 4.3 Requirements
 
@@ -331,35 +339,157 @@ Draft requirements from the notes:
 | --- | --- | --- |
 | F4-FR-01 | A floating box appears when a button in the header is clicked | TBD |
 | F4-FR-02 | The box appears as a dropdown drawer beneath the activation button, and stays open until the user closes it by clicking the button again | TBD |
-| F4-FR-03 | Guests and users may post in the shoutbox | TBD |
+| F4-FR-03 | Guests and users may post in the shoutbox (superseded: authenticated users only may post) | TBD |
 | F4-FR-04 | Posts are ordered from oldest to newest | TBD |
 | F4-FR-05 | The shoutbox is always scrolled to the bottom, so the newest messages are displayed | TBD |
 | F4-FR-06 | When a user posts a message, it appears automatically for anyone viewing the shoutbox | TBD |
 | F4-FR-07 | There is a limit to how many shoutbox messages appear | TBD |
-| F4-FR-08 | All shoutbox messages are displayed on a special thread on the forum | TBD |
-| F4-FR-09 | Shoutbox posts are counted, and the number is displayed on the user's profile | TBD |
+| F4-FR-08 | All shoutbox messages are displayed on a special thread on the forum (implemented as a paginated thread-like archive page; no archive-specific schema) | TBD |
+| F4-FR-09 | Shoutbox posts are counted, and the number is displayed on the user's profile (count is computed per author actor; no stored counter) | TBD |
 | F4-FR-10 | The user's most recent shoutbox post is also displayed on their profile | TBD |
+| F4-FR-11 | Messages are durably persisted in `rpc.shoutbox_message`; the live UI may use a rolling buffer of the 100 most recent active messages | TBD |
+| F4-FR-12 | The archive queries and paginates the durable message set rather than treating the live buffer as the complete history | TBD |
+| F4-FR-13 | Message authorship is stored only as `author_actor_id`; account ownership resolves through `rpc.actor.user_id` | TBD |
+| F4-FR-14 | Authenticated users may edit their own messages; `is_edited` may indicate an edit | TBD |
+| F4-FR-15 | Soft deletion uses `deleted` and nullable `deleted_at`, with the schema consistency check enforced | TBD |
+| F4-FR-16 | Soft-deleted messages are hidden from ordinary live and archive views but remain visible to authorized staff | TBD |
+| F4-FR-17 | Staff-initiated soft deletion creates an `rpc.audit_log` entry; self-deletion is not audit logged | TBD |
+| F4-FR-18 | Shoutbox messages support shared reactions, mentions, media links, and moderation reports through their owning modules | TBD |
+| F4-FR-19 | Contribution counts are computed per author actor from active, non-soft-deleted messages and are not stored | TBD |
+| F4-FR-20 | Posting cooldown is configured per trust tier through `rpc.trust_tier.post_cooldown_seconds` | TBD |
+| F4-FR-21 | Hide/unhide transitions and their audit entries are atomic; hiding remains distinct from soft deletion | TBD |
 
-### 4.4 Data Layer
+### 4.4 Functional Behaviour
 
-Candidate data from the notes:
+**Live shoutbox and persistence**
 
-- Shoutbox message (author or guest, body, timestamp)
-- Placeholder avatar for guests
-- Pings and quotes referencing users and other messages
-- Reports on messages
-- Per-user shoutbox post count and latest post
-- Link between shoutbox messages and the special forum thread
-- Cooldown settings per role (guest, user, admin)
+- `rpc.shoutbox_message` stores the message UUID, `author_actor_id`, content, edit/hide/delete state, and creation/update timestamps.
+- Messages persist in PostgreSQL. The live UI may render a rolling buffer of the 100 most recent active messages for performance; this is not the full persistence store.
+- Guests may read the live buffer and archive, but must authenticate to post.
+- The posting cooldown is configured per trust tier through `rpc.trust_tier.post_cooldown_seconds`.
+- Legacy documentation mentions automatic cataloging into a dedicated `shoutbox_archive` board. Treat this as an implementation/rendering concept, not a requirement for archive-specific schema. Exact archive-board integration follows the current Forum implementation.
 
-*Entities, fields, and relationships to be mapped.*
+**Authoring, editing, attribution**
 
-### 4.5 Open Questions
+- Every message is attributed to `author_actor_id`; the associated account is reached through `rpc.actor.user_id`.
+- Do not add a direct `user_id` or `deleted_by_user_id` column to `rpc.shoutbox_message` (**D-139**).
+- Users may edit their own messages. `is_edited` may indicate that a message has been edited.
+- Separate immutable message history is not in scope; there is no `rpc.shoutbox_message_history` table.
+- A moderation report captures the message's current content. If a message is edited before a report is submitted, earlier text may not be retained; this is accepted under D-132.
+- Actor deletion/soft deletion must not erase historical shoutbox content; attribution and actor masking follow the Actors module.
 
-- How many messages does the shoutbox display?
-- How long are the cooldowns for guests and registered users?
-- What is the maximum length of a "short" message?
-- How are guests identified for cooldowns?
+**Deletion and moderation**
+
+- Soft deletion uses `deleted` and `deleted_at`, which must agree according to the schema check.
+- Soft-deleted messages are hidden from regular users in both live and archive views, but remain visible to staff (**D-134**).
+- Staff-initiated soft deletion writes an `rpc.audit_log` entry identifying the staff actor and affected content (**D-141**). The message row itself does not store deletion attribution.
+- User self-deletion is not audit logged under D-141.
+- The schema has `is_hidden` and nullable `hidden_reason` (`shadow_ban` or `moderator`). Hiding is distinct from soft deletion. Whether `hidden_reason` remains necessary and the exact cross-surface policy remain open under P-050.
+- Hide/unhide transitions must be atomic with their audit entries under D-115/P-072.
+- Moderation reports can target `shoutbox_message`; report snapshots contain content at report time, not a full edit history.
+
+**Reactions, mentions and media**
+
+- Shoutbox messages are supported targets for the universal reaction system through `rpc.entity_reaction`.
+- Mention support includes `shoutbox_message` as a target type and references a mentioned actor.
+- `rpc.media_link` lists `shoutbox_message` as a supported target for inline media/attachments, subject to the shared target-vocabulary follow-up.
+- Reactions, mentions, and media linking reuse their cross-module systems; do not introduce shoutbox-specific parallel tables.
+
+**Counts, archive and presence boundaries**
+
+- Shoutbox counts are computed by querying active, non-soft-deleted messages per author actor. Do not store `actor.shout_count` or a user-level shoutbox total (**D-131**, **R-068**).
+- The archive query paginates the durable message set rather than treating the live 100-message buffer as the complete archive.
+- Who's Online is a separate presence feature. Guest display rules on `/online` and the compact widget are defined by D-135 and belong to Live Widgets.
+- Presence visibility settings and friend-list presence are deferred under P-063; do not infer a visibility setting from shoutbox read access.
+
+### 4.5 Data Layer
+
+`project.puml` is the source of truth for the data structure:
+
+- `rpc.shoutbox_message` — message UUID, `author_actor_id`, content, edit/hide/delete state, and timestamps.
+- `rpc.actor` — author identity; account ownership resolves through `actor.user_id`.
+- `rpc.trust_tier` — per-tier `post_cooldown_seconds`.
+- `rpc.entity_reaction`, `rpc.mention`, and `rpc.media_link` — shared interaction and media target relationships.
+- `rpc.moderation_report` — report target and content snapshot.
+- `rpc.audit_log` — staff moderation audit records.
+- `rpc.notification` — shared notification system for applicable events.
+
+Constraints and lifecycle rules:
+
+- `deleted` must equal whether `deleted_at` is non-null.
+- Counts are computed rather than stored; no archive-link or message-history table is specified.
+- No duplicate author `user_id` or `deleted_by_user_id` is stored on the message.
+
+Schema gaps: `hidden_reason` is flagged for reconsideration in `temp_log.md`; hiding and soft-delete policy needs cross-module reconciliation. `media_link.target_type` is marked for review. Archive rendering details are not a schema requirement.
+
+### 4.6 Security and Privacy
+
+- Require authentication to post; guest read access does not grant posting permission.
+- Resolve authors through `author_actor_id` and associated `actor.user_id`; do not duplicate account ownership on the message row (**D-139**).
+- Enforce the per-trust-tier posting cooldown using `rpc.trust_tier.post_cooldown_seconds`.
+- Filter soft-deleted messages from ordinary live and archive views while preserving staff visibility (**D-134**).
+- Staff access follows G-7 and relevant permissions; admins implicitly have all permissions.
+- Staff soft deletion must be recorded in `rpc.audit_log`; do not add per-message deletion-attribution columns (**D-139**, **D-141**).
+- Preserve the distinction between moderation hiding and soft deletion. Hide/unhide and audit logging must be atomic (**D-115**, **P-050**, **P-072**).
+- A report stores the message content snapshot at report time; accepted lack of edit-history means pre-report edits may not be recoverable (**D-132**).
+- Hidden-content behavior must be reconciled with reactions, mentions, notifications, search, counters, and archives (**P-050**, **P-075**).
+
+### 4.7 Cross-Module Dependencies
+
+| Related module | Dependency / contract | Source ID(s) | Notes |
+| --- | --- | --- | --- |
+| Actors & Hubs | Messages use `author_actor_id`; actor/account mapping governs attribution. | D-139, D-035 | No duplicate message `user_id`. |
+| Moderation, Governance & Admin | Reports, hide/unhide, staff deletion, and audit logging apply to shoutbox messages. | D-132, D-134, D-139, D-141, P-050, P-072 | No edit-history table; report captures current content. |
+| Forum | Archive is a paginated thread-like special page, not a new archive schema. | D-130 | Coordinate routing and rendering with Forum implementation. |
+| Content Interactions | Reactions and mentions use the shared polymorphic target systems. | `project.puml` Reaction System and Mention System | Hidden/deleted item behavior needs reconciliation. |
+| Content / Media | Messages may link media via `rpc.media_link`. | D-110, P-074 | Shared target vocabulary remains open. |
+| Notifications | Reactions/mentions may produce notification events under shared notification rules. | `project.puml` Notification System | No shoutbox-specific notification table. |
+| Security & Privacy | Trust-tier cooldown and presence visibility are separate controls. | `rpc.trust_tier.post_cooldown_seconds`, P-063 | Online visibility is future scope. |
+| Live Widgets | Who's Online is separate; guest listing differs between widget and `/online` page. | D-135, P-063 | Presence is not the shoutbox archive. |
+
+### 4.8 Settled Decisions
+
+| Decision ID | Decision | Implementation / documentation impact |
+| --- | --- | --- |
+| D-130 | Archive is an application-rendered paginated thread-like page. | No archive-link columns or dedicated archive table. |
+| D-131 | Shoutbox counts are computed per actor from active, non-soft-deleted messages. | No stored shout count or user total. |
+| D-132 | Separate edit-history retention is not required; report snapshot captures current content. | No `shoutbox_message_history`; pre-report edits may be unrecoverable. |
+| D-133 | Users may edit their own shoutbox messages. | Use `is_edited` as the edit indicator. |
+| D-134 | Soft-deleted messages are hidden from regular users but visible to staff. | Apply role-aware filtering in live and archive queries. |
+| D-135 | Guests appear on the full Who's Online page but not in the Who's Online widget. | Presence display rule owned by Live Widgets. |
+| D-138 | Soft deletion uses `deleted` plus nullable `deleted_at`. | Enforce the consistency check. |
+| D-139 | Message author is `author_actor_id`; no duplicate `user_id` or `deleted_by_user_id`. | Resolve account through actor; deletion attribution goes to audit log. |
+| D-141 | Staff soft deletion is audit logged; self-deletion is not. | Use `rpc.audit_log`; no per-row `deleted_by` field. |
+
+### 4.9 Outstanding Questions
+
+| Question ID | Open question / follow-up | Affected modules | Required decision or next step |
+| --- | --- | --- | --- |
+| P-050 | Reconcile hiding policy, `hidden_reason`, and hide-versus-delete behavior across content types. | Shoutbox, Moderation, Forum, Content Interactions | Confirm per-entity hiding fields and cross-surface behavior; do not silently remove schema columns. |
+| P-072 | Implement and test atomic moderation actions and audit entries. | Shoutbox, Moderation | Ensure hide/unhide and audit entry commit atomically. |
+| P-075 | Verify hidden-content consistency across search, feeds, notifications, counters, archive, and other surfaces. | Shoutbox, Discovery, Notifications, Live Widgets, Moderation | Add cross-surface tests. |
+| P-063 | Presence visibility and online-status settings are deferred. | Live Widgets, Security & Privacy | Do not infer or implement extra presence settings from the shoutbox requirements. |
+| `temp_log.md` review item | Revisit whether `rpc.shoutbox_message.hidden_reason` is necessary and whether reason/actor should live in audit JSON. | Shoutbox, Moderation | Keep current schema reference until a decision changes it. |
+| `temp_log.md` review item | Revisit `rpc.media_link.target_type` vocabulary for shoutbox attachments/embeds. | Shoutbox, Content, Media | Align polymorphic target names under P-074. |
+
+### 4.10 Acceptance Criteria
+
+- [ ] **D-130:** The archive displays the durable message set as a paginated thread-like page without requiring an archive-specific table or link column.
+- [ ] **D-131 / R-068:** Shoutbox contribution counts are derived per actor and exclude soft-deleted messages; no stored shout count is used.
+- [ ] **D-132 / D-133:** Users can edit their own messages; no separate message-history table is introduced, and report snapshots reflect content at report time.
+- [ ] **D-134:** Regular users cannot see soft-deleted messages in the live widget or archive; authorized staff can.
+- [ ] **D-138 / D-139:** Soft deletion uses consistent `deleted`/`deleted_at` fields and authorship is represented by `author_actor_id` only.
+- [ ] **D-141:** Staff soft-delete actions create audit records; user self-deletion does not.
+- [ ] **P-050 / P-072 / P-075:** Hiding semantics, atomic audit actions, and cross-surface hidden-content behavior are resolved and tested before implementation is considered complete.
+- [ ] **P-063:** Presence visibility remains separate from shoutbox messaging and is not treated as settled by this module.
+
+### 4.11 Source Documents and Traceability
+
+- **Requirements source(s):** `DECISION_LOG.md` — R-068, D-130–D-135, D-138–D-139, D-141.
+- **Decision source:** `DECISION_LOG.md` — D-130–D-135, D-138–D-139, D-141; open items P-050, P-063, P-072, P-075.
+- **Schema source:** `project.puml` — Shoutbox System, Reaction System, Mention System, Notification System, moderation reports and activity tracker relationships.
+- **Legacy documentation:** `rpc_temp_bundle.md` — Shoutbox System and Who's Online & Activity Tracker descriptions.
+- **Traceability notes:** Current decisions supersede legacy proposals for stored shout counts, archive schema, edit-history tables, author/account duplication, and deletion attribution. The 100-message live buffer is a UI optimization, not a limit on durable history.
 
 ## Feature 5: Notifications
 
@@ -1535,6 +1665,7 @@ The Guilds module supports user-owned community groups, membership applications 
 | `rpc.guild_board_link`, `rpc.guild_blog_link` | 6, 12, 18 | Typed bridges linking ordinary forum boards and blog posts to guilds. |
 | `rpc.dm_conversation`, `rpc.dm_participant`, `rpc.dm_message`, `rpc.user_dm_setting` | 7 | One-to-one account DMs, participant read state, message lifecycle, and per-user intake settings. |
 | `rpc.notification` | 5 | Account-level on-site notifications, recipient actor/profile, target reference, event payload, and individual read state. Preferences are stored in `rpc.player.notification_settings`. |
+| `rpc.shoutbox_message` | 4 | Durable actor-authored shoutbox messages, edit/hide/soft-delete state, and paginated archive source; counts are computed, not stored. Reuses shared reactions, mentions, media links, reports, notifications, and audit log. |
 | `rpc.user_friend`, `rpc.user_block`, `rpc.user_follow` | 10 | Account-level friendships, blocks, and polymorphic follows/subscriptions. |
 | `rpc.mention` | 10 | Polymorphic actor-handle mention records. |
 | `rpc.comment` | 13 | Flat chronological actor-authored comments with polymorphic targets and soft deletion. |
