@@ -43,7 +43,7 @@
 | 3 | Avatars | Per-actor layered SVG avatars, with optional static images for character/hub actors | TBD | Notes captured |
 | 4 | Shoutbox | A header-activated dropdown chat for guests and users, updated live | TBD | Notes captured |
 | 5 | Notifications | A navbar icon, dropdown, and page for reports, pings, quotes, replies, and DMs | TBD | Notes captured |
-| 6 | Forum | Forum > Category > Board > Thread > Post, updated in real time | TBD | Notes captured |
+| 6 | Forum | Forum > Category > Board > (optional one-level sub-board) > Thread > Post, updated in real time | TBD | Notes captured |
 | 7 | Direct Messages | A simple DM system between users, respecting blocks | TBD | Notes captured |
 | 8 | Admin | An admin panel for users, permissions, forum, shoutbox, site, reports, and audit log | TBD | Notes captured |
 | 9 | Creatures | Space reserved; to be defined later | TBD | Not started |
@@ -415,7 +415,7 @@ Candidate data from the notes:
 
 ### 6.1 Overview
 
-The forum is organized as Forum > Category > Board > (optional sub-boards) > Thread > Post. Content updates live, without page refreshes.
+The forum is organized as Forum > Category > Board > (optional one-level sub-board) > Thread > Post. It supports OOC discussion, IC roleplay, advertisements, and guild-linked writing spaces. Content updates live, without page refreshes. Thread ownership is account-level (`creator_user_id`); posts are authored by actors.
 
 ### 6.2 Use Cases
 
@@ -439,24 +439,116 @@ Draft requirements from the notes:
 | F6-FR-10 | Admins can close/lock threads | TBD |
 | F6-FR-11 | Admins can pin threads | TBD |
 | F6-FR-12 | Forum content is live-updated: new messages and threads appear automatically, in real time, without a page refresh | TBD |
+| F6-FR-13 | Board modes are `ooc_only`, `ic_only`, and `blend`; board access is `public`, `member_only`, `group_restricted`, or `guild_restricted`. | TBD |
+| F6-FR-14 | Thread context is `ic`, `ooc`, or `advertisement`, selected at creation and validated against board mode; staff may change it. | TBD |
+| F6-FR-15 | Thread ownership is held only by `thread.creator_user_id`; participants do not receive an owner role. | TBD |
+| F6-FR-16 | Thread privacy supports `public`, `restricted`, and `private`, subject to board access and staff access rules. | TBD |
+| F6-FR-17 | Thread participants are actors with roles `participant` or `invited`; open threads permit eligible non-creator actors without participant rows, while invite-only threads require a participant row. | TBD |
+| F6-FR-18 | Thread metadata is one-to-one with the thread and supports description, writing notes, banner media, and participant-edit configuration. | TBD |
+| F6-FR-19 | Thread status flags `is_pinned`, `is_locked`, and `is_archived` are independent and may coexist. | TBD |
+| F6-FR-20 | Thread URLs use `/thread/{short_id}-{slug}`; lookup uses `short_id` only and stale slugs redirect to the canonical URL. | TBD |
+| F6-FR-21 | Posts are authored by actors; every write, edit, and persona correction verifies actor ownership by the authenticated session user. | TBD |
+| F6-FR-22 | Posts record `is_edited` and `last_edited_at`; a full edit-history table is not defined. Report snapshots capture content at report time. | TBD |
+| F6-FR-23 | Forum content is limited to 50,000 characters and JSON request bodies to 2 MB; authored Markdown/HTML is sanitized server-side before rendering. | TBD |
+| F6-FR-24 | Posting cooldowns are configured by trust tier through `rpc.trust_tier.post_cooldown_seconds`. | TBD |
+| F6-FR-25 | Threads and posts support hiding and soft deletion; soft deletion uses `deleted` and `deleted_at`, with a consistency check. | TBD |
+| F6-FR-26 | Shadow-banned posts do not update `thread.last_post_id`, `thread.last_post_at`, or `thread.post_count`. | TBD |
+| F6-FR-27 | Staff soft-deletes are centrally audit logged; user self-deletes are not. Content rows do not store `deleted_by`. | TBD |
+| F6-FR-28 | Guild-linked boards use `rpc.guild_board_link`; active guild membership is required to post, and `guild_restricted` reads require active membership with staff/admin read bypass. | TBD |
+| F6-FR-29 | Recruitment advertisements may reference a guild and auto-pause after 60 days of inactivity; paused ads remain on the board and sink below active ads. Automated bumping is not allowed. | TBD |
+| F6-FR-30 | Threads use shared taxonomy/tagging; tag policy, aliases, and normalization are owned by Discovery. | TBD |
+| F6-FR-31 | Thread read tracking stores `last_read_at` per user/thread; unread anchors derive from post timestamps, and inactive tracker rows are pruned after 180 days. | TBD |
 
-### 6.4 Data Layer
+### 6.4 Functional Behaviour
 
-Candidate data from the notes:
+#### Categories, Boards, and Hierarchy
 
-- Hierarchy: forum, category, board, sub-board (optional), thread, post
-- Thread state: closed/locked, pinned
-- Thread subscriptions (user follows thread)
-- Per-user post count and latest posts
-- Real-time update mechanism
+- Categories contain boards. A board may optionally reference a parent board for one level of sub-board nesting: Category → Board → Sub-board.
+- `board_mode` values are `ooc_only`, `ic_only`, and `blend`. `ooc_only` permits OOC Player actor posting; `ic_only` permits IC Character/Hub actor posting; `blend` permits either, subject to thread context.
+- `board_access` values are `public`, `member_only`, `group_restricted`, and `guild_restricted`.
+- `group_restricted` means approved-user reply access for private roleplay; it is not the guild membership mechanism.
+- A `guild_restricted` board requires a `rpc.guild_board_link` row and is readable only by active members of the linked guild. Staff/admins bypass the guild membership check for reading. Only active members may post on any guild-linked board, including a public one.
+- Board access is enforced on every relevant route and API operation, not merely by hiding UI controls.
 
-*Entities, fields, and relationships to be mapped.*
+#### Threads, Ownership, Privacy, and Metadata
 
-### 6.5 Open Questions
+- `thread.creator_user_id` is the account owner of thread metadata, privacy settings, and participant management. Participants do not have an owner role.
+- `thread.context` is selected at creation and validated against board mode. Advertisement boards use `advertisement`; `ic_only` forces `ic`; `ooc_only` forces `ooc`; `blend` permits the applicable IC or OOC choice. Staff may change context.
+- Thread privacy values are `public`, `restricted`, and `private`: `public` follows board access; `restricted` is limited to the participant whitelist subject to staff access; `private` is visible to the creator and staff only.
+- `rpc.thread_participant` links actors to threads with role `participant` or `invited`. The creator's actors may post without participant rows. For invite-only threads, other actors must be included as participants.
+- Each thread has one `rpc.thread_metadata` record keyed by `thread_id`, with `description_markdown`, `writing_notes`, `banner_media_id`, and `allow_participant_edits`.
+- When `allow_participant_edits` is enabled, whitelisted participants may update writing notes and lore references as described by the legacy specification. Exact field-level boundaries require implementation validation.
+- `is_pinned`, `is_locked`, and `is_archived` are independent booleans and can coexist.
+- URLs use `/thread/{short_id}-{slug}`. Resolve by `short_id` only; redirect stale slugs to the canonical URL. Slugs are cosmetic and not unique.
+
+#### Posts, Authorship, and Editing
+
+- Posts use `author_actor_id`, not a user ID. Every write validates that the actor belongs to the authenticated session user.
+- The first post is the opening narrative post; `post_count` convention and counters must remain consistent with D-070 and the schema.
+- On `ic_only` or `blend` boards, an author may correct an accidental persona selection by changing `author_actor_id`, provided the replacement actor belongs to the same session user and board/thread constraints remain satisfied.
+- Edits set `is_edited` and `last_edited_at`. No separate full post edit-history table is defined.
+- Forum content is capped at 50,000 characters, with a 2 MB JSON request body limit.
+- Sanitize `content_markdown` server-side before rendering; do not render unsanitized user-authored HTML.
+- Posting velocity cooldown is configured per trust tier through `rpc.trust_tier.post_cooldown_seconds`.
+
+#### Hiding, Deletion, and Counters
+
+- Posts and threads support hiding through `is_hidden`; `hidden_reason` distinguishes `shadow_ban` and `moderator`.
+- Shadow-banned posts are hidden at write time and must not change `thread.last_post_id`, `thread.last_post_at`, or `thread.post_count` (D-140).
+- Soft deletion uses `deleted` and `deleted_at` together, with `CHECK (deleted = (deleted_at IS NOT NULL))`. Do not use legacy `is_soft_deleted` or a `soft_deleted` status.
+- Soft-deleted threads are hidden from regular users while remaining available to staff; the underlying thread and posts are not hard-deleted by this action.
+- Staff soft-deletes write a central `audit_log` entry identifying the staff actor and target. User self-deletion is not audit logged. Content rows do not carry `deleted_by` (D-141).
+- Cross-surface behavior for hidden, shadow-banned, and deleted content—including counters, search, feeds, notifications, unread markers, and recalculation after release—remains open under P-075.
+
+#### Advertisements, Tags, and Read Tracking
+
+- A recruitment advertisement may reference a guild through nullable `advertisement.guild_id` (D-075, D-129).
+- Advertisements auto-pause after 60 days of inactivity based on `last_bumped_at`; they remain visible on the board in a paused state and sink to the bottom. Automated bumping is not allowed (D-077).
+- Threads use the central tag component and taxonomy contracts. Thread tag scope includes IC, OOC, and advertisement contexts; Discovery owns tag scope, aliases, and policy.
+- `rpc.thread_read_tracker` stores one `last_read_at` per `(user_id, thread_id)`. Unread posts and “jump to first unread” anchors are calculated by comparing post timestamps to `last_read_at`; there is no `last_read_post_id` FK.
+- Read-tracker rows are pruned after 180 days of inactivity by background workers. DM read state is separate and stored in `rpc.dm_participant.last_read_at`.
+
+### 6.5 Security and Privacy
+
+- Guests may read public content but cannot post, comment, react, or DM (R-002). Enforce authorization server-side on every route and mutation.
+- Verify `author_actor_id` belongs to the current session user on every post write, edit, and persona correction (R-010).
+- For restricted/invite-only threads, validate participant membership for the posting actor; thread creator ownership is not a participant role.
+- Enforce board access, guild link existence, active guild membership, and guild-restricted read rules. Staff/admin read bypass applies to guild-restricted boards; posting still follows the active-member rule unless the owning contract specifies a staff exception.
+- Treat numeric `short_id` as the lookup key; do not trust the slug as an identifier or require it to be unique.
+- Do not expose shadow-banned activity through thread bump fields or post counts.
+- Sanitize user-authored Markdown/HTML server-side and apply the 50,000-character and 2 MB request limits.
+- Staff deletion is centrally audited; self-deletion is not. Do not add deletion-attribution columns to `thread` or `post`.
+- Do not assume one global visibility rule for hidden, deleted, and shadow-banned content until cross-module visibility and recalculation behavior is finalized.
+
+### 6.6 Data Layer
+
+- Hierarchy: `rpc.category`, `rpc.board`, optional one-level parent-board relationship, `rpc.thread`, `rpc.post`.
+- Thread metadata and participants: `rpc.thread_metadata`, `rpc.thread_participant`.
+- Advertisements and guild access: `rpc.advertisement`, `rpc.guild_board_link`.
+- Read tracking: `rpc.thread_read_tracker`; DM read state remains in `rpc.dm_participant`.
+- Shared contracts: `rpc.entity_tag`, `rpc.taxonomy_group_scope`, `rpc.moderation_report`, `rpc.audit_log`, `rpc.user_bookmark`.
+- Thread state includes independent lock, pin, archive, privacy, context, hiding, and deletion fields.
+- Post state includes actor authorship, edit marker/timestamp, hiding/deletion fields, and visible counter behavior.
+- Guild board links, actor ownership, audit records, media references, tags, interactions, and notifications are owned by their respective modules.
+
+### 6.7 Open Questions
 
 - Which formatting options does the basic WYSIWYG panel include?
-- How deep can sub-boards nest?
-- Which technology delivers the real-time updates?
+- Exact field-level boundaries for participant edits to thread metadata and lore references require validation.
+- Exact interaction between thread privacy and board-level access should be tested; do not infer broader access than the contracts allow.
+- Cross-surface visibility and recalculation for hidden, shadow-banned, and soft-deleted content remains open under P-075.
+- Retention windows for forum-specific records require confirmation under P-043.
+- Hiding fields and precedence among hiding, deletion, and other restrictions require reconciliation under P-050.
+- Safe FK behavior when referenced media is hard-purged must include `thread_metadata.banner_media_id` (P-071).
+- Real-time update technology remains unspecified.
+- Read-tracker cleanup is specified as 180 days; confirm implementation scheduling details against the tracking worker.
+
+### 6.8 Decision Traceability
+
+- **Requirements:** R-002, R-010, R-021; D-068–D-079; D-123, D-124, D-129, D-136, D-137, D-138, D-140, D-141.
+- **Open follow-ups:** P-043, P-050, P-071, P-075.
+- **Schema/legacy notes:** `project.puml` Forum System and linked Guild, Tagging & Taxonomy, Moderation, Interaction, and Read/Unread Tracker entities; `rpc_temp_bundle.md` Forum and Tracking READMEs.
+- Legacy `is_soft_deleted` is superseded by `deleted` / `deleted_at`. Participant rows link actors, not user IDs. Visibility/counter recalculation and media lifecycle behavior remain unresolved.
 
 ## Feature 7: Direct Messages
 
@@ -1046,6 +1138,9 @@ As a user, I should be able to:
 | `rpc.site_config`, `rpc.audit_log` | 8, 17 | Shared configuration and audit contracts. |
 | `rpc.taxonomy_group`, `rpc.taxonomy_group_scope` | 15 | Admin-defined taxonomy groups and content-type scopes. |
 | `rpc.tag`, `rpc.tag_alias`, `rpc.entity_tag` | 15 | Canonical tags, aliases, and polymorphic tag associations. |
+| `rpc.category`, `rpc.board`, `rpc.thread`, `rpc.thread_metadata`, `rpc.thread_participant`, `rpc.post`, `rpc.advertisement`, `rpc.guild_board_link` | 6 | Forum hierarchy, thread ownership/metadata/participants, actor-authored posts, advertisements, and guild-linked boards. |
+| `rpc.thread_read_tracker` | 6 | Per-user/per-thread read timestamps and unread tracking. |
+| `rpc.moderation_report`, `rpc.audit_log`, `rpc.user_bookmark` | 6, 8, 10 | Forum report snapshots, central staff-action audit events, and thread/post bookmarks. |
 | \[Entity\] | \[1, 2\] | \[Shared / owned by which feature\] |
 
 ## Global Open Questions and Risks
