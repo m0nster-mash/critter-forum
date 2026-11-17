@@ -1,36 +1,36 @@
 # Project Requirements
 
-*Status: Draft · Owner: \[name\] · Last updated: \[date\]*
+*Status: Draft · Owner: [name] · Last updated: [date]*
 
 ## Project Summary
 
-**Project name:** \[name\]
+**Project name:** [name]
 
-**One-line description:** \[What is this, in a single sentence?\]
+**One-line description:** [What is this, in a single sentence?]
 
-**Problem statement:** \[What problem are we solving, and for whom? Why now?\]
+**Problem statement:** [What problem are we solving, and for whom? Why now?]
 
 **Goals:**
 
-- &#91;Goal 1\]
-- &#91;Goal 2\]
+- [Goal 1]
+- [Goal 2]
 
 **Non-goals (out of scope):**
 
-- &#91;Explicitly excluded item 1\]
-- &#91;Explicitly excluded item 2\]
+- [Explicitly excluded item 1]
+- [Explicitly excluded item 2]
 
 **Target users / personas:**
 
 | Persona | Description | Primary needs |
 | --- | --- | --- |
-| \[Persona 1\] | \[Who they are\] | \[What they need\] |
-| \[Persona 2\] | \[Who they are\] | \[What they need\] |
+| [Persona 1] | [Who they are] | [What they need] |
+| [Persona 2] | [Who they are] | [What they need] |
 
 **Success metrics:**
 
-- &#91;Metric 1, with target\]
-- &#91;Metric 2, with target\]
+- [Metric 1, with target]
+- [Metric 2, with target]
 
 **Constraints and assumptions:** Authentication is built on BetterAuth (default user, session, etc. tables), extended with additional tables that bridge the default ones. Budget, timeline, integrations, and compliance are still to be defined.
 
@@ -688,10 +688,10 @@ Candidate data from the notes:
 
 | Entity | Used by features | Notes |
 | --- | --- | --- |
-| \[Entity\] | \[1, 2\] | \[Shared / owned by which feature\] |
+| [Entity] | [1, 2] | [Shared / owned by which feature] |
 
 ## Global Open Questions and Risks
 
 | # | Item | Type (Question / Risk) | Owner | Status |
 | --- | --- | --- | --- | --- |
-| 1 | \[Item\] | \[Type\] | \[Name\] | Open |
+| 1 | [Item] | [Type] | [Name] | Open |
