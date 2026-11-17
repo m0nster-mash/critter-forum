@@ -42,7 +42,7 @@
 | 2 | Activity Tracker | An /activity page and a Who's Online sidebar widget, with user privacy controls | TBD | Notes captured |
 | 3 | Avatars | Per-actor layered SVG avatars, with optional static images for character/hub actors | TBD | Notes captured |
 | 4 | Shoutbox | A header-activated dropdown chat for guests and users, updated live | TBD | Notes captured |
-| 5 | Notifications | A navbar icon, dropdown, and page for reports, pings, quotes, replies, and DMs | TBD | Notes captured |
+| 5 | Notifications | Shared account-level on-site inbox, preferences, unread counts, event alerts, and notification navigation | TBD | Notes captured |
 | 6 | Forum | Forum > Category > Board > (optional one-level sub-board) > Thread > Post, updated in real time | TBD | Notes captured |
 | 7 | Direct Messages | Private OOC one-to-one account messaging, with a shared inbox for Forum private threads | TBD | Notes captured |
 | 8 | Admin | An admin panel for users, permissions, forum, shoutbox, site, reports, and audit log | TBD | Notes captured |
@@ -365,11 +365,20 @@ Candidate data from the notes:
 
 ### 5.1 Overview
 
-A notification icon in the top navigation bar opens a dropdown of unread notifications, with a link to a full notifications page.
+Notifications provide the account-level inbox for activity and system alerts generated across the platform. A notification icon in the top navigation bar opens a preview tray of unread and recent notifications, with a link to the full `/notifications` page. The inbox is shared across the recipient account's actors; email delivery is out of scope.
 
 ### 5.2 Use Cases
 
-*To be written.*
+| ID | Actor | Use case |
+| --- | --- | --- |
+| UC-5.1 | User | View unread and recent notifications from the navigation bar |
+| UC-5.2 | User | Open the full notifications directory and filter notifications by category or read status |
+| UC-5.3 | User | Follow a notification to its target, with access rechecked by the target module |
+| UC-5.4 | User | Mark an individual notification as read |
+| UC-5.5 | User | Mark all notifications as read |
+| UC-5.6 | User | Configure ordinary notification preferences in account settings |
+| UC-5.7 | Admin | Receive report and other designated staff alerts when authorized to view them |
+| UC-5.8 | Platform | Generate on-site alerts for supported social, forum, messaging, content, guild, and staff events |
 
 ### 5.3 Requirements
 
@@ -396,21 +405,141 @@ Draft requirements from the notes:
 | F5-FR-17 | Types | A notification is created any time a user's thread is replied to | TBD |
 | F5-FR-18 | Types | A notification is created any time a user's subscribed thread is replied to | TBD |
 | F5-FR-19 | Types | A notification is created any time a user receives a direct message | TBD |
+| F5-FR-20 | Inbox | The notification inbox is shared at account level across the recipient's actors; `user_id` identifies the receiving account and `actor_id` identifies its recipient actor/profile. Self-notifications are allowed. (D-087) | TBD |
+| F5-FR-21 | Events | User-triggered and system-triggered events use `rpc.notification`; event-specific details are stored in the `data` JSONB payload, without requiring a triggering-actor column. (D-088) | TBD |
+| F5-FR-22 | Preferences | Ordinary event preferences are stored in `rpc.player.notification_settings`; email delivery is out of scope. (D-090, D-094) | TBD |
+| F5-FR-23 | Events | Support the event coverage defined by owning modules, including mentions, replies/comments, DMs, follows, bookmarks, reactions, guild events, and staff alerts. Designated admin/system alerts may bypass ordinary preferences. (D-089, D-094, D-095, D-101) | TBD |
+| F5-FR-24 | Reactions | Rapid reaction changes are debounced and reactions from multiple users to the same item may be bundled; grouping and read-state behaviour remain open. (D-091, P-059, P-060) | TBD |
+| F5-FR-25 | Read state | Individual and mark-all-read actions update `is_read` and `read_at` consistently. Notification read state is independent of forum and DM read markers. (D-092, D-101) | TBD |
+| F5-FR-26 | Retention | Notifications are not automatically purged in the current scope; staff may purge records programmatically. (D-092, P-061) | TBD |
+| F5-FR-27 | Security | Only the recipient account can access or change its notifications; `actor_id` must belong to the recipient account. (D-087, R-002) | TBD |
+| F5-FR-28 | Navigation | Clicking a notification navigates to its target or anchor when valid; target access is rechecked and notifications do not grant access to restricted content. | TBD |
+| F5-FR-29 | Staff alerts | Report-related notifications preserve reporter confidentiality and do not disclose to the reported user that a report was filed. (D-089) | TBD |
+| F5-FR-30 | Deleted accounts | Retained DM-related notification views and navigation follow the established “Deleted User” masking behaviour for hard-deleted accounts. (D-103) | TBD |
+| F5-FR-31 | Delivery | The header preview and full notification directory support the account's unread count and read state; polling/realtime transport and polling interval remain to be defined. | TBD |
 
-### 5.4 Data Layer
+### 5.4 Functional Behaviour
 
-Candidate data from the notes:
+#### 5.4.1 Inbox and Navigation
 
-- Notification (recipient, type, read status, optional source reference)
-- Notification types: report, ping, quote, thread reply, subscribed-thread reply, direct message
-- Permission to view reports
+- The header notification bell displays the current unread count and opens a preview tray containing unread and recent notifications.
+- The legacy README describes background polling for new alerts without a full page reload. Exact polling interval and any push/realtime transport are not settled by the current schema.
+- The full `/notifications` directory provides filtered views. Legacy filter categories are `all`, `mentions`, `replies`, `dms`, and `system`; map event types to these categories without changing the underlying event contract.
+- Clicking a notification marks it read and navigates to the relevant target or anchor when a valid target exists. If there is no valid source, direct the user to the notifications directory.
+- Users can mark all notifications as read. Viewing the directory alone does not mark notifications as read.
+- Notification read state is separate from a forum thread's `last_read_at` and a DM participant's `last_read_at`.
 
-*Entities, fields, and relationships to be mapped.*
+#### 5.4.2 Notification Events and Preferences
 
-### 5.5 Open Questions
+- Domain modules define when an event should be generated and what its target means; Notifications defines persistence, read state, preferences, and delivery presentation.
+- Event coverage includes, where supported by the owning module: mentions, replies/comments, new DMs, follows, bookmarks, reactions, guild events, staff alerts, announcements, and moderation/report updates.
+- New DMs and replies are unbundled high-priority events in the legacy specification.
+- Multiple reactions to the same item may be bundled into a composite alert. Rapid reaction changes should be debounced.
+- Admin-specific alerts, announcements, and report-related alerts may bypass ordinary preference/suppression settings. The exact set of bypass events must be explicit in code/configuration and not inferred from a generic “system” label.
+- The legacy Notifications README says official warnings, sanctions, and site announcements bypass user suppression. Warnings remain unsettled under P-036, so this does not establish a finalized warning workflow.
+- Report-resolution notifications and confidentiality rules must align with Admin/Moderation. A reported user must not be told that a user report was filed; reporter identity must not be exposed through notification payloads.
+- User notification preferences are stored in `rpc.player.notification_settings` JSONB, bound to the OOC player/account owner. Do not introduce a competing preferences table.
+- Preference keys and defaults must be validated against the complete legacy specification and current product requirements; the schema does not define a typed JSON schema or migration behaviour.
+- Follow and bookmark notifications are on-site. Email delivery is not part of the current contract.
 
-- Which sources can a notification link to (post, shoutbox message, DM, report)?
-- Which notifications, if any, can a user turn off?
+#### 5.4.3 Reaction Bundling
+
+- Rapid reaction changes should be debounced, and reactions from multiple users to the same item can be grouped into a single notification.
+- **P-059:** The grouping key and time window are not settled.
+- **P-060:** It is not settled whether a new reaction updates a previously read bundle or creates a new unread notification.
+- Until these decisions are made, avoid hard-coding assumptions about grouping windows or notification read-state reset behaviour.
+
+#### 5.4.4 Read State and Retention
+
+- Clicking an individual notification marks it read; users can also mark all notifications read.
+- The current schema supports `is_read` and nullable `read_at`. Keep them consistent in read/unread transitions.
+- There is no automatic purge in the current settled decision. Staff may purge records programmatically.
+- The legacy README proposes automatic purging of read notifications, but that proposal conflicts with D-092. Follow D-092 unless P-061 is revisited and a new decision is recorded.
+- Retention behaviour for unread notifications is not to be inferred from the legacy proposal. P-061 is the explicit follow-up for retention and purge implementation.
+
+### 5.5 Data Layer
+
+> `project.puml` is the source of truth for the data structure. This section references existing entities and relationships; it does not define a competing schema.
+
+- **Entities:** `rpc.notification`; recipient profile/account data from `rpc.actor` and `rpc.player`; related target entities from Forum, Content, Messaging, Social Relationships, Guilds, and Moderation.
+- **Relationships:**
+  - `notification.user_id` references the receiving account.
+  - `notification.actor_id` references the recipient actor/profile.
+  - `target_type` and `target_id` identify the notification target when applicable.
+  - `data` stores event-specific JSON payload data.
+  - `player.notification_settings` stores account-level notification preferences.
+- **Constraints / lifecycle:**
+  - `type` is `varchar(50)`; it is not a database enum in the current PUML.
+  - `target_type` is `varchar(32)` and `target_id` is a UUID; target vocabulary is validated by application/domain contracts.
+  - `is_read` defaults to false; `read_at` records read time.
+  - `created_at` is required.
+  - Notification inbox is account-level; `actor_id` is the recipient profile identity.
+- **Schema gaps / discrepancies:**
+  - `notification_settings` has no typed JSON schema in `project.puml`.
+  - The notification `type` vocabulary and complete event payload shapes are not enumerated by the schema.
+  - The legacy README's automatic purge of read notifications conflicts with D-092's no-automatic-purge decision.
+  - The precise realtime/polling mechanism and interval are not defined in the schema.
+  - Reaction bundling rules remain open under P-059 and P-060.
+
+### 5.6 Security and Privacy
+
+- Only the recipient account may access its inbox and read/change its notification state. Do not expose notification records to guests or other accounts.
+- Validate that `actor_id` is an actor/profile belonging to the recipient `user_id`; do not allow a caller to assign another account's actor.
+- Treat `data` as untrusted structured input and validate payload shape per event type. Do not place secrets, full private message bodies, or unnecessary personal data in notification payloads.
+- Apply user preferences to ordinary events, while explicitly allowlisting the staff/system events that bypass them. Email delivery is out of scope.
+- Notification targets must be checked against current access rules at click-through time. A notification must not grant access to a private thread, DM, hidden post, or other restricted target.
+- If an account is hard-deleted, retained DM content shown through notifications or navigation must use the established “Deleted User” masking behaviour where applicable.
+- Reaction aggregation must not disclose inaccessible or hidden content or stale actor identity.
+- Do not implement automatic purge of read notifications unless the retention decision is explicitly revisited.
+- Moderation/report notifications must preserve reporter confidentiality and must not disclose that a report was filed against the reported user.
+
+### 5.7 Cross-Module Dependencies
+
+| Related module | Dependency / contract | Source ID(s) | Notes |
+| --- | --- | --- | --- |
+| Auth | Inbox is private to the authenticated recipient account. | R-002, D-087 | Session account must match `notification.user_id`. |
+| Actors | Recipient actor/profile is stored in `notification.actor_id`; actor ownership must match recipient account. | D-087, D-083 | Shared actor display/masking rules apply. |
+| Forum | Thread replies and other forum events can create alerts with target navigation. | D-068, D-069, D-091 | Forum owns thread/post visibility and canonical URLs. |
+| Interactions | Mentions, comments, follows, bookmarks, and reactions can generate on-site notifications. | D-083, D-091, D-094, D-095 | Interaction modules define event triggers; Notifications owns delivery/read state. |
+| Messaging | New DMs and replies trigger on-site alerts; DM read state remains separate. | D-101, D-102, D-103 | Messaging owns conversation access and message lifecycle. |
+| Admin / Governance | Sanctions, reports, and announcements may be high-priority and bypass ordinary preferences. | D-089, D-072, P-036 | Keep reporter identity confidential; warnings are not a settled workflow. |
+| Content | Blog, lore, and other content events may target a content item or comment. | D-088, D-104, D-105 | Recheck target access on navigation. |
+| Guilds | Guild-related events may notify members or relevant account owners. | Legacy Notifications README | Guild-specific event list must follow the Guild module contract. |
+| Activity | Presence/online notifications are not implied by the current activity schema. | D-097, P-063 | Presence visibility remains deferred. |
+
+### 5.8 Open Questions
+
+- Which exact notification types and event payload shapes are supported by the complete legacy specification and current owning-module contracts?
+- Which event types and preference keys/defaults are configurable, and what is the migration/validation strategy for `player.notification_settings`?
+- What polling interval or push/realtime transport should be used for the preview tray?
+- **P-036:** Are warnings first-class records, sanction types, or a separate concept, and how do they relate to trust tiers? Do not implement warning-specific notification events as a settled workflow until the warning model is decided.
+- **P-059:** What grouping key and time window should bundle reaction notifications?
+- **P-060:** If a new reaction arrives after a notification bundle is read, should it update the existing bundle or create a new unread notification?
+- **P-061:** What notification retention and staff-triggered/programmatic purge behaviour is required? Current decision is no automatic purge.
+- **P-075:** How should hidden, shadow-banned, and soft-deleted content appear across notifications and other surfaces?
+
+### 5.9 Acceptance Criteria
+
+- [ ] A user can only list/read/update notifications addressed to their account, and recipient actor ownership is validated. (D-087, R-002)
+- [ ] User-triggered and system-triggered events can be stored in `rpc.notification` with validated event-specific `data`. (D-088)
+- [ ] Ordinary notifications respect configured preferences, while explicitly designated staff/system alerts follow the documented bypass policy. (D-089, D-090)
+- [ ] Follow and bookmark alerts use on-site delivery only; no email is sent by this module. (D-090, D-094, D-095)
+- [ ] Individual and mark-all-read actions update `is_read` and `read_at` consistently. (D-092)
+- [ ] A scheduled job does not automatically purge read notifications unless a later decision explicitly authorizes it. (D-092, P-061)
+- [ ] A new DM or reply creates an on-site notification without changing the DM participant's independent `last_read_at`. (D-101)
+- [ ] Retained message/notification views do not expose a deleted account's former identity where the Deleted User masking contract applies. (D-103)
+- [ ] Reaction notification grouping and read-state behaviour are covered by tests once P-059 and P-060 are decided.
+- [ ] Clicking a notification to inaccessible content does not bypass the target module's access controls. (P-075)
+
+### 5.10 Source Documents and Traceability
+
+- **Requirements source(s):** `DECISION_LOG.md` — D-087 through D-092; cross-module D-094, D-095, D-101, D-103; `rpc_temp_bundle.md` Notifications README.
+- **Decision source:** `DECISION_LOG.md` — D-087, D-088, D-089, D-090, D-091, D-092.
+- **Schema source:** `project.puml` — `Notification System` (`rpc.notification`) and `rpc.player.notification_settings`.
+- **Legacy documentation:** `rpc_temp_bundle.md` — `/apps/rpc/src/temp/NOTIFICATIONS README.md`, plus related mentions, social, messaging, and moderation sections.
+- **Open-issue source:** `DECISION_LOG.md` / `temp_log.md` — P-036, P-059, P-060, P-061, P-075.
+- **Traceability notes:** The legacy README proposes automatic purge of read notifications, but D-092 explicitly states no automatic purge is in scope. This section follows D-092 and records the discrepancy. Event type names, JSON payload shapes, and realtime transport are not fully defined in the schema.
+
 
 ## Feature 6: Forum
 
@@ -1405,6 +1534,7 @@ The Guilds module supports user-owned community groups, membership applications 
 | `rpc.guild`, `rpc.guild_membership`, `rpc.guild_character_link` | 18 | Guild identity, membership/leadership, and character affiliations. |
 | `rpc.guild_board_link`, `rpc.guild_blog_link` | 6, 12, 18 | Typed bridges linking ordinary forum boards and blog posts to guilds. |
 | `rpc.dm_conversation`, `rpc.dm_participant`, `rpc.dm_message`, `rpc.user_dm_setting` | 7 | One-to-one account DMs, participant read state, message lifecycle, and per-user intake settings. |
+| `rpc.notification` | 5 | Account-level on-site notifications, recipient actor/profile, target reference, event payload, and individual read state. Preferences are stored in `rpc.player.notification_settings`. |
 | `rpc.user_friend`, `rpc.user_block`, `rpc.user_follow` | 10 | Account-level friendships, blocks, and polymorphic follows/subscriptions. |
 | `rpc.mention` | 10 | Polymorphic actor-handle mention records. |
 | `rpc.comment` | 13 | Flat chronological actor-authored comments with polymorphic targets and soft deletion. |
