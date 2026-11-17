@@ -54,6 +54,7 @@
 | 14 | Reactions | Likes on shoutbox messages, posts, comments, and DMs | TBD | Notes captured |
 | 15 | Taxonomy | A standard tagging system for all communications | TBD | Notes captured |
 | 16 | Actors | OOC player and IC character/hub identities, handles, ownership, lifecycle, and authorship | TBD | Notes captured |
+| 17 | Content System | Lore library, shared editor drafts, data exports, and central media/gallery assets | TBD | Notes captured |
 
 ## Feature 1: Authentication
 
@@ -691,7 +692,7 @@ Candidate data from the notes:
 
 ### 12.1 Overview
 
-A simple per-user blog. A user's blog appears on their profile.
+A per-user blog and journal system. Blog posts may represent player blogs, character journals, or admin news, authored through an actor.
 
 ### 12.2 Use Cases
 
@@ -709,20 +710,27 @@ Draft requirements from the notes:
 | F12-FR-04 | Blog posts have a title and a body area | TBD |
 | F12-FR-05 | Users can comment on blog posts | TBD |
 | F12-FR-06 | A user can disable comments on their blog post | TBD |
+| F12-FR-07 | Blog posts support `draft`, `published`, and `archived` publication states; soft deletion is separate | TBD |
+| F12-FR-08 | Blog post visibility supports `everyone`, `friends_only`, and `private` | TBD |
+| F12-FR-09 | Blog posts support custom styling and optional cover media | TBD |
+| F12-FR-10 | Blog posts support moderation hiding separately from publication and deletion state | TBD |
 
 ### 12.4 Data Layer
 
 Candidate data from the notes:
 
-- Blog post (author, title, body, visibility setting)
+- `rpc.blog_post`: represents `player_blog`, `character_journal`, and `admin_news`; authored through `author_actor_id`
+- Blog post fields include title, slug, Markdown content, status, visibility, comments setting, style configuration, optional cover media, moderation-hiding fields, and timestamps
+- `rpc.blog_post.cover_media_id` references `rpc.user_media`
 - Tags on blog posts (see Feature 15)
 - Comments on blog posts (see Feature 13)
+- Supported polymorphic relationships may include tagging, comments, reactions, mentions, media links, and lore links
 
 *Entities, fields, and relationships to be mapped.*
 
 ### 12.5 Open Questions
 
-- Which visibility options exist (public, friends, private, etc.)?
+- Blog visibility currently remains `everyone`, `friends_only`, and `private`; exact access semantics remain under review.
 - Does a user have one blog, or can they have several?
 
 ## Feature 13: Comments
@@ -746,19 +754,22 @@ Draft requirements from the notes:
 | F13-FR-03 | Users can disable or enable comments on their own blogs or profiles | TBD |
 | F13-FR-04 | Users can control who can see the comment section on their own blogs or profiles | TBD |
 | F13-FR-05 | Users can control who can comment on their blog or profile | TBD |
+| F13-FR-06 | Comments on supported targets are flat chronological feeds, not nested reply trees | TBD |
+| F13-FR-07 | Content owners can toggle comments through `allow_comments` on supported content | TBD |
 
 ### 13.4 Data Layer
 
 Candidate data from the notes:
 
-- Comment (author, target blog or profile, body, timestamp)
-- Per-blog and per-profile settings: comments enabled, who can see comments, who can comment
+- Comment (author, target, body, timestamp)
+- Supported targets include blogs and profiles; other supported content targets follow the relevant interaction contracts
+- `allow_comments` on supported content controls whether comments are enabled
+- Comments are flat and chronological, not nested
 
 *Entities, fields, and relationships to be mapped.*
 
 ### 13.5 Open Questions
 
-- Are comments flat or threaded?
 - Can comments be edited or deleted, and by whom?
 
 ## Feature 14: Reactions
@@ -900,12 +911,98 @@ Candidate entities and fields from the Actors system:
 - The legacy documentation places character dossier `details` on `rpc.character`, while the current intended schema places `details` on `rpc.actor`; downstream documentation should follow the current schema.
 - The richer character profile/dossier UI and character-to-media gallery relationship are not yet complete; acceptance should remain pending until implemented and verified.
 
+## Feature 17: Content System
+
+### 17.1 Overview
+
+The Content system covers personal Lore Library articles, shared editor drafts and auto-save, asynchronous data portability exports, and central user media/gallery assets. Blog and journal publication is documented in Feature 12; comments are documented in Feature 13; detailed moderation and audit controls remain in Feature 8.
+
+### 17.2 Use Cases
+
+As a user, I should be able to:
+
+| ID | Use case |
+| --- | --- |
+| UC-17.1 | Organize personal lore articles in folders and link them to supported content |
+| UC-17.2 | Continue editing supported content through shared auto-saved drafts |
+| UC-17.3 | Request an export of my eligible account data and receive a notification when it is ready |
+| UC-17.4 | Upload and organize media in a central gallery, subject to file and account quotas |
+| UC-17.5 | Embed or attach gallery media to supported content and see an unavailable placeholder if media is purged |
+
+### 17.3 Requirements
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| F17-FR-01 | Lore folders and articles are account-owned; shared lore libraries are deferred (P-066) | TBD |
+| F17-FR-02 | Lore articles support moderation hiding through `is_hidden` and `hidden_reason` | TBD |
+| F17-FR-03 | Lore articles can link to characters, forum threads, forum posts, and blog posts; links support ordering and are unique per article/target tuple | TBD |
+| F17-FR-04 | Lore articles may be referenced inline using the documented `[[lore:id]]` convention | TBD |
+| F17-FR-05 | `rpc.user_draft` is the shared auto-save store across supported editors, including forum threads and forum posts/replies | TBD |
+| F17-FR-06 | Drafts require `target_id` and enforce at most one draft per user/target | TBD |
+| F17-FR-07 | Preserve legacy draft synchronization timing, enforce a 50-draft per-user cap, remove drafts on publication, and purge drafts inactive for 180 days | TBD |
+| F17-FR-08 | Data exports are machine-readable JSON in a ZIP bundle and are processed asynchronously | TBD |
+| F17-FR-09 | Export only items to which the requesting user contributed, retaining full legacy scope including complete thread context and DMs | TBD |
+| F17-FR-10 | Export completion notifies the user; files and download links are purged after 7 days | TBD |
+| F17-FR-11 | Export requests use a default 24-hour per-user cooldown configurable through `site_config.export_cooldown_hours` | TBD |
+| F17-FR-12 | Media uploads accept PNG, JPEG, WebP, and GIF; SVG is excluded and file type is verified using magic bytes | TBD |
+| F17-FR-13 | Default media limits are 5 MB per file and 100 MB per user, configurable through `site_config` and per-user quota overrides | TBD |
+| F17-FR-14 | Media moderation state (`approved`, `pending_review`), hiding (`is_hidden`), and soft deletion (`deleted`, `deleted_at`) remain distinct | TBD |
+| F17-FR-15 | Media links track inline embeds and attachments; permanently purged media leaves unavailable link tombstones and renders a standard placeholder | TBD |
+| F17-FR-16 | Soft-deleted media is purged after the configurable retention period, default 30 days, without an investigation hold | TBD |
+| F17-FR-17 | Server-side media handling strips EXIF GPS/camera metadata and avoids exposing raw storage paths | TBD |
+| F17-FR-18 | Animated GIFs must be converted to animated WebP output where conversion is used, so animation is not lost | TBD |
+| F17-FR-19 | Soft deletion for applicable content/media entities uses `deleted` plus nullable `deleted_at`, with a consistency check | TBD |
+| F17-FR-20 | Each hide/unhide transition commits atomically with an `rpc.audit_log` event containing previous/new state and reason | TBD |
+
+### 17.4 Data Layer
+
+- `rpc.lore_folder` and `rpc.lore_article` are owned by `rpc.user`; an article may reference a folder or have no folder
+- Lore articles include title, body, category, visibility, comment settings, hiding fields, and common soft-delete fields
+- `rpc.lore_link` connects lore articles to characters, forum threads, forum posts, and blog posts
+- `rpc.user_draft` stores editor drafts for `forum_thread`, `forum_post`, `blog_post`, `dm_conversation`, and `lore_article`; actor attribution is nullable
+- `rpc.user_export_job` stores export jobs with states `pending`, `processing`, `completed`, and `failed`
+- `rpc.user_media` stores user-owned media; `rpc.user_media_quota` stores per-user quota overrides
+- `rpc.album` and `rpc.album_media` represent albums and membership; album visibility is inherited from the parent entity
+- `rpc.media_link` tracks media embeds/attachments for forum posts, blog posts, comments, lore articles, direct messages, and shoutbox messages
+- `rpc.site_config` stores configurable export cooldown, media retention, and upload limits
+- `rpc.audit_log` records atomic hide/unhide transitions
+- `character.static_avatar_media_id` references central media; avatar behavior remains in Feature 3
+
+### 17.5 Security and Privacy
+
+- Enforce contributor eligibility and the requesting user's access rights before exporting any item; export generation must not bypass content access or privacy controls.
+- Apply blog and lore visibility rules; do not expose private or friend-only content to unauthorized viewers.
+- Validate media types using magic bytes, reject SVG, strip EXIF location/camera metadata, and avoid exposing raw storage paths.
+- Enforce per-file and per-user quotas, including administrative configuration and per-user overrides.
+- Keep moderation status, hiding, and soft deletion as distinct states.
+- Hide/unhide state changes and their audit events must be atomic.
+- Purged media must not silently render as available; preserve unavailable `media_link` tombstones.
+- Export files and links expire and are purged after 7 days.
+
+### 17.6 Open Questions
+
+- Reconcile hiding policy, eligible hidden entity types, and interactions between hiding, soft deletion, and visibility restrictions (P-050).
+- Define safe behavior for active `character.static_avatar_media_id` references when media is purged (P-071).
+- Ensure hide/unhide transitions and audit events commit atomically (P-072).
+- Define allowed polymorphic target validation and deletion behavior for `media_link` and `lore_link` (P-074).
+- Resolve hidden-content visibility across feeds, search, notifications, counters, and other surfaces (P-075).
+- Shared lore ownership, collaboration, and permissions remain deferred (P-066).
+- Revisit blog visibility (`private` versus `friends_only`) and lore visibility (including whether `private` or `guild_only` is needed); preserve current values until explicitly decided.
+- Reconcile `media_link.target_type`, `usage_type`, and `lore_article.hidden_reason` as shared contracts.
+- Confirm media purge handling for album membership and active avatar references before purge implementation.
+
 ## Cross-Cutting Data Model
 
 *(Filled in once the features are complete. Consolidates the entities from each feature, resolves overlaps, and shows the full set of relationships.)*
 
 | Entity | Used by features | Notes |
 | --- | --- | --- |
+| `rpc.blog_post` | 12 | Blog, journal, and admin-news content; actor-authored, with optional cover media. |
+| `rpc.lore_folder`, `rpc.lore_article`, `rpc.lore_link` | 17 | Personal lore library and polymorphic links to supported content. |
+| `rpc.user_draft` | 17 | Shared per-user/per-target editor draft persistence. |
+| `rpc.user_export_job` | 17 | Asynchronous data portability export jobs. |
+| `rpc.user_media`, `rpc.user_media_quota`, `rpc.album`, `rpc.album_media`, `rpc.media_link` | 3, 17 | Central media/gallery storage, quotas, albums, and content links. |
+| `rpc.site_config`, `rpc.audit_log` | 8, 17 | Shared configuration and audit contracts. |
 | \[Entity\] | \[1, 2\] | \[Shared / owned by which feature\] |
 
 ## Global Open Questions and Risks
