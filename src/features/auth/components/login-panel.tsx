@@ -1,7 +1,10 @@
+"use client";
+
 import {signIn} from "@/lib/auth-client";
+import {ERROR_MESSAGES, USER_ALERTS} from "@/lib/constants/messages";
 import {LoginPanelProps} from "@/lib/types";
-import {useRouter} from "next/router";
-import {useState} from "react";
+import {useRouter} from "next/navigation";
+import {type SubmitEvent, useState} from "react";
 
 export function LoginPanel({onSuccess}: LoginPanelProps) {
 
@@ -14,7 +17,7 @@ export function LoginPanel({onSuccess}: LoginPanelProps) {
     async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         setError(null);
-        setLoading(true)
+        setLoading(true);
 
         try {
             const attemptSignIn = await signIn.email({
@@ -23,8 +26,7 @@ export function LoginPanel({onSuccess}: LoginPanelProps) {
             });
 
             if (attemptSignIn.error) {
-                setError(attemptSignIn.error.message || "Failed to log in. Please check your credentials.");
-
+                setError(attemptSignIn.error.message || ERROR_MESSAGES.LOGIN_FAILED);
             } else {
                 if (onSuccess) {
                     onSuccess();
@@ -32,8 +34,8 @@ export function LoginPanel({onSuccess}: LoginPanelProps) {
                 router.push("/home");
                 router.refresh();
             }
-        } catch(err: unknown) {
-            setError(err instanceof Error ? err.message : "An unexpected error occurred.");
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : ERROR_MESSAGES.LOGIN_UNKNOWN_ERROR);
         } finally {
             setLoading(false);
         }
@@ -42,6 +44,11 @@ export function LoginPanel({onSuccess}: LoginPanelProps) {
     return (
         <>
             <div>
+                {error && (
+                    <p>
+                        {error}
+                    </p>
+                )}
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="login-email">
@@ -71,7 +78,7 @@ export function LoginPanel({onSuccess}: LoginPanelProps) {
                     </div>
                     <div>
                         <button type="submit" disabled={loading}>
-                            {loading ? "Logging in..." : "Login"}
+                            {loading ? USER_ALERTS.LOGIN_PROCESSING : USER_ALERTS.LOGIN_PENDING}
                         </button>
                     </div>
                 </form>
