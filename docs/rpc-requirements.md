@@ -52,7 +52,7 @@
 | 12 | Blogs | A simple per-user blog with tags, visibility controls, and comments | TBD | Notes captured |
 | 13 | Comments | Comments on blogs and profiles, with owner controls | TBD | Notes captured |
 | 14 | Reactions | Likes on shoutbox messages, posts, comments, and DMs | TBD | Notes captured |
-| 15 | Taxonomy | A standard tagging system for all communications | TBD | Notes captured |
+| 15 | Taxonomy & Discovery | Shared taxonomy/tagging, tag administration, aliases, and permission-aware global search/browse | TBD | Notes captured |
 | 16 | Actors | OOC player and IC character/hub identities, handles, ownership, lifecycle, and authorship | TBD | Notes captured |
 | 17 | Content System | Lore library, shared editor drafts, data exports, and central media/gallery assets | TBD | Notes captured |
 
@@ -804,39 +804,80 @@ Candidate data from the notes:
 
 - Is "like" the only reaction, or are there others?
 
-## Feature 15: Taxonomy
+## Feature 15: Taxonomy & Discovery
 
 ### 15.1 Overview
 
-A standard tagging system for all communications.
+The Discovery system provides shared taxonomy/tagging, tag administration and moderation, aliases, and global
+search/browse across forum threads/posts, blogs, lore, characters, guilds, and media. Search and tag-result surfaces
+must respect the current viewer's permissions. Search-index design and several browse/tag edge cases remain open.
 
 ### 15.2 Use Cases
 
-*To be written.*
+As a user, I should be able to:
+
+| ID | Use case |
+| --- | --- |
+| UC-15.1 | Add tags to supported content using shared typeahead with usage counts and fuzzy matches |
+| UC-15.2 | Find and select canonical tags when entering an alias |
+| UC-15.3 | Submit a new tag where group policy permits, with approval where required |
+| UC-15.4 | Search across supported content types using text, tags, filters, and sorting |
+| UC-15.5 | Browse discovery content when the search query is empty |
+| UC-15.6 | Open a tag page showing uses I am authorized to access and report a tag |
+| UC-15.7 | Manage tags, aliases, taxonomy groups, and applicable content types when authorized staff |
 
 ### 15.3 Requirements
 
-Draft requirements from the notes:
-
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| F15-FR-01 | The system provides a standard tagging system for all communications | TBD |
-
-Blog tagging is noted in Feature 12.
+| F15-FR-01 | Taxonomy groups are admin-defined and scoped to supported content types, including forum threads, blog posts, actors, lore articles, guilds, gallery media, and albums | TBD |
+| F15-FR-02 | Each taxonomy group defines selection mode (`single` or `multi`), whether selection is required, creation policy, and sort order | TBD |
+| F15-FR-03 | Tag creation policy is `open`, `moderated`, or `staff_only`; creation and approval behavior follows the selected policy | TBD |
+| F15-FR-04 | “Create anyway” never bypasses group policy, duplicate handling, or approval requirements | TBD |
+| F15-FR-05 | Search and tag entry resolve aliases to canonical tags and visibly clarify the canonical term | TBD |
+| F15-FR-06 | Duplicate merges move associations to the surviving tag and preserve the old tag as an alias | TBD |
+| F15-FR-07 | User-facing typeahead and filters show only approved, enabled tags, with usage counts and fuzzy matches | TBD |
+| F15-FR-08 | The shared tag component is used on thread, blog, character, player, lore, and guild forms; tag pages show accessible uses and provide “Report tag” | TBD |
+| F15-FR-09 | Tag reports enter the existing moderation queue; disabling a tag preserves existing associations | TBD |
+| F15-FR-10 | Global search covers forum threads/posts, blogs, lore, characters, guilds, and media, enforcing viewer permissions before returning results | TBD |
+| F15-FR-11 | Search supports filters for content type, tags, date, author, and rating, and sorting by relevance, newest, oldest, or popular | TBD |
+| F15-FR-12 | Relevance prioritizes exact title matches, then partial title matches, then body/tag matches; popular search counts matching content visible to the current viewer | TBD |
+| F15-FR-13 | An empty search query displays a browse view with filters and popular tags/content | TBD |
+| F15-FR-14 | Ordinary search excludes hidden and deleted content; authorized staff access is governed by staff/moderation permissions | TBD |
+| F15-FR-15 | Restricted content must not leak through search snippets, counts, facets, titles, URLs, or other result metadata | TBD |
 
 ### 15.4 Data Layer
 
-Candidate data from the notes:
+- `rpc.taxonomy_group` stores group name, selection mode (`single`/`multi`), `is_required`, `creation_policy`, and sort order
+- `rpc.taxonomy_group_scope` maps groups to supported target types; `thread_context` is nullable and, when set, applies only to `forum_thread`
+- `rpc.tag` stores display name, slug, normalized key, official/disabled flags, approval status, creator, similarity reference where applicable, and usage count
+- Tag approval states are `pending_review`, `approved`, and `rejected`; schema default is `approved`
+- `rpc.tag_alias` maps aliases to canonical tags
+- `rpc.entity_tag` bridges tags to polymorphic targets
+- Slug and normalized key are unique within a taxonomy group; alias slug is unique; entity-tag uses the composite key `tag_id`, `target_type`, `target_id`
+- `pg_trgm` indexes support typeahead matching; alias/canonical collisions and normalized resolution require application-level checks
+- Searchable targets include Forum, Blog & Journal, Lore Library, Actors, Guilds, and Media entities
 
-- Tag
-- Tagged items across all communication types
+### 15.5 Security and Privacy
 
-*Entities, fields, and relationships to be mapped.*
+- Enforce the current viewer's permissions before returning search results.
+- Public content may be discoverable; friend-only content appears only to viewers authorized to access it.
+- Hidden and deleted content is excluded from ordinary search; staff access is permission-gated.
+- Do not reveal restricted content through snippets, result counts, facets, or other result metadata.
+- User-facing typeahead and filters show only approved and enabled tags.
+- “Create anyway” cannot override group creation policy, approval requirements, or duplicate/alias rules.
+- Staff taxonomy management uses applicable staff permissions. “Staff” follows G-7: admins plus users holding the relevant permission; admins implicitly hold all permissions.
+- Hidden-content precedence and visibility enforcement across other surfaces remain open under P-050 and P-075.
 
-### 15.5 Open Questions
+### 15.6 Open Questions
 
-- Which content types count as "communications" (threads, posts, blogs, shoutbox, DMs)?
-- Can users create new tags, or only admins?
+- Choose the search-indexing design and verify permission enforcement before results and metadata are returned (P-068).
+- Decide disabled-tag behavior for historical content, new tagging, typeahead, filters, and direct tag pages (P-069).
+- Define browse-page popular-content calculation separately from the already-defined popular search sort (P-070).
+- Define allowed polymorphic target validation and target deletion behavior, including `entity_tag` (P-074).
+- Reconcile hidden-content visibility across search, feeds, notifications, counters, and other surfaces (P-075).
+- Review the purpose/need for `taxonomy_group_scope.thread_context` and confirm the supported `entity_tag.target_type` set.
+- Confirm collision handling for normalized tag/alias resolution and any additional alias constraints.
 
 ## Feature 16: Actors
 
@@ -1003,6 +1044,8 @@ As a user, I should be able to:
 | `rpc.user_export_job` | 17 | Asynchronous data portability export jobs. |
 | `rpc.user_media`, `rpc.user_media_quota`, `rpc.album`, `rpc.album_media`, `rpc.media_link` | 3, 17 | Central media/gallery storage, quotas, albums, and content links. |
 | `rpc.site_config`, `rpc.audit_log` | 8, 17 | Shared configuration and audit contracts. |
+| `rpc.taxonomy_group`, `rpc.taxonomy_group_scope` | 15 | Admin-defined taxonomy groups and content-type scopes. |
+| `rpc.tag`, `rpc.tag_alias`, `rpc.entity_tag` | 15 | Canonical tags, aliases, and polymorphic tag associations. |
 | \[Entity\] | \[1, 2\] | \[Shared / owned by which feature\] |
 
 ## Global Open Questions and Risks
