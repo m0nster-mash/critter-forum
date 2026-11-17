@@ -38,7 +38,7 @@
 
 | # | Feature | Short description | Priority | Status |
 | --- | --- | --- | --- | --- |
-| 1 | Authentication | Login, logout, registration, email confirmation, account pages, and role-based access, built on BetterAuth | TBD | Notes captured |
+| 1 | Authentication | Login, logout, registration, email confirmation, account pages, and role-based access, built on BetterAuth | TBD | Partially implemented |
 | 2 | Activity Tracker | An /activity page and a Who's Online sidebar widget, with user privacy controls | TBD | Notes captured |
 | 3 | Avatars | Customizable avatars built from layered SVG images | TBD | Notes captured |
 | 4 | Shoutbox | A header-activated dropdown chat for guests and users, updated live | TBD | Notes captured |
@@ -59,7 +59,7 @@
 
 ### 1.1 Overview
 
-Authentication uses BetterAuth, with its default user, session, and related tables. Additional tables bridge the default BetterAuth tables.
+Authentication uses Better Auth for core account credentials and sessions, with RPC-specific profile, permission, registration, and lifecycle data held in separate tables.
 
 ### 1.2 Use Cases
 
@@ -88,25 +88,78 @@ As a user, I should be able to:
 
 ### 1.3 Requirements
 
-*To be defined while working through the use cases.*
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| F1-FR-01 | Use Better Auth for core account credentials, sessions, linked accounts, and verification records. Keep RPC-specific profile, trust-tier, privacy, and lifecycle state in separate RPC tables; do not add RPC fields to vanilla Better Auth tables. (R-001) | TBD |
+| F1-FR-02 | Guests may read public content but may not post, comment, react, or send direct messages. Access must be checked server-side for each protected page and operation. (R-002) | TBD |
+| F1-FR-03 | Session cookies must be `HttpOnly`, `Secure`, and `SameSite=Lax`, with a 30-day sliding expiry. (R-003) | TBD |
+| F1-FR-04 | A ban or password reset must revoke all active sessions. (R-005) | TBD |
+| F1-FR-05 | Users may view and revoke their own sessions, including the current session. (R-006) | TBD |
+| F1-FR-06 | Login and password-reset attempts must be limited to five failures per 15-minute window, followed by exponential lockout. (R-007) | TBD |
+| F1-FR-07 | Registration and password reset must be protected by Turnstile. (R-008) | TBD |
+| F1-FR-08 | Each account owns exactly one player actor and may own multiple character actors; a character actor represents either a character or a hub. Player provisioning occurs during registration. (R-009) | TBD |
+| F1-FR-09 | All content is authored by an actor. Every content write must verify server-side that the actor belongs to the authenticated session user; a client-supplied actor ID is not proof of ownership. (R-010) | TBD |
+| F1-FR-10 | Core authentication configuration belongs on the Better Auth `user` record; RPC profile, age-certification, date-of-birth, terms, privacy, social, notification, and trust-tier data belongs on `rpc.player`. (R-011) | TBD |
+| F1-FR-11 | Admins have all known permissions. Delegated staff receive permissions individually or through permission groups, optionally scoped to an entity; there is no moderator role. Permission definitions and grants are owned by Admin. (R-012, D-072) | TBD |
+| F1-FR-12 | The login name (`user.name`) is distinct from the public display name (`player.display_name`). (R-041) | TBD |
+| F1-FR-13 | Account deletion is initially a reversible soft delete: hide all owned actors, revoke sessions, and mask authorship on retained content. There is no automatic hard delete or mass purge; staff process hard-delete requests. (R-052, R-061) | TBD |
+| F1-FR-14 | Registration mode is enforced server-side and supports `open`, `gated`, and `closed`. Gated registration records applications with `pending`, `approved`, or `rejected` status; pending applicants cannot sign in. (D-057, D-063, P-047) | TBD |
+| F1-FR-15 | Registration screening supports blacklist entries for IP, IP range, email domain, and email hash, with `block` or `gate` outcomes. Screening must not be bypassable through direct API calls. (D-063) | TBD |
+| F1-FR-16 | Staff review of registration applications is limited to applicants whose email is verified. Rejected application history is retained after account deletion and permits same-email reapplication. (P-047) | TBD |
+| F1-FR-17 | A soft-deleted account cannot create a session. Restoring an account unmasks only actors marked as deleted due to account deletion and does not clear independent bans or sanctions. (D-043, D-067, D-138) | TBD |
+| F1-FR-18 | Hard deletion, when implemented, must retain the `rpc.user` row, anonymize sensitive Better Auth user fields according to the approved P-048 contract, preserve required audit and deletion history, and retain masked actor attribution. | TBD |
+| F1-FR-19 | Formal bans and shadow-bans must remain enforceable after hard deletion through a privacy-preserving keyed email hash; mutes do not trigger email retention. Implementation and retention duration remain deferred pending P-043. | TBD |
+| F1-FR-20 | Authorization must be derived server-side from the session and database. Client-side permission checks are for presentation only and never replace server-side guards. Unknown permissions fail closed. (R-012) | TBD |
 
 ### 1.4 Data Layer
 
-Candidate data from the notes:
+- Better Auth core tables in the `rpc` schema: `rpc.user`, `rpc.session`, `rpc.account`, and `rpc.verification`. The admin plugin adds `user.role`, `user.banned`, `user.ban_reason`, `user.ban_expires`, and `session.impersonated_by`.
+- `rpc.user_deletion` stores the latest account-deletion lifecycle state (one row per user); its user reference uses `ON DELETE RESTRICT`.
+- `rpc.player` is the one-to-one OOC profile extension; `rpc.actor` represents the player and character/hub identities. The Actors module owns these tables and provisions the player actor during registration.
+- Registration and screening entities: `rpc.registration_application` (application status, applicant and reviewer references) and `rpc.security_blacklist` (IP, IP range, email-domain, and email-hash entries with `block` / `gate` action).
+- Admin-owned related entities include `rpc.site_config` (including `registration_mode`), `rpc.audit_log`, `rpc.staff_permission`, `rpc.permission_group`, `rpc.permission_group_item`, and `rpc.user_permission_group`.
+- `rpc.user_ip_log` is the separate intended store for durable per-user IP history; it is not yet implemented.
+- The trust-tier table is not yet implemented; `player.trust_tier_id` is currently a UUID without a foreign key.
+- Keep account credentials and session data in Better Auth tables; keep profile and community-specific data in RPC tables.
 
-- BetterAuth default tables (user, session, etc.)
-- Additional tables that bridge the default BetterAuth tables (to be defined)
-- Username, in addition to email and password
-- Roles, including `user` and `admin`
-- Email confirmation status
-- Account ban status
+*The `project.puml` is the source of truth for RPC entities and relationships. Reconcile the documented auth schema with Better Auth CLI output and `project.puml` when either changes.*
 
-*Entities, fields, and relationships to be mapped.*
+### 1.5 Security and Privacy
 
-### 1.5 Open Questions
+- Session cookies use `HttpOnly`, `Secure`, and `SameSite=Lax`; `Secure` is currently configured only in production. Sessions have a 30-day expiry refreshed at most once per day.
+- A ban, password reset, soft deletion, or staff password change revokes all sessions. A signed-in password change requires the current password and revokes the user's other sessions.
+- Never expose password values or hashes. Password hashing uses Better Auth's default scrypt hasher; code that writes `account.password` directly must use Better Auth's `hashPassword`.
+- Do not expose session IP address or user-agent metadata to anyone other than the owning user.
+- Enforce registration mode, application status, and blacklist outcomes on the server. Pending or soft-deleted accounts must not create sessions.
+- Derive authorization from the server-side session and database. Do not trust caller-supplied roles, staff flags, or actor IDs.
+- Every content write must validate actor ownership. Guest write, reaction, and DM operations are disallowed.
+- Account authentication data belongs in Better Auth records; private profile and personal information belongs in `rpc.player` and must not leak into public payloads.
+- Database credentials and Better Auth secrets must be supplied through environment configuration and must not be committed to version control. Development seed credentials are local-only.
 
-- Does avatar and creature creation happen at registration, or after email validation?
-- Which additional tables bridge the default BetterAuth tables?
+### 1.6 Implementation Status and Verification
+
+The Auth README describes the system as partially implemented, not production-ready. Code presence does not establish that a requirement has passed runtime verification.
+
+- Implemented: Better Auth configuration and API handler; core auth schema; login, registration, sign-out, settings, and session-review UI; server-side guards; unified permission evaluation (unit-tested); registration-mode and blacklist screening hooks; player-actor provisioning on registration; account soft-delete and restore paths.
+- Implemented but requiring runtime verification: login and registration flows; session cookie attributes and expiry; session listing and revocation; ban sign-in rejection; registration application approval/rejection and blacklist outcomes; account lifecycle actions.
+- Deferred/not implemented: email verification and delivery; self-service password reset; Turnstile; login/reset rate limiting and exponential lockout; staff hard deletion; retained-ban integration after hard deletion; durable user IP history; a trust-tier table; shared actor-ownership validation across every content-writing operation.
+- Authorization is enforced per page and operation. There is no global middleware/proxy layer; every protected page, API route, server action, and content write must call the appropriate server-side guard.
+- `routes.ts` access metadata is not enforcement unless a route explicitly calls a guard. The `/profile/[id]` placeholder is noted as lacking a guard.
+- The current `/settings` privacy panel reads `stealthMode` and `hideLocation` from the Better Auth session user, although those fields belong to `rpc.player`; the panel therefore initializes incorrectly and must be corrected by the Actors settings work.
+- The Auth module owns session and identity guards (`getSession`, `requireAuth`, `can`, `requirePermission`, `requirePagePermission`, `requireAdmin`, `checkUserData`) and client-side policy evaluation (`hasPermission`). Admin owns permission definitions, grants, groups, and effective-permission resolution. `requireAdmin()` delegates to `can("admin.dashboard")`; client-side `hasPermission()` is never an enforcement boundary.
+
+### 1.7 Open Questions and Deferred Work
+
+- **P-042:** Where should rate-limit counters be stored (Redis, memory, or Better Auth's built-in limiter)? Preserve the five-failures-per-15-minutes rule and exponential lockout.
+- **P-052:** Verify through tests that Better Auth rejects sign-in when native ban fields are set and that Admin's delegated server-action ban/session-revocation contract remains effective.
+- **P-022, P-023, P-024:** Trust-tier seed values, promotion criteria, T0/T5 behaviour, and interactions with mutes and admin-role changes remain open in the Trust Tier work.
+- **P-036:** Warning levels and their relationship to sanctions and trust tiers remain open across Auth, Admin, Security, and Shoutbox.
+- Email verification/delivery and email-change verification must be designed and tested before deployment. Staff review remains unavailable for unverified applicants until email verification is implemented.
+- Turnstile and rate limiting must be completed before authentication and registration are considered production-ready.
+- Hard deletion and retained-ban enforcement remain deferred until blacklist integration, cross-module referential handling, and P-043 retention policy are ready. The approved P-048 anonymization contract is settled; its execution is not.
+- Reconcile the small schema discrepancies between `auth-schema.ts` and `project.puml` (including `user.role` type and verification timestamp nullability) during schema verification.
+- Decide whether a separate append-only lifecycle-event table is needed; `rpc.user_deletion` stores only the latest lifecycle state, while audit records remain the default history for staff actions.
+- Player provisioning is implemented through `provisionPlayerActor` on registration; confirm the workflow at runtime. Avatar and creature creation timing remains a separate feature-level question.
 
 ## Feature 2: Activity Tracker
 
