@@ -44,7 +44,7 @@
 | 4 | Shoutbox | A header-activated dropdown chat for guests and users, updated live | TBD | Notes captured |
 | 5 | Notifications | A navbar icon, dropdown, and page for reports, pings, quotes, replies, and DMs | TBD | Notes captured |
 | 6 | Forum | Forum > Category > Board > (optional one-level sub-board) > Thread > Post, updated in real time | TBD | Notes captured |
-| 7 | Direct Messages | A simple DM system between users, respecting blocks | TBD | Notes captured |
+| 7 | Direct Messages | Private OOC one-to-one account messaging, with a shared inbox for Forum private threads | TBD | Notes captured |
 | 8 | Admin | An admin panel for users, permissions, forum, shoutbox, site, reports, and audit log | TBD | Notes captured |
 | 9 | Creatures | Space reserved; to be defined later | TBD | Not started |
 | 10 | User Interactions | Account-level friendships, blocking, follows, bookmarks, mentions, and thread read tracking | TBD | Notes captured |
@@ -555,35 +555,141 @@ Draft requirements from the notes:
 
 ### 7.1 Overview
 
-A simple direct message (DM) system between users.
+Private out-of-character (OOC), account-to-account direct messages, presented in the Direct Messages tab of the shared Messaging Center. Private in-character roleplay remains in Forum private/restricted threads and appears in a separate inbox tab. The initial implementation supports one-to-one conversations only.
 
 ### 7.2 Use Cases
 
-*To be written.*
+- **UC-7.1:** A user starts a direct conversation with another user and supplies a conversation title.
+- **UC-7.2:** A participant sends and reads messages in an existing direct conversation.
+- **UC-7.3:** A participant edits or soft-deletes a message where permitted.
+- **UC-7.4:** A user views the Direct Messages and Private Threads tabs in the shared Messaging Center.
+- **UC-7.5:** A user changes their DM intake preference.
+- **UC-7.6:** A blocked participant retains visibility of an existing conversation, but cannot continue editing/sending messages.
+- **UC-7.7:** Staff sends an official or moderation-related DM using the authorized staff bypass.
 
 ### 7.3 Requirements
 
-Draft requirements from the notes:
-
 | ID | Requirement | Priority |
 | --- | --- | --- |
-| F7-FR-01 | The system provides a simple DM system | TBD |
-| F7-FR-02 | Users can DM other users | TBD |
-| F7-FR-03 | Users cannot DM another user if either user has blocked the other | TBD |
+| F7-FR-01 | The system provides private one-to-one direct conversations between user accounts; messages are OOC and do not use actor/persona identity. (D-098, R-010) | TBD |
+| F7-FR-02 | Users may have multiple simultaneous conversations with the same other user; participant-pair uniqueness must not be enforced. (D-098) | TBD |
+| F7-FR-03 | Each conversation requires a user-entered title of no more than 100 characters; the title cannot be edited after creation. (D-098) | TBD |
+| F7-FR-04 | The shared `/messages` workspace provides separate Direct Messages (`/messages/dms`) and Private Threads (`/messages/private-threads`) tabs. (D-102) | TBD |
+| F7-FR-05 | DM participants are user accounts; each participant has an independent `last_read_at` marker. (D-101) | TBD |
+| F7-FR-06 | New DM messages and replies trigger on-site notifications; notification read state remains separate from DM read state. (D-101) | TBD |
+| F7-FR-07 | DM messages support editing and soft deletion; soft deletion uses consistent `deleted` and `deleted_at` values. (D-101, D-138) | TBD |
+| F7-FR-08 | Blocking leaves existing DMs visible but closed and not editable; new DM initiation is subject to the account-blocking contract. (D-100, D-096) | TBD |
+| F7-FR-09 | Staff may bypass intake and blocking restrictions for authorized official/staff duties, subject to server-side authorization. (D-100) | TBD |
+| F7-FR-10 | DM intake preferences support `everyone`, `friends_only`, and `nobody`; enforcement timing remains unresolved. Existing conversations remain open after a setting change. (D-099, P-064) | TBD |
+| F7-FR-11 | Hard account deletion preserves DM history in the other participant's inbox and masks the deleted sender as “Deleted User”. (D-103) | TBD |
+| F7-FR-12 | DM posting cooldown uses `trust_tier.post_cooldown_seconds` where configured by the current schema. | TBD |
+| F7-FR-13 | Guests cannot create conversations or send messages; authorization is enforced on every protected route and mutation. (R-002) | TBD |
+| F7-FR-14 | Group DMs, group invitations/re-entry, attachments, external image embeds, tags, and persona switching are excluded from the initial implementation. (P-065) | TBD |
 
-### 7.4 Data Layer
+### 7.4 Functional Behaviour
 
-Candidate data from the notes:
+#### Messaging Center and Conversation Scope
 
-- Direct message (sender, recipient, body, timestamp)
-- Block relationship between users (see Feature 10)
+- The shared `/messages` workspace has a Direct Messages tab (`/messages/dms`) and a Private Threads inbox tab (`/messages/private-threads`).
+- DMs are strictly OOC and account-to-account. Users cannot select a character or hub persona when sending a DM.
+- The initial implementation supports direct one-to-one conversations only. `dm_conversation.type` currently has the enum value `direct`; group conversations are deferred under P-065.
+- Users may create multiple simultaneous conversations with the same other user. Do not enforce uniqueness on the participant pair.
+- Every conversation requires a user-entered title at creation (`title` is required and limited to 100 characters). Titles cannot be edited after creation.
+- Private IC roleplay is conducted in Forum threads with `privacy` set to `restricted` or `private`; the Messaging Center surfaces those threads in a separate tab for users allowed to access them.
 
-*Entities, fields, and relationships to be mapped.*
+#### Participants and Read State
 
-### 7.5 Open Questions
+- `rpc.dm_participant` records the participating user account and that participant's `last_read_at`.
+- The current one-to-one DM contract has no participant leave/exit workflow.
+- Read state is participant-specific. Reading a DM does not mark its notification as read, and reading a notification does not change the DM's `last_read_at`.
+- The schema uses a surrogate `dm_participant.id`; do not replace it with a composite primary key.
+- Legacy group-DM membership entry/exit, re-invitation, and retained-history rules are deferred under P-065.
 
-- Are messages grouped into conversations?
-- Can DMs be deleted, and by whom?
+#### Messages and Lifecycle
+
+- Messages are authored by `sender_user_id`; persona selection is disabled.
+- Message edits are represented by `is_edited`; `updated_at` records the update timestamp. The schema does not define a full message edit-history table.
+- Soft deletion uses `deleted` and `deleted_at` together, with the schema consistency check `CHECK (deleted = (deleted_at IS NOT NULL))`.
+- A hard-deleted account's messages remain in the other participant's inbox. The sender's displayed identity is masked as “Deleted User”; account deletion must not purge the other participant's DM history. (D-103)
+- Staff soft-deletes must be recorded in the central audit log under D-141; routine user self-deletion is not logged as a staff action.
+- New messages and replies trigger on-site notifications. Notifications are separate records and do not replace DM read tracking. (D-101)
+
+#### Intake Settings and Blocking
+
+- `rpc.user_dm_setting` stores a unique settings row per user, with `intake_level` values `everyone`, `friends_only`, and `nobody`; default is `everyone`.
+- Enforcement timing is unresolved under P-064. Existing conversations remain open after a user's intake setting changes; implementation must not silently assume whether the restriction is checked only when starting a conversation, on every message, or at another point.
+- If either participant blocks the other, the existing DM remains visible but closed and cannot be edited. New 1:1 DM initiation is blocked according to the central account-blocking contract.
+- Staff may bypass DM intake and blocking restrictions for official notices and moderation duties, as specified by D-100. Apply a server-side staff authorization check.
+- Muted users can still message staff according to the current schema note. Do not interpret mute as a blanket prohibition on all DMs; follow sanction semantics from Security/Admin.
+- Legacy `allow_readd` and group re-invitation controls are group-DM rules and deferred under P-065.
+
+#### Cooldowns and Excluded Features
+
+- Posting cooldown is configured per trust tier through `rpc.trust_tier.post_cooldown_seconds`, according to the current schema note.
+- The legacy README excludes media attachments, external image embeds, tags, and actor persona swapping from this iteration.
+- Do not add group-chat titles, invitation flows, group re-entry/history rules, or group-specific controls to the current schema or behaviour as if already approved.
+
+### 7.5 Data Layer
+
+- **Entities:** `rpc.dm_conversation`, `rpc.dm_participant`, `rpc.dm_message`, `rpc.user_dm_setting`; related `rpc.user`, `rpc.user_block`, `rpc.user_friend`, `rpc.notification`, `rpc.trust_tier`, and Forum `rpc.thread` / `rpc.thread_participant`.
+- **Relationships:** `dm_conversation.created_by_user_id` references the creating user; `dm_participant.conversation_id` links participant rows to a conversation and `user_id` identifies the account; `dm_message.conversation_id` links a message to its conversation and `sender_user_id` identifies the sender; `user_dm_setting.user_id` is unique; `dm_participant.last_read_at` stores participant-specific read state.
+- **Constraints / lifecycle:** `dm_conversation.type` currently allows `direct` only; title is required and limited to 100 characters; titles are immutable; multiple direct conversations between the same pair are allowed; `intake_level` is `everyone`, `friends_only`, or `nobody` (default `everyone`); message deletion uses consistent `deleted` / `deleted_at`; blocked existing conversations remain visible but closed/non-editable; DM read state is separate from notification read state.
+- **Schema gaps / discrepancies:** Group-DM fields and behaviours in legacy documentation conflict with current direct-only scope and are deferred under P-065. Intake enforcement timing remains open under P-064. There is no dedicated DM edit-history table. Do not add attachment fields based on legacy descriptions. Exact staff-delete audit event names follow the central audit contract; do not add `deleted_by` to `dm_message`.
+
+### 7.6 Security and Privacy
+
+- Guests cannot create conversations or send DMs. Enforce session checks on every conversation/message route and mutation.
+- Validate `sender_user_id` against the authenticated user unless an authorized staff action is explicitly acting within staff duties.
+- Blocking must close existing conversations for editing while leaving them visible; it must also prevent disallowed new 1:1 conversations. Do not make a blocked conversation appear as though it never existed.
+- Intake-setting enforcement timing remains unresolved under P-064. Do not silently impose a per-message or conversation-creation rule without confirming the policy.
+- Staff bypass of intake/block restrictions requires a server-side permission check; never rely on a client-provided staff flag.
+- Account deletion must not erase the other participant's DM history. Mask the deleted sender as “Deleted User”.
+- Keep `deleted` and `deleted_at` consistent; staff-initiated soft deletes are centrally audited and self-deletes are not.
+- DM content is private. Notifications and target links must not expose message bodies or conversation details to non-participants.
+- Private/restricted IC threads are Forum content, not DMs. Their access checks follow the Forum participant/privacy contract.
+
+### 7.7 Cross-Module Dependencies
+
+| Related module | Dependency / contract | Source ID(s) | Notes |
+| --- | --- | --- | --- |
+| Auth | DMs require authenticated account identity; sender is a user account, not an actor. | R-002, D-098, D-101 | Validate sender on every write. |
+| Actors | Persona switching is disabled; deleted account identity is masked as “Deleted User”. | D-103 | Do not attach messages to character/hub actors. |
+| Forum | Private/restricted IC threads are distinct from DMs but appear in the shared Messaging Center. | D-102 | Forum owns participant and privacy checks. |
+| Interactions / Blocking | Account-wide blocks prevent new 1:1 DM initiation and close existing DMs for editing. | D-096, D-100 | Blocking cleanup is owned centrally by Interactions/Security. |
+| Notifications | New DM messages and replies create on-site alerts. | D-101 | Notification read state is independent of DM read state. |
+| Admin / Security | Staff can bypass restrictions for official notices/moderation; mute semantics and staff permissions remain governed centrally. | D-100, P-052 | Staff bypass must be server-authorized. |
+| Activity / Trust Tiers | DM posting cooldown uses `trust_tier.post_cooldown_seconds`. | `project.puml` | Apply the configured cooldown where specified. |
+| Account Deletion / Privacy | Hard account deletion retains messages for the other participant and masks the deleted sender. | D-103 | Never purge the other participant's conversation history as a side effect of account deletion. |
+
+### 7.8 Open Questions
+
+- **P-052:** Delegated staff actions must work with BetterAuth admin endpoints that require an admin caller. Confirm the staff authorization path for staff-initiated DM and related account actions.
+- **P-064:** At what point are DM intake settings enforced: conversation creation, every message, or another rule? Preserve the rule that existing conversations remain open when settings change.
+- **P-065:** Group DMs are deferred. If introduced later, define group title, membership, invitations, re-add, history, notification, and read-state rules before implementation.
+- **P-075:** Define cross-surface visibility for hidden, shadow-banned, and soft-deleted content, including DM-related notifications and message visibility without violating D-100 or D-103.
+
+### 7.9 Acceptance Criteria
+
+- [ ] Guests cannot create conversations or send messages. (R-002)
+- [ ] The system supports direct conversations only; two users can have multiple separate conversations, and titles cannot be edited after creation. (D-098)
+- [ ] A conversation requires a user-entered title of at most 100 characters. (D-098)
+- [ ] A new message creates an on-site notification, while participant `last_read_at` remains an independent DM read marker. (D-101)
+- [ ] When either participant blocks the other, the existing conversation remains visible but message editing/sending is closed according to the block contract. (D-100)
+- [ ] Intake-setting tests follow the explicitly selected policy; the unresolved enforcement point is not silently assumed. (D-099, P-064)
+- [ ] Hard-deleting an account does not remove the other participant's message history, and the deleted sender is displayed as “Deleted User”. (D-103)
+- [ ] Message delete/restore operations keep `deleted` and `deleted_at` consistent. (D-138)
+- [ ] Staff soft-deletion writes a central audit entry; ordinary self-deletion is not logged as a staff action. (D-141)
+- [ ] Private IC threads appear in a separate Messaging Center tab and continue to enforce Forum thread privacy/participant rules. (D-102)
+- [ ] Group-DM-specific fields and behaviour are absent from the initial direct-only implementation. (P-065)
+
+### 7.10 Source Traceability
+
+- **Requirements source(s):** `DECISION_LOG.md` — D-098 through D-103; D-138 and D-141; `rpc_temp_bundle.md` DMS README.
+- **Decision source:** `DECISION_LOG.md` — D-098, D-099, D-100, D-101, D-102, D-103, D-138, D-141.
+- **Schema source:** `project.puml` — `Direct Messages System` (`rpc.dm_conversation`, `rpc.dm_participant`, `rpc.dm_message`, `rpc.user_dm_setting`) and related notification, block, trust-tier, and forum entities.
+- **Legacy documentation:** `rpc_temp_bundle.md` — `/apps/rpc/src/temp/DMS README.md` and related Notifications, Forum, and Social sections.
+- **Open-issue source:** `DECISION_LOG.md` / `temp_log.md` — P-052, P-064, P-065, P-075.
+- **Traceability notes:** Legacy group-chat membership, re-entry, `left_at`, and `allow_readd` behaviour is deferred under P-065. Intake-setting enforcement remains open under P-064. This section follows the current decision and schema.
 
 ## Feature 8: Admin
 
@@ -1298,6 +1404,7 @@ The Guilds module supports user-owned community groups, membership applications 
 | `rpc.thread_read_tracker` | 6, 10 | Per-user/per-thread read timestamps and unread tracking; direct-message read state remains separate in Messaging. |
 | `rpc.guild`, `rpc.guild_membership`, `rpc.guild_character_link` | 18 | Guild identity, membership/leadership, and character affiliations. |
 | `rpc.guild_board_link`, `rpc.guild_blog_link` | 6, 12, 18 | Typed bridges linking ordinary forum boards and blog posts to guilds. |
+| `rpc.dm_conversation`, `rpc.dm_participant`, `rpc.dm_message`, `rpc.user_dm_setting` | 7 | One-to-one account DMs, participant read state, message lifecycle, and per-user intake settings. |
 | `rpc.user_friend`, `rpc.user_block`, `rpc.user_follow` | 10 | Account-level friendships, blocks, and polymorphic follows/subscriptions. |
 | `rpc.mention` | 10 | Polymorphic actor-handle mention records. |
 | `rpc.comment` | 13 | Flat chronological actor-authored comments with polymorphic targets and soft deletion. |
