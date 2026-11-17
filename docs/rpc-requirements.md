@@ -40,7 +40,7 @@
 | --- | --- | --- | --- | --- |
 | 1 | Authentication | Login, logout, registration, email confirmation, account pages, and role-based access, built on BetterAuth | TBD | Partially implemented |
 | 2 | Activity Tracker | An /activity page and a Who's Online sidebar widget, with user privacy controls | TBD | Notes captured |
-| 3 | Avatars | Customizable avatars built from layered SVG images | TBD | Notes captured |
+| 3 | Avatars | Per-actor layered SVG avatars, with optional static images for character/hub actors | TBD | Notes captured |
 | 4 | Shoutbox | A header-activated dropdown chat for guests and users, updated live | TBD | Notes captured |
 | 5 | Notifications | A navbar icon, dropdown, and page for reports, pings, quotes, replies, and DMs | TBD | Notes captured |
 | 6 | Forum | Forum > Category > Board > Thread > Post, updated in real time | TBD | Notes captured |
@@ -233,7 +233,9 @@ Candidate data from the notes:
 
 ### 3.1 Overview
 
-Customizable avatars created out of various layered `.svg` images.
+Each actor has an independent avatar configuration. Vector avatars are created from approved, layered `.svg` assets and
+pre-rendered to WebP/PNG. Character and hub actors may additionally use a static image from the owner's central media
+gallery; player/OOC actors use vector avatars only.
 
 ### 3.2 Use Cases
 
@@ -247,21 +249,47 @@ As a user, I should be able to:
 
 ### 3.3 Requirements
 
-*To be defined while working through the use cases.*
+- **R-013:** Every actor has its own independent avatar. Character actors may have both a vector avatar and a static
+  upload; player actors use vector avatars only. Static uploads use a 1:1 crop and have a 5 MB maximum input size.
+- **R-014:** Vector avatars are stacked SVG layers saved as JSON and pre-rendered to WebP/PNG on save. Palette mapping
+  and colour swapping are v2 and are excluded from the baseline.
+- **R-015:** Admins can reset non-compliant avatars.
+- Avatar configuration belongs to the selected actor. Changing one actor's avatar must not overwrite another actor's
+  configuration.
+- Vector configurations select approved SVG assets; arbitrary client-supplied SVG markup must not be trusted.
+- Static avatar binaries are managed by the central Media system. Avatar records reference media items rather than
+  unmanaged public URLs.
+- Avatar changes must validate that the actor belongs to the authenticated session user (**R-010**).
+- Administrative reset permissions and audit requirements are owned by Admin / Permissions.
 
 ### 3.4 Data Layer
 
-Candidate data from the notes:
+The current schema (`project.puml`) is the source of truth:
 
-- Avatar per user
-- Layered `.svg` images (the available layers and options)
-- The layer selections that make up each user's avatar
+- `rpc.avatar` — one-to-one actor vector-avatar configuration, with `actor_id` and `avatar` JSONB (default `{}`).
+- `rpc.actor` — identity to which the avatar configuration belongs; ownership resolves through `actor.user_id`.
+- `rpc.character` — nullable `static_avatar_media_id` for a character's static image.
+- `rpc.user_media` — central media item referenced by `static_avatar_media_id`.
+- `rpc.avatar.actor_id` is a unique FK to `rpc.actor.id`.
+- `rpc.character.static_avatar_media_id` is a nullable FK to `rpc.user_media.id`.
 
-*Entities, fields, and relationships to be mapped.*
+Vector configuration is the source for rebuilding the rendered WebP/PNG output. The schema does not yet standardize the
+JSON payload, permitted layer IDs, output dimensions, cache keys, or cache invalidation. Static avatar upload,
+validation, ownership, binary storage, and moderation belong to Media. Player actors do not have a static-avatar field;
+the static-media FK is character-only. Hubs use the shared character representation (`profile_type = 'hub'`).
+
+The legacy schema description of `avatar_type`, `avatar_url`, and `vector_config` fields on `rpc.actor` is superseded
+by the current `rpc.avatar` and `rpc.character.static_avatar_media_id` model.
 
 ### 3.5 Open Questions
 
-- Which layer categories exist (for example, body, hair, clothing)?
+- What layer categories, permitted asset IDs, ordering, required layers, and default configuration make up the formal
+  JSON schema for `rpc.avatar.avatar`?
+- What output dimensions, cache keys, and cache invalidation rules apply to pre-rendered WebP/PNG files?
+- What happens to `character.static_avatar_media_id` when the referenced media row and object are hard-purged
+  (**P-071**)? Define FK deletion behaviour or an application-level clear/invalidation flow.
+- What default avatar is applied after an admin reset, and what notification or appeal behaviour applies?
+- What exact SVG asset validation/sanitization policy applies?
 - Is avatar creation required, or can it be skipped?
 
 ## Feature 4: Shoutbox
