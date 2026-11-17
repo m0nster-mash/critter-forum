@@ -53,6 +53,7 @@
 | 13 | Comments | Comments on blogs and profiles, with owner controls | TBD | Notes captured |
 | 14 | Reactions | Likes on shoutbox messages, posts, comments, and DMs | TBD | Notes captured |
 | 15 | Taxonomy | A standard tagging system for all communications | TBD | Notes captured |
+| 16 | Actors | OOC player and IC character/hub identities, handles, ownership, lifecycle, and authorship | TBD | Notes captured |
 
 ## Feature 1: Authentication
 
@@ -111,7 +112,7 @@ Candidate data from the notes:
 
 ### 2.1 Overview
 
-Two elements: an `/activity` page and a `<WhosOnline/>` sidebar widget.
+Two elements: a `/online` page and a `<WhosOnline/>` sidebar widget. Presence is updated through API heartbeats and page transitions, using the site-configured inactivity threshold (default 30 minutes).
 
 ### 2.2 Use Cases
 
@@ -120,46 +121,60 @@ As a user, I should:
 | ID | Element | Use case |
 | --- | --- | --- |
 | UC-2.1 | Widget | See a simple widget in the sidebar that reads "n User Online" |
-| UC-2.2 | Widget | Only see the count of registered users online, not a count of guests viewing the website |
-| UC-2.3 | Widget | Be able to click the widget to be directed to the 'activity' page |
-| UC-2.4 | Activity page | See a table of all currently online users who are choosing to display their status |
+| UC-2.2 | Widget | Only see the count of active registered users who are not in stealth mode, not a count of guests viewing the website |
+| UC-2.3 | Widget | Be able to click the widget to be directed to the `/online` page |
+| UC-2.4 | Activity page | See a table of all currently online users, excluding members in stealth mode from the public view |
 | UC-2.5 | Activity page | Be able to click the "View Profile" / eye-icon button to view any visible user's profile |
 | UC-2.6 | Activity page | See a 'location' column showing the last page a user was on |
 | UC-2.7 | Activity page | See a 'timestamp' column showing the last time the user made an action on the site |
-| UC-2.8 | Activity page | See a count beneath the table of the number of guests currently viewing the site |
-| UC-2.9 | Activity page | See a separate count beneath the table of the number of 'hidden' users currently viewing the site |
+| UC-2.8 | Activity page | See guest presence separately from member rows |
+| UC-2.9 | Activity page | As a staff member with permission to view users, see members in stealth mode with a stealth indicator |
 | UC-2.10 | Activity page | Not see an entry in the table for any user who is hiding their online status / appearing offline |
-| UC-2.11 | Activity page | Not see the location of any user who is hiding their location; instead see masking text (e.g. "Viewing the Site") |
-| UC-2.12 | Settings and privacy | Be able to hide my online status, making me appear offline |
-| UC-2.13 | Settings and privacy | Be able to hide my location, masking the current page I am viewing |
+| UC-2.11 | Activity page | See the generic route label "Exploring the Site" in the public directory; staff with permission to view users can see the actual route and a location-masked indicator |
+| UC-2.12 | Settings and privacy | Be able to enable stealth mode, hiding me from public Who's Online displays and active-user counts |
+| UC-2.13 | Settings and privacy | Be able to hide my location, masking the route shown publicly |
 
 As an admin, I should:
 
 | ID | Element | Use case |
 | --- | --- | --- |
 | UC-2.14 | Admin controls | Be able to set the activity threshold in the admin panel. It defaults to 30 minutes. Any user who has not been active within the threshold is removed from the activity list and displayed as offline |
-| UC-2.15 | Admin controls | Be able to see all online users, regardless of their privacy settings, on the 'activity' page |
+| UC-2.15 | Admin controls | Be able to see all online users, regardless of their privacy settings, on the `/online` page, if I have permission to view users |
 
 ### 2.3 Requirements
 
-*To be defined while working through the use cases.*
+Draft requirements from the notes:
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| F2-FR-01 | Presence is updated through API heartbeats and page transitions | TBD |
+| F2-FR-02 | Active presence is determined by `rpc.site_config.inactivity_threshold_minutes`, defaulting to 30 minutes | TBD |
+| F2-FR-03 | Authenticated members are tracked by user ID; guests are tracked by an anonymous persistent browser token | TBD |
+| F2-FR-04 | The Who's Online widget displays active members and omits guests and members in stealth mode | TBD |
+| F2-FR-05 | The `/online` page shows guest presence separately from member rows | TBD |
+| F2-FR-06 | `stealth_mode` hides members from public presence displays and counts; authorized staff can see them with a stealth indicator | TBD |
+| F2-FR-07 | `hide_location` masks the public route with the generic label "Exploring the Site"; authorized staff can see the actual route with a masking indicator | TBD |
+| F2-FR-08 | Presence rows older than the configured inactivity threshold are purged | TBD |
+| F2-FR-09 | The activity tracker does not collect IP addresses or user-agent values; durable IP history is stored separately in `rpc.user_ip_log` | TBD |
 
 ### 2.4 Data Layer
 
 Candidate data from the notes:
 
-- Per-user last-active timestamp
-- Per-user last page visited (location)
-- Per-user privacy settings: hide online status, hide location
-- Site setting: activity threshold (default 30 minutes)
-- Counts of guests and hidden users currently viewing
+- `rpc.activity_tracker` presence data: optional user ID, guest token, route path, and last-seen timestamp
+- Per-user privacy settings on `rpc.player`: `stealth_mode` (default `false`) and `hide_location`
+- Site setting: `rpc.site_config.inactivity_threshold_minutes` (default 30 minutes)
+- Guest tokens persisted in browser `localStorage`
+- Guest presence shown separately on `/online` and omitted from the widget
+- The activity tracker does not collect IP addresses or user-agent values; durable IP history belongs in `rpc.user_ip_log`
 
 *Entities, fields, and relationships to be mapped.*
 
 ### 2.5 Open Questions
 
-- How are guests tracked, so they can be counted without a user account?
-- How do hidden users count toward the separate 'hidden' total?
+- How are guest tokens authenticated, rotated, and protected against client-side abuse?
+- What are the exact heartbeat interval and stale-row cleanup execution mechanism?
+- Should future online visibility support global or friend-only visibility?
 
 ## Feature 3: Avatars
 
@@ -399,11 +414,25 @@ Candidate data from the notes:
 
 ### 8.1 Overview
 
-The admin panel is split into sections for managing users, permissions, the forum, the shoutbox, the site, reports, and an audit log.
+The admin panel provides staff governance and moderation workflows for users, permissions, reports, sanctions, registration controls, site configuration, and audit history. Admins have full access; delegated staff receive specific permissions, optionally scoped to an entity. There is no moderator role.
 
 ### 8.2 Use Cases
 
-*To be written.*
+As an administrator or authorized staff member, I should be able to:
+
+| ID | Use case |
+| --- | --- |
+| UC-8.1 | Manage users and their account status through permission-checked staff actions |
+| UC-8.2 | Assign existing permissions directly or through permission groups, with supported entity scopes |
+| UC-8.3 | View and manage moderation reports, including filtering, assignment, and resolution notes |
+| UC-8.4 | Issue and reverse supported account sanctions, subject to the applicable staff permissions |
+| UC-8.5 | Review and decide registration applications when registration is gated |
+| UC-8.6 | Manage registration blacklist entries for IPs, IP ranges, email domains, and email hashes |
+| UC-8.7 | Hide and unhide supported content and have each transition recorded in the audit log |
+| UC-8.8 | Soft-delete content as staff, with the action recorded in the audit log |
+| UC-8.9 | View audit history when authorized |
+| UC-8.10 | Manage typed site configuration, including the activity inactivity threshold |
+| UC-8.11 | Access administrative panels only when holding the required permission |
 
 ### 8.3 Requirements
 
@@ -418,6 +447,18 @@ Draft requirements from the notes:
 | F8-FR-05 | Site | The admin panel has a Site section (contents to be defined) | TBD |
 | F8-FR-06 | Report Queue | The admin panel has a Report Queue section | TBD |
 | F8-FR-07 | Audit Log | The admin panel has an Audit Log section | TBD |
+| F8-FR-08 | Staff Permissions | Admins have full access. Delegated staff receive permissions individually or through permission groups, optionally scoped to a supported entity. There is no moderator role; permission names are defined in code and cannot be redefined by admins. (R-012, D-072) | TBD |
+| F8-FR-09 | Global Administrator | The system enforces a single global administrator; a second administrator cannot be promoted and the only administrator cannot be demoted. (D-072) | TBD |
+| F8-FR-10 | Moderation Reports | Reports support `pending`, `in_review`, `resolved`, and `dismissed` statuses, filtering, assignment, and resolution notes. Report targets use the defined `target_type` enum. (D-046) | TBD |
+| F8-FR-11 | Account Sanctions | Mutes and shadow-bans apply at user level and cascade to linked actors. Issuing a sanction creates an audit entry and immediately alerts admins. Permanent-ban override or reversal is restricted to admins. | TBD |
+| F8-FR-12 | Registration | Registration supports `open`, `gated`, and `closed` modes. In gated mode, applications support `pending`, `approved`, and `rejected` states; pending applicants cannot sign in, approval enables sign-in, and rejection retains the application while deleting the account and allowing same-email reapplication. | TBD |
+| F8-FR-13 | Registration Blacklist | Blacklist entries support `ip`, `ip_range`, `email_domain`, and `email_hash` types, with `block` or `gate` actions. | TBD |
+| F8-FR-14 | Content Hiding | Supported content types use `is_hidden`; every hide/unhide transition records previous state, new state, and reason in an audit event in the same transaction. (R-110, D-115) | TBD |
+| F8-FR-15 | Content Deletion | Staff-initiated content soft-deletes write an audit event identifying the acting staff user and deleted item; user self-deletions are not audit logged. Content rows do not require a `deleted_by` column. (R-119, D-141) | TBD |
+| F8-FR-16 | Audit Log | The audit log is append-only and readable by admins and staff with the appropriate permission. Before-and-after state is recorded in metadata. (R-054) | TBD |
+| F8-FR-17 | Site Configuration | Site configuration is stored as keyed JSON configuration and validated against a code-defined registry. Typed settings include registration mode, media upload settings, storage quotas, export cooldowns, retention windows, and the activity inactivity threshold. | TBD |
+| F8-FR-18 | Trust Tiers | Trust-tier IDs referenced in site configuration are validated in application code, and a tier referenced by configuration cannot be deleted. (P-053) | TBD |
+| F8-FR-19 | Staff Authorization | Every staff action and protected administrative route checks the applicable server-side permission; delegated account-control actions must not rely on BetterAuth admin endpoints. | TBD |
 
 Related admin capabilities are noted in Feature 1 (account management), Feature 2 (activity threshold), Feature 4 (shoutbox moderation), and Feature 6 (locking and pinning threads).
 
@@ -425,18 +466,41 @@ Related admin capabilities are noted in Feature 1 (account management), Feature 
 
 Candidate data from the notes:
 
-- Roles and permissions
-- Reports (the report queue)
-- Audit log entries
-- Site settings (for example, the activity threshold)
+- `rpc.staff_permission`, `rpc.permission_group`, `rpc.permission_group_item`, and `rpc.user_permission_group`
+- `rpc.moderation_report` (nullable reporter, assigned staff member, status, target type, and resolution notes)
+- `rpc.audit_log` (acting user, action, optional target, metadata, optional IP address, and timestamp)
+- `rpc.site_config` (keyed JSON configuration, updater, and update timestamp)
+- `rpc.security_blacklist` (type, value, action, reason, issuer, expiry, and timestamps)
+- `rpc.user_sanction` (sanction types `mute` and `shadow_ban`)
+- `rpc.user_deletion`, `rpc.registration_application`, and related user/account records
+- BetterAuth user ban fields (`banned`, `ban_reason`, `ban_expires`); bans are not a `user_sanction` type
+- Related entities managed through admin workflows, including users, actors, characters, forums, guilds, media, avatars, and content
 
 *Entities, fields, and relationships to be mapped.*
 
-### 8.5 Open Questions
+### 8.5 Security and Privacy
 
-- What belongs in the Forum, Shoutbox, and Site sections of the admin panel?
-- Which actions are written to the audit log?
-- What permissions exist beyond the `admin` role (for example, permission to view reports)?
+- Admins have full access; delegated staff are limited to assigned permissions and supported scopes. No `moderator` role exists; `user.role` values are `admin` and `user`.
+- Permission vocabulary is code-defined. Admins may assign existing delegable permissions but cannot redefine them; admin-only permissions cannot be granted to delegated staff, including through permission groups.
+- Permission groups are global; direct staff grants may be global or scoped. Scoped grants require a supported scope type and scope ID.
+- The system enforces one global administrator.
+- Report target types must be validated against the enum, and the referenced row must match the stated target type. Reporter identity must not be disclosed to the reported user; exact notification behaviour remains to be confirmed with Notifications.
+- Hide/unhide state changes and audit writes are atomic. Do not add `hidden_by` or `hidden_reason` columns to every content table by default; reconcile existing fields and entity eligibility separately.
+- Staff-initiated soft-deletes are audit logged; routine user self-deletes are not. The central audit log is used instead of per-row deletion-attribution columns.
+- Blacklist values may contain network and email-derived identifiers and require access controls and configured retention rules.
+- Trust-tier references in site configuration must be validated; referenced tiers cannot be deleted.
+
+### 8.6 Open Questions
+
+- What belongs in the Forum, Shoutbox, and other content-specific admin panels?
+- Which exact notification types and messages are sent to reporters when reports are resolved, and how is report confidentiality maintained?
+- Are warnings first-class records, sanction types, or a separate concept, and how do they relate to trust tiers? (P-036)
+- Is additional hidden-content review metadata needed, or is the audit log sufficient? (P-037)
+- What are the retention windows and purge/anonymization rules for IP logs, sanctions, reports, audit records, private data, tokens, and media? (P-043)
+- Which entities support hiding, how do existing `hidden_reason` fields reconcile with `is_hidden`, and what is the precedence among hiding, soft deletion, and other restrictions? (P-050)
+- What cross-surface visibility rules apply to hidden, shadow-banned, and soft-deleted content, including feeds, search, notifications, counters, and unread markers? (P-075)
+- Confirm the audit target-type schema against the enum-based decision; the current schema reference shows `varchar(32)`.
+- Registration email verification and delivery, and runtime integration verification of application review, remain outstanding.
 
 ## Feature 9: Creatures
 
@@ -681,6 +745,79 @@ Candidate data from the notes:
 
 - Which content types count as "communications" (threads, posts, blogs, shoutbox, DMs)?
 - Can users create new tags, or only admins?
+
+## Feature 16: Actors
+
+### 16.1 Overview
+
+The Actors system separates the authenticated account from the identity used to appear and author content. Each user has exactly one Out-Of-Character (OOC) player actor and may own any number of In-Character (IC) character actors. A character profile may represent either a character or a hub. Actor handles are globally unique. Auth owns credentials and sessions; content modules use actor identity for authorship.
+
+### 16.2 Use Cases
+
+As a user, I should be able to:
+
+| ID | Use case |
+| --- | --- |
+| UC-16.1 | Have one player actor representing my OOC identity |
+| UC-16.2 | Create and own multiple character or hub actors |
+| UC-16.3 | Set and update globally unique actor handles |
+| UC-16.4 | Manage my character or hub profile lifecycle, including activating, archiving, retiring, and reactivating it |
+| UC-16.5 | Link images from my central media gallery to a character |
+| UC-16.6 | Set a character's static avatar using a reference to my media |
+| UC-16.7 | Retain my authored content with masked attribution if a character or account is deleted |
+
+As a content author, I should:
+
+| ID | Use case |
+| --- | --- |
+| UC-16.8 | Author content as an actor rather than directly as an account |
+| UC-16.9 | Be prevented from writing content as an actor I do not own |
+
+### 16.3 Requirements
+
+| ID | Requirement | Priority |
+| --- | --- | --- |
+| F16-FR-01 | Each user owns exactly one player actor and may own any number of character actors; a character record represents either a character or a hub. (R-009) | TBD |
+| F16-FR-02 | All content is authored by an actor, and every content write verifies server-side that the actor belongs to the authenticated session user. A client-supplied actor ID is not proof of ownership. (R-010) | TBD |
+| F16-FR-03 | Actor handles are globally unique across player, character, and hub actors. | TBD |
+| F16-FR-04 | Character and hub lifecycle states are draft, active, archived, and retired. Draft and archived profiles are owner/staff-only and cannot post; active profiles are public; retired profiles are public but locked/read-only and reactivatable. (R-027, R-028) | TBD |
+| F16-FR-05 | Owners may change their own character/hub lifecycle state; staff require `characters.manage`. Each transition is recorded in an audit event in the same transaction. Allowed transitions are draft → active, active → archived, active → retired, archived → active, and retired → active. | TBD |
+| F16-FR-06 | Publishing or reactivating a character/hub requires a 1–60-character name, a valid handle, and no active account ban or mute. (R-033) | TBD |
+| F16-FR-07 | Soft deletion is separate from lifecycle status. A soft-deleted character's profile is inaccessible, while existing posts remain with masked author attribution and a visual indicator. (R-030, R-053) | TBD |
+| F16-FR-08 | Account hard deletion retains posts, threads, and comments with masked authorship, strips sensitive user data, and does not create a system actor. (R-031) | TBD |
+| F16-FR-09 | Restoring an account unmasks only actors deleted as part of account deletion; separately deleted characters remain deleted. | TBD |
+| F16-FR-10 | A character may link any number of images from its owner's central media gallery, subject to the owner's media quota. (R-032) | TBD |
+| F16-FR-11 | A character's static avatar is a nullable `static_avatar_media_id` reference to `rpc.user_media`. | TBD |
+
+### 16.4 Data Layer
+
+Candidate entities and fields from the Actors system:
+
+- `rpc.actor`: owner `user_id`, `actor_type` (`player` or `character`), globally unique `handle`, RP status, searchability, tagline, comment controls, details, counts, and deletion fields (`deleted`, `deleted_at`, `deleted_reason`)
+- `rpc.player`: OOC profile extension, including `display_name` and account-level profile/social settings
+- `rpc.character`: `actor_id`, `profile_type` (`character` or `hub`), `status` (`draft`, `active`, `archived`, or `retired`), `name`, and nullable `static_avatar_media_id`
+- `rpc.user`: owning authenticated account
+- Character-to-media gallery links to owner-owned `rpc.user_media` records
+- Actor handles are globally unique; one player actor exists per user
+- Soft deletion uses actor-level `deleted` and nullable `deleted_at`, which must be consistent; `deleted_reason` distinguishes `character_deleted` from `account_deleted`
+
+*Entities, fields, and relationships to be mapped against the schema.*
+
+### 16.5 Security and Privacy
+
+- Every actor-authored content write must validate actor ownership against the authenticated session user on the server.
+- Draft and archived profiles are visible only to their owner and staff with `characters.manage`; active and retired profiles are public. Soft-deleted actors are inaccessible.
+- Draft, archived, and retired profiles cannot post. Retired profiles may be reactivated by their owner or authorized staff.
+- Active bans and mutes prevent publishing; sanctions apply to the account and cascade to linked characters and hubs.
+- Character gallery links may reference only media owned by the relevant user.
+- Ordinary search excludes deleted actors; handle and mention resolution uses globally unique handles and respects visibility and authorization.
+
+### 16.6 Open Questions
+
+- What exact masked-author display text and visual indicator should be used for deleted characters and users? (P-038)
+- What should happen to `character.static_avatar_media_id` when the referenced media row is hard-purged? (P-071)
+- The legacy documentation places character dossier `details` on `rpc.character`, while the current intended schema places `details` on `rpc.actor`; downstream documentation should follow the current schema.
+- The richer character profile/dossier UI and character-to-media gallery relationship are not yet complete; acceptance should remain pending until implemented and verified.
 
 ## Cross-Cutting Data Model
 
