@@ -51,9 +51,7 @@ export function LoginPanel({onSuccess}: AuthFlowProps) {
                 )}
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="login-email">
-                            Email Address
-                        </label>
+                        <label htmlFor="login-email"> Email Address </label>
                         <input id="login-email"
                                type="email"
                                autoComplete="email"
@@ -64,9 +62,7 @@ export function LoginPanel({onSuccess}: AuthFlowProps) {
                                required/>
                     </div>
                     <div>
-                        <label htmlFor="login-password">
-                            Email Address
-                        </label>
+                        <label htmlFor="login-password">Password</label>
                         <input id="login-password"
                                type="password"
                                autoComplete="current-password"

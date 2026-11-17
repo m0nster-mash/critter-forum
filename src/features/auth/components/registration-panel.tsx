@@ -5,7 +5,7 @@ import {signIn} from "@/lib/auth-client";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
 import {AuthFlowProps} from "@/lib/types";
 import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {type SubmitEvent, useState} from "react";
 
 export function RegistrationPanel({onSuccess}: AuthFlowProps) {
 
@@ -92,7 +92,7 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps) {
                            autoComplete="email"
                            placeholder="email@address.com"
                            value={email}
-                           onChange={(registerEvent) => setName(registerEvent.target.value)}
+                           onChange={(registerEvent) => setPassword(registerEvent.target.value)}
                            disabled={loading}
                            required/>
                 </div>
