@@ -7,6 +7,13 @@ import {AuthFlowProps} from "@/lib/types";
 import {useRouter} from "next/navigation";
 import {type SubmitEvent, useState} from "react";
 
+/**
+ * TODO:: document
+ *
+ * @param param0
+ * @param param0.onSuccess
+ * @constructor
+ */
 export function RegistrationPanel({onSuccess}: AuthFlowProps) {
 
     const router = useRouter();

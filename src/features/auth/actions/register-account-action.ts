@@ -5,6 +5,10 @@ import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
 import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
 
+/**
+ * TODO:: document
+ * @param input
+ */
 export async function registerAccountAction(input: {
     name: string;
     email: string;
@@ -28,6 +32,7 @@ export async function registerAccountAction(input: {
     });
 
     if (!registerResult.user?.id) {
+        // TODO:: replace with correct error handling
         throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_FAILURE);
     }
 

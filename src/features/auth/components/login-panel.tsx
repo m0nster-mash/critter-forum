@@ -4,10 +4,19 @@ import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {signIn} from "@/lib/auth-client";
+import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {AuthFlowProps} from "@/lib/types";
+import {resolvePath} from "@/lib/utilities/route-utils";
 import {useRouter} from "next/navigation";
 import {type SubmitEvent, useState} from "react";
 
+/**
+ * TODO:: document
+ *
+ * @param param0
+ * @param param0.onSuccess
+ * @constructor
+ */
 export function LoginPanel({onSuccess}: AuthFlowProps) {
 
     const router = useRouter();
@@ -33,7 +42,7 @@ export function LoginPanel({onSuccess}: AuthFlowProps) {
                 if (onSuccess) {
                     onSuccess();
                 }
-                router.push("/dashboard");
+                router.push(resolvePath(PRIVATE_ROUTES.DASHBOARD));
                 router.refresh();
             }
         } catch (err: unknown) {

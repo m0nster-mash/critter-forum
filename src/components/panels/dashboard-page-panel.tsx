@@ -1,5 +1,13 @@
 import {DashboardPageProps} from "@/lib/types";
 
+/**
+ * TODO:: document
+ *
+ * @param {DashboardPageProps} param0
+ * @param {UserPropItems} param0.user
+ *
+ * @return
+ */
 export function DashboardPagePanel({user}: DashboardPageProps) {
 
     return (
