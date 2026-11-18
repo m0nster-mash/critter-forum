@@ -1,7 +1,10 @@
+import {logger} from "@/lib/alerts/server/logger";
 import {auth} from "@/lib/db/auth/auth";
 import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
+
+const log = logger.child({scope: "seed"});
 
 const TEST_PASSWORD = "password00";
 
@@ -22,7 +25,7 @@ const seedUsersData = [
  * Configures users for the database seeder.
  */
 export async function seedUsers(): Promise<void> {
-    console.info("Seeding users...");
+    log.info("Seeding users...");
 
     for (const seedUser of seedUsersData) {
         const [existingUser] = await db
@@ -32,7 +35,7 @@ export async function seedUsers(): Promise<void> {
             .limit(1);
 
         if (existingUser) {
-            console.info(`User already exists; skipping: ${seedUser.email}`)
+            log.info("User already exists; skipping.", {email: seedUser.email});
             continue;
         }
 
@@ -44,8 +47,8 @@ export async function seedUsers(): Promise<void> {
             },
         });
 
-        console.info(`Created user: ${seedUser.email}`);
+        log.info("Created user.", {email: seedUser.email});
     }
 
-    console.info("User seeding complete.");
+    log.info("User seeding complete.");
 }
