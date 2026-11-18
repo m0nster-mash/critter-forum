@@ -3,26 +3,27 @@
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
 import {signOut} from "@/lib/auth-client";
 import {REDIRECT} from "@/lib/constants/globals";
-import {LogoutButtonProps, LogoutProps} from "@/lib/types";
 import {useRouter} from "next/navigation";
-import {type MouseEvent, useState} from "react";
+import {JSX, type MouseEvent, useState} from "react";
 
 /**
- * TODO:: document
+ * Renders a stylized button component that triggers user sign-out when clicked.
  *
- * @param param0
- * @param param0.label
- * @param param0.redirectTo
- * @param param0.onBeforeLogout
- * @constructor
+ * @param   {LogoutButtonProps} props                   Configuration options for the logout button
+ * @param   {string}            [props.label="Logout"]  The display text label rendered on the button
+ * @param   {string}            [props.redirectTo="/"]  The route path to navigate to after completing logout
+ * @param   {Function}          [props.onBeforeLogout]  Optional callback executed immediately before signing out
+ *
+ * @return  {JSX.Element} The rendered logout button JSX element.
  */
 export function LogoutButton({
                                  label = AUTH_LABELS.LOGOUT_LABEL,
                                  redirectTo = REDIRECT,
                                  onBeforeLogout,
-                             }: LogoutButtonProps) {
+                             }: LogoutButtonProps): JSX.Element {
     return (
         <Logout redirectTo={redirectTo} onBeforeLogout={onBeforeLogout}>
             <button type="button">{label}</button>
@@ -31,14 +32,14 @@ export function LogoutButton({
 }
 
 /**
- * TODO:: document
+ * Wrapper component providing click-to-logout handling and session termination logic for child UI elements.
  *
- * @param param0
- * @param param0.children
- * @param param0.redirectTo
- * @param param0.onSuccess
- * @param param0.onBeforeLogout
- * @constructor
+ * @param {LogoutProps} props    Properties controlling the logout execution container.
+ * @param {ReactNode} props.children    Child elements wrapped within the interactive logout container.
+ * @param {string} [props.redirectTo="/"]    The target route to navigate to after sign-out completes.
+ * @param {Function} [props.onSuccess]    Optional callback executed upon successful logout.
+ * @param {Function} [props.onBeforeLogout]    Optional callback executed prior to initiating sign-out.
+ * @return {JSX.Element} The interactive container wrapping child elements.
  */
 export function Logout({
                            children,

@@ -1,20 +1,21 @@
 "use client";
 
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
+import {AuthFlowProps} from "@/features/auth/types";
 import {signIn} from "@/lib/auth-client";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
-import {AuthFlowProps} from "@/lib/types";
 import {useRouter} from "next/navigation";
-import {type SubmitEvent, useState} from "react";
+import {JSX, type SubmitEvent, useState} from "react";
 
 /**
- * TODO:: document
+ * Renders the registration form panel enabling account creation.
  *
- * @param param0
- * @param param0.onSuccess
- * @constructor
+ * @param   {AuthFlowProps} props               Component properties handling registration callbacks
+ * @param   {Function}      [props.onSuccess]   Optional callback function executed upon successful account registration
+ *
+ * @return  {JSX.Element}   The registration panel JSX element.
  */
-export function RegistrationPanel({onSuccess}: AuthFlowProps) {
+export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
     const router = useRouter();
     const [name, setName] = useState("");
@@ -110,7 +111,7 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps) {
                            autoComplete="password"
                            placeholder="••••••••"
                            value={email}
-                           onChange={(registerEvent) => setName(registerEvent.target.value)}
+                           onChange={(registerEvent) => setEmail(registerEvent.target.value)}
                            disabled={loading}
                            required/>
                 </div>

@@ -2,13 +2,14 @@ import {PageHeader} from "@/components/ui/page-header";
 import {LoginPanel} from "@/features/auth/components/login-panel";
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
+import {JSX} from "react";
 
 /**
- * TODO:: document
+ * Renders the full login page view composition.
  *
- * @constructor
+ * @return  {JSX.Element}   The login page view JSX element.
  */
-export function LoginPageView() {
+export function LoginPageView(): JSX.Element {
     return (
         <>
             <PageHeader {...getPageHeaderProps(PUBLIC_ROUTES.LOGIN)}/>

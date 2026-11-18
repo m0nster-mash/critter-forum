@@ -1,5 +1,5 @@
 /**
- * TODO:: document
+ * Immutable object containing UI alert and notification text strings for authentication processes.
  */
 export const AUTH_ALERTS = {
     // Login stream:

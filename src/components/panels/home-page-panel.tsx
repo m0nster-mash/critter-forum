@@ -1,9 +1,11 @@
+import {JSX} from "react";
+
 /**
- * TODO:: document
+ * Renders the default home panel.
  *
- * @return
+ * @return  {JSX.Element}   The rendered home page panel JSX element
  */
-export function HomePagePanel() {
+export function HomePagePanel(): JSX.Element {
     return (
         <>
             <h2>critter-forum</h2>
