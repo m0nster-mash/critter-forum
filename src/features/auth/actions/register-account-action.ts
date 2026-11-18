@@ -1,5 +1,6 @@
 "use server";
 
+import {ERROR_MESSAGES, USER_ALERTS} from "@/lib/constants/messages";
 import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
 
@@ -13,7 +14,7 @@ export async function registerAccountAction(input: {
     const email = input.email.trim().toLowerCase();
 
     if(!name || !email || !input.password) {
-        throw new Error("Username, email, and password are required.");
+        throw new Error(ERROR_MESSAGES.REGISTRATION_MISSING_DATA);
     }
 
     const registerResult = await auth.api.signUpEmail({
@@ -26,10 +27,10 @@ export async function registerAccountAction(input: {
     });
 
     if(!registerResult.user?.id) {
-        throw new Error("The account could not be created.");
+        throw new Error(ERROR_MESSAGES.REGISTRATION_FAILURE);
     }
 
     return {
-        message: "Your account has been created.",
+        message: USER_ALERTS.REGISTRATION_ACCOUNT_CREATED,
     }
 }
