@@ -176,8 +176,13 @@ function describeError(error: SerializedError, indent: string): string[] {
 
 const LEVEL_COLORS: Record<AlertLogLevel, string> = {debug: "90", info: "36", warn: "33", error: "31"};
 
+/**
+ * Whether to color pretty output. Reads `stdout` through `globalThis` so the Edge bundler, which also compiles
+ * `instrumentation.ts`, doesn't flag a Node-only API; on Edge the property is simply absent and colors are off.
+ */
 function colorEnabled(): boolean {
-    return typeof process !== "undefined" && Boolean(process.stdout?.isTTY) && !process.env.NO_COLOR;
+    const runtime = (globalThis as { process?: { stdout?: { isTTY?: boolean }; env?: Record<string, string | undefined> } }).process;
+    return Boolean(runtime?.stdout?.isTTY) && !runtime?.env?.NO_COLOR;
 }
 
 function formatPretty(level: AlertLogLevel, message: string, data: LogContext): string {
