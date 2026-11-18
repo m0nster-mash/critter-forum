@@ -1,10 +1,12 @@
 import {PageHeader} from "@/components/ui/page-header";
 import {RegistrationPanel} from "@/features/auth/components/registration-panel";
+import {PUBLIC_ROUTES} from "@/lib/constants/routes";
+import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 
 export function RegistrationPageView() {
     return (
         <>
-            <PageHeader title="Registration"/>
+            <PageHeader {...getPageHeaderProps(PUBLIC_ROUTES.REGISTER)}/>
             <RegistrationPanel/>
         </>
     );

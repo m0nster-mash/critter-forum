@@ -4,6 +4,8 @@ import {DashboardPagePanel} from "@/components/panels/dashboard-page-panel";
 import {PageHeader} from "@/components/ui/page-header";
 import {useSession} from "@/lib/auth-client";
 import {REDIRECT} from "@/lib/constants/globals";
+import {PRIVATE_ROUTES} from "@/lib/constants/routes";
+import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 import {redirect} from "next/navigation";
 
 export default function DashboardPageView() {
@@ -19,7 +21,7 @@ export default function DashboardPageView() {
 
     return (
         <>
-            <PageHeader title="Dashboard"/>
+            <PageHeader {...getPageHeaderProps(PRIVATE_ROUTES.DASHBOARD)}/>
             <DashboardPagePanel user={session.user}/>
         </>
     );

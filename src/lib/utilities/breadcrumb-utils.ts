@@ -38,11 +38,11 @@ export function getBreadcrumbs(
         } else {
             current = undefined;
         }
-
-        if (breadcrumbs.length > 0) {
-            breadcrumbs[breadcrumbs.length - 1].href = undefined;
-        }
-
-        return breadcrumbs;
     }
+
+    if (breadcrumbs.length > 0) {
+        breadcrumbs[breadcrumbs.length - 1].href = undefined;
+    }
+
+    return breadcrumbs;
 }

@@ -1,9 +1,3 @@
-
-
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
-
 import {RouteMetadata} from "@/lib/constants/routes";
 import {getBreadcrumbs} from "@/lib/utilities/breadcrumb-utils";
 
@@ -23,6 +17,7 @@ export function resolvePath(
     }
 
     if (!params) {
+        // TODO:: migrate to proper error handling
         throw new Error(`Route requires parameters: ${route.label}`);
     }
     return route.path(params);
@@ -39,7 +34,14 @@ export function getPageHeaderProps(
     route: RouteMetadata,
     params?: Record<string, string>,
     overrides?: { title?: string; }
-): { title: string; breadcrumb: Array<{ label: string; href?: string }> } {
+): {
+    title: string;
+    breadcrumb: Array<{
+        label: string;
+        href?: string
+    }>
+} {
+
     return {
         title: overrides?.title ?? route.title,
         breadcrumb: getBreadcrumbs(route, params),
