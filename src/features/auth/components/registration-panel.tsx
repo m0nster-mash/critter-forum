@@ -1,9 +1,14 @@
 "use client";
 
+import {AlertBanner} from "@/components/ui/alert-banner";
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
 import {AuthFlowProps} from "@/features/auth/types";
+import {useAlert} from "@/lib/alerts/client/toast-context";
+import {createAlert} from "@/lib/alerts/create-alert";
+import type {PublicAlert} from "@/lib/alerts/types";
 import {signIn} from "@/lib/auth-client";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
+import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {useRouter} from "next/navigation";
 import {JSX, type SubmitEvent, useState} from "react";
 
@@ -18,39 +23,47 @@ import {JSX, type SubmitEvent, useState} from "react";
 export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
     const router = useRouter();
+    const {notify} = useAlert();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [message, setMessage] = useState<string | null>(null);
+    const [error, setError] = useState<PublicAlert | null>(null);
     const [loading, setLoading] = useState(false);
 
     async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
         setError(null);
-        setMessage(null);
 
         const normalizedName = name.trim();
         const normalizedEmail = email.trim().toLowerCase();
 
         if (!normalizedName) {
-            setError("Please enter a valid name.");
+            setError(createAlert("AUTH_REGISTER_INVALID"));
             return;
         }
 
         if (password.length < PASSWORD_MIN_LENGTH) {
-            setError(`Password must be at least ${PASSWORD_MIN_LENGTH} characters long.`);
+            setError(createAlert("AUTH_REGISTER_INVALID"));
             return;
         }
 
         setLoading(true);
 
         try {
-            await registerAccountAction({
+            const result = await registerAccountAction({
                 name: normalizedName,
                 email: normalizedEmail,
                 password: password,
             });
+
+            if (!result.ok) {
+                setError(result.alert);
+                return;
+            }
+
+            if (result.alert) {
+                notify(result.alert);
+            }
 
             const attemptSignIn = await signIn.email({
                 email: normalizedEmail,
@@ -58,28 +71,24 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
             });
 
             if (attemptSignIn.error) {
-                setError(attemptSignIn.error.message || "Account created, but automatic sign-in failed. Please sign in.");
+                setError(createAlert("AUTH_REGISTER_SIGN_IN_FAILED"));
                 return;
             }
 
             onSuccess?.();
-            router.push("/home");
+            router.push(PRIVATE_ROUTES.DASHBOARD.path as string);
             router.refresh();
 
-        } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : "An unexpected error occurred.");
+        } catch {
+            setError(createAlert("APP_UNKNOWN_ERROR"));
         } finally {
             setLoading(false);
         }
-
     }
 
     return (
         <>
-            <div>
-                {error && (<p>{error}</p>)}
-                {message && (<p>{message}</p>)}
-            </div>
+            {error && <AlertBanner alert={error}/>}
 
             <form onSubmit={handleSubmit}>
                 <div>
@@ -108,9 +117,9 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
                     <label htmlFor="register-password">Password</label>
                     <input id="register-password"
                            type="password"
-                           autoComplete="password"
+                           autoComplete="new-password"
                            placeholder="••••••••"
-                           value={email}
+                           value={password}
                            onChange={(registerEvent) => setPassword(registerEvent.target.value)}
                            disabled={loading}
                            required/>

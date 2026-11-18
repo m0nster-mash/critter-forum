@@ -1,21 +1,25 @@
 import {getAlertDefinition} from "@/lib/alerts/create-alert";
-import {logger, type LogContext} from "@/lib/alerts/client/logger";
+import {clientLogger, ClientLogContext} from "@/lib/alerts/client/logger";
 import type {PublicAlert} from "@/lib/alerts/types";
 
 /**
- * Logs a client-originated alert according to the registry's client policy.
+ * Writes an alert to the client log according to its registry log policy.
  *
- * Use this only for failures the browser uniquely knows about (for example, a network failure
- * or an exception in a client event handler). Do not call it for server failures that have
- * already been logged by the server.
+ * @param   {PublicAlert}       alert       The alert being raised
+ * @param   {ClientLogContext}  [detail]    Optional context
  */
-export function logAlert(alert: PublicAlert, detail: LogContext = {}): void {
+export function logClientAlert(alert: PublicAlert, detail: ClientLogContext = {}): void {
     const level = getAlertDefinition(alert.code).log.client;
-    if (!level) return;
 
-    logger[level](alert.code, {
-        message: alert.message,
-        ref: alert.ref,
+    if (!level) {
+        return;
+    }
+
+    const context = {
         ...detail,
-    });
+        code: alert.code,
+        ref: alert.ref,
+    };
+
+    clientLogger[level](alert.code, context);
 }

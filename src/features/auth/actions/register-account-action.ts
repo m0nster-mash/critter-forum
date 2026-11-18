@@ -1,7 +1,8 @@
 "use server";
 
-import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
-import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
+import {createAlert} from "@/lib/alerts/create-alert";
+import {fail, succeed} from "@/lib/alerts/result";
+import {safeAction} from "@/lib/alerts/server/safe-action";
 import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
 
@@ -13,38 +14,32 @@ import {headers} from "next/headers";
  * @param   {string}    input.email     The email address of the registering user
  * @param   {string}    input.password  The plain-text password for account creation
  *
- * @return  {Promise<Object>}   Resolves to the newly created user session or user record object upon success
- *
- * @throws  {Error} Throws an error if required input parameters are missing or if registration fails
+ * @return  {Promise<ActionResult>}   Resolves to the registration result.
  */
-export async function registerAccountAction(input: {
+export const registerAccountAction = safeAction("auth.register", async (input: {
     name: string;
     email: string;
     password: string;
-}): Promise<object> {
-
+}) => {
     const name = input.name.trim();
     const email = input.email.trim().toLowerCase();
 
     if (!name || !email || !input.password) {
-        throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_MISSING_DATA);
+        return fail(createAlert("AUTH_REGISTER_INVALID"));
     }
 
     const registerResult = await auth.api.signUpEmail({
         body: {
             name: name,
             email: email,
-            password: input.password
+            password: input.password,
         },
         headers: await headers(),
     });
 
     if (!registerResult.user?.id) {
-        // TODO:: replace with correct error handling
-        throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_FAILURE);
+        return fail(createAlert("AUTH_REGISTER_FAILED"));
     }
 
-    return {
-        message: AUTH_ALERTS.REGISTRATION_ACCOUNT_CREATED,
-    }
-}
+    return succeed(undefined, createAlert("AUTH_REGISTER_SUCCESS"));
+});
