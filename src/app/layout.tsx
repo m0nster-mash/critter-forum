@@ -1,7 +1,7 @@
 import layoutStyle from "@/components/styles/layout.module.css"
 import LogoutButton from "@/features/auth/components/logout-button";
 import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
-import {getPageHeaderProps, resolvePath} from "@/lib/utilities/route-utils";
+import {resolvePath} from "@/lib/utilities/route-utils";
 import type {Metadata} from "next";
 import "./globals.css";
 import React from "react";

@@ -1,7 +1,7 @@
 import DashboardPageView from "@/components/views/dashboard-page-view";
 
 /**
- * Auth -> Login page
+ * Private -> User Dashboard Page
  */
 export default function DashboardPage() {
     return (

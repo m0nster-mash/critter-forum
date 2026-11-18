@@ -9,6 +9,15 @@ import {LogoutButtonProps, LogoutProps} from "@/lib/types";
 import {useRouter} from "next/navigation";
 import {type MouseEvent, useState} from "react";
 
+/**
+ * TODO:: document
+ *
+ * @param param0
+ * @param param0.label
+ * @param param0.redirectTo
+ * @param param0.onBeforeLogout
+ * @constructor
+ */
 export function LogoutButton({
                                  label = AUTH_LABELS.LOGOUT_LABEL,
                                  redirectTo = REDIRECT,
@@ -21,6 +30,16 @@ export function LogoutButton({
     );
 }
 
+/**
+ * TODO:: document
+ *
+ * @param param0
+ * @param param0.children
+ * @param param0.redirectTo
+ * @param param0.onSuccess
+ * @param param0.onBeforeLogout
+ * @constructor
+ */
 export function Logout({
                            children,
                            redirectTo = REDIRECT,

@@ -1,3 +1,8 @@
+/**
+ * TODO:: document
+ *
+ * @return
+ */
 export function HomePagePanel() {
     return (
         <>

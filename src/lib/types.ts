@@ -19,7 +19,7 @@ export interface AuthFlowProps {
 }
 
 /**
- * TODO:: comment
+ * TODO:: document
  */
 export interface LogoutButtonProps {
     label?: string;
@@ -28,7 +28,7 @@ export interface LogoutButtonProps {
 }
 
 /**
- * TODO:: comment
+ * TODO:: document
  */
 export interface LogoutProps {
     children?: ReactNode;
@@ -38,14 +38,14 @@ export interface LogoutProps {
 }
 
 /**
- * TODO:: comment
+ * TODO:: document
  */
 export interface DashboardPageProps {
     user: UserPropItems;
 }
 
 /**
- * TODO:: comment
+ * TODO:: document
  */
 export type UserPropItems = {
     name: string;

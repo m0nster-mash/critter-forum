@@ -8,7 +8,13 @@ import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 import {redirect} from "next/navigation";
 
+/**
+ * TODO:: document
+ *
+ * @return
+ */
 export default function DashboardPageView() {
+
     const {data: session, isPending} = useSession();
 
     if (!isPending && !session?.user) {
