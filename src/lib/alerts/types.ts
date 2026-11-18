@@ -46,8 +46,8 @@ export interface AlertDefinition {
 }
 
 /**
- * The alert as it crosses the server/client boundary. Primitives only, so it serializes cleanly out of server
- * actions. Never holds internal detail (causes, stacks, request context).
+ * The alert as it crosses the server/client boundary. Primitives only, so it serializes cleanly out of server actions.
+ * Never holds internal detail (causes, stacks, request context).
  *
  * @property    {string}            code            Registry key, e.g. `AUTH_LOGIN_INVALID_CREDENTIALS`
  * @property    {AlertSeverity}     severity        Severity used for styling and live-region role
@@ -73,7 +73,7 @@ export interface PublicAlert {
  * @property    {AlertPresentation}                 [presentation]  Override the registry presentation
  * @property    {string}                            [field]         Form field name for field-level alerts
  * @property    {string}                            [ref]           Reference ID matching a server log entry
- * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in the message
+ * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in message
  */
 export interface AlertOverrides {
     severity?: AlertSeverity;
