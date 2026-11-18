@@ -18,15 +18,35 @@ export interface AuthFlowProps {
     onSuccess?: () => void;
 }
 
+/**
+ * TODO:: comment
+ */
 export interface LogoutButtonProps {
     label?: string;
     redirectTo?: string;
     onBeforeLogout?: () => void | Promise<unknown>;
 }
 
+/**
+ * TODO:: comment
+ */
 export interface LogoutProps {
     children?: ReactNode;
     redirectTo?: string;
-    onBeforeLogout?: () => void | Promise<unknown>;
     onSuccess?: () => void;
+    onBeforeLogout?: () => void | Promise<unknown>;
+}
+
+/**
+ * TODO:: comment
+ */
+export interface DashboardPageProps {
+    user: UserPropItems;
+}
+
+/**
+ * TODO:: comment
+ */
+export type UserPropItems = {
+    name: string;
 }

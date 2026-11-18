@@ -1,4 +1,4 @@
-import {DashboardPageView} from "@/components/views/dashboard-page-view";
+import DashboardPageView from "@/components/views/dashboard-page-view";
 
 /**
  * Auth -> Login page

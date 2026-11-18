@@ -33,7 +33,7 @@ export function LoginPanel({onSuccess}: AuthFlowProps) {
                 if (onSuccess) {
                     onSuccess();
                 }
-                router.push("/home");
+                router.push("/dashboard");
                 router.refresh();
             }
         } catch (err: unknown) {
