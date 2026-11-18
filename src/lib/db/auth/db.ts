@@ -3,7 +3,7 @@ import {Pool} from "pg";
 import * as schema from "./schema";
 
 /**
- * TODO:: document
+ * PostgreSQL connection pool and Drizzle ORM instance initialized using environment database configuration.
  */
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,

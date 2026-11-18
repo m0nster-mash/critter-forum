@@ -2,13 +2,14 @@ import {PageHeader} from "@/components/ui/page-header";
 import {RegistrationPanel} from "@/features/auth/components/registration-panel";
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
+import {JSX} from "react";
 
 /**
- * TODO:: document
+ * Renders the full account registration page view composition.
  *
- * @constructor
+ * @return  {JSX.Element}   The registration page view JSX element.
  */
-export function RegistrationPageView() {
+export function RegistrationPageView(): JSX.Element {
     return (
         <>
             <PageHeader {...getPageHeaderProps(PUBLIC_ROUTES.REGISTER)}/>

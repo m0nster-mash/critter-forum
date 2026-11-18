@@ -2,16 +2,21 @@ import {ALL_ROUTES, RouteMetadata} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 
 /**
- * TODO:: document
+ * Generates an ordered array of breadcrumb objects tracing parent route hierarchy for navigation elements.
  *
- * @param route
- * @param params
- * @param routeRegistry
+ * @param   {RouteMetadata} route                                       Target route object to resolve breadcrumbs for
+ * @param   {Record<string, string>} [params]                           Optional; key-value object satisfying dynamic
+ *                                                                      route path parameters
+ * @param   {Record<string, RouteMetadata>} [routeRegistry=ALL_ROUTES]  Route registry used for parent route hierarchy
+ *                                                                      lookups
+ *
+ * @return  {Array<{label: string, href?: string}>} Ordered array of breadcrumb items with labels and optional resolved
+ *                                                  URLs.
  */
 export function getBreadcrumbs(
     route: RouteMetadata,
     params?: Record<string, string>,
-    routeRegistry = ALL_ROUTES
+    routeRegistry: Record<string, RouteMetadata> = ALL_ROUTES
 ): Array<{
     label: string;
     href?: string

@@ -3,21 +3,22 @@
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {AuthFlowProps} from "@/features/auth/types";
 import {signIn} from "@/lib/auth-client";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
-import {AuthFlowProps} from "@/lib/types";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import {useRouter} from "next/navigation";
-import {type SubmitEvent, useState} from "react";
+import {JSX, type SubmitEvent, useState} from "react";
 
 /**
- * TODO:: document
+ * Renders the authentication login form panel.
  *
- * @param param0
- * @param param0.onSuccess
- * @constructor
+ * @param   {AuthFlowProps} props               Component properties for managing auth flow callbacks
+ * @param   {Function}      [props.onSuccess]   Optional callback executed after successful authentication
+ *
+ * @return  {JSX.Element}   The login form panel JSX element
  */
-export function LoginPanel({onSuccess}: AuthFlowProps) {
+export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
     const router = useRouter();
     const [email, setEmail] = useState("");

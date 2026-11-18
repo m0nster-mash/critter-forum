@@ -1,10 +1,16 @@
 /**
- * TODO:: document
+ * Union type representing permissible access levels for application routes.
  */
 export type AccessLevel = "public" | "private" | "admin";
 
 /**
- * TODO:: document
+ * Interface defining structural metadata and access constraints associated with an application route.
+ *
+ * @property    {string | Function} path        The static route path string or builder function producing dynamic paths
+ * @property    {string}            label       Human-readable navigation menu text label
+ * @property    {string}            title       Header or document title associated with the route
+ * @property    {AccessLevel}       accessLevel Permission level required to navigate to the route
+ * @property    {string}            [parent]    Optional key identifier linking to a parent route
  */
 export interface RouteMetadata {
     path: string | ((params: Record<string, string>) => string);
@@ -17,9 +23,8 @@ export interface RouteMetadata {
 // ============================================================================
 // PUBLIC ROUTES
 // ============================================================================
-
 /**
- * TODO:: document
+ * Publicly accessible route definitions.
  */
 export const PUBLIC_ROUTES = {
     HOME: {
@@ -49,9 +54,8 @@ export const PUBLIC_ROUTES = {
 // ============================================================================
 // PRIVATE ROUTES (requires authentication)
 // ============================================================================
-
 /**
- * TODO:: document
+ * Authenticated user private route definitions.
  */
 export const PRIVATE_ROUTES = {
     DASHBOARD: {
@@ -65,9 +69,8 @@ export const PRIVATE_ROUTES = {
 // ============================================================================
 // ADMIN ROUTES (requires admin access)
 // ============================================================================
-
 /**
- * TODO:: document
+ * Administrative route definitions restricted to admin users.
  */
 export const ADMIN_ROUTES = {
     DASHBOARD: {
@@ -83,7 +86,7 @@ export const ADMIN_ROUTES = {
 // ============================================================================
 
 /**
- * TODO:: document
+ * Unified registry combining all public, private, and administrative route definitions.
  */
 export const ALL_ROUTES = {
     ...PUBLIC_ROUTES,

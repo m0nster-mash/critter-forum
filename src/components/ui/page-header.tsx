@@ -4,13 +4,11 @@ import {PageHeaderProps} from "@/lib/types";
 /**
  * A standard header intended to appear at the top of every page.
  *
- * TODO:: build this out more:
  * TODO:: add breadcrumbs
- * TODO:: add styling
  *
- * @param {PageHeaderProps} props
- * @param {string} props.title
- */
+ * @param   {PageHeaderProps}   props           The props object for the PageHeader component
+ * @param   {ReactNode}         [props.title]   The page's title rendered inside the header
+ *  */
 export function PageHeader({title}: PageHeaderProps) {
 
     return (

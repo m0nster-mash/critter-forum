@@ -1,14 +1,15 @@
 import {DashboardPageProps} from "@/lib/types";
+import {JSX} from "react";
 
 /**
- * TODO:: document
+ * Renders the member dashboard panel view.
  *
- * @param {DashboardPageProps} param0
- * @param {UserPropItems} param0.user
+ * @param   {DashboardPageProps}    props       The component properties containing user context
+ * @param   {UserPropItems}         props.user  The authenticated user data
  *
- * @return
+ * @return  {JSX.Element}    The rendered dashboard panel JSX element.
  */
-export function DashboardPagePanel({user}: DashboardPageProps) {
+export function DashboardPagePanel({user}: DashboardPageProps): JSX.Element {
 
     return (
         <>
