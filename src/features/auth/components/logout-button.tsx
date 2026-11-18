@@ -3,9 +3,9 @@
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
 import {signOut} from "@/lib/auth-client";
 import {REDIRECT} from "@/lib/constants/globals";
-import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
 import {useRouter} from "next/navigation";
 import {JSX, type MouseEvent, useState} from "react";
 

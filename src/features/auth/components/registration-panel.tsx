@@ -1,9 +1,9 @@
 "use client";
 
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
+import {AuthFlowProps} from "@/features/auth/types";
 import {signIn} from "@/lib/auth-client";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
-import {AuthFlowProps} from "@/features/auth/types";
 import {useRouter} from "next/navigation";
 import {JSX, type SubmitEvent, useState} from "react";
 
