@@ -100,7 +100,7 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
                            autoComplete="email"
                            placeholder="email@address.com"
                            value={email}
-                           onChange={(registerEvent) => setPassword(registerEvent.target.value)}
+                           onChange={(registerEvent) => setEmail(registerEvent.target.value)}
                            disabled={loading}
                            required/>
                 </div>
@@ -111,7 +111,7 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
                            autoComplete="password"
                            placeholder="••••••••"
                            value={email}
-                           onChange={(registerEvent) => setEmail(registerEvent.target.value)}
+                           onChange={(registerEvent) => setPassword(registerEvent.target.value)}
                            disabled={loading}
                            required/>
                 </div>
