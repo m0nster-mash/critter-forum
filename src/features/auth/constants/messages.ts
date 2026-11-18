@@ -1,5 +1,5 @@
 /**
- * TODO:: document
+ * Immutable collection of error message strings used for authentication failure feedback.
  */
 export const AUTH_ERROR_MESSAGES = {
     // Login stream:

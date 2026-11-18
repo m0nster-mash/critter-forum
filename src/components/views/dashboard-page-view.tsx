@@ -7,13 +7,14 @@ import {REDIRECT} from "@/lib/constants/globals";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 import {redirect} from "next/navigation";
+import {JSX} from "react";
 
 /**
- * TODO:: document
+ * Renders the protected dashboard page view.
  *
- * @return
+ * @return  {JSX.Element | null}    The dashboard view component, or null while authentication status is resolving
  */
-export default function DashboardPageView() {
+export default function DashboardPageView(): JSX.Element | null {
 
     const {data: session, isPending} = useSession();
 

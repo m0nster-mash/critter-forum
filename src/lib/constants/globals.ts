@@ -1,11 +1,11 @@
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";
 
 /**
- * TODO:: document
+ * Minimum character length constraint required for user account passwords.
  */
 export const PASSWORD_MIN_LENGTH = 7;
 
 /**
- * TODO:: document
+ * Default fallback path used across the application for unauthenticated navigation redirects.
  */
 export const REDIRECT = PUBLIC_ROUTES.HOME.path;

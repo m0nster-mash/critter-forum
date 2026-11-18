@@ -6,14 +6,22 @@ import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
 
 /**
- * TODO:: document
- * @param input
+ * Server action that registers a new user account using email and password credentials.
+ *
+ * @param   {Object}    input           The user registration payload
+ * @param   {string}    input.name      The display name of the user registering
+ * @param   {string}    input.email     The email address of the registering user
+ * @param   {string}    input.password  The plain-text password for account creation
+ *
+ * @return  {Promise<Object>}   Resolves to the newly created user session or user record object upon success
+ *
+ * @throws  {Error} Throws an error if required input parameters are missing or if registration fails
  */
 export async function registerAccountAction(input: {
     name: string;
     email: string;
     password: string;
-}) {
+}): Promise<object> {
 
     const name = input.name.trim();
     const email = input.email.trim().toLowerCase();

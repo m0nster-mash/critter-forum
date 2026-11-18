@@ -10,42 +10,18 @@ export interface PageHeaderProps {
 }
 
 /**
- * Properties for authentication (login and registration) handling.
+ * Property object structure passed into the DashboardPagePanel component.
  *
- * @property    {void}  onSuccess   Optional; behaviour on successful login attempt
- */
-export interface AuthFlowProps {
-    onSuccess?: () => void;
-}
-
-/**
- * TODO:: document
- */
-export interface LogoutButtonProps {
-    label?: string;
-    redirectTo?: string;
-    onBeforeLogout?: () => void | Promise<unknown>;
-}
-
-/**
- * TODO:: document
- */
-export interface LogoutProps {
-    children?: ReactNode;
-    redirectTo?: string;
-    onSuccess?: () => void;
-    onBeforeLogout?: () => void | Promise<unknown>;
-}
-
-/**
- * TODO:: document
+ * @property    {UserPropItems} user    User metadata object required for rendering dashboard user UI details.
  */
 export interface DashboardPageProps {
     user: UserPropItems;
 }
 
 /**
- * TODO:: document
+ * Essential user profile attributes required by view panels.
+ *
+ * @property    {string}    name    The display name of the authenticated user.
  */
 export type UserPropItems = {
     name: string;
