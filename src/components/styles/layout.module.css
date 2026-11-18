@@ -16,3 +16,11 @@
     gap: 1rem;
     padding: 2rem;
 }
+
+.breadcrumbs {
+    display: flex;
+}
+
+.breadcrumbs a {
+    color: darkred;
+}

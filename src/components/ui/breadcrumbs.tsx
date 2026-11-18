@@ -1,32 +1,31 @@
 import layoutStyle from "@/components/styles/layout.module.css";
-import {PageHeaderProps} from "@/lib/types";
+import {BREADCRUMBS} from "@/lib/constants/ui";
+import {BreadcrumbProps} from "@/lib/types";
 import Link from "next/link";
 import {Fragment} from "react";
 
 /**
- * A standard header intended to appear at the top of every page.
+ * Renders a breadcrumb navigation trail.
  *
- * TODO:: build this out more:
- * TODO:: add breadcrumbs
- * TODO:: add styling
+ * Each item is rendered as a link if an `href` is provided, otherwise as plain text.
  *
- * @param {PageHeaderProps} props
- * @param {string} props.title
+ * @param   {BreadcrumbProps}   props               The props object for the Breadcrumbs component
+ * @param   {BreadcrumbItem[]}  [props.breadcrumb]  Optional array of breadcrumb items to render
  */
-export function Breadcrumbs({breadcrumb, title}: PageHeaderProps) {
+export function Breadcrumbs({breadcrumb}: BreadcrumbProps) {
 
     return (
-        {breadcrumb && breadcrumb.length > 0 && (
-            <nav aria-label="Breadcrumb">
-                {breadcrumb.map((item, index) => (
-                    <Fragment key={item.label}>
-                        {index > 0 && " / "}
-                        {item.href ? <Link href={item.href}>{item.label}</Link> : item.label}
-                    </Fragment>
-                ))}
-            </nav>
-        )}
-    <h1>{title}</h1>
-</>
+        <>
+            {breadcrumb && breadcrumb.length > 0 && (
+                <nav className={layoutStyle.breadcrumbs} aria-label={BREADCRUMBS.ARIA}>
+                    {breadcrumb.map((item, index) => (
+                        <Fragment key={item.label}>
+                            {index > 0 && BREADCRUMBS.DIVIDER}
+                            {item.href ? <Link href={item.href}>{item.label}</Link> : item.label}
+                        </Fragment>
+                    ))}
+                </nav>
+            )}
+        </>
     );
 }
