@@ -1,4 +1,5 @@
 import layoutStyle from "@/components/styles/layout.module.css"
+import LogoutButton from "@/features/auth/components/logout-button";
 import type {Metadata} from "next";
 import "./globals.css";
 import React from "react";
@@ -19,13 +20,17 @@ export default function RootLayout({
         <div className="layout">
             <nav>
                 <h3>Navigation</h3>
-                <a href="#">Home</a>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
                 <h4>Authentication</h4>
                 <a href="/register">Register</a>
                 <a href="/login">Login</a>
+                <LogoutButton/>
             </nav>
             <div className={layoutStyle.contentArea}>
-                {children}
+                <main>
+                    {children}
+                </main>
             </div>
         </div>
         </body>

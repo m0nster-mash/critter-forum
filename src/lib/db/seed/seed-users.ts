@@ -3,7 +3,7 @@ import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
 
-;
+
 
 const TEST_PASSWORD = "password00";
 

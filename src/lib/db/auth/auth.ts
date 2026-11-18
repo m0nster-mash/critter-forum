@@ -1,6 +1,6 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "@better-auth/drizzle-adapter";
-import { db } from "@/lib/db/auth/db";
+import {db} from "@/lib/db/auth/db";
+import {drizzleAdapter} from "@better-auth/drizzle-adapter";
+import {betterAuth} from "better-auth";
 
 /**
  * Separates the auth configuration separate from the database connection, application modules, and route handlers.

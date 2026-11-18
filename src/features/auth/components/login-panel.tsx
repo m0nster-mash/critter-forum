@@ -1,7 +1,9 @@
 "use client";
 
+import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
+import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
+import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {signIn} from "@/lib/auth-client";
-import {ERROR_MESSAGES, USER_ALERTS} from "@/lib/constants/messages";
 import {AuthFlowProps} from "@/lib/types";
 import {useRouter} from "next/navigation";
 import {type SubmitEvent, useState} from "react";
@@ -26,16 +28,16 @@ export function LoginPanel({onSuccess}: AuthFlowProps) {
             });
 
             if (attemptSignIn.error) {
-                setError(attemptSignIn.error.message || ERROR_MESSAGES.LOGIN_FAILED);
+                setError(attemptSignIn.error.message || AUTH_ERROR_MESSAGES.LOGIN_FAILED);
             } else {
                 if (onSuccess) {
                     onSuccess();
                 }
-                router.push("/home");
+                router.push("/dashboard");
                 router.refresh();
             }
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : ERROR_MESSAGES.LOGIN_UNKNOWN_ERROR);
+            setError(err instanceof Error ? err.message : AUTH_ERROR_MESSAGES.LOGIN_UNKNOWN_ERROR);
         } finally {
             setLoading(false);
         }
@@ -74,7 +76,7 @@ export function LoginPanel({onSuccess}: AuthFlowProps) {
                     </div>
                     <div>
                         <button type="submit" disabled={loading}>
-                            {loading ? USER_ALERTS.LOGIN_PROCESSING : USER_ALERTS.LOGIN_PENDING}
+                            {loading ? AUTH_ALERTS.LOGIN_PROCESSING : AUTH_LABELS.LOGIN_LABEL}
                         </button>
                     </div>
                 </form>
