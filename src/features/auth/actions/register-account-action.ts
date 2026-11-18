@@ -14,7 +14,7 @@ export async function registerAccountAction(input: {
     const name = input.name.trim();
     const email = input.email.trim().toLowerCase();
 
-    if(!name || !email || !input.password) {
+    if (!name || !email || !input.password) {
         throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_MISSING_DATA);
     }
 
@@ -27,7 +27,7 @@ export async function registerAccountAction(input: {
         headers: await headers(),
     });
 
-    if(!registerResult.user?.id) {
+    if (!registerResult.user?.id) {
         throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_FAILURE);
     }
 

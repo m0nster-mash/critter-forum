@@ -1,5 +1,5 @@
-import {PageHeaderProps} from "@/lib/types";
 import layoutStyle from "@/components/styles/layout.module.css";
+import {PageHeaderProps} from "@/lib/types";
 
 /**
  * A standard header intended to appear at the top of every page.

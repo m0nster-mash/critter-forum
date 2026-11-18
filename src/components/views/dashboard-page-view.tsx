@@ -20,7 +20,7 @@ export default function DashboardPageView() {
     return (
         <>
             <PageHeader title="Dashboard"/>
-            <DashboardPagePanel user={session.user} />
+            <DashboardPagePanel user={session.user}/>
         </>
     );
 }
