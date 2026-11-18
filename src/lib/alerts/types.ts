@@ -1,0 +1,84 @@
+/**
+ * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
+ */
+export const ALERT_SEVERITIES = ["success", "info", "warning", "error"] as const;
+export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
+
+/**
+ * Where an alert is shown on-page.
+ *
+ * - `toast`:  transient, non-blocking snackbar
+ * - `inline`: persistent banner rendered in context (page, form, or field level)
+ * - `none`:   not shown to the user (logging only)
+ */
+export const ALERT_PRESENTATIONS = ["toast", "inline", "none"] as const;
+export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
+
+/**
+ * Log levels shared by the server and client loggers.
+ */
+export type AlertLogLevel = "debug" | "info" | "warn" | "error";
+
+/**
+ * Per-environment logging rules for an alert. `false` means the alert is never logged in that environment.
+ *
+ * @property    {AlertLogLevel | false} server  Level written to the terminal / server logs
+ * @property    {AlertLogLevel | false} client  Level written to the browser console (production output is sanitized)
+ */
+export interface AlertLogPolicy {
+    server: AlertLogLevel | false;
+    client: AlertLogLevel | false;
+}
+
+/**
+ * A registry entry: the single source of truth for what an alert says, how it looks, and how it is logged.
+ *
+ * @property    {AlertSeverity}     severity        Default severity
+ * @property    {string}            message         User-safe text. May contain `{name}` tokens filled via `params`.
+ * @property    {AlertPresentation} presentation    Default on-page presentation
+ * @property    {AlertLogPolicy}    log             Default logging rules
+ */
+export interface AlertDefinition {
+    severity: AlertSeverity;
+    message: string;
+    presentation: AlertPresentation;
+    log: AlertLogPolicy;
+}
+
+/**
+ * The alert as it crosses the server/client boundary. Primitives only, so it serializes cleanly out of server
+ * actions. Never holds internal detail (causes, stacks, request context).
+ *
+ * @property    {string}            code            Registry key, e.g. `AUTH_LOGIN_INVALID_CREDENTIALS`
+ * @property    {AlertSeverity}     severity        Severity used for styling and live-region role
+ * @property    {string}            message         Final, user-safe text
+ * @property    {AlertPresentation} presentation    Where the alert should be rendered
+ * @property    {string}            [field]         Optional; form field name for field-level inline alerts
+ * @property    {string}            [ref]           Optional; reference ID matching a server log entry
+ */
+export interface PublicAlert {
+    code: string;
+    severity: AlertSeverity;
+    message: string;
+    presentation: AlertPresentation;
+    field?: string;
+    ref?: string;
+}
+
+/**
+ * Per-call adjustments when creating an alert. There is deliberately no `message` override: user-facing text lives
+ * in the registry, and dynamic values go through `params`.
+ *
+ * @property    {AlertSeverity}                     [severity]      Override the registry severity
+ * @property    {AlertPresentation}                 [presentation]  Override the registry presentation
+ * @property    {string}                            [field]         Form field name for field-level alerts
+ * @property    {string}                            [ref]           Reference ID matching a server log entry
+ * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in the message
+ */
+export interface AlertOverrides {
+    severity?: AlertSeverity;
+    presentation?: AlertPresentation;
+    field?: string;
+    ref?: string;
+    params?: Record<string, string | number>;
+}
