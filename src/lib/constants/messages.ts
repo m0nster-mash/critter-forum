@@ -1,10 +1,14 @@
 export const USER_ALERTS = {
     // Login stream:
     LOGIN_PROCESSING: "Logging in...",
-    LOGIN_PENDING: "Login",
+    LOGIN_LABEL: "Login",
 
     // Registration steam:
-    REGISTRATION_ACCOUNT_CREATED: "Your account has been created,"
+    REGISTRATION_ACCOUNT_CREATED: "Your account has been created,",
+
+    // Logout stream:
+    LOGOUT_PROCESSING: "Signing out...",
+    LOGOUT_LABEL: "Logout",
 
 } as const;
 
@@ -16,4 +20,7 @@ export const ERROR_MESSAGES = {
     // Registration stream:
     REGISTRATION_MISSING_DATA: "Username, email, and password are required.",
     REGISTRATION_FAILURE: "The account could not be created.",
+
+    // Logout stream:
+    LOGOUT_FAILURE: "Logout failed: ",
 } as const;

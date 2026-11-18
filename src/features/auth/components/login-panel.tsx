@@ -74,7 +74,7 @@ export function LoginPanel({onSuccess}: AuthFlowProps) {
                     </div>
                     <div>
                         <button type="submit" disabled={loading}>
-                            {loading ? USER_ALERTS.LOGIN_PROCESSING : USER_ALERTS.LOGIN_PENDING}
+                            {loading ? USER_ALERTS.LOGIN_PROCESSING : USER_ALERTS.LOGIN_LABEL}
                         </button>
                     </div>
                 </form>

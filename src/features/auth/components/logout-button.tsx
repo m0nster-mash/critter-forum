@@ -1,13 +1,15 @@
 "use client";
 
-import {LogoutButtonProps, LogoutProps} from "@/lib/types";
 import {signOut} from "@/lib/auth-client";
+import {REDIRECT} from "@/lib/constants/globals";
+import {ERROR_MESSAGES, USER_ALERTS} from "@/lib/constants/messages";
+import {LogoutButtonProps, LogoutProps} from "@/lib/types";
 import {useRouter} from "next/navigation";
 import {type MouseEvent, useState} from "react";
 
 export function LogoutButton({
-                                 label = "Logout",
-                                 redirectTo = "/",
+                                 label = USER_ALERTS.LOGOUT_LABEL,
+                                 redirectTo = REDIRECT,
                                  onBeforeLogout,
                              }: LogoutButtonProps) {
     return (
@@ -19,7 +21,7 @@ export function LogoutButton({
 
 export function Logout({
                            children,
-                           redirectTo = "/",
+                           redirectTo = REDIRECT,
                            onSuccess,
                            onBeforeLogout,
                        }: LogoutProps) {
@@ -45,21 +47,21 @@ export function Logout({
             router.push(redirectTo);
             router.refresh();
         } catch (err) {
-            console.error("Logout failed:", err);
+            console.error(ERROR_MESSAGES.LOGOUT_FAILURE, err);
             setLoading(false);
         }
     };
     if (children) {
         return (
             <span onClick={handleLogout} role="button" tabIndex={0}>
-                {loading ? "Signing out..." : children}
+                {loading ? USER_ALERTS.LOGOUT_PROCESSING : children}
             </span>
         );
     }
 
     return (
         <button type="button" onClick={handleLogout} disabled={loading}>
-            {loading ? "Signing out..." : "Logout"}
+            {loading ? USER_ALERTS.LOGOUT_PROCESSING : USER_ALERTS.LOGOUT_LABEL}
         </button>
     );
 }
