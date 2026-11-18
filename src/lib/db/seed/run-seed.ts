@@ -1,17 +1,20 @@
 import "dotenv/config";
+import {logger} from "@/lib/alerts/server/logger";
 import {seedUsers} from "./seed-users";
+
+const log = logger.child({scope: "seed"});
 
 /**
  * runs the database seeder.
  */
 async function main() {
     try {
-        console.log("Starting database seed runner...\n");
+        log.info("Starting database seed runner...");
         await seedUsers();
-        console.log("\nAll database seeds completed successfully.");
+        log.info("All database seeds completed successfully.");
         process.exit(0);
     } catch (error) {
-        console.error("Seeding failed with error:", error);
+        log.error("Seeding failed.", {err: error});
         process.exit(1);
     }
 }
