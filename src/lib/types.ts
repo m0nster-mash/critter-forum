@@ -17,3 +17,16 @@ export interface PageHeaderProps {
 export interface AuthFlowProps {
     onSuccess?: () => void;
 }
+
+export interface LogoutButtonProps {
+    label?: string;
+    redirectTo?: string;
+    onBeforeLogout?: () => void | Promise<unknown>;
+}
+
+export interface LogoutProps {
+    children?: ReactNode;
+    redirectTo?: string;
+    onBeforeLogout?: () => void | Promise<unknown>;
+    onSuccess?: () => void;
+}
