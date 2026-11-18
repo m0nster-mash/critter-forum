@@ -1,6 +1,7 @@
 "use server";
 
-import {ERROR_MESSAGES, USER_ALERTS} from "@/lib/constants/messages";
+import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
+import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
 import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
 
@@ -14,7 +15,7 @@ export async function registerAccountAction(input: {
     const email = input.email.trim().toLowerCase();
 
     if(!name || !email || !input.password) {
-        throw new Error(ERROR_MESSAGES.REGISTRATION_MISSING_DATA);
+        throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_MISSING_DATA);
     }
 
     const registerResult = await auth.api.signUpEmail({
@@ -27,10 +28,10 @@ export async function registerAccountAction(input: {
     });
 
     if(!registerResult.user?.id) {
-        throw new Error(ERROR_MESSAGES.REGISTRATION_FAILURE);
+        throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_FAILURE);
     }
 
     return {
-        message: USER_ALERTS.REGISTRATION_ACCOUNT_CREATED,
+        message: AUTH_ALERTS.REGISTRATION_ACCOUNT_CREATED,
     }
 }
