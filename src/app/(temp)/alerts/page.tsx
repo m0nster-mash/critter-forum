@@ -2,6 +2,7 @@
 
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {useAlerts} from "@/features/alerts/client/use-alerts";
+import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {createAlert} from "@/features/alerts/create-alert";
 import type {AlertCode} from "@/features/alerts/registry";
 
@@ -42,17 +43,17 @@ export default function AlertTestPage() {
                         Info toast (severity override)
                     </button>
                     <button type="button"
-                            onClick={() => raiseToast("APP_RATE_LIMITED", {params: {seconds: 30}})}>
+                            onClick={() => raiseToast(APP_ALERT_CODES.RATE_LIMITED, {params: {seconds: 30}})}>
                         Warning toast (with params)
                     </button>
                     <button type="button" onClick={() => raiseToast("AUTH_LOGIN_FAILED")}>
                         Error toast
                     </button>
-                    <button type="button" onClick={() => raiseToast("APP_NETWORK_ERROR")}>
+                    <button type="button" onClick={() => raiseToast(APP_ALERT_CODES.NETWORK_ERROR)}>
                         Network error toast
                     </button>
                     <button type="button"
-                            onClick={() => raiseToast("APP_UNKNOWN_ERROR", {ref: "ref-abc-123"})}>
+                            onClick={() => raiseToast(APP_ALERT_CODES.UNKNOWN_ERROR, {ref: "ref-abc-123"})}>
                         Error toast with ref
                     </button>
                 </div>
@@ -74,7 +75,7 @@ export default function AlertTestPage() {
                     <button type="button" onClick={() => raiseInline("AUTH_REGISTER_EMAIL_INVALID")}>
                         Warning banner (field: email)
                     </button>
-                    <button type="button" onClick={() => raiseInline("APP_NOT_FOUND", {severity: "info"})}>
+                    <button type="button" onClick={() => raiseInline(APP_ALERT_CODES.NOT_FOUND, {severity: "info"})}>
                         Info banner (severity override)
                     </button>
                     <button type="button" onClick={clear}>
@@ -104,7 +105,7 @@ export default function AlertTestPage() {
                         Unhandled promise rejection
                     </button>
                     <button type="button"
-                            onClick={() => raiseInline("APP_UNKNOWN_ERROR", {presentation: "inline"})}>
+                            onClick={() => raiseInline(APP_ALERT_CODES.UNKNOWN_ERROR, {presentation: "inline"})}>
                         Present unknown-error inline
                     </button>
                 </div>

@@ -1,5 +1,6 @@
-import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
+import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {AlertDefinition} from "@/features/alerts/types";
+import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 
 /**
  * Application-wide components that don't belong to any single feature.
@@ -57,4 +58,4 @@ export type AlertCode = keyof typeof ALERT_REGISTRY;
 /**
  * Code used when an alert code can't be resolved at runtime.
  */
-export const FALLBACK_ALERT_CODE = "APP_UNKNOWN_ERROR" satisfies AlertCode; // TODO:: clean this (magic/const, types)
+export const FALLBACK_ALERT_CODE = APP_ALERT_CODES.UNKNOWN_ERROR satisfies AlertCode;
