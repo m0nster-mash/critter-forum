@@ -1,8 +1,8 @@
 import {AlertLogLevel, ClientLogger} from "@/lib/alerts/types";
 import {
     ALERT_LOG_LEVEL_ORDER,
-    ALERT_LOG_LEVELS,
     ALERT_LOG_LEVEL_SILENT,
+    ALERT_LOG_LEVELS,
     BEARER_REDACTED,
     DEFAULT_LOG_LEVEL,
     NODE_ENV_PRODUCTION,

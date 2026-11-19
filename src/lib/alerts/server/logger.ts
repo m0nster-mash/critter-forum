@@ -185,7 +185,9 @@ const LEVEL_COLORS: Record<AlertLogLevel, string> = {debug: "90", info: "36", wa
  * `instrumentation.ts`, doesn't flag a Node-only API; on Edge the property is simply absent and colors are off.
  */
 function colorEnabled(): boolean {
-    const runtime = (globalThis as { process?: { stdout?: { isTTY?: boolean }; env?: Record<string, string | undefined> } }).process;
+    const runtime = (globalThis as {
+        process?: { stdout?: { isTTY?: boolean }; env?: Record<string, string | undefined> }
+    }).process;
     return Boolean(runtime?.stdout?.isTTY) && !runtime?.env?.NO_COLOR;
 }
 

@@ -2,7 +2,13 @@
 
 import {AlertBanner} from "@/components/ui/alert-banner";
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
-import {AUTH_ALERT_CODES, AUTH_FORM_FIELDS, AUTH_LABELS, AUTH_UI_TEXT, AUTH_USERNAME_PLACEHOLDER} from "@/features/auth/constants/ui";
+import {
+    AUTH_ALERT_CODES,
+    AUTH_FORM_FIELDS,
+    AUTH_LABELS,
+    AUTH_UI_TEXT,
+    AUTH_USERNAME_PLACEHOLDER
+} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {useAlert} from "@/lib/alerts/client/toast-context";
 import {createAlert} from "@/lib/alerts/create-alert";

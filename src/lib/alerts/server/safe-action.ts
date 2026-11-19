@@ -5,8 +5,8 @@ import {logAlert} from "@/lib/alerts/server/log-alert";
 import type {LogContext} from "@/lib/alerts/server/logger";
 import {generateRef} from "@/lib/alerts/server/ref";
 import type {PublicAlert} from "@/lib/alerts/types";
+import {ALERT_SEVERITY_ERROR, ALERT_SEVERITY_WARNING, APP_UNKNOWN_ERROR_CODE} from "@/lib/constants/alerts";
 import {unstable_rethrow} from "next/navigation";
-import {APP_UNKNOWN_ERROR_CODE, ALERT_SEVERITY_ERROR, ALERT_SEVERITY_WARNING} from "@/lib/constants/alerts";
 
 /**
  * Logs an alert per its registry policy and, when that produces a log entry for a warning or error, stamps the alert

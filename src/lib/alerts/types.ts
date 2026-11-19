@@ -91,9 +91,13 @@ export interface AlertOverrides {
  */
 export interface ClientLogger {
     debug(message: string, context?: ClientLogContext): void;
+
     info(message: string, context?: ClientLogContext): void;
+
     warn(message: string, context?: ClientLogContext): void;
+
     error(message: string, context?: ClientLogContext): void;
+
     child(bindings: ClientLogContext): ClientLogger;
 }
 
