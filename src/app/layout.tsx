@@ -37,6 +37,9 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
                     <h4>Authentication</h4>
                     <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>{PUBLIC_ROUTES.REGISTER.label}</a>
                     <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</a>
+                    <h4>Test Pages</h4>
+                    <a href={"/alerts"}>Alert Testing</a>
+                    <hr/>
                     <LogoutButton/>
                 </nav>
                 <div className={layoutStyle.contentArea}>
