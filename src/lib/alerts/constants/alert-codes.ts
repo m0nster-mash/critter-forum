@@ -1,3 +1,5 @@
+import {AlertSeverity} from "@/lib/alerts/types";
+
 /**
  * Alert codes for application-wide errors and feedback.
  *
@@ -45,3 +47,19 @@ export const ALERT_CODES = {
 export type AppAlertCode = typeof APP_ALERT_CODES[keyof typeof APP_ALERT_CODES];
 export type AuthAlertCode = typeof AUTH_ALERT_CODES[keyof typeof AUTH_ALERT_CODES];
 export type KnownAlertCode = typeof ALERT_CODES[keyof typeof ALERT_CODES];
+
+export const SEVERITY_LABELS: Record<AlertSeverity, string> = {
+    success: "Success",
+    info: "Information",
+    warning: "Warning",
+    error: "Error",
+};
+
+
+
+export const ALERT_VARIANTS = [
+    "banner",
+    "field",
+    "toast",
+] as const;
+export type AlertVariant = (typeof ALERT_VARIANTS)[number];
