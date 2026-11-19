@@ -1,3 +1,7 @@
+import styles from "@/components/alerts/alerts.module.css";
+import {AlertVariant} from "@/lib/alerts/constants/alert-codes";
+import type {JSX, ReactNode} from "react";
+
 /**
  * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
  */
@@ -106,4 +110,23 @@ export interface AlertOverrides {
     field?: string;
     ref?: string;
     params?: Record<string, string | number>;
+}
+
+/**
+ * Properties for the AlertBanner component.
+ *
+ * @property    {PublicAlert | null}    [alert]     The alert to render; renders nothing if absent
+ * @property    {string}                [id]        Optional; element id, so an input can reference it via
+ *                                                  `aria-describedby`
+ * @property    {string}                [variant]   Optional; `banner` (default, page or form level), `field` (compact,
+ *                                                  under an input) or `toast` (floating)
+ * @property    {number}                [count]     Optional; how many identical alerts this represents
+ * @property    {ReactNode}             [action]    Optional; trailing content such as a dismiss button
+ */
+export interface AlertBannerProps {
+    alert: PublicAlert | null | undefined;
+    id?: string;
+    variant?: AlertVariant;
+    count?: number;
+    action?: ReactNode;
 }
