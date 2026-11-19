@@ -49,7 +49,7 @@ export function Logout({
                            redirectTo = REDIRECT,
                            onSuccess,
                            onBeforeLogout,
-                       }: LogoutProps) {
+                       }: LogoutProps): JSX.Element {
     const router = useRouter();
     const {present} = useAlerts();
     const [loading, setLoading] = useState(false);

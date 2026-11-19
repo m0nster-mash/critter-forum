@@ -1,8 +1,10 @@
 "use client";
 
 import {AlertBanner} from "@/components/alerts/alert-banner";
-import styles from "@/components/alerts/alerts.module.css";
-import {type ToastItem, TOAST_DURATIONS} from "@/lib/alerts/client/toast-state";
+import styles from "@/components/styles/alerts.module.css";
+import {TOAST_DURATIONS, type ToastItem} from "@/lib/alerts/client/toast-state";
+import {VARIANT_TYPES} from "@/lib/alerts/constants/alert-codes";
+import {TOAST_KEYSTROKE, TOAST_LABELS} from "@/lib/alerts/constants/ui";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";
 
 /**
@@ -10,8 +12,18 @@ import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "reac
  *
  * The timer pauses while the pointer is over the toast or focus is inside it, resumes with at least one second
  * left, and restarts whenever an identical alert is merged into it (`version` changes). Escape dismisses it.
+ *
+ * @param   {} param  TODO:: document
+ * @param   {ToastItem }param.item  TODO:: document
+ * @param   {(id: string) => void} param.onDismiss  TODO:: document
+ *
+ * @return TODO:: document
  */
-function Toast({item, onDismiss}: { item: ToastItem; onDismiss: (id: string) => void }): JSX.Element {
+function Toast({item, onDismiss}: {
+    item: ToastItem;
+    onDismiss: (id: string) => void
+}): JSX.Element {
+
     const {id, alert, count, version} = item;
     const duration = TOAST_DURATIONS[alert.severity];
 
@@ -55,7 +67,11 @@ function Toast({item, onDismiss}: { item: ToastItem; onDismiss: (id: string) => 
     }, [version, duration, start]);
 
     const dismissButton = (
-        <button type="button" className={styles.dismiss} aria-label="Dismiss notification" onClick={dismiss}>
+        <button type="button"
+                className={styles.dismiss}
+                aria-label={TOAST_LABELS.DISMISS_NOTIFICATION}
+                onClick={dismiss}>
+            {/* TODO:: replace with icon once proper icon handling has been implemented */}
             ×
         </button>
     );
@@ -79,9 +95,12 @@ function Toast({item, onDismiss}: { item: ToastItem; onDismiss: (id: string) => 
                  sync();
              }}
              onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
-                 if (event.key === "Escape") dismiss();
+                 if (event.key === TOAST_KEYSTROKE.ESCAPE) dismiss();
              }}>
-            <AlertBanner alert={alert} variant="toast" count={count} action={dismissButton}/>
+            <AlertBanner alert={alert}
+                         variant={VARIANT_TYPES.TOAST}
+                         count={count}
+                         action={dismissButton}/>
         </div>
     );
 }
@@ -106,7 +125,7 @@ export interface ToastViewportProps {
  */
 export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Element {
     return (
-        <div className={styles.viewport} role="region" aria-label="Notifications">
+        <div className={styles.viewport} role="region" aria-label={TOAST_LABELS.NOTIFICATIONS}>
             {toasts.map((item) => (
                 <Toast key={item.id} item={item} onDismiss={onDismiss}/>
             ))}

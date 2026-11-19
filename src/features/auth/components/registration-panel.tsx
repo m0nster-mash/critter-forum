@@ -2,8 +2,7 @@
 
 import {AlertBanner} from "@/components/alerts/alert-banner";
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
-import {AUTH_FIELDS, AUTH_FORM_IDS} from "@/features/auth/constants/fields";
-import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {AUTH_FIELDS, AUTH_FORM_IDS, AUTH_LABELS} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {validateRegistration} from "@/features/auth/validation";
 import {useAlerts} from "@/lib/alerts/client/use-alerts";

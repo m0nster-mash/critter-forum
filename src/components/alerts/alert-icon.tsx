@@ -1,6 +1,7 @@
 import type {AlertSeverity} from "@/lib/alerts/types";
 import type {JSX} from "react";
 
+// TODO:: replace with proper icons once icon handling is complete
 const PATHS: Record<AlertSeverity, string> = {
     success: "M10 1.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17Zm4.03 6.28-4.5 5.5a.75.75 0 0 1-1.1.06l-2.5-2.5a.75.75 0 1 1 1.06-1.06l1.9 1.9 3.97-4.85a.75.75 0 1 1 1.17.95Z",
     info: "M10 1.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17Zm.75 12.5h-1.5V9h1.5v5Zm0-6.5h-1.5V6h1.5v1.5Z",
@@ -17,7 +18,11 @@ const PATHS: Record<AlertSeverity, string> = {
  *
  * @return  {JSX.Element}   The icon.
  */
-export function AlertIcon({severity, className}: { severity: AlertSeverity; className?: string }): JSX.Element {
+export function AlertIcon({severity, className}: {
+    severity: AlertSeverity;
+    className?: string
+}): JSX.Element {
+
     return (
         <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
             <path d={PATHS[severity]}/>

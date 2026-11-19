@@ -1,8 +1,7 @@
 "use client";
 
 import {AlertBanner} from "@/components/alerts/alert-banner";
-import {AUTH_FORM_IDS} from "@/features/auth/constants/fields";
-import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {AUTH_FORM_IDS, AUTH_LABELS} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {resolveAuthAlertCode} from "@/features/auth/utilities/auth-errors";
 import {useAlerts} from "@/lib/alerts/client/use-alerts";

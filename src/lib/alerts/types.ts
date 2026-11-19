@@ -1,4 +1,4 @@
-import styles from "@/components/alerts/alerts.module.css";
+import styles from "@/components/styles/alerts.module.css";
 import {AlertVariant} from "@/lib/alerts/constants/alert-codes";
 import type {JSX, ReactNode} from "react";
 
