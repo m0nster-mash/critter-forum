@@ -44,3 +44,23 @@ export const ALERT_BANNER_CLASSES = {
  * Label text rendered before an alert reference ID.
  */
 export const ALERT_REF_LABEL = "Reference: ";
+
+/**
+ * `clientLogger.error()` message key for uncaught window errors.
+ */
+export const WINDOW_UNHANDLED_ERROR = "window.unhandled_error";
+
+/**
+ * `clientLogger.error()` message key for unhandled promise rejections.
+ */
+export const WINDOW_UNHANDLED_REJECTION = "window.unhandled_rejection";
+
+/**
+ * DOM event type for uncaught window errors.
+ */
+export const WINDOW_ERROR_EVENT = "error";
+
+/**
+ * DOM event type for unhandled promise rejections.
+ */
+export const WINDOW_UNHANDLED_REJECTION_EVENT = "unhandledrejection";
