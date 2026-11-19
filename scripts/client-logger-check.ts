@@ -2,6 +2,7 @@
  * Throwaway sanity check for the client logger. Safe to delete once real tests exist.
  * Run with: npx tsx scripts/client-logger-check.ts
  */
+import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
 import assert from "node:assert/strict";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {logClientAlert} from "@/lib/alerts/client/log-alert";
@@ -60,12 +61,12 @@ calls = withEnv(PROD, () => {
     clientLogger.debug("d");
     clientLogger.info("i");
     clientLogger.warn("w", {code: "APP_X", ref: "abc12345", status: 401, field: "email", note: "free text"});
-    clientLogger.error("e", {err: secretError, password: "hunter2", user: {email: "a@b.c"}, scope: "route.render_error"});
+    clientLogger.error("e", {err: secretError, password: "hunter2", user: {email: "a@b.c"}, scope: LOG_SCOPES.ROUTE_RENDER_ERROR});
 });
 assert.deepEqual(calls.map((c) => c.method), ["warn", "error"], "production defaults to warn+");
 assert.deepEqual(calls[0].args[1], {code: "APP_X", ref: "abc12345", status: 401, field: "email"}, "only safe keys survive");
 const prodError = calls[1].args[1] as Record<string, unknown>;
-assert.deepEqual(prodError, {scope: "route.render_error", errorName: "TypeError"});
+assert.deepEqual(prodError, {scope: LOG_SCOPES.ROUTE_RENDER_ERROR, errorName: "TypeError"});
 const wire = JSON.stringify(calls);
 for (const secret of ["hunter2", "LEAK-MESSAGE-7f3a", "LEAK-DETAIL-7f3a", "a@b.c", "free text"]) {
     assert.ok(!wire.includes(secret), `production output must not contain: ${secret}`);
@@ -101,13 +102,13 @@ assert.deepEqual(calls[0].args[1], {scope: "a", job: "b", extra: 1});
 calls = withEnv(PROD, () => {
     logClientAlert(createAlert("AUTH_LOGIN_INVALID_CREDENTIALS"));          // client: false -> silent
     logClientAlert(createAlert("APP_NETWORK_ERROR"));                       // client: warn
-    logClientAlert(createAlert("APP_UNKNOWN_ERROR", {ref: "r-1"}), {err: secretError, scope: "window.error"}); // error
+    logClientAlert(createAlert("APP_UNKNOWN_ERROR", {ref: "r-1"}), {err: secretError, scope: LOG_SCOPES.WINDOW_ERROR}); // error
 });
 assert.equal(calls.length, 2);
 assert.equal(calls[0].method, "warn");
 assert.equal(calls[0].args[0], "APP_NETWORK_ERROR");
 assert.equal(calls[1].method, "error");
-assert.deepEqual(calls[1].args[1], {severity: "error", ref: "r-1", scope: "window.error", errorName: "TypeError"});
+assert.deepEqual(calls[1].args[1], {severity: "error", ref: "r-1", scope: LOG_SCOPES.WINDOW_ERROR, errorName: "TypeError"});
 assert.ok(!JSON.stringify(calls).includes("Something went wrong"), "userMessage is development-only");
 
 console.info("client-logger-check: all assertions passed");

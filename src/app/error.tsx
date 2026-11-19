@@ -2,6 +2,7 @@
 
 import {AlertBanner} from "@/components/alerts/alert-banner";
 import {logClientAlert} from "@/lib/alerts/client/log-alert";
+import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {getErrorDigest} from "@/lib/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
@@ -25,7 +26,7 @@ export default function RouteError({error, retry}: { error: unknown; retry: () =
     );
 
     useEffect(() => {
-        logClientAlert(alert, {err: error, scope: "route.render_error"});
+        logClientAlert(alert, {err: error, scope: LOG_SCOPES.ROUTE_RENDER_ERROR});
     }, [alert, error]);
 
     return (

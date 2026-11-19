@@ -1,10 +1,11 @@
+import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
 import {logger} from "@/lib/alerts/server/logger";
 import {auth} from "@/lib/db/auth/auth";
 import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
 
-const log = logger.child({scope: "seed"});
+const log = logger.child({scope: LOG_SCOPES.SEED});
 
 const TEST_PASSWORD = "password00";
 

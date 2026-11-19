@@ -1,6 +1,7 @@
 "use client";
 
 import {useAlertContext} from "@/lib/alerts/client/alert-provider";
+import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {useEffect} from "react";
 
@@ -28,17 +29,17 @@ export function GlobalErrorListeners(): null {
     useEffect(() => {
         const onError = (event: ErrorEvent) => {
             if (isNoise(event)) return;
-            notify(createAlert("APP_UNKNOWN_ERROR"), {err: event.error ?? event.message, scope: "window.error"});
+            notify(createAlert("APP_UNKNOWN_ERROR"), {err: event.error ?? event.message, scope: LOG_SCOPES.WINDOW_ERROR});
         };
         const onRejection = (event: PromiseRejectionEvent) => {
-            notify(createAlert("APP_UNKNOWN_ERROR"), {err: event.reason, scope: "unhandledrejection"});
+            notify(createAlert("APP_UNKNOWN_ERROR"), {err: event.reason, scope: LOG_SCOPES.UNHANDLED_REJECTION});
         };
 
         window.addEventListener("error", onError);
-        window.addEventListener("unhandledrejection", onRejection);
+        window.addEventListener(LOG_SCOPES.UNHANDLED_REJECTION, onRejection);
         return () => {
             window.removeEventListener("error", onError);
-            window.removeEventListener("unhandledrejection", onRejection);
+            window.removeEventListener(LOG_SCOPES.UNHANDLED_REJECTION, onRejection);
         };
     }, [notify]);
 

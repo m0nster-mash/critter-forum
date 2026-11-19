@@ -1,8 +1,9 @@
 import "dotenv/config";
+import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
 import {logger} from "@/lib/alerts/server/logger";
 import {seedUsers} from "./seed-users";
 
-const log = logger.child({scope: "seed"});
+const log = logger.child({scope: LOG_SCOPES.SEED});
 
 /**
  * runs the database seeder.
