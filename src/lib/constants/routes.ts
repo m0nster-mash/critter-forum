@@ -44,7 +44,7 @@ export const PUBLIC_ROUTES = {
 
     REGISTER: {
         path: "/register",
-        label: "Join",
+        label: "Register",
         title: "Create Account",
         accessLevel: "public",
         parent: "HOME",
