@@ -1,3 +1,4 @@
+import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {AlertDefinition} from "@/lib/alerts/types";
 
 /**
@@ -17,6 +18,12 @@ const CORE_ALERTS = {
         message: "We couldn't reach the server. Check your connection and try again.",
         presentation: "toast",
         log: {server: false, client: "warn"},
+    },
+    APP_NOT_FOUND: {
+        severity: "warning",
+        message: "We couldn't find the page you were looking for.",
+        presentation: "inline",
+        log: {server: false, client: false},
     },
     APP_RATE_LIMITED: {
         severity: "warning",
@@ -39,6 +46,7 @@ const CORE_ALERTS = {
  */
 export const ALERT_REGISTRY = {
     ...CORE_ALERTS,
+    ...AUTH_ALERTS,
 } as const satisfies Record<string, AlertDefinition>;
 
 /**

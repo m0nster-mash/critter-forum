@@ -1,9 +1,10 @@
 "use client";
 
-import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
-import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
+import {useAlerts} from "@/lib/alerts/client/use-alerts";
+import {alertFromThrown} from "@/lib/alerts/from-thrown";
+import {createAlert} from "@/lib/alerts/create-alert";
 import {signOut} from "@/lib/auth-client";
 import {REDIRECT} from "@/lib/constants/globals";
 import {useRouter} from "next/navigation";
@@ -48,6 +49,7 @@ export function Logout({
                            onBeforeLogout,
                        }: LogoutProps) {
     const router = useRouter();
+    const {present} = useAlerts();
     const [loading, setLoading] = useState(false);
 
     const handleLogout = async (event?: MouseEvent<HTMLElement>) => {
@@ -62,28 +64,35 @@ export function Logout({
                 await onBeforeLogout();
             }
 
-            await signOut();
+            const attemptSignOut = await signOut();
+            if (attemptSignOut.error) {
+                present(createAlert("AUTH_LOGOUT_FAILED"));
+                setLoading(false);
+                return;
+            }
+
+            present(createAlert("AUTH_LOGOUT_SUCCESS"));
             if (onSuccess) {
                 onSuccess();
             }
             router.push(redirectTo);
             router.refresh();
         } catch (err) {
-            console.error(AUTH_ERROR_MESSAGES.LOGOUT_FAILURE, err);
+            present(alertFromThrown(err), {err});
             setLoading(false);
         }
     };
     if (children) {
         return (
             <span onClick={handleLogout} role="button" tabIndex={0}>
-                {loading ? AUTH_ALERTS.LOGOUT_PROCESSING : children}
+                {loading ? AUTH_LABELS.LOGOUT_PROCESSING : children}
             </span>
         );
     }
 
     return (
         <button type="button" onClick={handleLogout} disabled={loading}>
-            {loading ? AUTH_ALERTS.LOGOUT_PROCESSING : AUTH_LABELS.LOGOUT_LABEL}
+            {loading ? AUTH_LABELS.LOGOUT_PROCESSING : AUTH_LABELS.LOGOUT_LABEL}
         </button>
     );
 }

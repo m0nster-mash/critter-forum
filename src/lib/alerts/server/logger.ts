@@ -1,29 +1,6 @@
-import type {AlertLogLevel} from "@/lib/alerts/types";
+import type {AlertLogLevel, LogContext, Logger} from "@/lib/alerts/types";
 
-/**
- * Free-form structured data attached to a log entry. Errors anywhere inside are serialized (name, message, stack,
- * cause, and own properties such as a database `code`), and values under sensitive-looking keys are redacted.
- */
-export type LogContext = Record<string, unknown>;
-
-/**
- * Server-side logger. Runtime-agnostic: no Next.js or Node-only imports, so it runs in the app, in
- * `instrumentation.ts`, and in standalone `tsx` scripts (seeding, DB checks).
- */
-export interface Logger {
-    debug(message: string, context?: LogContext): void;
-
-    info(message: string, context?: LogContext): void;
-
-    warn(message: string, context?: LogContext): void;
-
-    error(message: string, context?: LogContext): void;
-
-    /**
-     * Creates a logger that adds the given bindings (e.g. `{scope: "seed"}`) to every entry it writes.
-     */
-    child(bindings: LogContext): Logger;
-}
+export type {LogContext, Logger};
 
 const LEVEL_ORDER: Record<AlertLogLevel, number> = {debug: 10, info: 20, warn: 30, error: 40};
 const REDACTED = "[REDACTED]";
@@ -71,13 +48,24 @@ function getConfig(): { minLevel: AlertLogLevel; format: LogFormat } {
 // NORMALIZATION (safe to serialize: no circular refs, no raw Errors, secrets redacted)
 // ============================================================================
 
+/**
+ * Drizzle appends the bound query parameters to failed-query errors (`Failed query: ...\nparams: a@b.c,<hash>`).
+ * Those can hold emails and password hashes, and key-based redaction can't see inside a message string, so the
+ * parameter list is cut out of both the message and the stack. The SQL itself is kept.
+ */
+const QUERY_PARAMS = /\nparams:[\s\S]*?(?=\n\s+at |$)/;
+
+function redactQueryParams(text: string): string {
+    return text.replace(QUERY_PARAMS, "\nparams: [REDACTED]");
+}
+
 function serializeError(error: Error, depth: number, ancestors: WeakSet<object>): SerializedError {
     ancestors.add(error);
 
     const serialized: SerializedError = {
         name: error.name,
-        message: error.message,
-        stack: error.stack,
+        message: redactQueryParams(error.message),
+        stack: error.stack === undefined ? undefined : redactQueryParams(error.stack),
     };
 
     for (const key of Object.keys(error)) {

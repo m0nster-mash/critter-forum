@@ -1,121 +1,88 @@
+import type {AlertLogLevel, LogContext, Logger} from "@/lib/alerts/types";
+
 /**
- * Browser-side logger.
+ * Browser-side logger. Same interface as the server logger, but the browser console is public, so output is
+ * sanitized in production.
  *
- * Keep this module free of server imports and internal error details. In production the only
- * emitted fields are an alert code, a sanitized user-safe message, and an optional reference ID.
+ * - Development: everything is passed to the console as-is, so devtools can inspect errors and objects.
+ * - Production: only allow-listed keys with primitive values survive (code, ref, severity, field, scope, digest,
+ *   status), strings are truncated, and an `err` is reduced to its name. Messages, stacks and anything else are
+ *   dropped.
+ *
+ * `NEXT_PUBLIC_LOG_LEVEL` (`debug | info | warn | error`) sets the minimum level. Default: `debug` in development,
+ * `warn` in production. It controls how much is logged, never how much detail: detail is development-only.
  */
-import type {AlertLogLevel} from "@/lib/alerts/types";
 
-/** Structured context accepted by the logger interface. */
-export type LogContext = Record<string, unknown>;
+const LEVEL_ORDER: Record<AlertLogLevel, number> = {debug: 10, info: 20, warn: 30, error: 40};
+const SAFE_KEYS = new Set(["code", "ref", "severity", "field", "scope", "digest", "status"]);
+const MAX_SAFE_LENGTH = 120;
 
-/** Same level-method and child-logger contract as the server logger. */
-export interface Logger {
-    debug(message: string, context?: LogContext): void;
-    info(message: string, context?: LogContext): void;
-    warn(message: string, context?: LogContext): void;
-    error(message: string, context?: LogContext): void;
-    child(bindings: LogContext): Logger;
-}
-
-const LEVEL_ORDER: Record<AlertLogLevel, number> = {
-    debug: 10,
-    info: 20,
-    warn: 30,
-    error: 40,
-};
-
-const VALID_LEVELS = ["debug", "info", "warn", "error", "silent"] as const;
-type ConfiguredLevel = (typeof VALID_LEVELS)[number];
-
-function getConfig(): {production: boolean; minLevel: ConfiguredLevel} {
-    const production = process.env.NODE_ENV === "production";
-    const configured = process.env.NEXT_PUBLIC_ALERT_LOG_LEVEL;
-    const minLevel = VALID_LEVELS.includes(configured as ConfiguredLevel)
-        ? configured as ConfiguredLevel
-        : "debug";
+/**
+ * Reads config from the environment on every call. `process.env.NEXT_PUBLIC_*` must be referenced statically so
+ * Next can inline it into the client bundle.
+ */
+function getConfig(): { minLevel: AlertLogLevel; verbose: boolean } {
+    const isProduction = process.env.NODE_ENV === "production";
+    const requested = process.env.NEXT_PUBLIC_LOG_LEVEL?.toLowerCase();
 
     return {
-        production,
-        // A public env var can increase dev verbosity, but can never enable production debug/info.
-        minLevel: production ? "warn" : minLevel,
+        minLevel: requested && Object.hasOwn(LEVEL_ORDER, requested)
+            ? (requested as AlertLogLevel)
+            : isProduction ? "warn" : "debug",
+        verbose: !isProduction,
     };
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-    return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+function sanitize(context: LogContext): LogContext {
+    const safe: LogContext = {};
 
-/**
- * Redact common personal/credential data even when a caller accidentally supplies it as a message.
- * The registry should remain the source of user-facing text; this is a defensive last line.
- */
-function sanitizeMessage(value: unknown): string | undefined {
-    if (typeof value !== "string") return undefined;
-
-    return value
-        .slice(0, 500)
-        .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[REDACTED_EMAIL]")
-        .replace(/\bBearer\s+[A-Z0-9._~+/=-]+/gi, "Bearer [REDACTED]")
-        .replace(/\b(password|passwd|token|secret|api[_-]?key)\s*[:=]\s*\S+/gi, "$1=[REDACTED]");
-}
-
-function safeCode(value: string): string {
-    // Log message arguments are expected to be registry codes, never exception messages.
-    return /^[A-Z][A-Z0-9_]{0,99}$/.test(value) ? value : "CLIENT_LOG_EVENT";
-}
-
-function safeRef(value: unknown): string | undefined {
-    return typeof value === "string" && /^[a-zA-Z0-9_-]{1,64}$/.test(value)
-        ? value
-        : undefined;
-}
-
-function emit(
-    level: AlertLogLevel,
-    code: string,
-    bindings: LogContext,
-    context: LogContext = {},
-): void {
-    const {production, minLevel} = getConfig();
-
-    if (minLevel === "silent" || LEVEL_ORDER[level] < LEVEL_ORDER[minLevel]) return;
-    // Production is deliberately limited to warn/error, regardless of the configured public value.
-    if (production && level !== "warn" && level !== "error") return;
-
-    if (production) {
-        const merged = {...bindings, ...context};
-        const safeEntry: {code: string; message?: string; ref?: string} = {
-            code: safeCode(code),
-        };
-        const message = sanitizeMessage(merged.message ?? merged.userMessage);
-        const ref = safeRef(merged.ref);
-
-        if (message) safeEntry.message = message;
-        if (ref) safeEntry.ref = ref;
-
-        // Do not pass arbitrary objects, exceptions, stacks, or context through the browser console.
-        console[level](safeEntry);
-        return;
+    for (const [key, value] of Object.entries(context)) {
+        if (SAFE_KEYS.has(key)) {
+            if (typeof value === "string") {
+                safe[key] = value.slice(0, MAX_SAFE_LENGTH);
+            } else if (typeof value === "number" || typeof value === "boolean") {
+                safe[key] = value;
+            }
+        } else if (key === "err" && value instanceof Error) {
+            safe.errorName = value.name;
+        }
     }
 
-    // Development is intentionally verbose to make client-only failures diagnosable.
-    console[level](code, {...bindings, ...context});
+    return safe;
+}
+
+function emit(level: AlertLogLevel, message: string, bindings: LogContext, context?: LogContext): void {
+    const {minLevel, verbose} = getConfig();
+    if (LEVEL_ORDER[level] < LEVEL_ORDER[minLevel]) return;
+
+    const merged = {...bindings, ...context};
+    const data = verbose ? merged : sanitize(merged);
+
+    if (Object.keys(data).length > 0) {
+        console[level](message, data);
+    } else {
+        console[level](message);
+    }
 }
 
 /**
- * Creates a logger with fixed bindings, matching the server logger's interface.
- * Child bindings are merged first; per-call context can override them.
+ * Creates a client logger with optional fixed bindings added to every entry.
+ *
+ * @param   {LogContext}    [bindings]  Optional; key-value pairs merged into every entry
+ *
+ * @return  {Logger}    The logger instance.
  */
-export function createLogger(bindings: LogContext = {}): Logger {
+export function createClientLogger(bindings: LogContext = {}): Logger {
     return {
         debug: (message, context) => emit("debug", message, bindings, context),
         info: (message, context) => emit("info", message, bindings, context),
         warn: (message, context) => emit("warn", message, bindings, context),
         error: (message, context) => emit("error", message, bindings, context),
-        child: (childBindings) => createLogger({...bindings, ...childBindings}),
+        child: (childBindings) => createClientLogger({...bindings, ...childBindings}),
     };
 }
 
-/** Shared browser logger. */
-export const logger: Logger = createLogger();
+/**
+ * The shared client logger.
+ */
+export const clientLogger: Logger = createClientLogger();

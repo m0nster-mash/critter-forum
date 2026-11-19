@@ -20,6 +20,29 @@ export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
 export type AlertLogLevel = "debug" | "info" | "warn" | "error";
 
 /**
+ * Free-form structured data attached to a log entry.
+ */
+export type LogContext = Record<string, unknown>;
+
+/**
+ * The logging interface shared by the server and client loggers, so calling code reads the same on both sides.
+ */
+export interface Logger {
+    debug(message: string, context?: LogContext): void;
+
+    info(message: string, context?: LogContext): void;
+
+    warn(message: string, context?: LogContext): void;
+
+    error(message: string, context?: LogContext): void;
+
+    /**
+     * Creates a logger that adds the given bindings (e.g. `{scope: "seed"}`) to every entry it writes.
+     */
+    child(bindings: LogContext): Logger;
+}
+
+/**
  * Per-environment logging rules for an alert. `false` means the alert is never logged in that environment.
  *
  * @property    {AlertLogLevel | false} server  Level written to the terminal / server logs
@@ -37,17 +60,19 @@ export interface AlertLogPolicy {
  * @property    {string}            message         User-safe text. May contain `{name}` tokens filled via `params`.
  * @property    {AlertPresentation} presentation    Default on-page presentation
  * @property    {AlertLogPolicy}    log             Default logging rules
+ * @property    {string}            [field]         Optional; form field this alert belongs to by default
  */
 export interface AlertDefinition {
     severity: AlertSeverity;
     message: string;
     presentation: AlertPresentation;
     log: AlertLogPolicy;
+    field?: string;
 }
 
 /**
- * The alert as it crosses the server/client boundary. Primitives only, so it serializes cleanly out of server actions.
- * Never holds internal detail (causes, stacks, request context).
+ * The alert as it crosses the server/client boundary. Primitives only, so it serializes cleanly out of server
+ * actions. Never holds internal detail (causes, stacks, request context).
  *
  * @property    {string}            code            Registry key, e.g. `AUTH_LOGIN_INVALID_CREDENTIALS`
  * @property    {AlertSeverity}     severity        Severity used for styling and live-region role
@@ -73,7 +98,7 @@ export interface PublicAlert {
  * @property    {AlertPresentation}                 [presentation]  Override the registry presentation
  * @property    {string}                            [field]         Form field name for field-level alerts
  * @property    {string}                            [ref]           Reference ID matching a server log entry
- * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in message
+ * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in the message
  */
 export interface AlertOverrides {
     severity?: AlertSeverity;

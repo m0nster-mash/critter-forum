@@ -1,0 +1,39 @@
+"use client";
+
+import {AlertBanner} from "@/components/alerts/alert-banner";
+import {logClientAlert} from "@/lib/alerts/client/log-alert";
+import {createAlert} from "@/lib/alerts/create-alert";
+import {getErrorDigest} from "@/lib/alerts/error-digest";
+import {type JSX, useEffect, useMemo} from "react";
+
+/**
+ * Last-resort error boundary: replaces the root layout when the layout itself throws, so it must render its own
+ * `<html>` and `<body>`. Deliberately independent of the root layout and AlertProvider, which aren't available here.
+ *
+ * @param   {Object}        props           Component properties
+ * @param   {unknown}       props.error     The thrown value; not guaranteed to be an Error
+ * @param   {() => void}    props.retry     Re-fetches and re-renders the application
+ *
+ * @return  {JSX.Element}   The error UI.
+ */
+export default function GlobalError({error, retry}: { error: unknown; retry: () => void }): JSX.Element {
+    const alert = useMemo(
+        () => createAlert("APP_UNKNOWN_ERROR", {presentation: "inline", ref: getErrorDigest(error)}),
+        [error],
+    );
+
+    useEffect(() => {
+        logClientAlert(alert, {err: error, scope: "global.render_error"});
+    }, [alert, error]);
+
+    return (
+        <html lang="en">
+        <body style={{fontFamily: "Arial, sans-serif", margin: 0, padding: "2rem"}}>
+        <AlertBanner alert={alert}/>
+        <p>
+            <button type="button" onClick={() => retry()}>Try again</button>
+        </p>
+        </body>
+        </html>
+    );
+}

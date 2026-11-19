@@ -3,5 +3,9 @@
  */
 export const AUTH_LABELS = {
     LOGIN_LABEL: "Login",
+    LOGIN_PROCESSING: "Logging in...",
     LOGOUT_LABEL: "Logout",
+    LOGOUT_PROCESSING: "Signing out...",
+    REGISTER_LABEL: "Register Account",
+    REGISTER_PROCESSING: "Creating account...",
 } as const;
