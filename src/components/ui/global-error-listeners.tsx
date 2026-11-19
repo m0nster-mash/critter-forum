@@ -2,14 +2,14 @@
 
 import {clientLogger} from "@/lib/alerts/client/logger";
 import {useAlert} from "@/lib/alerts/client/toast-context";
-import {createAlert} from "@/lib/alerts/create-alert";
-import {FALLBACK_ALERT_CODE} from "@/lib/alerts/registry";
 import {
     WINDOW_ERROR_EVENT,
     WINDOW_UNHANDLED_ERROR,
     WINDOW_UNHANDLED_REJECTION,
     WINDOW_UNHANDLED_REJECTION_EVENT,
 } from "@/lib/alerts/constants/alerts";
+import {createAlert} from "@/lib/alerts/create-alert";
+import {FALLBACK_ALERT_CODE} from "@/lib/alerts/registry";
 import {useEffect} from "react";
 
 /**

@@ -1,7 +1,13 @@
 "use client";
 
+import {
+    ALERT_SEVERITY_ERROR,
+    MAX_TOASTS,
+    TOAST_ACTION_TYPES,
+    TOAST_DURATIONS,
+    TOAST_UI
+} from "@/lib/alerts/constants/alerts";
 import type {PublicAlert, Toast, ToastAction, ToastContextValue} from "@/lib/alerts/types";
-import {ALERT_SEVERITY_ERROR, MAX_TOASTS, TOAST_ACTION_TYPES, TOAST_DURATIONS, TOAST_UI} from "@/lib/alerts/constants/alerts";
 import {
     createContext,
     JSX,

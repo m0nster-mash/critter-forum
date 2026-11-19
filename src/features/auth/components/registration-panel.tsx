@@ -1,140 +1,135 @@
 "use client";
 
-import {AlertBanner} from "@/components/ui/alert-banner";
+import {AlertBanner} from "@/components/alerts/alert-banner";
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
-import {
-    AUTH_ALERT_CODES,
-    AUTH_FORM_FIELDS,
-    AUTH_LABELS,
-    AUTH_UI_TEXT,
-    AUTH_USERNAME_PLACEHOLDER
-} from "@/features/auth/constants/ui";
+import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
-import {useAlert} from "@/lib/alerts/client/toast-context";
+import {validateRegistration} from "@/features/auth/validation";
+import {useAlerts} from "@/lib/alerts/client/use-alerts";
 import {createAlert} from "@/lib/alerts/create-alert";
-import type {PublicAlert} from "@/lib/alerts/types";
+import {alertFromThrown} from "@/lib/alerts/from-thrown";
 import {signIn} from "@/lib/auth-client";
-import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
-import {PRIVATE_ROUTES} from "@/lib/constants/routes";
+import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
+import {resolvePath} from "@/lib/utilities/route-utils";
 import {useRouter} from "next/navigation";
 import {JSX, type SubmitEvent, useState} from "react";
 
 /**
  * Renders the registration form panel enabling account creation.
  *
+ * Validation and server failures appear inline (field-level where the alert names a field, form-level otherwise); the
+ * "account created" confirmation is a toast that survives the redirect.
+ *
  * @param   {AuthFlowProps} props               Component properties handling registration callbacks
  * @param   {Function}      [props.onSuccess]   Optional callback function executed upon successful account registration
  *
- * @return  {JSX.Element}                       The registration panel JSX element.
+ * @return  {JSX.Element}   The registration panel JSX element.
  */
 export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
     const router = useRouter();
-    const {notify} = useAlert();
+    const {present, clear, formAlert, fieldAlert} = useAlerts();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState<PublicAlert | null>(null);
     const [loading, setLoading] = useState(false);
 
-    async function handleSubmit(registerEvent: SubmitEvent<HTMLFormElement>) {
-        registerEvent.preventDefault();
-        setError(null);
+    const nameAlert = fieldAlert("name");
+    const emailAlert = fieldAlert("email");
+    const passwordAlert = fieldAlert("password");
 
-        const normalizedName = name.trim();
-        const normalizedEmail = email.trim().toLowerCase();
+    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+        event.preventDefault();
+        clear();
 
-        if (!normalizedName) {
-            setError(createAlert(AUTH_ALERT_CODES.REGISTER_INVALID));
-            return;
-        }
+        const input = {name: name.trim(), email: email.trim().toLowerCase(), password};
 
-        if (password.length < PASSWORD_MIN_LENGTH) {
-            setError(createAlert(AUTH_ALERT_CODES.REGISTER_INVALID));
+        const invalid = validateRegistration(input);
+        if (invalid) {
+            present(invalid);
             return;
         }
 
         setLoading(true);
 
         try {
-            const result = await registerAccountAction({
-                name: normalizedName,
-                email: normalizedEmail,
-                password: password,
-            });
-
+            const result = await registerAccountAction(input);
             if (!result.ok) {
-                setError(result.alert);
+                present(result.alert);
                 return;
             }
 
-            if (result.alert) {
-                notify(result.alert);
-            }
-
-            const attemptSignIn = await signIn.email({
-                email: normalizedEmail,
-                password,
-            });
-
+            const attemptSignIn = await signIn.email({email: input.email, password});
             if (attemptSignIn.error) {
-                setError(createAlert(AUTH_ALERT_CODES.REGISTER_SIGN_IN_FAILED));
+                present(createAlert("AUTH_REGISTER_SIGNIN_FAILED"));
+                router.push(resolvePath(PUBLIC_ROUTES.LOGIN));
                 return;
             }
 
+            present(result.alert ?? createAlert("AUTH_REGISTER_SUCCESS"));
             onSuccess?.();
-            router.push(PRIVATE_ROUTES.DASHBOARD.path as string);
+            router.push(resolvePath(PRIVATE_ROUTES.DASHBOARD));
             router.refresh();
 
-        } catch {
-            setError(createAlert(AUTH_ALERT_CODES.UNKNOWN_ERROR));
+        } catch (err: unknown) {
+            present(alertFromThrown(err), {err});
         } finally {
             setLoading(false);
         }
+
     }
 
     return (
         <>
-            {error && <AlertBanner alert={error}/>}
+            <AlertBanner alert={formAlert}/>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
                 <div>
-                    <label htmlFor={AUTH_FORM_FIELDS.REGISTER_USERNAME_ID}>{AUTH_LABELS.USERNAME_LABEL}</label>
-                    <input id={AUTH_FORM_FIELDS.REGISTER_USERNAME_ID}
+                    <label htmlFor="register-username">Username</label>
+                    <input id="register-username"
                            type="text"
-                           autoComplete={AUTH_FORM_FIELDS.USERNAME_AUTOCOMPLETE}
-                           placeholder={AUTH_USERNAME_PLACEHOLDER}
+                           autoComplete="username"
+                           placeholder="Username"
                            value={name}
                            onChange={(registerEvent) => setName(registerEvent.target.value)}
+                           aria-invalid={nameAlert ? true : undefined}
+                           aria-describedby={nameAlert ? "register-username-alert" : undefined}
                            disabled={loading}
                            required/>
+                    <AlertBanner alert={nameAlert} id="register-username-alert" variant="field"/>
                 </div>
                 <div>
-                    <label htmlFor={AUTH_FORM_FIELDS.REGISTER_EMAIL_ID}>{AUTH_LABELS.EMAIL_LABEL}</label>
-                    <input id={AUTH_FORM_FIELDS.REGISTER_EMAIL_ID}
+                    <label htmlFor="register-email">Email</label>
+                    <input id="register-email"
                            type="email"
-                           autoComplete={AUTH_FORM_FIELDS.EMAIL_AUTOCOMPLETE}
-                           placeholder={AUTH_UI_TEXT.EMAIL_PLACEHOLDER}
+                           autoComplete="email"
+                           placeholder="email@address.com"
                            value={email}
                            onChange={(registerEvent) => setEmail(registerEvent.target.value)}
+                           aria-invalid={emailAlert ? true : undefined}
+                           aria-describedby={emailAlert ? "register-email-alert" : undefined}
                            disabled={loading}
                            required/>
+                    <AlertBanner alert={emailAlert} id="register-email-alert" variant="field"/>
                 </div>
                 <div>
-                    <label htmlFor={AUTH_FORM_FIELDS.REGISTER_PASSWORD_ID}>{AUTH_LABELS.PASSWORD_LABEL}</label>
-                    <input id={AUTH_FORM_FIELDS.REGISTER_PASSWORD_ID}
+                    <label htmlFor="register-password">Password</label>
+                    <input id="register-password"
                            type="password"
-                           autoComplete={AUTH_FORM_FIELDS.NEW_PASSWORD_AUTOCOMPLETE}
-                           placeholder={AUTH_UI_TEXT.PASSWORD_PLACEHOLDER}
+                           autoComplete="new-password"
+                           placeholder="••••••••"
                            value={password}
                            onChange={(registerEvent) => setPassword(registerEvent.target.value)}
+                           aria-invalid={passwordAlert ? true : undefined}
+                           aria-describedby={passwordAlert ? "register-password-alert" : undefined}
                            disabled={loading}
                            required/>
+                    <AlertBanner alert={passwordAlert} id="register-password-alert" variant="field"/>
                 </div>
                 <div>
                     <button type="submit"
                             disabled={loading}>
-                        {loading ? AUTH_UI_TEXT.REGISTER_LOADING : AUTH_UI_TEXT.REGISTER_SUBMIT}
+                        {loading ? AUTH_LABELS.REGISTER_PROCESSING : AUTH_LABELS.REGISTER_LABEL}
                     </button>
                 </div>
             </form>

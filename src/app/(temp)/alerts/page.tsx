@@ -1,8 +1,8 @@
 "use client";
 
 import {AlertBanner} from "@/components/ui/alert-banner";
-import {useAlert} from "@/lib/alerts/client/toast-context";
 import {clientLogger} from "@/lib/alerts/client/logger";
+import {useAlert} from "@/lib/alerts/client/toast-context";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {AlertCode} from "@/lib/alerts/registry";
 import type {PublicAlert} from "@/lib/alerts/types";
@@ -157,7 +157,8 @@ export default function AlertTestPage(): JSX.Element {
                         Simulated unhandled rejection
                     </button>
                 </div>
-                <p>These dispatch synthetic window events handled by GlobalErrorListeners, which logs the event and publishes a fallback toast.</p>
+                <p>These dispatch synthetic window events handled by GlobalErrorListeners, which logs the event and
+                    publishes a fallback toast.</p>
             </section>
 
             <section>

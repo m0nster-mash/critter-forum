@@ -1,12 +1,11 @@
 import type {AlertCode} from "@/lib/alerts/registry";
 import type {LogContext} from "@/lib/alerts/server/logger";
 import type {AlertOverrides} from "@/lib/alerts/types";
-import {ALERT_ERROR_NAME} from "@/lib/alerts/constants/alerts";
 
 /**
  * Options for an AlertError.
  *
- * @property    {unknown}       [cause]     Optional; the underlying error. Logged on the server, never sent to client
+ * @property    {unknown}       [cause]     Optional; the underlying error. Logged on the server, never sent to the client.
  * @property    {LogContext}    [detail]    Optional; internal-only context to log. Never sent to the client.
  */
 export interface AlertErrorOptions extends AlertOverrides {
@@ -34,7 +33,7 @@ export class AlertError extends Error {
     constructor(code: AlertCode, options: AlertErrorOptions = {}) {
         const {cause, detail, ...overrides} = options;
         super(code, {cause});
-        this.name = ALERT_ERROR_NAME;
+        this.name = "AlertError";
         this.code = code;
         this.overrides = overrides;
         this.detail = detail ?? {};
@@ -47,7 +46,7 @@ export class AlertError extends Error {
  *
  * @param   {unknown}   value   The caught value
  *
- * @return  {boolean}           True if the value is an AlertError.
+ * @return  {boolean}   True if the value is an AlertError.
  */
 export function isAlertError(value: unknown): value is AlertError {
 

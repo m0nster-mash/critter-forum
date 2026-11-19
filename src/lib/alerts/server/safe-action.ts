@@ -5,7 +5,6 @@ import {logAlert} from "@/lib/alerts/server/log-alert";
 import type {LogContext} from "@/lib/alerts/server/logger";
 import {generateRef} from "@/lib/alerts/server/ref";
 import type {PublicAlert} from "@/lib/alerts/types";
-import {ALERT_SEVERITY_ERROR, ALERT_SEVERITY_WARNING, APP_UNKNOWN_ERROR_CODE} from "@/lib/alerts/constants/alerts";
 import {unstable_rethrow} from "next/navigation";
 
 /**
@@ -24,7 +23,7 @@ function record(
         return alert;
     }
 
-    const needsRef = alert.ref === undefined && (alert.severity === ALERT_SEVERITY_ERROR || alert.severity === ALERT_SEVERITY_WARNING);
+    const needsRef = alert.ref === undefined && (alert.severity === "error" || alert.severity === "warning");
     const stamped = needsRef ? {...alert, ref: generateRef()} : alert;
 
     logAlert(stamped, context);
@@ -44,11 +43,10 @@ function record(
  *
  * Usage, in a `"use server"` file: `export const saveThing = safeAction("things.save", async (input: Input) => {...})`
  *
- *
- * @param   {string}                                    name    Stable identifier for logs, ex. `auth.register`
+ * @param   {string}                                    name    Stable identifier for logs, e.g. `auth.register`
  * @param   {(...args: Args) => Promise<ActionResult>}  action  The action body
  *
- * @return  {(...args: Args) => Promise<ActionResult>}          The wrapped action.
+ * @return  {(...args: Args) => Promise<ActionResult>}  The wrapped action.
  */
 export function safeAction<Args extends unknown[], T>(
     name: string,
@@ -76,7 +74,7 @@ export function safeAction<Args extends unknown[], T>(
                 ));
             }
 
-            return fail(record(createAlert(APP_UNKNOWN_ERROR_CODE), {action: name, err: error}));
+            return fail(record(createAlert("APP_UNKNOWN_ERROR"), {action: name, err: error}));
         }
     };
 }

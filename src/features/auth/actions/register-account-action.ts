@@ -1,8 +1,10 @@
 "use server";
 
-import {AUTH_ALERT_CODES, AUTH_REGISTER_ACTION_NAME} from "@/features/auth/constants/ui";
+import {AUTH_ALERT_PARAMS, isAuthApiError, resolveAuthAlertCode,} from "@/features/auth/utilities/auth-errors";
+import {type RegistrationInput, validateRegistration} from "@/features/auth/validation";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {fail, succeed} from "@/lib/alerts/result";
+import {AlertError} from "@/lib/alerts/server/alert-error";
 import {safeAction} from "@/lib/alerts/server/safe-action";
 import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
@@ -10,37 +12,51 @@ import {headers} from "next/headers";
 /**
  * Server action that registers a new user account using email and password credentials.
  *
- * @param   {Object}    input           The user registration payload
- * @param   {string}    input.name      The display name of the user registering
- * @param   {string}    input.email     The email address of the registering user
- * @param   {string}    input.password  The plain-text password for account creation
+ * Wrapped in `safeAction`, so it always resolves to an ActionResult:
+ * - invalid input -> a failure carrying the validation alert for the offending field
+ * - better-auth rejected the request (e.g. email taken) -> a failure carrying the mapped alert
+ * - anything unexpected (database down, bug) -> a generic failure with a reference ID, full detail in the server log
+ * - success -> a success result carrying the "account created" alert
  *
- * @return  {Promise<ActionResult>}     Resolves to the registration result.
+ * @param   {RegistrationInput} input           The user registration payload
+ * @param   {string}            input.name      The display name of the user registering
+ * @param   {string}            input.email     The email address of the registering user
+ * @param   {string}            input.password  The plain-text password for account creation
+ *
+ * @return  {Promise<ActionResult<undefined>>}  Resolves to a success or failure result; never throws to the client.
  */
-export const registerAccountAction = safeAction(AUTH_REGISTER_ACTION_NAME, async (input: {
-    name: string;
-    email: string;
-    password: string;
-}) => {
-    const name = input.name.trim();
-    const email = input.email.trim().toLowerCase();
+export const registerAccountAction = safeAction("auth.register", async (input: RegistrationInput) => {
 
-    if (!name || !email || !input.password) {
-        return fail(createAlert(AUTH_ALERT_CODES.REGISTER_INVALID));
+    const normalized: RegistrationInput = {
+        name: input.name.trim(),
+        email: input.email.trim().toLowerCase(),
+        password: input.password,
+    };
+
+    const invalid = validateRegistration(normalized);
+    if (invalid) {
+        return fail(invalid);
     }
 
-    const registerResult = await auth.api.signUpEmail({
-        body: {
-            name: name,
-            email: email,
-            password: input.password,
-        },
-        headers: await headers(),
-    });
+    let registerResult;
+    try {
+        registerResult = await auth.api.signUpEmail({
+            body: normalized,
+            headers: await headers(),
+        });
+    } catch (error) {
+        if (isAuthApiError(error)) {
+            throw new AlertError(resolveAuthAlertCode(error, "AUTH_REGISTER_FAILED"), {
+                cause: error,
+                params: AUTH_ALERT_PARAMS,
+            });
+        }
+        throw error;
+    }
 
     if (!registerResult.user?.id) {
-        return fail(createAlert(AUTH_ALERT_CODES.REGISTER_FAILED));
+        throw new AlertError("AUTH_REGISTER_FAILED", {detail: {reason: "signUpEmail returned no user id"}});
     }
 
-    return succeed(undefined, createAlert(AUTH_ALERT_CODES.REGISTER_SUCCESS));
+    return succeed(undefined, createAlert("AUTH_REGISTER_SUCCESS"));
 });

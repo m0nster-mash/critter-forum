@@ -1,5 +1,3 @@
-import {ClientLogContext} from "@/lib/alerts/client/logger";
-
 /**
  * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
  */
@@ -22,6 +20,29 @@ export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
 export type AlertLogLevel = "debug" | "info" | "warn" | "error";
 
 /**
+ * Free-form structured data attached to a log entry.
+ */
+export type LogContext = Record<string, unknown>;
+
+/**
+ * The logging interface shared by the server and client loggers, so calling code reads the same on both sides.
+ */
+export interface Logger {
+    debug(message: string, context?: LogContext): void;
+
+    info(message: string, context?: LogContext): void;
+
+    warn(message: string, context?: LogContext): void;
+
+    error(message: string, context?: LogContext): void;
+
+    /**
+     * Creates a logger that adds the given bindings (e.g. `{scope: "seed"}`) to every entry it writes.
+     */
+    child(bindings: LogContext): Logger;
+}
+
+/**
  * Per-environment logging rules for an alert. `false` means the alert is never logged in that environment.
  *
  * @property    {AlertLogLevel | false} server  Level written to the terminal / server logs
@@ -39,12 +60,14 @@ export interface AlertLogPolicy {
  * @property    {string}            message         User-safe text. May contain `{name}` tokens filled via `params`.
  * @property    {AlertPresentation} presentation    Default on-page presentation
  * @property    {AlertLogPolicy}    log             Default logging rules
+ * @property    {string}            [field]         Optional; form field this alert belongs to by default
  */
 export interface AlertDefinition {
     severity: AlertSeverity;
     message: string;
     presentation: AlertPresentation;
     log: AlertLogPolicy;
+    field?: string;
 }
 
 /**
@@ -85,23 +108,6 @@ export interface AlertOverrides {
     ref?: string;
     params?: Record<string, string | number>;
 }
-
-/**
- * Client-side logging interface with severity-specific methods and support for child loggers. Each method accepts a
- * message and optional structured context; child loggers inherit fixed bindings.
- */
-export interface ClientLogger {
-    debug(message: string, context?: ClientLogContext): void;
-
-    info(message: string, context?: ClientLogContext): void;
-
-    warn(message: string, context?: ClientLogContext): void;
-
-    error(message: string, context?: ClientLogContext): void;
-
-    child(bindings: ClientLogContext): ClientLogger;
-}
-
 
 /**
  * Toast notification enriched with a stable per-instance identifier for rendering and dismissal.

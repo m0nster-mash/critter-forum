@@ -48,7 +48,6 @@ export function succeed(): ActionSuccess<undefined>;
  */
 export function succeed<T>(data: T, alert?: PublicAlert): ActionSuccess<T>;
 
-
 /**
  * Builds a success result.
  *

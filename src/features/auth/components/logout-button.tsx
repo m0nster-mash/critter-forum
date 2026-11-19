@@ -1,10 +1,10 @@
 "use client";
 
-import {AUTH_ALERT_CODES, AUTH_LABELS, AUTH_UI_TEXT} from "@/features/auth/constants/ui";
+import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
-import {logClientAlert} from "@/lib/alerts/client/log-alert";
-import {useAlert} from "@/lib/alerts/client/toast-context";
+import {useAlerts} from "@/lib/alerts/client/use-alerts";
 import {createAlert} from "@/lib/alerts/create-alert";
+import {alertFromThrown} from "@/lib/alerts/from-thrown";
 import {signOut} from "@/lib/auth-client";
 import {REDIRECT} from "@/lib/constants/globals";
 import {useRouter} from "next/navigation";
@@ -18,7 +18,7 @@ import {JSX, type MouseEvent, useState} from "react";
  * @param   {string}            [props.redirectTo="/"]  The route path to navigate to after completing logout
  * @param   {Function}          [props.onBeforeLogout]  Optional callback executed immediately before signing out
  *
- * @return  {JSX.Element}                               The rendered logout button JSX element.
+ * @return  {JSX.Element} The rendered logout button JSX element.
  */
 export function LogoutButton({
                                  label = AUTH_LABELS.LOGOUT_LABEL,
@@ -35,27 +35,26 @@ export function LogoutButton({
 /**
  * Wrapper component providing click-to-logout handling and session termination logic for child UI elements.
  *
- * @param   {LogoutProps}   props                   Properties controlling the logout execution container
- * @param   {ReactNode}     props.children          Child elements wrapped within the interactive logout container
- * @param   {string}        [props.redirectTo="/"]  The target route to navigate to after sign-out completes
- * @param   {Function}      [props.onSuccess]       Optional callback executed upon successful logout
- * @param   {Function}      [props.onBeforeLogout]  Optional callback executed prior to initiating sign-out
- *
- * @return  {JSX.Element} The interactive container wrapping child elements.
+ * @param {LogoutProps} props    Properties controlling the logout execution container.
+ * @param {ReactNode} props.children    Child elements wrapped within the interactive logout container.
+ * @param {string} [props.redirectTo="/"]    The target route to navigate to after sign-out completes.
+ * @param {Function} [props.onSuccess]    Optional callback executed upon successful logout.
+ * @param {Function} [props.onBeforeLogout]    Optional callback executed prior to initiating sign-out.
+ * @return {JSX.Element} The interactive container wrapping child elements.
  */
 export function Logout({
                            children,
                            redirectTo = REDIRECT,
                            onSuccess,
                            onBeforeLogout,
-                       }: LogoutProps): JSX.Element {
+                       }: LogoutProps) {
     const router = useRouter();
-    const {notify} = useAlert();
+    const {present} = useAlerts();
     const [loading, setLoading] = useState(false);
 
-    const handleLogout = async (logoutEvent?: MouseEvent<HTMLElement>) => {
-        if (logoutEvent) {
-            logoutEvent.preventDefault();
+    const handleLogout = async (event?: MouseEvent<HTMLElement>) => {
+        if (event) {
+            event.preventDefault();
         }
         if (loading) return;
 
@@ -65,29 +64,35 @@ export function Logout({
                 await onBeforeLogout();
             }
 
-            await signOut();
-            onSuccess?.();
+            const attemptSignOut = await signOut();
+            if (attemptSignOut.error) {
+                present(createAlert("AUTH_LOGOUT_FAILED"));
+                setLoading(false);
+                return;
+            }
+
+            present(createAlert("AUTH_LOGOUT_SUCCESS"));
+            if (onSuccess) {
+                onSuccess();
+            }
             router.push(redirectTo);
             router.refresh();
         } catch (err) {
-            const alert = createAlert(AUTH_ALERT_CODES.LOGOUT_FAILED);
-            logClientAlert(alert, {err});
-            notify(alert);
+            present(alertFromThrown(err), {err});
             setLoading(false);
         }
     };
-
     if (children) {
         return (
             <span onClick={handleLogout} role="button" tabIndex={0}>
-                {loading ? AUTH_UI_TEXT.LOGOUT_LOADING : children}
+                {loading ? AUTH_LABELS.LOGOUT_PROCESSING : children}
             </span>
         );
     }
 
     return (
         <button type="button" onClick={handleLogout} disabled={loading}>
-            {loading ? AUTH_UI_TEXT.LOGOUT_LOADING : AUTH_LABELS.LOGOUT_LABEL}
+            {loading ? AUTH_LABELS.LOGOUT_PROCESSING : AUTH_LABELS.LOGOUT_LABEL}
         </button>
     );
 }

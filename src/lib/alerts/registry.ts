@@ -1,6 +1,5 @@
+import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {AlertDefinition} from "@/lib/alerts/types";
-
-// TODO:: replace magic strings with consts in entire class
 
 /**
  * Application-wide alerts that don't belong to any single feature.
@@ -18,6 +17,12 @@ const CORE_ALERTS = {
         presentation: "toast",
         log: {server: false, client: "warn"},
     },
+    APP_NOT_FOUND: {
+        severity: "warning",
+        message: "We couldn't find the page you were looking for.",
+        presentation: "inline",
+        log: {server: false, client: false},
+    },
     APP_RATE_LIMITED: {
         severity: "warning",
         message: "Too many attempts. Please try again in {seconds} seconds.",
@@ -33,49 +38,7 @@ const CORE_ALERTS = {
 } as const satisfies Record<string, AlertDefinition>;
 
 /**
- * UI alert and notification text strings for authentication processes.
- */
-const AUTH_ALERTS = {
-    AUTH_REGISTER_SUCCESS: {
-        severity: "success",
-        message: "Your account has been created.",
-        presentation: "toast",
-        log: {server: "info", client: false},
-    },
-    AUTH_REGISTER_INVALID: {
-        severity: "warning",
-        message: "Please check your registration details and try again.",
-        presentation: "inline",
-        log: {server: false, client: false},
-    },
-    AUTH_REGISTER_FAILED: {
-        severity: "error",
-        message: "Your account could not be created. Please try again.",
-        presentation: "inline",
-        log: {server: "error", client: false},
-    },
-    AUTH_REGISTER_SIGN_IN_FAILED: {
-        severity: "warning",
-        message: "Your account was created, but automatic sign-in failed. Please sign in.",
-        presentation: "inline",
-        log: {server: false, client: "warn"},
-    },
-    AUTH_LOGIN_FAILED: {
-        severity: "error",
-        message: "Failed to log in. Please check your credentials.",
-        presentation: "inline",
-        log: {server: false, client: "warn"},
-    },
-    AUTH_LOGOUT_FAILED: {
-        severity: "error",
-        message: "Logout failed. Please try again.",
-        presentation: "toast",
-        log: {server: false, client: "error"},
-    },
-} as const satisfies Record<string, AlertDefinition>;
-
-/**
- * Unified alert registry. Feature registries are spread in here (ex. `...AUTH_ALERTS`), each defined in its own
+ * Unified alert registry. Feature registries are spread in here (e.g. `...AUTH_ALERTS`), each defined in its own
  * feature folder with `as const satisfies Record<string, AlertDefinition>`. Prefix every feature code with its
  * feature name so spreads can't collide.
  */
