@@ -1,17 +1,8 @@
+import {ALERT_ERROR_NAME} from "@/features/alerts/constants/alert-codes";
 import type {AlertCode} from "@/features/alerts/registry";
 import type {LogContext} from "@/features/alerts/server/logger";
-import type {AlertOverrides} from "@/features/alerts/types";
+import {AlertErrorOptions, AlertOverrides} from "@/features/alerts/types";
 
-/**
- * Options for an AlertError.
- *
- * @property    {unknown}       [cause]     Optional; the underlying error. Logged on the server, never sent to the client.
- * @property    {LogContext}    [detail]    Optional; internal-only context to log. Never sent to the client.
- */
-export interface AlertErrorOptions extends AlertOverrides {
-    cause?: unknown;
-    detail?: LogContext;
-}
 
 /**
  * Throw to signal an *expected* failure from deep inside server code (a helper, a guard) without threading a result
@@ -32,7 +23,7 @@ export class AlertError extends Error {
     constructor(code: AlertCode, options: AlertErrorOptions = {}) {
         const {cause, detail, ...overrides} = options;
         super(code, {cause});
-        this.name = "AlertError";
+        this.name = ALERT_ERROR_NAME;
         this.code = code;
         this.overrides = overrides;
         this.detail = detail ?? {};

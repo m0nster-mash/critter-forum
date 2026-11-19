@@ -2,14 +2,15 @@ import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 
 export type {LogContext, Logger};
 
-const LEVEL_ORDER: Record<AlertLogLevel, number> = {debug: 10, info: 20, warn: 30, error: 40};
-const REDACTED = "[REDACTED]";
-const SENSITIVE_KEY = /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i;
-const MAX_DEPTH = 6;
-const RESERVED_KEYS = ["level", "time", "msg"];
+const LEVEL_ORDER: Record<AlertLogLevel, number> = {debug: 10, info: 20, warn: 30, error: 40}; // TODO:: migrate to const
+const REDACTED = "[REDACTED]"; // TODO:: migrate to const
+const SENSITIVE_KEY = /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i; // TODO:: migrate to const
+const MAX_DEPTH = 6; // TODO:: migrate to const
+const RESERVED_KEYS = ["level", "time", "msg"]; // TODO:: migrate to const
 
-type LogFormat = "pretty" | "json";
+type LogFormat = "pretty" | "json"; // TODO:: migrate to const
 
+// TODO:: migrate to types
 interface SerializedError {
     name: string;
     message: string;
@@ -30,17 +31,17 @@ interface SerializedError {
  * - `LOG_FORMAT`: `pretty | json`. Default: `json` in production, `pretty` everywhere else.
  */
 function getConfig(): { minLevel: AlertLogLevel; format: LogFormat } {
-    const isProduction = process.env.NODE_ENV === "production";
+    const isProduction = process.env.NODE_ENV === "production"; // TODO:: replace magic string with consts
     const requestedLevel = process.env.LOG_LEVEL?.toLowerCase();
     const requestedFormat = process.env.LOG_FORMAT?.toLowerCase();
 
     return {
         minLevel: requestedLevel && Object.hasOwn(LEVEL_ORDER, requestedLevel)
             ? (requestedLevel as AlertLogLevel)
-            : isProduction ? "info" : "debug",
-        format: requestedFormat === "json" || requestedFormat === "pretty"
+            : isProduction ? "info" : "debug", // TODO:: replace magic string with consts
+        format: requestedFormat === "json" || requestedFormat === "pretty" // TODO:: replace magic string with consts
             ? requestedFormat
-            : isProduction ? "json" : "pretty",
+            : isProduction ? "json" : "pretty", // TODO:: replace magic string with consts
     };
 }
 
@@ -53,10 +54,10 @@ function getConfig(): { minLevel: AlertLogLevel; format: LogFormat } {
  * Those can hold emails and password hashes, and key-based redaction can't see inside a message string, so the
  * parameter list is cut out of both the message and the stack. The SQL itself is kept.
  */
-const QUERY_PARAMS = /\nparams:[\s\S]*?(?=\n\s+at |$)/;
+const QUERY_PARAMS = /\nparams:[\s\S]*?(?=\n\s+at |$)/; // TODO:: replace magic string with consts
 
 function redactQueryParams(text: string): string {
-    return text.replace(QUERY_PARAMS, "\nparams: [REDACTED]");
+    return text.replace(QUERY_PARAMS, "\nparams: [REDACTED]"); // TODO:: replace magic string with consts
 }
 
 function serializeError(error: Error, depth: number, ancestors: WeakSet<object>): SerializedError {
@@ -95,14 +96,14 @@ function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): u
         case "symbol":
             return value.toString();
         case "function":
-            return "[Function]";
+            return "[Function]"; // TODO:: replace magic string with consts
     }
 
     if (value === null) return null;
 
     const object = value as object;
-    if (depth >= MAX_DEPTH) return "[MaxDepth]";
-    if (ancestors.has(object)) return "[Circular]";
+    if (depth >= MAX_DEPTH) return "[MaxDepth]"; // TODO:: replace magic string with consts
+    if (ancestors.has(object)) return "[Circular]"; // TODO:: replace magic string with consts
 
     if (object instanceof Error) return serializeError(object, depth, ancestors);
     if (object instanceof Date) return object.toISOString();
@@ -154,15 +155,15 @@ function describeError(error: SerializedError, indent: string): string[] {
         lines.push(`${indent}  ${JSON.stringify(extras)}`);
     }
     if (isSerializedError(cause)) {
-        lines.push(`${indent}caused by:`, ...describeError(cause, indent));
+        lines.push(`${indent}caused by:`, ...describeError(cause, indent)); // TODO:: replace magic string with consts
     } else if (cause !== undefined) {
-        lines.push(`${indent}caused by: ${JSON.stringify(cause)}`);
+        lines.push(`${indent}caused by: ${JSON.stringify(cause)}`); // TODO:: replace magic string with consts
     }
 
     return lines;
 }
 
-const LEVEL_COLORS: Record<AlertLogLevel, string> = {debug: "90", info: "36", warn: "33", error: "31"};
+const LEVEL_COLORS: Record<AlertLogLevel, string> = {debug: "90", info: "36", warn: "33", error: "31"}; // TODO:: replace magic string with consts
 
 /**
  * Whether to color pretty output. Reads `stdout` through `globalThis` so the Edge bundler, which also compiles
@@ -183,7 +184,7 @@ function formatPretty(level: AlertLogLevel, message: string, data: LogContext): 
 
     for (const [key, value] of Object.entries(data)) {
         if (isSerializedError(value)) {
-            errorLines.push(`  ${key} →`, ...describeError(value, "    "));
+            errorLines.push(`  ${key} →`, ...describeError(value, "    ")); // TODO:: replace → with icon
         } else {
             plain[key] = value;
         }
@@ -205,7 +206,7 @@ function emit(level: AlertLogLevel, message: string, bindings: LogContext, conte
     if (LEVEL_ORDER[level] < LEVEL_ORDER[minLevel]) return;
 
     const data = normalize({...bindings, ...context}, 0, new WeakSet()) as LogContext;
-    const line = format === "json" ? formatJson(level, message, data) : formatPretty(level, message, data);
+    const line = format === "json" ? formatJson(level, message, data) : formatPretty(level, message, data); // TODO:: replace magic string with consts
 
     console[level](line);
 }
@@ -218,6 +219,8 @@ function emit(level: AlertLogLevel, message: string, bindings: LogContext, conte
  * @return  {Logger}    The logger instance.
  */
 export function createLogger(bindings: LogContext = {}): Logger {
+
+    // TODO:: replace magic string with consts
     return {
         debug: (message, context) => emit("debug", message, bindings, context),
         info: (message, context) => emit("info", message, bindings, context),

@@ -11,8 +11,8 @@ import type {PublicAlert} from "@/features/alerts/types";
  * @return  {PublicAlert}   A user-safe alert.
  */
 export function alertFromThrown(error: unknown): PublicAlert {
-    const offline = typeof navigator !== "undefined" && navigator.onLine === false;
-    const failedFetch = error instanceof TypeError && /fetch|network|load failed/i.test(error.message);
+    const offline = typeof navigator !== "undefined" && !navigator.onLine; // TODO:: clean this (magic/const, types)
+    const failedFetch = error instanceof TypeError && /fetch|network|load failed/i.test(error.message); // TODO:: clean this (magic/const, types)
 
-    return createAlert(offline || failedFetch ? "APP_NETWORK_ERROR" : "APP_UNKNOWN_ERROR");
+    return createAlert(offline || failedFetch ? "APP_NETWORK_ERROR" : "APP_UNKNOWN_ERROR"); // TODO:: clean this (magic/const, types)
 }

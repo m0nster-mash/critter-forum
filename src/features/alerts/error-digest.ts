@@ -7,7 +7,7 @@
  * @return  {string | undefined}    The digest, or undefined if there isn't one (e.g. in development).
  */
 export function getErrorDigest(error: unknown): string | undefined {
-    if (typeof error === "object" && error !== null && "digest" in error) {
+    if (typeof error === "object" && error !== null && "digest" in error) { // TODO:: clean this (magic/const, types)
         const digest = (error as { digest?: unknown }).digest;
         return typeof digest === "string" && digest.length > 0 ? digest : undefined;
     }

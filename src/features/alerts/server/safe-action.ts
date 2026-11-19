@@ -16,7 +16,7 @@ function record(alert: PublicAlert, context: LogContext): PublicAlert {
         return alert;
     }
 
-    const needsRef = alert.ref === undefined && (alert.severity === "error" || alert.severity === "warning");
+    const needsRef = alert.ref === undefined && (alert.severity === "error" || alert.severity === "warn"); // TODO:: replace magic string with consts
     const stamped = needsRef ? {...alert, ref: generateRef()} : alert;
 
     logAlert(stamped, context);
@@ -67,7 +67,7 @@ export function safeAction<Args extends unknown[], T>(
                 ));
             }
 
-            return fail(record(createAlert("APP_UNKNOWN_ERROR"), {action: name, err: error}));
+            return fail(record(createAlert("APP_UNKNOWN_ERROR"), {action: name, err: error})); // TODO:: replace magic string with consts
         }
     };
 }

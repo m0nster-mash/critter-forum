@@ -20,19 +20,19 @@ const CORE_ALERTS = {
         log: {server: false, client: "warn"},
     },
     APP_NOT_FOUND: {
-        severity: "warning",
+        severity: "warn",
         message: "We couldn't find the page you were looking for.",
         presentation: "inline",
         log: {server: false, client: false},
     },
     APP_RATE_LIMITED: {
-        severity: "warning",
+        severity: "warn",
         message: "Too many attempts. Please try again in {seconds} seconds.",
         presentation: "toast",
         log: {server: "warn", client: false},
     },
     APP_VALIDATION_FAILED: {
-        severity: "warning",
+        severity: "warn",
         message: "Please check the highlighted fields and try again.",
         presentation: "inline",
         log: {server: false, client: false},
@@ -57,4 +57,4 @@ export type AlertCode = keyof typeof ALERT_REGISTRY;
 /**
  * Code used when an alert code can't be resolved at runtime.
  */
-export const FALLBACK_ALERT_CODE = "APP_UNKNOWN_ERROR" satisfies AlertCode;
+export const FALLBACK_ALERT_CODE = "APP_UNKNOWN_ERROR" satisfies AlertCode; // TODO:: clean this (magic/const, types)

@@ -62,7 +62,7 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
             const attemptSignIn = await signIn.email({email: input.email, password});
             if (attemptSignIn.error) {
-                present(createAlert(AUTH_ALERT_CODES.REGISTER_SIGNIN_FAILED));
+                present(createAlert(AUTH_ALERT_CODES.REGISTER_SIGN_IN_FAILED));
                 router.push(resolvePath(PUBLIC_ROUTES.LOGIN));
                 return;
             }

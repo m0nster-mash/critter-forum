@@ -31,7 +31,7 @@ export const AUTH_ALERTS = {
         log: {server: false, client: "warn"},
     },
     AUTH_RATE_LIMITED: {
-        severity: "warning",
+        severity: "warn",
         message: "Too many attempts. Please wait a moment and try again.",
         presentation: "inline",
         log: {server: false, client: "warn"},
@@ -45,21 +45,21 @@ export const AUTH_ALERTS = {
         log: {server: "info", client: false},
     },
     AUTH_REGISTER_NAME_REQUIRED: {
-        severity: "warning",
+        severity: "warn",
         message: "Please enter a username.",
         presentation: "inline",
         field: "name",
         log: {server: false, client: false},
     },
     AUTH_REGISTER_EMAIL_INVALID: {
-        severity: "warning",
+        severity: "warn",
         message: "Please enter a valid email address.",
         presentation: "inline",
         field: "email",
         log: {server: false, client: false},
     },
     AUTH_REGISTER_PASSWORD_TOO_SHORT: {
-        severity: "warning",
+        severity: "warn",
         message: "Password must be at least {min} characters long.",
         presentation: "inline",
         field: "password",
@@ -79,7 +79,7 @@ export const AUTH_ALERTS = {
         log: {server: "error", client: "warn"},
     },
     AUTH_REGISTER_SIGNIN_FAILED: {
-        severity: "warning",
+        severity: "warn",
         message: "Your account was created, but we couldn't sign you in automatically. Please sign in.",
         presentation: "toast",
         log: {server: false, client: "warn"},

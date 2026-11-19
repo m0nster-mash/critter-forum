@@ -36,6 +36,7 @@ function interpolate(template: string, params?: Record<string, string | number>)
     if (!params) {
         return template;
     }
+    // TODO:: migrate to regex const
     return template.replace(/\{(\w+)}/g, (token, key: string) =>
         Object.hasOwn(params, key) ? String(params[key]) : token
     );

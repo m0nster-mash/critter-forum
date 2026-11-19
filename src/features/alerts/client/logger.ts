@@ -13,26 +13,33 @@ import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
  * `warn` in production. It controls how much is logged, never how much detail: detail is development-only.
  */
 
-const LEVEL_ORDER: Record<AlertLogLevel, number> = {debug: 10, info: 20, warn: 30, error: 40};
-const SAFE_KEYS = new Set(["code", "ref", "severity", "field", "scope", "digest", "status"]);
-const MAX_SAFE_LENGTH = 120;
+const LEVEL_ORDER: Record<AlertLogLevel, number> = {debug: 10, info: 20, warn: 30, error: 40}; // TODO:: migrate to const file
+const SAFE_KEYS = new Set(["code", "ref", "severity", "field", "scope", "digest", "status"]); // TODO:: replace magic string with consts, migrate
+const MAX_SAFE_LENGTH = 120; // TODO:: migrate to const file
 
 /**
  * Reads config from the environment on every call. `process.env.NEXT_PUBLIC_*` must be referenced statically so
  * Next can inline it into the client bundle.
+ *
+ * @return TODO:: document
  */
 function getConfig(): { minLevel: AlertLogLevel; verbose: boolean } {
-    const isProduction = process.env.NODE_ENV === "production";
+    const isProduction = process.env.NODE_ENV === "production"; // TODO:: replace magic string with consts
     const requested = process.env.NEXT_PUBLIC_LOG_LEVEL?.toLowerCase();
 
     return {
         minLevel: requested && Object.hasOwn(LEVEL_ORDER, requested)
             ? (requested as AlertLogLevel)
-            : isProduction ? "warn" : "debug",
+            : isProduction ? "warn" : "debug", // TODO:: replace magic string with consts
         verbose: !isProduction,
     };
 }
 
+/**
+ * TODO:: document
+ *
+ * @param context TODO:: document
+ */
 function sanitize(context: LogContext): LogContext {
     const safe: LogContext = {};
 
@@ -51,6 +58,14 @@ function sanitize(context: LogContext): LogContext {
     return safe;
 }
 
+/**
+ * TODO:: document
+ *
+ * @param level TODO:: document
+ * @param message TODO:: document
+ * @param bindings TODO:: document
+ * @param context TODO:: document
+ */
 function emit(level: AlertLogLevel, message: string, bindings: LogContext, context?: LogContext): void {
     const {minLevel, verbose} = getConfig();
     if (LEVEL_ORDER[level] < LEVEL_ORDER[minLevel]) return;
@@ -73,6 +88,8 @@ function emit(level: AlertLogLevel, message: string, bindings: LogContext, conte
  * @return  {Logger}    The logger instance.
  */
 export function createClientLogger(bindings: LogContext = {}): Logger {
+
+    // TODO:: migrate, replace with const
     return {
         debug: (message, context) => emit("debug", message, bindings, context),
         info: (message, context) => emit("info", message, bindings, context),

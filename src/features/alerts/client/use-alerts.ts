@@ -19,20 +19,20 @@ import {useCallback, useState} from "react";
  * @return  {Object}    `present`, `clear`, `notify` (force a toast), `inline` (the current inline alert),
  *                      `formAlert` (inline alert without a field) and `fieldAlert(name)` (inline alert for one field).
  */
-export function useAlerts() {
+export function useAlerts(): object {
     const {notify} = useAlertContext();
     const [inline, setInline] = useState<PublicAlert | null>(null);
 
     const present = useCallback((alert: PublicAlert, detail?: LogContext) => {
         switch (alert.presentation) {
-            case "toast":
+            case "toast": // TODO:: replace magic string with consts
                 notify(alert, detail);
                 break;
-            case "inline":
+            case "inline": // TODO:: replace magic string with consts
                 logClientAlert(alert, detail);
                 setInline(alert);
                 break;
-            case "none":
+            case "none": // TODO:: replace magic string with consts
                 logClientAlert(alert, detail);
                 break;
         }

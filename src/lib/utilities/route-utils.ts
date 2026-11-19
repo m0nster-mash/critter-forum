@@ -1,4 +1,4 @@
-import {RouteMetadata} from "@/lib/constants/routes";
+import {MISSING_ROUTE_PARMS, RouteMetadata} from "@/lib/constants/routes";
 import {getBreadcrumbs} from "@/lib/utilities/breadcrumb-utils";
 
 /**
@@ -24,7 +24,7 @@ export function resolvePath(
     if (!params) {
         // Programmer error: a dynamic route was resolved without its parameters. Thrown deliberately, not turned into a
         // user alert: it surfaces through the error boundary on the client and `onRequestError` (logged) on the server.
-        throw new Error(`Route requires parameters: ${route.label}`);
+        throw new Error(`${MISSING_ROUTE_PARMS} ${route.label}`);
     }
     return route.path(params);
 }

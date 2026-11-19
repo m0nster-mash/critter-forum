@@ -3,21 +3,25 @@ import type {AlertSeverity, PublicAlert} from "@/features/alerts/types";
 /**
  * Most toasts shown at once. When exceeded, the oldest is dropped.
  */
-export const MAX_VISIBLE_TOASTS = 4;
+export const MAX_VISIBLE_TOASTS = 4;  // TODO:: relocate to const file
 
 /**
  * Auto-dismiss delay in milliseconds, by severity. Failures stay longer so they can be read and the reference noted.
  * Hovering or focusing a toast pauses its timer.
+ *
+ *  TODO:: relocate to const file
  */
 export const TOAST_DURATIONS: Record<AlertSeverity, number> = {
     success: 4000,
     info: 5000,
-    warning: 8000,
+    warn: 8000,
     error: 12000,
 };
 
 /**
  * A toast on screen.
+ *
+ * TODO:: relocate to types file
  *
  * @property    {string}        id      Stable key for the toast
  * @property    {PublicAlert}   alert   The alert being shown (the latest one, if duplicates were merged)
@@ -31,6 +35,7 @@ export interface ToastItem {
     version: number;
 }
 
+// TODO:: relocate to types file
 export type ToastAction =
     | { type: "add"; id: string; alert: PublicAlert }
     | { type: "dismiss"; id: string }
@@ -51,18 +56,27 @@ function isSameAlert(a: PublicAlert, b: PublicAlert): boolean {
  */
 export function toastReducer(state: ToastItem[], action: ToastAction): ToastItem[] {
     switch (action.type) {
-        case "add": {
+        case "add": { // TODO:: replace magic string with consts
             const existing = state.find((item) => isSameAlert(item.alert, action.alert));
             if (existing) {
                 return state.map((item) => item === existing
-                    ? {...item, alert: action.alert, count: item.count + 1, version: item.version + 1}
+                    ? {
+                        ...item,
+                        alert: action.alert,
+                        count: item.count + 1,
+                        version: item.version + 1
+                    }
                     : item);
             }
-            return [...state, {id: action.id, alert: action.alert, count: 1, version: 0}].slice(-MAX_VISIBLE_TOASTS);
+            return [...state, {
+                id: action.id,
+                alert: action.alert,
+                count: 1, version: 0
+            }].slice(-MAX_VISIBLE_TOASTS);
         }
-        case "dismiss":
+        case "dismiss": // TODO:: replace magic string with consts
             return state.filter((item) => item.id !== action.id);
-        case "clear":
+        case "clear": // TODO:: replace magic string with consts
             return [];
     }
 }

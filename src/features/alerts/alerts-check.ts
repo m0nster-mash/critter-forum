@@ -7,6 +7,8 @@ import {ALERT_REGISTRY, AlertCode} from "@/features/alerts/registry";
 import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/types";
 import assert from "node:assert/strict";
 
+// TODO: clean up this class; replace magic strings, migrate out consts and types, etc
+
 // Registry integrity
 for (const [code, def] of Object.entries(ALERT_REGISTRY)) {
     assert.ok(ALERT_SEVERITIES.includes(def.severity), `${code}: bad severity`);

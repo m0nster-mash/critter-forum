@@ -18,9 +18,21 @@ export const BROWSER_ERROR_EVENTS = {
 } as const;
 
 /**
+ * Known browser error messages that should be ignored.
+ */
+export const BROWSER_ERROR_MESSAGES = {
+    SCRIPT_ERROR: "Script error.",
+} as const;
+
+/**
+ * Browser error-message patterns that should be ignored.
+ */
+export const BROWSER_ERROR_PATTERNS = {
+    RESIZE_OBSERVER_LOOP: /ResizeObserver loop/i,
+} as const;
+
+/**
  * Structured log event names.
- *
- * TODO:: only seems to be used by `src/instrumentation.ts`; delete?
  */
 export const LOG_EVENT_NAMES = {
     REQUEST_UNHANDLED_ERROR: "request.unhandled_error",
@@ -28,9 +40,23 @@ export const LOG_EVENT_NAMES = {
 
 /**
  * Prefixes used when logging messages from external integrations.
- *
- * TODO:: if there are no uses for this, delete it
  */
 export const LOGGER_MESSAGES = {
     BETTER_AUTH_PREFIX: "better-auth: ",
+} as const;
+
+/**
+ * Toast reducer and dispatch action identifiers.
+ */
+export const DISPATCH_TYPES = {
+    ADD: "add",
+    DISMISS: "dismiss",
+    CLEAR: "clear",
+} as const;
+
+/**
+ * Property names used when inspecting framework error objects.
+ */
+export const ERROR_PROPERTY_KEYS = {
+    DIGEST: "digest",
 } as const;

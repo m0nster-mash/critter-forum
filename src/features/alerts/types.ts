@@ -1,11 +1,10 @@
-import styles from "@/features/alerts/styles/alerts.module.css";
 import {AlertVariant} from "@/features/alerts/constants/alert-codes";
-import type {JSX, ReactNode} from "react";
+import type {ReactNode} from "react";
 
 /**
  * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
  */
-export const ALERT_SEVERITIES = ["success", "info", "warning", "error"] as const;
+export const ALERT_SEVERITIES = ["success", "info", "warn", "error"] as const; // TODO:: clean this (magic/const, types)
 export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
 
 /**
@@ -15,13 +14,13 @@ export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
  * - `inline`: persistent banner rendered in context (page, form, or field level)
  * - `none`:   not shown to the user (logging only)
  */
-export const ALERT_PRESENTATIONS = ["toast", "inline", "none"] as const;
+export const ALERT_PRESENTATIONS = ["toast", "inline", "none"] as const; // TODO:: clean this (magic/const, types)
 export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
 
 /**
  * Log levels shared by the server and client loggers.
  */
-export type AlertLogLevel = "debug" | "info" | "warn" | "error";
+export type AlertLogLevel = "debug" | "info" | "warn" | "error"; // TODO:: clean this (magic/const, types)
 
 /**
  * Free-form structured data attached to a log entry.
@@ -129,4 +128,15 @@ export interface AlertBannerProps {
     variant?: AlertVariant;
     count?: number;
     action?: ReactNode;
+}
+
+/**
+ * Options for an AlertError.
+ *
+ * @property    {unknown}       [cause]     Optional; the underlying error. Logged on the server, never sent to the client.
+ * @property    {LogContext}    [detail]    Optional; internal-only context to log. Never sent to the client.
+ */
+export interface AlertErrorOptions extends AlertOverrides {
+    cause?: unknown;
+    detail?: LogContext;
 }

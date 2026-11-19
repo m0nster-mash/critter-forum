@@ -30,7 +30,7 @@ export default function RootLayout({
                     <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>Register</a>
                     <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>Login</a>
                     <h4>Test Routes</h4>
-                    <a href={"/components"}>Alert Testing</a>
+                    <a href={"/alerts"}>Alert Testing</a>
                     <hr/>
                     <LogoutButton/>
                 </nav>

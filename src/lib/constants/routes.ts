@@ -93,3 +93,5 @@ export const ALL_ROUTES = {
     ...PRIVATE_ROUTES,
     ...ADMIN_ROUTES,
 } as const;
+
+export const MISSING_ROUTE_PARMS = "Route requires parameters: " as const;

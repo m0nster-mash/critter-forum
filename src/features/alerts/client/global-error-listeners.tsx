@@ -12,8 +12,8 @@ import {useEffect} from "react";
  */
 function isNoise(event: ErrorEvent): boolean {
 
-    if (/ResizeObserver loop/i.test(event.message)) return true;
-    if (event.message === "Script error.") return true;
+    if (/ResizeObserver loop/i.test(event.message)) return true; // TODO:: replace magic string with consts
+    if (event.message === "Script error.") return true; // TODO:: replace magic string with consts
 
     return Boolean(event.filename) && !event.filename.startsWith(window.location.origin);
 }
