@@ -1,7 +1,6 @@
-import {ClientLogContext} from "@/lib/alerts/client/logger";
+import {ClientLogContext, clientLogger} from "@/lib/alerts/client/logger";
 import {getAlertDefinition} from "@/lib/alerts/create-alert";
 import {PublicAlert} from "@/lib/alerts/types";
-import {clientLogger} from "@/lib/types";
 
 /**
  * Writes an alert to the client log according to its registry log policy.

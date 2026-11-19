@@ -1,5 +1,6 @@
 "use client";
 
+import {clientLogger} from "@/lib/alerts/client/logger";
 import {useAlert} from "@/lib/alerts/client/toast-context";
 import {
     WINDOW_ERROR_EVENT,
@@ -9,7 +10,6 @@ import {
 } from "@/lib/alerts/constants/alerts";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {FALLBACK_ALERT_CODE} from "@/lib/alerts/registry";
-import {clientLogger} from "@/lib/types";
 import {useEffect} from "react";
 
 /**
