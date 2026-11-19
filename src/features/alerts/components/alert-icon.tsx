@@ -1,4 +1,4 @@
-import type {AlertSeverity} from "@/lib/alerts/types";
+import type {AlertSeverity} from "@/features/alerts/types";
 import type {JSX} from "react";
 
 // TODO:: replace with proper icons once icon handling is complete

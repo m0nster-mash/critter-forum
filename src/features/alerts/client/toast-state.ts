@@ -1,4 +1,4 @@
-import type {AlertSeverity, PublicAlert} from "@/lib/alerts/types";
+import type {AlertSeverity, PublicAlert} from "@/features/alerts/types";
 
 /**
  * Most toasts shown at once. When exceeded, the oldest is dropped.
@@ -21,7 +21,7 @@ export const TOAST_DURATIONS: Record<AlertSeverity, number> = {
  *
  * @property    {string}        id      Stable key for the toast
  * @property    {PublicAlert}   alert   The alert being shown (the latest one, if duplicates were merged)
- * @property    {number}        count   How many identical alerts this toast represents
+ * @property    {number}        count   How many identical components this toast represents
  * @property    {number}        version Bumped on every merge, so the toast can restart its timer
  */
 export interface ToastItem {

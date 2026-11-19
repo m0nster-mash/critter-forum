@@ -1,6 +1,6 @@
 import {AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";
-import {AUTH_ALERT_CODES} from "@/lib/alerts/constants/alert-codes";
-import type {AlertCode} from "@/lib/alerts/registry";
+import {AUTH_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
+import type {AlertCode} from "@/features/alerts/registry";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
 
 /**
@@ -16,7 +16,7 @@ const AUTH_ERROR_ALERT_CODES: Record<string, AlertCode> = {
 };
 
 /**
- * Parameters some mapped alerts need to fill their message.
+ * Parameters some mapped components need to fill their message.
  */
 export const AUTH_ALERT_PARAMS = {min: PASSWORD_MIN_LENGTH};
 

@@ -3,11 +3,11 @@
  * Run with: npx tsx scripts/safe-action-check.ts
  */
 import assert from "node:assert/strict";
-import {createAlert} from "@/lib/alerts/create-alert";
-import {ALERT_REGISTRY, AlertCode} from "@/lib/alerts/registry";
-import {ActionResult, fail, succeed} from "@/lib/alerts/result";
-import {AlertError, isAlertError} from "@/lib/alerts/server/alert-error";
-import {safeAction} from "@/lib/alerts/server/safe-action";
+import {createAlert} from "@/features/alerts/create-alert";
+import {ALERT_REGISTRY, AlertCode} from "@/features/alerts/registry";
+import {ActionResult, fail, succeed} from "@/features/alerts/result";
+import {AlertError, isAlertError} from "@/features/alerts/server/alert-error";
+import {safeAction} from "@/features/alerts/server/safe-action";
 import {notFound, redirect} from "next/navigation";
 
 // A success alert that logs, which the core registry doesn't have. Registered at runtime for this script only.

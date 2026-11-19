@@ -1,12 +1,12 @@
-import type {AlertDefinition} from "@/lib/alerts/types";
+import type {AlertDefinition} from "@/features/alerts/types";
 
 /**
  * Registry entries for every authentication alert. This is the single place that decides what each auth message says,
- * how it is shown, and whether it is logged. Merged into the application-wide registry in `lib/alerts/registry.ts`.
+ * how it is shown, and whether it is logged. Merged into the application-wide registry in `lib/components/registry.ts`.
  *
  * Naming: `AUTH_<ACTION>_<REASON>`.
  *
- * Note on `log.server` for the login alerts: sign-in goes straight from the browser to better-auth rather than through
+ * Note on `log.server` for the login components: sign-in goes straight from the browser to better-auth rather than through
  * a server action, so failed sign-ins are written to the server log by the better-auth logger hook in
  * `lib/db/auth/auth.ts`, not by these entries.
  */

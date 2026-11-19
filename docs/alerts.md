@@ -50,7 +50,7 @@ src/features/<feature>/constants/alerts.ts   each feature's registry entries
 ### Add an alert
 
 In the feature's `constants/alerts.ts` (see `src/features/auth/constants/alerts.ts`), then spread it into
-`ALERT_REGISTRY` in `src/lib/alerts/registry.ts`:
+`ALERT_REGISTRY` in `../src/features/alerts/registry.ts`:
 
 ```ts
 export const THINGS_ALERTS = {
@@ -110,10 +110,10 @@ Validation shared by form and server action lives in one pure function (see `fea
 Use the loggers; `console.*` is a lint error everywhere else.
 
 ```ts
-import {logger} from "@/lib/alerts/server/logger";        // server
+import {logger} from "@/lib/components/server/logger";        // server
 logger.child({scope: "seed"}).info("Created user.", {email});
 
-import {clientLogger} from "@/lib/alerts/client/logger";  // browser
+import {clientLogger} from "@/lib/components/client/logger";  // browser
 ```
 
 The server logger redacts values under keys like `password`, `token`, `secret`, `authorization`, `cookie`, `apiKey`,

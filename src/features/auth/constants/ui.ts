@@ -41,7 +41,7 @@ export const AUTH_FORM_IDS = {
 } as const;
 
 /**
- * HTML IDs for registration field-level alerts.
+ * HTML IDs for registration field-level components.
  */
 export const AUTH_ALERT_IDS = {
     REGISTER_NAME: "register-username-alert",

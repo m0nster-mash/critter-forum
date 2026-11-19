@@ -1,6 +1,6 @@
-import {getAlertDefinition} from "@/lib/alerts/create-alert";
-import {logger, LogContext} from "@/lib/alerts/server/logger";
-import type {PublicAlert} from "@/lib/alerts/types";
+import {getAlertDefinition} from "@/features/alerts/create-alert";
+import {logger, LogContext} from "@/features/alerts/server/logger";
+import type {PublicAlert} from "@/features/alerts/types";
 
 /**
  * Writes an alert to the server log according to its registry log policy. Does nothing if the policy is `false`.

@@ -3,9 +3,9 @@
  * Run with: npx tsx scripts/toast-state-check.ts
  */
 import assert from "node:assert/strict";
-import {createAlert} from "@/lib/alerts/create-alert";
-import {MAX_VISIBLE_TOASTS, TOAST_DURATIONS, ToastItem, toastReducer} from "@/lib/alerts/client/toast-state";
-import {ALERT_SEVERITIES} from "@/lib/alerts/types";
+import {createAlert} from "@/features/alerts/create-alert";
+import {MAX_VISIBLE_TOASTS, TOAST_DURATIONS, ToastItem, toastReducer} from "@/features/alerts/client/toast-state";
+import {ALERT_SEVERITIES} from "@/features/alerts/types";
 
 const limited = createAlert("APP_RATE_LIMITED", {params: {seconds: 5}});
 const network = createAlert("APP_NETWORK_ERROR");

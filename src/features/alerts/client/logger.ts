@@ -1,4 +1,4 @@
-import type {AlertLogLevel, LogContext, Logger} from "@/lib/alerts/types";
+import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 
 /**
  * Browser-side logger. Same interface as the server logger, but the browser console is public, so output is

@@ -1,4 +1,4 @@
-import type {PublicAlert} from "@/lib/alerts/types";
+import type {PublicAlert} from "@/features/alerts/types";
 
 /**
  * Successful outcome of a server action.

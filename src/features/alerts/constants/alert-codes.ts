@@ -1,4 +1,4 @@
-import {AlertSeverity} from "@/lib/alerts/types";
+import {AlertSeverity} from "@/features/alerts/types";
 
 /**
  * Alert codes for application-wide errors and feedback.
@@ -37,7 +37,7 @@ export const AUTH_ALERT_CODES = {
 } as const;
 
 /**
- * Combined lookup for callers that use both application and auth alerts.
+ * Combined lookup for callers that use both application and auth components.
  */
 export const ALERT_CODES = {
     ...APP_ALERT_CODES,

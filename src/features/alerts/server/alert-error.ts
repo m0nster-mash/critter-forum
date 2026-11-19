@@ -1,6 +1,6 @@
-import type {AlertCode} from "@/lib/alerts/registry";
-import type {LogContext} from "@/lib/alerts/server/logger";
-import type {AlertOverrides} from "@/lib/alerts/types";
+import type {AlertCode} from "@/features/alerts/registry";
+import type {LogContext} from "@/features/alerts/server/logger";
+import type {AlertOverrides} from "@/features/alerts/types";
 
 /**
  * Options for an AlertError.

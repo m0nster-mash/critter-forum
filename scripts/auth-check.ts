@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {isAuthApiError, readAuthError, resolveAuthAlertCode} from "@/features/auth/utilities/auth-errors";
 import {validateRegistration} from "@/features/auth/validation";
-import {createAlert, isAlertCode} from "@/lib/alerts/create-alert";
+import {createAlert, isAlertCode} from "@/features/alerts/create-alert";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
 
 const valid = {name: "Ada", email: "ada@example.com", password: "x".repeat(PASSWORD_MIN_LENGTH)};

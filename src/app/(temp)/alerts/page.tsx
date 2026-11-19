@@ -1,9 +1,9 @@
 "use client";
 
-import {AlertBanner} from "@/components/alerts/alert-banner";
-import {useAlerts} from "@/lib/alerts/client/use-alerts";
-import {createAlert} from "@/lib/alerts/create-alert";
-import type {AlertCode} from "@/lib/alerts/registry";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {useAlerts} from "@/features/alerts/client/use-alerts";
+import {createAlert} from "@/features/alerts/create-alert";
+import type {AlertCode} from "@/features/alerts/registry";
 
 /**
  * AlertTestPage

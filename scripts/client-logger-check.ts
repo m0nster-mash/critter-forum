@@ -2,11 +2,11 @@
  * Throwaway sanity check for the client logger. Safe to delete once real tests exist.
  * Run with: npx tsx scripts/client-logger-check.ts
  */
-import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
+import {LOG_SCOPES} from "@/features/alerts/constants/observability";
 import assert from "node:assert/strict";
-import {createAlert} from "@/lib/alerts/create-alert";
-import {logClientAlert} from "@/lib/alerts/client/log-alert";
-import {createClientLogger, clientLogger} from "@/lib/alerts/client/logger";
+import {createAlert} from "@/features/alerts/create-alert";
+import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {createClientLogger, clientLogger} from "@/features/alerts/client/logger";
 
 type Call = { method: string; args: unknown[] };
 

@@ -3,9 +3,9 @@
  * Run with: npx tsx scripts/logger-check.ts
  */
 import assert from "node:assert/strict";
-import {createAlert} from "@/lib/alerts/create-alert";
-import {logAlert} from "@/lib/alerts/server/log-alert";
-import {createLogger, logger} from "@/lib/alerts/server/logger";
+import {createAlert} from "@/features/alerts/create-alert";
+import {logAlert} from "@/features/alerts/server/log-alert";
+import {createLogger, logger} from "@/features/alerts/server/logger";
 
 type Captured = { method: string; line: string };
 

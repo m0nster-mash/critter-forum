@@ -1,5 +1,5 @@
-import styles from "@/components/styles/alerts.module.css";
-import {AlertVariant} from "@/lib/alerts/constants/alert-codes";
+import styles from "@/features/alerts/styles/alerts.module.css";
+import {AlertVariant} from "@/features/alerts/constants/alert-codes";
 import type {JSX, ReactNode} from "react";
 
 /**
@@ -82,7 +82,7 @@ export interface AlertDefinition {
  * @property    {AlertSeverity}     severity        Severity used for styling and live-region role
  * @property    {string}            message         Final, user-safe text
  * @property    {AlertPresentation} presentation    Where the alert should be rendered
- * @property    {string}            [field]         Optional; form field name for field-level inline alerts
+ * @property    {string}            [field]         Optional; form field name for field-level inline components
  * @property    {string}            [ref]           Optional; reference ID matching a server log entry
  */
 export interface PublicAlert {
@@ -100,7 +100,7 @@ export interface PublicAlert {
  *
  * @property    {AlertSeverity}                     [severity]      Override the registry severity
  * @property    {AlertPresentation}                 [presentation]  Override the registry presentation
- * @property    {string}                            [field]         Form field name for field-level alerts
+ * @property    {string}                            [field]         Form field name for field-level components
  * @property    {string}                            [ref]           Reference ID matching a server log entry
  * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in the message
  */
@@ -120,7 +120,7 @@ export interface AlertOverrides {
  *                                                  `aria-describedby`
  * @property    {string}                [variant]   Optional; `banner` (default, page or form level), `field` (compact,
  *                                                  under an input) or `toast` (floating)
- * @property    {number}                [count]     Optional; how many identical alerts this represents
+ * @property    {number}                [count]     Optional; how many identical components this represents
  * @property    {ReactNode}             [action]    Optional; trailing content such as a dismiss button
  */
 export interface AlertBannerProps {

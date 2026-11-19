@@ -1,12 +1,12 @@
 "use client";
 
-import {logClientAlert} from "@/lib/alerts/client/log-alert";
-import {useAlertContext} from "@/lib/alerts/client/alert-provider";
-import type {LogContext, PublicAlert} from "@/lib/alerts/types";
+import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {useAlertContext} from "@/features/alerts/client/alert-provider";
+import type {LogContext, PublicAlert} from "@/features/alerts/types";
 import {useCallback, useState} from "react";
 
 /**
- * The one hook components use to raise alerts.
+ * The one hook components use to raise components.
  *
  * `present(alert)` routes by the alert's registry-defined presentation, so no component decides how an alert looks:
  * - `toast`:  shown in the global toast stack

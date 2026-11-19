@@ -1,8 +1,8 @@
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
-import {AlertDefinition} from "@/lib/alerts/types";
+import {AlertDefinition} from "@/features/alerts/types";
 
 /**
- * Application-wide alerts that don't belong to any single feature.
+ * Application-wide components that don't belong to any single feature.
  *
  * Naming convention: `FEATURE_ACTION_REASON`. Core codes use the `APP_` prefix.
  */

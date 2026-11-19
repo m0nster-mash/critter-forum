@@ -1,9 +1,9 @@
 "use client";
 
-import {useAlertContext} from "@/lib/alerts/client/alert-provider";
-import {APP_ALERT_CODES} from "@/lib/alerts/constants/alert-codes";
-import {BROWSER_ERROR_EVENTS, LOG_SCOPES} from "@/lib/alerts/constants/observability";
-import {createAlert} from "@/lib/alerts/create-alert";
+import {useAlertContext} from "@/features/alerts/client/alert-provider";
+import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
+import {BROWSER_ERROR_EVENTS, LOG_SCOPES} from "@/features/alerts/constants/observability";
+import {createAlert} from "@/features/alerts/create-alert";
 import {useEffect} from "react";
 
 /**

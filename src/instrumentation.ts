@@ -1,5 +1,5 @@
-import {LOG_EVENT_NAMES} from "@/lib/alerts/constants/observability";
-import {logger} from "@/lib/alerts/server/logger";
+import {LOG_EVENT_NAMES} from "@/features/alerts/constants/observability";
+import {logger} from "@/features/alerts/server/logger";
 import type {Instrumentation} from "next";
 
 /**

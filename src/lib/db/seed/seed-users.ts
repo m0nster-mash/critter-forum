@@ -1,5 +1,5 @@
-import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
-import {logger} from "@/lib/alerts/server/logger";
+import {LOG_SCOPES} from "@/features/alerts/constants/observability";
+import {logger} from "@/features/alerts/server/logger";
 import {auth} from "@/lib/db/auth/auth";
 import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";

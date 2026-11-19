@@ -1,6 +1,6 @@
-import {getAlertDefinition} from "@/lib/alerts/create-alert";
-import {clientLogger} from "@/lib/alerts/client/logger";
-import type {LogContext, PublicAlert} from "@/lib/alerts/types";
+import {getAlertDefinition} from "@/features/alerts/create-alert";
+import {clientLogger} from "@/features/alerts/client/logger";
+import type {LogContext, PublicAlert} from "@/features/alerts/types";
 
 /**
  * Writes an alert to the browser console according to its registry `log.client` policy. Does nothing if the policy is

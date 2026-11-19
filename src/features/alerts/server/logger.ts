@@ -1,4 +1,4 @@
-import type {AlertLogLevel, LogContext, Logger} from "@/lib/alerts/types";
+import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 
 export type {LogContext, Logger};
 

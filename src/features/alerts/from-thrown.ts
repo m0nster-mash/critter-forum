@@ -1,5 +1,5 @@
-import {createAlert} from "@/lib/alerts/create-alert";
-import type {PublicAlert} from "@/lib/alerts/types";
+import {createAlert} from "@/features/alerts/create-alert";
+import type {PublicAlert} from "@/features/alerts/types";
 
 /**
  * Converts something caught on the client (typically from a failed server action or fetch) into an alert. A failed
