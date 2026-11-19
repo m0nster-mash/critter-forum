@@ -23,47 +23,62 @@ import {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-function toastReducer(
-    state: Toast[],
-    action: ToastAction,
-): Toast[] {
-
+/**
+ * Applies toast additions and dismissals, suppressing duplicate alerts and enforcing the viewport size limit.
+ *
+ * @param   {Toast[]}       state   Current toast notifications
+ * @param   {ToastAction}   action  State transition to apply
+ *
+ * @return  {Toast[]}               Updated toast notifications
+ */
+function toastReducer(state: Toast[], action: ToastAction): Toast[] {
     if (action.type === TOAST_ACTION_TYPES.DISMISS) {
-        return state.filter((toast) => toast.id != action.id);
+        return state.filter((toast) => toast.id !== action.id);
     }
 
-    const duplicate = state.some((toast) => {
+    const duplicate = state.some((toast) =>
         toast.code === action.toast.code
-        && toast.message == action.toast.message
+        && toast.message === action.toast.message
         && toast.ref === action.toast.ref
-    })
+    );
 
-    if (duplicate) return state;
+    if (duplicate) {
+        return state;
+    }
 
     return [...state, action.toast].slice(-MAX_TOASTS);
 }
 
-export function userAlert(): ToastContextValue {
-
+/**
+ * Returns the toast notification functions from the nearest AlertProvider.
+ *
+ * @return  {ToastContextValue} Context methods for notifying and dismissing alerts
+ *
+ * @throws  {Error}             When called outside an AlertProvider
+ */
+export function useAlert(): ToastContextValue {
     const context = useContext(ToastContext);
 
     if (!context) {
-        // TODO:: replace with correct error handling methods
-        throw new Error("useAlert must be used within an AlertProvider.")
+        throw new Error("useAlert must be used within an AlertProvider.");
     }
 
     return context;
 }
 
+/**
+ * Displays the toast viewport and provides notification functions to descendants.
+ *
+ * @param   {Object}    props
+ * @param   {ReactNode} props.children  Application content
+ *
+ * @return  {JSX.Element}               Provider and toast viewport
+ */
 export function AlertProvider({children}: { children: ReactNode }): JSX.Element {
-
-    const [toast, dispatch] = useReducer(toastReducer, []);
+    const [toasts, dispatch] = useReducer(toastReducer, []);
 
     const dismiss = useCallback((id: string) => {
-        dispatch({
-            type: TOAST_ACTION_TYPES.DISMISS,
-            id,
-        });
+        dispatch({type: TOAST_ACTION_TYPES.DISMISS, id});
     }, []);
 
     const notify = useCallback((alert: PublicAlert) => {
@@ -78,17 +93,14 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
     const value = useMemo(() => ({notify, dismiss}), [notify, dismiss]);
 
     return (
-        <>
-            <ToastContext.Provider value={value}>
-                {children}
-                <div className={TOAST_UI.VIEWPORT_CLASS}
-                     aria-label={TOAST_UI.VIEWPORT_LABEL}>
-                    {toast.map((toast: Toast) => (
-                        <ToastItem key={toast.id} toast={toast} onDismiss={dismiss}/>
-                    ))}
-                </div>
-            </ToastContext.Provider>
-        </>
+        <ToastContext.Provider value={value}>
+            {children}
+            <div className={TOAST_UI.VIEWPORT_CLASS} aria-label={TOAST_UI.VIEWPORT_LABEL}>
+                {toasts.map((toast) => (
+                    <ToastItem key={toast.id} toast={toast} onDismiss={dismiss}/>
+                ))}
+            </div>
+        </ToastContext.Provider>
     );
 }
 
