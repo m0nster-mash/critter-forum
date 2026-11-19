@@ -1,5 +1,5 @@
+import {ClientLogContext, clientLogger} from "@/lib/alerts/client/logger";
 import {getAlertDefinition} from "@/lib/alerts/create-alert";
-import {clientLogger, ClientLogContext} from "@/lib/alerts/client/logger";
 import type {PublicAlert} from "@/lib/alerts/types";
 
 /**
@@ -8,12 +8,13 @@ import type {PublicAlert} from "@/lib/alerts/types";
  * @param   {PublicAlert}       alert       The alert being raised
  * @param   {ClientLogContext}  [detail]    Optional context
  */
-export function logClientAlert(alert: PublicAlert, detail: ClientLogContext = {}): void {
-    const level = getAlertDefinition(alert.code).log.client;
+export function logClientAlert(
+    alert: PublicAlert,
+    detail: ClientLogContext = {}
+): void {
 
-    if (!level) {
-        return;
-    }
+    const level = getAlertDefinition(alert.code).log.client;
+    if (!level) return;
 
     const context = {
         ...detail,

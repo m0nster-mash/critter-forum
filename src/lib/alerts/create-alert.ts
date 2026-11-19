@@ -52,7 +52,11 @@ function interpolate(template: string, params?: Record<string, string | number>)
  *
  * @return  {PublicAlert}   The alert, ready to return from a server action or hand to the UI.
  */
-export function createAlert(code: AlertCode, overrides: AlertOverrides = {}): PublicAlert {
+export function createAlert(
+    code: AlertCode,
+    overrides: AlertOverrides = {}
+): PublicAlert {
+
     const resolvedCode = isAlertCode(code) ? code : FALLBACK_ALERT_CODE;
     const definition = getAlertDefinition(resolvedCode);
 

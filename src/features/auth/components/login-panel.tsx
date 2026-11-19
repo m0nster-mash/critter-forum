@@ -1,7 +1,9 @@
 "use client";
 
+import {AlertBanner} from "@/components/ui/alert-banner";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
+import {logClientAlert} from "@/lib/alerts/client/log-alert";
 import {createAlert} from "@/lib/alerts/create-alert";
 import type {PublicAlert} from "@/lib/alerts/types";
 import {signIn} from "@/lib/auth-client";
@@ -13,10 +15,12 @@ import {JSX, type SubmitEvent, useState} from "react";
 /**
  * Renders the authentication login form panel.
  *
+ * TODO:: convert magic strings into consts
+ *
  * @param   {AuthFlowProps} props               Component properties for managing auth flow callbacks
  * @param   {Function}      [props.onSuccess]   Optional callback executed after successful authentication
  *
- * @return  {JSX.Element}   The login form panel JSX element
+ * @return  {JSX.Element}                       The login form panel JSX element
  */
 export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
@@ -26,8 +30,8 @@ export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
     const [error, setError] = useState<PublicAlert | null>(null);
     const [loading, setLoading] = useState(false);
 
-    async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-        e.preventDefault();
+    async function handleSubmit(loginEvent: SubmitEvent<HTMLFormElement>) {
+        loginEvent.preventDefault();
         setError(null);
         setLoading(true);
 

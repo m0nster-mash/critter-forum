@@ -10,6 +10,8 @@ import {unstable_rethrow} from "next/navigation";
 /**
  * Logs an alert per its registry policy and, when that produces a log entry for a warning or error, stamps the alert
  * with a reference ID. A ref on the client therefore always matches a line in the server log.
+ *
+ * TODO:: replace magic strings with const
  */
 function record(alert: PublicAlert, context: LogContext): PublicAlert {
     if (!getAlertDefinition(alert.code).log.server) {
@@ -36,10 +38,12 @@ function record(alert: PublicAlert, context: LogContext): PublicAlert {
  *
  * Usage, in a `"use server"` file: `export const saveThing = safeAction("things.save", async (input: Input) => {...})`
  *
- * @param   {string}                                    name    Stable identifier for logs, e.g. `auth.register`
- * @param   {(...args: Args) => Promise<ActionResult<T>>}   action  The action body
+ * TODO:: replace magic strings with const
  *
- * @return  {(...args: Args) => Promise<ActionResult<T>>}  The wrapped action.
+ * @param   {string}                                    name    Stable identifier for logs, e.g. `auth.register`
+ * @param   {(...args: Args) => Promise<ActionResult>}  action  The action body
+ *
+ * @return  {(...args: Args) => Promise<ActionResult>}          The wrapped action.
  */
 export function safeAction<Args extends unknown[], T>(
     name: string,

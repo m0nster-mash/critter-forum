@@ -1,5 +1,9 @@
 import type {AlertLogLevel} from "@/lib/alerts/types";
 
+/*
+ * TODO:: clean up entire class
+ */
+
 /**
  * Free-form structured data attached to a log entry. Errors anywhere inside are serialized (name, message, stack,
  * cause, and own properties such as a database `code`), and values under sensitive-looking keys are redacted.

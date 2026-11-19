@@ -9,12 +9,14 @@ import {headers} from "next/headers";
 /**
  * Server action that registers a new user account using email and password credentials.
  *
+ * TODO:: convert magic strings into consts
+ *
  * @param   {Object}    input           The user registration payload
  * @param   {string}    input.name      The display name of the user registering
  * @param   {string}    input.email     The email address of the registering user
  * @param   {string}    input.password  The plain-text password for account creation
  *
- * @return  {Promise<ActionResult>}   Resolves to the registration result.
+ * @return  {Promise<ActionResult>}     Resolves to the registration result.
  */
 export const registerAccountAction = safeAction("auth.register", async (input: {
     name: string;

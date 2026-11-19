@@ -15,10 +15,12 @@ import {JSX, type SubmitEvent, useState} from "react";
 /**
  * Renders the registration form panel enabling account creation.
  *
+ * TODO:: convert magic strings into consts
+ *
  * @param   {AuthFlowProps} props               Component properties handling registration callbacks
  * @param   {Function}      [props.onSuccess]   Optional callback function executed upon successful account registration
  *
- * @return  {JSX.Element}   The registration panel JSX element.
+ * @return  {JSX.Element}                       The registration panel JSX element.
  */
 export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
@@ -30,8 +32,8 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
     const [error, setError] = useState<PublicAlert | null>(null);
     const [loading, setLoading] = useState(false);
 
-    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-        event.preventDefault();
+    async function handleSubmit(registerEvent: SubmitEvent<HTMLFormElement>) {
+        registerEvent.preventDefault();
         setError(null);
 
         const normalizedName = name.trim();

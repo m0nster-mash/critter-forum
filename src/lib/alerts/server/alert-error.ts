@@ -5,7 +5,7 @@ import type {AlertOverrides} from "@/lib/alerts/types";
 /**
  * Options for an AlertError.
  *
- * @property    {unknown}       [cause]     Optional; the underlying error. Logged on the server, never sent to the client.
+ * @property    {unknown}       [cause]     Optional; the underlying error. Logged on the server, never sent to client
  * @property    {LogContext}    [detail]    Optional; internal-only context to log. Never sent to the client.
  */
 export interface AlertErrorOptions extends AlertOverrides {
@@ -20,12 +20,15 @@ export interface AlertErrorOptions extends AlertOverrides {
  * Only the alert reaches the client. `cause` and `detail` go to the server log.
  */
 export class AlertError extends Error {
+
     readonly isAlertError = true as const;
     readonly code: AlertCode;
     readonly overrides: AlertOverrides;
     readonly detail: LogContext;
 
     /**
+     * TODO:: replace magic string with const
+     *
      * @param   {AlertCode}         code        Registry code of the alert to raise
      * @param   {AlertErrorOptions} [options]   Optional; alert overrides plus `cause` and `detail`
      */
@@ -45,8 +48,9 @@ export class AlertError extends Error {
  *
  * @param   {unknown}   value   The caught value
  *
- * @return  {boolean}   True if the value is an AlertError.
+ * @return  {boolean}           True if the value is an AlertError.
  */
 export function isAlertError(value: unknown): value is AlertError {
+
     return value instanceof Error && (value as Partial<AlertError>).isAlertError === true;
 }

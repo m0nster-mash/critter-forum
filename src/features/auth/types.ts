@@ -1,3 +1,4 @@
+import type {PublicAlert} from "@/lib/alerts/types";
 import {ReactNode} from "react";
 
 /**
@@ -35,4 +36,11 @@ export interface LogoutProps {
     redirectTo?: string;
     onSuccess?: () => void;
     onBeforeLogout?: () => void | Promise<unknown>;
+}
+
+/**
+ * TODO:: document
+ */
+export interface AlertBannerProps {
+    alert: PublicAlert;
 }

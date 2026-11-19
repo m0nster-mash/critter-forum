@@ -33,6 +33,8 @@ main {
     padding: 32px;
 }
 
+/* TODO:: migrate alert styles into alert.module.css and change formating. */
+
 /* Alert banners */
 
 .alert-banner {

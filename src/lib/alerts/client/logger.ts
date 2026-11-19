@@ -1,15 +1,14 @@
-import type {AlertLogLevel} from "@/lib/alerts/types";
+import {AlertLogLevel, ClientLogger} from "@/lib/alerts/types";
 
 export type ClientLogContext = Record<string, unknown>;
 
-export interface ClientLogger {
-    debug(message: string, context?: ClientLogContext): void;
-    info(message: string, context?: ClientLogContext): void;
-    warn(message: string, context?: ClientLogContext): void;
-    error(message: string, context?: ClientLogContext): void;
-    child(bindings: ClientLogContext): ClientLogger;
-}
-
+/**
+ * TODO:: document
+ *
+ * TODO:: replace magic strings with const
+ *
+ * TODO:: relocate to proper const file/dir
+ */
 const LEVEL_ORDER: Record<AlertLogLevel | "silent", number> = {
     debug: 10,
     info: 20,
@@ -18,8 +17,17 @@ const LEVEL_ORDER: Record<AlertLogLevel | "silent", number> = {
     silent: 50,
 };
 
+// TODO:: relocated to correct const file/dir
 const SENSITIVE_KEY = /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i;
 
+/**
+ * TODO:: document
+ *
+ * TODO:: replace magic strings with const
+ *
+ * @param value
+ * @param key
+ */
 function sanitize(value: unknown, key = ""): unknown {
     if (SENSITIVE_KEY.test(key)) {
         return "[REDACTED]";
@@ -47,6 +55,11 @@ function sanitize(value: unknown, key = ""): unknown {
     return value;
 }
 
+/**
+ * TODO:: document
+ *
+ * TODO:: replace magic strings with const
+ */
 function getMinimumLevel(): AlertLogLevel | "silent" {
     if (process.env.NODE_ENV === "production") {
         return "warn";
@@ -59,6 +72,16 @@ function getMinimumLevel(): AlertLogLevel | "silent" {
         : "debug";
 }
 
+/**
+ * TODO:: document
+ *
+ * TODO:: replace magic strings with const
+ *
+ * @param level
+ * @param message
+ * @param bindings
+ * @param context
+ */
 function emit(
     level: AlertLogLevel,
     message: string,
@@ -102,6 +125,13 @@ function emit(
     }
 }
 
+/**
+ * TODO:: document
+ *
+ * TODO:: replace magic strings with const
+ *
+ * @param bindings
+ */
 export function createClientLogger(bindings: ClientLogContext = {}): ClientLogger {
     return {
         debug: (message, context) => emit("debug", message, bindings, context),

@@ -1,3 +1,5 @@
+import {ClientLogContext} from "@/lib/alerts/client/logger";
+
 /**
  * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
  */
@@ -81,4 +83,15 @@ export interface AlertOverrides {
     field?: string;
     ref?: string;
     params?: Record<string, string | number>;
+}
+
+/**
+ * TODO:: document
+ */
+export interface ClientLogger {
+    debug(message: string, context?: ClientLogContext): void;
+    info(message: string, context?: ClientLogContext): void;
+    warn(message: string, context?: ClientLogContext): void;
+    error(message: string, context?: ClientLogContext): void;
+    child(bindings: ClientLogContext): ClientLogger;
 }

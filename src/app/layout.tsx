@@ -8,16 +8,22 @@ import type {Metadata} from "next";
 import "./globals.css";
 import React from "react";
 
+/**
+ * TODO:: document
+ */
 export const metadata: Metadata = {
     title: "critter-forum",
     description: "critters: pangaea, maybe?",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+/**
+ * TODO:: document
+ *
+ * @param param0
+ * @param param0.children
+ * @constructor
+ */
+export default function RootLayout({children,}: Readonly<{ children: React.ReactNode; }>) {
     return (
         <html lang="en">
         <body>
@@ -26,11 +32,11 @@ export default function RootLayout({
             <div className="layout">
                 <nav>
                     <h3>Navigation</h3>
-                    <a href={resolvePath(PUBLIC_ROUTES.HOME)}>Home</a>
-                    <a href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>Dashboard</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.HOME)}>{PUBLIC_ROUTES.HOME.label}</a>
+                    <a href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>{PRIVATE_ROUTES.DASHBOARD.label}</a>
                     <h4>Authentication</h4>
-                    <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>Register</a>
-                    <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>Login</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>{PUBLIC_ROUTES.REGISTER.label}</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</a>
                     <LogoutButton/>
                 </nav>
                 <div className={layoutStyle.contentArea}>

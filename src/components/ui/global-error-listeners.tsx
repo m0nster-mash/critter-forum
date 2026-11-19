@@ -1,12 +1,16 @@
 "use client";
 
-import {useAlert} from "@/lib/alerts/client/toast-context";
 import {clientLogger} from "@/lib/alerts/client/logger";
+import {useAlert} from "@/lib/alerts/client/toast-context";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {useEffect} from "react";
 
 /**
  * Logs uncaught browser errors and unhandled promise rejections.
+ *
+ * TODO:: convert magic strings into consts
+ *
+ * @return TODO:: document
  */
 export function GlobalErrorListeners() {
     const {notify} = useAlert();

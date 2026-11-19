@@ -14,23 +14,34 @@ import {
     useState,
 } from "react";
 
+/**
+ * TODO:: relocated to correct types file
+ */
 interface Toast extends PublicAlert {
     id: string;
 }
 
+/**
+ * TODO:: relocate to correct types file
+ */
 interface ToastContextValue {
     notify: (alert: PublicAlert) => void;
     dismiss: (id: string) => void;
 }
 
+/**
+ * TODO:: relocate to correct types file
+ */
 type ToastAction =
-    | {type: "add"; toast: Toast}
-    | {type: "dismiss"; id: string};
+    | { type: "add"; toast: Toast }
+    | { type: "dismiss"; id: string };
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
+// TODO:: relocate to correct const file
 const MAX_TOASTS = 5;
 
+// TODO:: relocate to correct const file
 const TOAST_DURATIONS = {
     success: 5000,
     info: 5000,
@@ -38,6 +49,14 @@ const TOAST_DURATIONS = {
     error: 10000,
 } as const;
 
+/**
+ * TODO:: document
+ *
+ * TODO:: replace magic strings with const
+ *
+ * @param state
+ * @param action
+ */
 function toastReducer(state: Toast[], action: ToastAction): Toast[] {
     if (action.type === "dismiss") {
         return state.filter((toast) => toast.id !== action.id);
@@ -58,6 +77,10 @@ function toastReducer(state: Toast[], action: ToastAction): Toast[] {
 
 /**
  * Returns the toast notification functions.
+ *
+ * TODO:: replace magic strings with const
+ *
+ * TODO:: use correct error handling
  */
 export function useAlert(): ToastContextValue {
     const context = useContext(ToastContext);
@@ -72,11 +95,13 @@ export function useAlert(): ToastContextValue {
 /**
  * Displays the toast viewport and provides notification functions to descendants.
  *
+ * TODO:: replace magic strings with const
+ *
  * @param   {Object}    props
  * @param   {ReactNode} props.children   Application content
  * @return  {JSX.Element}                Provider and toast viewport
  */
-export function AlertProvider({children}: {children: ReactNode}): JSX.Element {
+export function AlertProvider({children}: { children: ReactNode }): JSX.Element {
     const [toasts, dispatch] = useReducer(toastReducer, []);
 
     const dismiss = useCallback((id: string) => {
@@ -109,6 +134,16 @@ export function AlertProvider({children}: {children: ReactNode}): JSX.Element {
     );
 }
 
+/**
+ * TODO:: document
+ *
+ * TODO:: replace magic strings with const
+ *
+ * @param param0
+ * @param param0.toast
+ * @param param0.onDismiss
+ * @constructor
+ */
 function ToastItem({
                        toast,
                        onDismiss,
@@ -116,11 +151,11 @@ function ToastItem({
     toast: Toast;
     onDismiss: (id: string) => void;
 }): JSX.Element {
+
     const [hovered, setHovered] = useState(false);
     const [focused, setFocused] = useState(false);
     const paused = hovered || focused;
-
-    const remaining = useRef(TOAST_DURATIONS[toast.severity]);
+    const remaining = useRef<number>(TOAST_DURATIONS[toast.severity]);
     const startedAt = useRef(0);
     const timer = useRef<number | undefined>(undefined);
 
@@ -166,6 +201,7 @@ function ToastItem({
             <button type="button"
                     aria-label="Dismiss notification"
                     onClick={dismiss}>
+                {/* TODO:: replace × with an icon */}
                 ×
             </button>
         </div>

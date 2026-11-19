@@ -1,9 +1,13 @@
-import type {PublicAlert} from "@/lib/alerts/types";
+import {AlertBannerProps} from "@/features/auth/types";
+import {
+    ALERT_ARIA_LIVE,
+    ALERT_BANNER_CLASSES,
+    ALERT_FIELD_ID_PREFIX,
+    ALERT_REF_LABEL,
+    ALERT_ROLES,
+    ALERT_SEVERITY_ERROR,
+} from "@/lib/constants/alerts";
 import {JSX} from "react";
-
-interface AlertBannerProps {
-    alert: PublicAlert;
-}
 
 /**
  * Renders a persistent, accessible alert banner.
@@ -12,16 +16,16 @@ interface AlertBannerProps {
  * @return  {JSX.Element}              The rendered alert banner
  */
 export function AlertBanner({alert}: AlertBannerProps): JSX.Element {
-    const role = alert.severity === "error" ? "alert" : "status";
-    const fieldId = alert.field ? `alert-${alert.field}` : undefined;
+    const role = alert.severity === ALERT_SEVERITY_ERROR ? ALERT_ROLES.ERROR : ALERT_ROLES.STATUS;
+    const fieldId = alert.field ? `${ALERT_FIELD_ID_PREFIX}${alert.field}` : undefined;
 
     return (
         <div id={fieldId}
-             className={`alert-banner alert-banner-${alert.severity}`}
+             className={`${ALERT_BANNER_CLASSES.BASE} ${ALERT_BANNER_CLASSES.SEVERITY_PREFIX}${alert.severity}`}
              role={role}
-             aria-live={role === "alert" ? "assertive" : "polite"}>
+             aria-live={role === ALERT_ROLES.ERROR ? ALERT_ARIA_LIVE.ASSERTIVE : ALERT_ARIA_LIVE.POLITE}>
             <p>{alert.message}</p>
-            {alert.ref && <small>Reference: {alert.ref}</small>}
+            {alert.ref && <small>{ALERT_REF_LABEL}{alert.ref}</small>}
         </div>
     );
 }

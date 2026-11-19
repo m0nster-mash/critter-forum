@@ -9,9 +9,13 @@ import type {PublicAlert} from "@/lib/alerts/types";
  * info) that must never reach the browser. The alert code is the log message, so entries are easy to grep.
  *
  * @param   {PublicAlert}   alert       The alert being raised
- * @param   {LogContext}    [detail]    Optional; internal-only context, e.g. `{err}`
+ * @param   {LogContext}    [detail]    Optional; internal-only context (ex. `{err}`)
  */
-export function logAlert(alert: PublicAlert, detail: LogContext = {}): void {
+export function logAlert(
+    alert: PublicAlert,
+    detail: LogContext = {}
+): void {
+
     const level = getAlertDefinition(alert.code).log.server;
     if (!level) {
         return;
