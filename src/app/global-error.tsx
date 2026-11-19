@@ -2,6 +2,7 @@
 
 import {AlertBanner} from "@/components/alerts/alert-banner";
 import {logClientAlert} from "@/lib/alerts/client/log-alert";
+import {APP_ALERT_CODES} from "@/lib/alerts/constants/alert-codes";
 import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {getErrorDigest} from "@/lib/alerts/error-digest";
@@ -17,18 +18,29 @@ import {type JSX, useEffect, useMemo} from "react";
  *
  * @return  {JSX.Element}   The error UI.
  */
-export default function GlobalError({error, retry}: { error: unknown; retry: () => void }): JSX.Element {
+export default function GlobalError({error, retry}: {
+    error: unknown;
+    retry: () => void
+}): JSX.Element {
+
     const alert = useMemo(
-        () => createAlert("APP_UNKNOWN_ERROR", {presentation: "inline", ref: getErrorDigest(error)}),
+        () => createAlert(APP_ALERT_CODES.UNKNOWN_ERROR, {
+            presentation: "inline",
+            ref: getErrorDigest(error)
+        }),
         [error],
     );
 
     useEffect(() => {
-        logClientAlert(alert, {err: error, scope: LOG_SCOPES.GLOBAL_RENDER_ERROR});
+        logClientAlert(alert, {
+            err: error,
+            scope: LOG_SCOPES.GLOBAL_RENDER_ERROR
+        });
     }, [alert, error]);
 
     return (
         <html lang="en">
+        {/* TODO:: remove inline styles */}
         <body style={{fontFamily: "Arial, sans-serif", margin: 0, padding: "2rem"}}>
         <AlertBanner alert={alert}/>
         <p>
