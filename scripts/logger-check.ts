@@ -2,10 +2,10 @@
  * Throwaway sanity check for the server logger. Safe to delete once real tests exist.
  * Run with: npx tsx scripts/logger-check.ts
  */
+import assert from "node:assert/strict";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {logAlert} from "@/lib/alerts/server/log-alert";
 import {createLogger, logger} from "@/lib/alerts/server/logger";
-import assert from "node:assert/strict";
 
 type Captured = { method: string; line: string };
 
@@ -88,13 +88,16 @@ assert.equal(redacted.nested.list[0].apiKey, "[REDACTED]");
 assert.equal(redacted.nested.safe, "ok");
 assert.equal(redacted.circular.self, "[Circular]");
 
+// --- Drizzle-style failed-query errors: SQL kept, bound parameters (emails, hashes) removed from message AND stack
+const queryError = new Error("Failed query: select * from \"user\" where email = $1\nparams: victim@example.com,$argon2id$HASHVALUE");
+out = env(JSON_MODE, () => logger.error("x", {err: queryError, nested: {inner: new Error("Failed query: insert\nparams: second@example.com")}}));
+assert.ok(!out[0].line.includes("victim@example.com") && !out[0].line.includes("HASHVALUE") && !out[0].line.includes("second@example.com"), "bound params must not reach the log");
+const qerr = JSON.parse(out[0].line).err;
+assert.match(qerr.message, /^Failed query: select \* from "user" where email = \$1\nparams: \[REDACTED\]$/);
+assert.match(qerr.stack, /params: \[REDACTED\]\n\s+at /, "stack frames after the params block are preserved");
+
 // --- Odd values don't throw
-assert.doesNotThrow(() => env(JSON_MODE, () => logger.info("x", {
-    big: BigInt(10),
-    fn: () => 1,
-    sym: Symbol("s"),
-    date: new Date(0)
-})));
+assert.doesNotThrow(() => env(JSON_MODE, () => logger.info("x", {big: BigInt(10), fn: () => 1, sym: Symbol("s"), date: new Date(0)})));
 out = env(JSON_MODE, () => logger.error("thrown string", {err: "just a string"}));
 assert.equal(JSON.parse(out[0].line).err, "just a string");
 

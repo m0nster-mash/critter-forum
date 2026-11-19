@@ -1,50 +1,66 @@
 "use server";
 
-import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
-import {AUTH_ERROR_MESSAGES} from "@/features/auth/constants/messages";
+import {
+    AUTH_ALERT_PARAMS,
+    isAuthApiError,
+    resolveAuthAlertCode,
+} from "@/features/auth/utilities/auth-errors";
+import {type RegistrationInput, validateRegistration} from "@/features/auth/validation";
+import {createAlert} from "@/lib/alerts/create-alert";
+import {fail, succeed} from "@/lib/alerts/result";
+import {AlertError} from "@/lib/alerts/server/alert-error";
+import {safeAction} from "@/lib/alerts/server/safe-action";
 import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
 
 /**
  * Server action that registers a new user account using email and password credentials.
  *
- * @param   {Object}    input           The user registration payload
- * @param   {string}    input.name      The display name of the user registering
- * @param   {string}    input.email     The email address of the registering user
- * @param   {string}    input.password  The plain-text password for account creation
+ * Wrapped in `safeAction`, so it always resolves to an ActionResult:
+ * - invalid input -> a failure carrying the validation alert for the offending field
+ * - better-auth rejected the request (e.g. email taken) -> a failure carrying the mapped alert
+ * - anything unexpected (database down, bug) -> a generic failure with a reference ID, full detail in the server log
+ * - success -> a success result carrying the "account created" alert
  *
- * @return  {Promise<Object>}   Resolves to the newly created user session or user record object upon success
+ * @param   {RegistrationInput} input           The user registration payload
+ * @param   {string}            input.name      The display name of the user registering
+ * @param   {string}            input.email     The email address of the registering user
+ * @param   {string}            input.password  The plain-text password for account creation
  *
- * @throws  {Error} Throws an error if required input parameters are missing or if registration fails
+ * @return  {Promise<ActionResult<undefined>>}  Resolves to a success or failure result; never throws to the client.
  */
-export async function registerAccountAction(input: {
-    name: string;
-    email: string;
-    password: string;
-}): Promise<object> {
+export const registerAccountAction = safeAction("auth.register", async (input: RegistrationInput) => {
 
-    const name = input.name.trim();
-    const email = input.email.trim().toLowerCase();
+    const normalized: RegistrationInput = {
+        name: input.name.trim(),
+        email: input.email.trim().toLowerCase(),
+        password: input.password,
+    };
 
-    if (!name || !email || !input.password) {
-        throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_MISSING_DATA);
+    const invalid = validateRegistration(normalized);
+    if (invalid) {
+        return fail(invalid);
     }
 
-    const registerResult = await auth.api.signUpEmail({
-        body: {
-            name: name,
-            email: email,
-            password: input.password
-        },
-        headers: await headers(),
-    });
+    let registerResult;
+    try {
+        registerResult = await auth.api.signUpEmail({
+            body: normalized,
+            headers: await headers(),
+        });
+    } catch (error) {
+        if (isAuthApiError(error)) {
+            throw new AlertError(resolveAuthAlertCode(error, "AUTH_REGISTER_FAILED"), {
+                cause: error,
+                params: AUTH_ALERT_PARAMS,
+            });
+        }
+        throw error;
+    }
 
     if (!registerResult.user?.id) {
-        // TODO:: replace with correct error handling
-        throw new Error(AUTH_ERROR_MESSAGES.REGISTRATION_FAILURE);
+        throw new AlertError("AUTH_REGISTER_FAILED", {detail: {reason: "signUpEmail returned no user id"}});
     }
 
-    return {
-        message: AUTH_ALERTS.REGISTRATION_ACCOUNT_CREATED,
-    }
-}
+    return succeed(undefined, createAlert("AUTH_REGISTER_SUCCESS"));
+});
