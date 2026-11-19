@@ -2,6 +2,7 @@
 
 import {AlertBanner} from "@/components/ui/alert-banner";
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
+import {AUTH_ALERT_CODES, AUTH_FORM_FIELDS, AUTH_LABELS, AUTH_UI_TEXT, AUTH_USERNAME_PLACEHOLDER} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {useAlert} from "@/lib/alerts/client/toast-context";
 import {createAlert} from "@/lib/alerts/create-alert";
@@ -14,8 +15,6 @@ import {JSX, type SubmitEvent, useState} from "react";
 
 /**
  * Renders the registration form panel enabling account creation.
- *
- * TODO:: convert magic strings into consts
  *
  * @param   {AuthFlowProps} props               Component properties handling registration callbacks
  * @param   {Function}      [props.onSuccess]   Optional callback function executed upon successful account registration
@@ -40,12 +39,12 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
         const normalizedEmail = email.trim().toLowerCase();
 
         if (!normalizedName) {
-            setError(createAlert("AUTH_REGISTER_INVALID"));
+            setError(createAlert(AUTH_ALERT_CODES.REGISTER_INVALID));
             return;
         }
 
         if (password.length < PASSWORD_MIN_LENGTH) {
-            setError(createAlert("AUTH_REGISTER_INVALID"));
+            setError(createAlert(AUTH_ALERT_CODES.REGISTER_INVALID));
             return;
         }
 
@@ -73,7 +72,7 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
             });
 
             if (attemptSignIn.error) {
-                setError(createAlert("AUTH_REGISTER_SIGN_IN_FAILED"));
+                setError(createAlert(AUTH_ALERT_CODES.REGISTER_SIGN_IN_FAILED));
                 return;
             }
 
@@ -82,7 +81,7 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
             router.refresh();
 
         } catch {
-            setError(createAlert("APP_UNKNOWN_ERROR"));
+            setError(createAlert(AUTH_ALERT_CODES.UNKNOWN_ERROR));
         } finally {
             setLoading(false);
         }
@@ -94,33 +93,33 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="register-username">Username</label>
-                    <input id="register-username"
+                    <label htmlFor={AUTH_FORM_FIELDS.REGISTER_USERNAME_ID}>{AUTH_LABELS.USERNAME_LABEL}</label>
+                    <input id={AUTH_FORM_FIELDS.REGISTER_USERNAME_ID}
                            type="text"
-                           autoComplete="username"
-                           placeholder="Username"
+                           autoComplete={AUTH_FORM_FIELDS.USERNAME_AUTOCOMPLETE}
+                           placeholder={AUTH_USERNAME_PLACEHOLDER}
                            value={name}
                            onChange={(registerEvent) => setName(registerEvent.target.value)}
                            disabled={loading}
                            required/>
                 </div>
                 <div>
-                    <label htmlFor="register-email">Email</label>
-                    <input id="register-email"
+                    <label htmlFor={AUTH_FORM_FIELDS.REGISTER_EMAIL_ID}>{AUTH_LABELS.EMAIL_LABEL}</label>
+                    <input id={AUTH_FORM_FIELDS.REGISTER_EMAIL_ID}
                            type="email"
-                           autoComplete="email"
-                           placeholder="email@address.com"
+                           autoComplete={AUTH_FORM_FIELDS.EMAIL_AUTOCOMPLETE}
+                           placeholder={AUTH_UI_TEXT.EMAIL_PLACEHOLDER}
                            value={email}
                            onChange={(registerEvent) => setEmail(registerEvent.target.value)}
                            disabled={loading}
                            required/>
                 </div>
                 <div>
-                    <label htmlFor="register-password">Password</label>
-                    <input id="register-password"
+                    <label htmlFor={AUTH_FORM_FIELDS.REGISTER_PASSWORD_ID}>{AUTH_LABELS.PASSWORD_LABEL}</label>
+                    <input id={AUTH_FORM_FIELDS.REGISTER_PASSWORD_ID}
                            type="password"
-                           autoComplete="new-password"
-                           placeholder="••••••••"
+                           autoComplete={AUTH_FORM_FIELDS.NEW_PASSWORD_AUTOCOMPLETE}
+                           placeholder={AUTH_UI_TEXT.PASSWORD_PLACEHOLDER}
                            value={password}
                            onChange={(registerEvent) => setPassword(registerEvent.target.value)}
                            disabled={loading}
@@ -129,7 +128,7 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
                 <div>
                     <button type="submit"
                             disabled={loading}>
-                        {loading ? "Creating account..." : "Register Account"}
+                        {loading ? AUTH_UI_TEXT.REGISTER_LOADING : AUTH_UI_TEXT.REGISTER_SUBMIT}
                     </button>
                 </div>
             </form>

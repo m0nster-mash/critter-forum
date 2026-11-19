@@ -1,6 +1,6 @@
 "use client";
 
-import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {AUTH_ALERT_CODES, AUTH_LABELS, AUTH_UI_TEXT} from "@/features/auth/constants/ui";
 import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
 import {logClientAlert} from "@/lib/alerts/client/log-alert";
 import {useAlert} from "@/lib/alerts/client/toast-context";
@@ -12,8 +12,6 @@ import {JSX, type MouseEvent, useState} from "react";
 
 /**
  * Renders a stylized button component that triggers user sign-out when clicked.
- *
- * TODO:: convert magic strings into consts
  *
  * @param   {LogoutButtonProps} props                   Configuration options for the logout button
  * @param   {string}            [props.label="Logout"]  The display text label rendered on the button
@@ -36,8 +34,6 @@ export function LogoutButton({
 
 /**
  * Wrapper component providing click-to-logout handling and session termination logic for child UI elements.
- *
- * TODO:: convert magic strings into consts
  *
  * @param   {LogoutProps}   props                   Properties controlling the logout execution container
  * @param   {ReactNode}     props.children          Child elements wrapped within the interactive logout container
@@ -74,7 +70,7 @@ export function Logout({
             router.push(redirectTo);
             router.refresh();
         } catch (err) {
-            const alert = createAlert("AUTH_LOGOUT_FAILED");
+            const alert = createAlert(AUTH_ALERT_CODES.LOGOUT_FAILED);
             logClientAlert(alert, {err});
             notify(alert);
             setLoading(false);
@@ -84,14 +80,14 @@ export function Logout({
     if (children) {
         return (
             <span onClick={handleLogout} role="button" tabIndex={0}>
-                {loading ? "Signing out..." : children}
+                {loading ? AUTH_UI_TEXT.LOGOUT_LOADING : children}
             </span>
         );
     }
 
     return (
         <button type="button" onClick={handleLogout} disabled={loading}>
-            {loading ? "Signing out..." : AUTH_LABELS.LOGOUT_LABEL}
+            {loading ? AUTH_UI_TEXT.LOGOUT_LOADING : AUTH_LABELS.LOGOUT_LABEL}
         </button>
     );
 }

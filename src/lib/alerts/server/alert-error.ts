@@ -1,6 +1,7 @@
 import type {AlertCode} from "@/lib/alerts/registry";
 import type {LogContext} from "@/lib/alerts/server/logger";
 import type {AlertOverrides} from "@/lib/alerts/types";
+import {ALERT_ERROR_NAME} from "@/lib/constants/alerts";
 
 /**
  * Options for an AlertError.
@@ -27,15 +28,13 @@ export class AlertError extends Error {
     readonly detail: LogContext;
 
     /**
-     * TODO:: replace magic string with const
-     *
      * @param   {AlertCode}         code        Registry code of the alert to raise
      * @param   {AlertErrorOptions} [options]   Optional; alert overrides plus `cause` and `detail`
      */
     constructor(code: AlertCode, options: AlertErrorOptions = {}) {
         const {cause, detail, ...overrides} = options;
         super(code, {cause});
-        this.name = "AlertError";
+        this.name = ALERT_ERROR_NAME;
         this.code = code;
         this.overrides = overrides;
         this.detail = detail ?? {};

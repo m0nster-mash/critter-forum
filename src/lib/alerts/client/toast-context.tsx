@@ -1,6 +1,7 @@
 "use client";
 
-import type {PublicAlert} from "@/lib/alerts/types";
+import type {PublicAlert, Toast, ToastAction, ToastContextValue} from "@/lib/alerts/types";
+import {ALERT_SEVERITY_ERROR, MAX_TOASTS, TOAST_ACTION_TYPES, TOAST_DURATIONS, TOAST_UI} from "@/lib/constants/alerts";
 import {
     createContext,
     JSX,
@@ -14,51 +15,18 @@ import {
     useState,
 } from "react";
 
-/**
- * TODO:: relocated to correct types file
- */
-interface Toast extends PublicAlert {
-    id: string;
-}
-
-/**
- * TODO:: relocate to correct types file
- */
-interface ToastContextValue {
-    notify: (alert: PublicAlert) => void;
-    dismiss: (id: string) => void;
-}
-
-/**
- * TODO:: relocate to correct types file
- */
-type ToastAction =
-    | { type: "add"; toast: Toast }
-    | { type: "dismiss"; id: string };
-
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-// TODO:: relocate to correct const file
-const MAX_TOASTS = 5;
-
-// TODO:: relocate to correct const file
-const TOAST_DURATIONS = {
-    success: 5000,
-    info: 5000,
-    warning: 8000,
-    error: 10000,
-} as const;
-
 /**
- * TODO:: document
+ * Applies toast additions and dismissals, suppressing duplicate alerts and enforcing the viewport size limit.
  *
- * TODO:: replace magic strings with const
+ * @param   {Toast[]}       state   Current toast notifications
+ * @param   {ToastAction}   action  State transition to apply
  *
- * @param state
- * @param action
+ * @return  {Toast[]}               Updated toast notifications
  */
 function toastReducer(state: Toast[], action: ToastAction): Toast[] {
-    if (action.type === "dismiss") {
+    if (action.type === TOAST_ACTION_TYPES.DISMISS) {
         return state.filter((toast) => toast.id !== action.id);
     }
 
@@ -76,11 +44,11 @@ function toastReducer(state: Toast[], action: ToastAction): Toast[] {
 }
 
 /**
- * Returns the toast notification functions.
+ * Returns the toast notification functions from the nearest AlertProvider.
  *
- * TODO:: replace magic strings with const
+ * @return  {ToastContextValue} Context methods for notifying and dismissing alerts
  *
- * TODO:: use correct error handling
+ * @throws  {Error}             When called outside an AlertProvider
  */
 export function useAlert(): ToastContextValue {
     const context = useContext(ToastContext);
@@ -95,17 +63,16 @@ export function useAlert(): ToastContextValue {
 /**
  * Displays the toast viewport and provides notification functions to descendants.
  *
- * TODO:: replace magic strings with const
- *
  * @param   {Object}    props
- * @param   {ReactNode} props.children   Application content
- * @return  {JSX.Element}                Provider and toast viewport
+ * @param   {ReactNode} props.children  Application content
+ *
+ * @return  {JSX.Element}               Provider and toast viewport
  */
 export function AlertProvider({children}: { children: ReactNode }): JSX.Element {
     const [toasts, dispatch] = useReducer(toastReducer, []);
 
     const dismiss = useCallback((id: string) => {
-        dispatch({type: "dismiss", id});
+        dispatch({type: TOAST_ACTION_TYPES.DISMISS, id});
     }, []);
 
     const notify = useCallback((alert: PublicAlert) => {
@@ -114,7 +81,7 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
             id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`,
         };
 
-        dispatch({type: "add", toast});
+        dispatch({type: TOAST_ACTION_TYPES.ADD, toast});
     }, []);
 
     const value = useMemo(() => ({notify, dismiss}), [notify, dismiss]);
@@ -122,12 +89,9 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
     return (
         <ToastContext.Provider value={value}>
             {children}
-            <div className="alert-toast-viewport"
-                 aria-label="Notifications">
+            <div className={TOAST_UI.VIEWPORT_CLASS} aria-label={TOAST_UI.VIEWPORT_LABEL}>
                 {toasts.map((toast) => (
-                    <ToastItem key={toast.id}
-                               toast={toast}
-                               onDismiss={dismiss}/>
+                    <ToastItem key={toast.id} toast={toast} onDismiss={dismiss}/>
                 ))}
             </div>
         </ToastContext.Provider>
@@ -135,14 +99,13 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
 }
 
 /**
- * TODO:: document
+ * Renders one toast notification and pauses its auto-dismiss countdown while hovered or focused.
  *
- * TODO:: replace magic strings with const
+ * @param   {Object}                props           Toast data and its dismissal callback
+ * @param   {Toast}                 props.toast     Notification to render
+ * @param   {(id: string) => void}  props.onDismiss Callback invoked when the toast is dismissed
  *
- * @param param0
- * @param param0.toast
- * @param param0.onDismiss
- * @constructor
+ * @return  {JSX.Element}                           Rendered toast notification
  */
 function ToastItem({
                        toast,
@@ -184,22 +147,22 @@ function ToastItem({
         };
     }, [paused, dismiss]);
 
-    const role = toast.severity === "error" ? "alert" : "status";
+    const role = toast.severity === ALERT_SEVERITY_ERROR ? TOAST_UI.ALERT_ROLE : TOAST_UI.STATUS_ROLE;
 
     return (
         <div className={`alert-toast alert-toast-${toast.severity}`}
              role={role}
-             aria-live={role === "alert" ? "assertive" : "polite"}
+             aria-live={role === TOAST_UI.ALERT_ROLE ? TOAST_UI.ASSERTIVE_LIVE : TOAST_UI.POLITE_LIVE}
              onMouseEnter={() => setHovered(true)}
              onMouseLeave={() => setHovered(false)}
              onFocusCapture={() => setFocused(true)}
              onBlurCapture={() => setFocused(false)}>
             <div>
                 <p>{toast.message}</p>
-                {toast.ref && <small>Reference: {toast.ref}</small>}
+                {toast.ref && <small>{TOAST_UI.REFERENCE_LABEL}{toast.ref}</small>}
             </div>
             <button type="button"
-                    aria-label="Dismiss notification"
+                    aria-label={TOAST_UI.DISMISS_LABEL}
                     onClick={dismiss}>
                 {/* TODO:: replace × with an icon */}
                 ×

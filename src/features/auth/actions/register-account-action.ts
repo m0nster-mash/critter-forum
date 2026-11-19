@@ -1,5 +1,6 @@
 "use server";
 
+import {AUTH_ALERT_CODES, AUTH_REGISTER_ACTION_NAME} from "@/features/auth/constants/ui";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {fail, succeed} from "@/lib/alerts/result";
 import {safeAction} from "@/lib/alerts/server/safe-action";
@@ -9,8 +10,6 @@ import {headers} from "next/headers";
 /**
  * Server action that registers a new user account using email and password credentials.
  *
- * TODO:: convert magic strings into consts
- *
  * @param   {Object}    input           The user registration payload
  * @param   {string}    input.name      The display name of the user registering
  * @param   {string}    input.email     The email address of the registering user
@@ -18,7 +17,7 @@ import {headers} from "next/headers";
  *
  * @return  {Promise<ActionResult>}     Resolves to the registration result.
  */
-export const registerAccountAction = safeAction("auth.register", async (input: {
+export const registerAccountAction = safeAction(AUTH_REGISTER_ACTION_NAME, async (input: {
     name: string;
     email: string;
     password: string;
@@ -27,7 +26,7 @@ export const registerAccountAction = safeAction("auth.register", async (input: {
     const email = input.email.trim().toLowerCase();
 
     if (!name || !email || !input.password) {
-        return fail(createAlert("AUTH_REGISTER_INVALID"));
+        return fail(createAlert(AUTH_ALERT_CODES.REGISTER_INVALID));
     }
 
     const registerResult = await auth.api.signUpEmail({
@@ -40,8 +39,8 @@ export const registerAccountAction = safeAction("auth.register", async (input: {
     });
 
     if (!registerResult.user?.id) {
-        return fail(createAlert("AUTH_REGISTER_FAILED"));
+        return fail(createAlert(AUTH_ALERT_CODES.REGISTER_FAILED));
     }
 
-    return succeed(undefined, createAlert("AUTH_REGISTER_SUCCESS"));
+    return succeed(undefined, createAlert(AUTH_ALERT_CODES.REGISTER_SUCCESS));
 });

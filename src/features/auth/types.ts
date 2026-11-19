@@ -39,7 +39,9 @@ export interface LogoutProps {
 }
 
 /**
- * TODO:: document
+ * Properties required to render an alert banner.
+ *
+ * @property {PublicAlert} alert  Public, user-safe alert data to display in the banner
  */
 export interface AlertBannerProps {
     alert: PublicAlert;

@@ -1,7 +1,7 @@
 "use client";
 
 import {AlertBanner} from "@/components/ui/alert-banner";
-import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {AUTH_ALERT_CODES, AUTH_FORM_FIELDS, AUTH_LABELS, AUTH_UI_TEXT} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {logClientAlert} from "@/lib/alerts/client/log-alert";
 import {createAlert} from "@/lib/alerts/create-alert";
@@ -14,8 +14,6 @@ import {JSX, type SubmitEvent, useState} from "react";
 
 /**
  * Renders the authentication login form panel.
- *
- * TODO:: convert magic strings into consts
  *
  * @param   {AuthFlowProps} props               Component properties for managing auth flow callbacks
  * @param   {Function}      [props.onSuccess]   Optional callback executed after successful authentication
@@ -42,7 +40,7 @@ export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
             });
 
             if (attemptSignIn.error) {
-                const alert = createAlert("AUTH_LOGIN_FAILED");
+                const alert = createAlert(AUTH_ALERT_CODES.LOGIN_FAILED);
                 setError(alert);
                 logClientAlert(alert);
             } else {
@@ -51,7 +49,7 @@ export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
                 router.refresh();
             }
         } catch (err: unknown) {
-            const alert = createAlert("APP_UNKNOWN_ERROR");
+            const alert = createAlert(AUTH_ALERT_CODES.UNKNOWN_ERROR);
             setError(alert);
             logClientAlert(alert, {err});
         } finally {
@@ -65,30 +63,30 @@ export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="login-email"> Email Address </label>
-                    <input id="login-email"
+                    <label htmlFor={AUTH_FORM_FIELDS.LOGIN_EMAIL_ID}>{AUTH_LABELS.LOGIN_EMAIL_LABEL}</label>
+                    <input id={AUTH_FORM_FIELDS.LOGIN_EMAIL_ID}
                            type="email"
-                           autoComplete="email"
-                           placeholder="email@address.com"
+                           autoComplete={AUTH_FORM_FIELDS.EMAIL_AUTOCOMPLETE}
+                           placeholder={AUTH_UI_TEXT.EMAIL_PLACEHOLDER}
                            value={email}
                            onChange={(loginEvent) => setEmail(loginEvent.target.value)}
                            disabled={loading}
                            required/>
                 </div>
                 <div>
-                    <label htmlFor="login-password">Password</label>
-                    <input id="login-password"
+                    <label htmlFor={AUTH_FORM_FIELDS.LOGIN_PASSWORD_ID}>{AUTH_LABELS.PASSWORD_LABEL}</label>
+                    <input id={AUTH_FORM_FIELDS.LOGIN_PASSWORD_ID}
                            type="password"
-                           autoComplete="current-password"
+                           autoComplete={AUTH_FORM_FIELDS.CURRENT_PASSWORD_AUTOCOMPLETE}
                            value={password}
                            onChange={(loginEvent) => setPassword(loginEvent.target.value)}
-                           placeholder="••••••••"
+                           placeholder={AUTH_UI_TEXT.PASSWORD_PLACEHOLDER}
                            disabled={loading}
                            required/>
                 </div>
                 <div>
                     <button type="submit" disabled={loading}>
-                        {loading ? "Logging in..." : AUTH_LABELS.LOGIN_LABEL}
+                        {loading ? AUTH_UI_TEXT.LOGIN_LOADING : AUTH_LABELS.LOGIN_LABEL}
                     </button>
                 </div>
             </form>

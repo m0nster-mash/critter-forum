@@ -1,42 +1,36 @@
 import {AlertLogLevel, ClientLogger} from "@/lib/alerts/types";
+import {
+    ALERT_LOG_LEVEL_ORDER,
+    ALERT_LOG_LEVELS,
+    ALERT_LOG_LEVEL_SILENT,
+    BEARER_REDACTED,
+    DEFAULT_LOG_LEVEL,
+    NODE_ENV_PRODUCTION,
+    PRODUCTION_LOG_LEVEL,
+    REDACTED,
+    SENSITIVE_LOG_KEY,
+} from "@/lib/constants/alerts";
 
 export type ClientLogContext = Record<string, unknown>;
 
 /**
- * TODO:: document
+ * Returns a sanitized copy of a value, redacting sensitive property names, bearer tokens, and email addresses. Arrays
+ * and nested objects are sanitized recursively; other values are returned unchanged.
  *
- * TODO:: replace magic strings with const
+ * @param   {unknown}   value   Value to sanitize before it is written to a client log
+ * @param   {string}    [key]   Property name used to detect sensitive values
  *
- * TODO:: relocate to proper const file/dir
+ * @return  {unknown}           Sanitized value
  */
-const LEVEL_ORDER: Record<AlertLogLevel | "silent", number> = {
-    debug: 10,
-    info: 20,
-    warn: 30,
-    error: 40,
-    silent: 50,
-};
-
-// TODO:: relocated to correct const file/dir
-const SENSITIVE_KEY = /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i;
-
-/**
- * TODO:: document
- *
- * TODO:: replace magic strings with const
- *
- * @param value
- * @param key
- */
-function sanitize(value: unknown, key = ""): unknown {
-    if (SENSITIVE_KEY.test(key)) {
-        return "[REDACTED]";
+function sanitize(value: unknown, key: string = ""): unknown {
+    if (SENSITIVE_LOG_KEY.test(key)) {
+        return REDACTED;
     }
 
     if (typeof value === "string") {
         return value
-            .replace(/Bearer\s+\S+/gi, "Bearer [REDACTED]")
-            .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[REDACTED]");
+            .replace(/Bearer\s+\S+/gi, BEARER_REDACTED)
+            .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, REDACTED);
     }
 
     if (Array.isArray(value)) {
@@ -56,31 +50,31 @@ function sanitize(value: unknown, key = ""): unknown {
 }
 
 /**
- * TODO:: document
+ * Resolves the minimum client log level from the public environment setting, using safe environment defaults.
+ * Production defaults to warnings; other environments default to debug.
  *
- * TODO:: replace magic strings with const
+ * @return  {AlertLogLevel | typeof ALERT_LOG_LEVEL_SILENT}     Configured minimum log level
  */
-function getMinimumLevel(): AlertLogLevel | "silent" {
-    if (process.env.NODE_ENV === "production") {
-        return "warn";
+function getMinimumLevel(): AlertLogLevel | typeof ALERT_LOG_LEVEL_SILENT {
+    if (process.env.NODE_ENV === NODE_ENV_PRODUCTION) {
+        return PRODUCTION_LOG_LEVEL;
     }
 
     const configured = process.env.NEXT_PUBLIC_ALERT_LOG_LEVEL;
 
-    return configured && Object.hasOwn(LEVEL_ORDER, configured)
-        ? configured as AlertLogLevel | "silent"
-        : "debug";
+    return configured && Object.hasOwn(ALERT_LOG_LEVEL_ORDER, configured)
+        ? configured as AlertLogLevel | typeof ALERT_LOG_LEVEL_SILENT
+        : DEFAULT_LOG_LEVEL;
 }
 
 /**
- * TODO:: document
+ * Emits a structured client log entry when the requested severity meets the configured minimum level. Production
+ * output is reduced to safe fields; development output retains sanitized context.
  *
- * TODO:: replace magic strings with const
- *
- * @param level
- * @param message
- * @param bindings
- * @param context
+ * @param   {AlertLogLevel}     level       Severity of the log entry
+ * @param   {string}            message     Human-readable log message
+ * @param   {ClientLogContext}  bindings    Logger-level context inherited by each entry
+ * @param   {ClientLogContext}  [context]   Per-entry context
  */
 function emit(
     level: AlertLogLevel,
@@ -88,13 +82,13 @@ function emit(
     bindings: ClientLogContext,
     context: ClientLogContext = {},
 ): void {
-    if (LEVEL_ORDER[level] < LEVEL_ORDER[getMinimumLevel()]) {
+    if (ALERT_LOG_LEVEL_ORDER[level] < ALERT_LOG_LEVEL_ORDER[getMinimumLevel()]) {
         return;
     }
 
     const data = {...bindings, ...context};
 
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === NODE_ENV_PRODUCTION) {
         const safe = sanitize({
             code: data.code,
             message,
@@ -103,9 +97,9 @@ function emit(
 
         const line = JSON.stringify({level, ...safe});
 
-        if (level === "warn") {
+        if (level === PRODUCTION_LOG_LEVEL) {
             console.warn(line);
-        } else if (level === "error") {
+        } else if (level === ALERT_LOG_LEVELS.ERROR) {
             console.error(line);
         }
 
@@ -114,11 +108,11 @@ function emit(
 
     const safe = sanitize(data) as ClientLogContext;
 
-    if (level === "debug") {
+    if (level === DEFAULT_LOG_LEVEL) {
         console.debug(message, safe);
-    } else if (level === "info") {
+    } else if (level === ALERT_LOG_LEVELS.INFO) {
         console.info(message, safe);
-    } else if (level === "warn") {
+    } else if (level === PRODUCTION_LOG_LEVEL) {
         console.warn(message, safe);
     } else {
         console.error(message, safe);
@@ -126,18 +120,19 @@ function emit(
 }
 
 /**
- * TODO:: document
+ * Creates a client logger whose methods merge fixed bindings with optional per-call context. Child loggers inherit
+ * existing bindings and add their own.
  *
- * TODO:: replace magic strings with const
+ * @param   {ClientLogContext}  [bindings]  Context attached to every entry from this logger
  *
- * @param bindings
+ * @return  {ClientLogger}                  Configured client logger
  */
 export function createClientLogger(bindings: ClientLogContext = {}): ClientLogger {
     return {
-        debug: (message, context) => emit("debug", message, bindings, context),
-        info: (message, context) => emit("info", message, bindings, context),
-        warn: (message, context) => emit("warn", message, bindings, context),
-        error: (message, context) => emit("error", message, bindings, context),
+        debug: (message, context) => emit(DEFAULT_LOG_LEVEL, message, bindings, context),
+        info: (message, context) => emit(ALERT_LOG_LEVELS.INFO, message, bindings, context),
+        warn: (message, context) => emit(PRODUCTION_LOG_LEVEL, message, bindings, context),
+        error: (message, context) => emit(ALERT_LOG_LEVELS.ERROR, message, bindings, context),
         child: (childBindings) => createClientLogger({...bindings, ...childBindings}),
     };
 }

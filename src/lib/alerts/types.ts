@@ -51,7 +51,7 @@ export interface AlertDefinition {
  * The alert as it crosses the server/client boundary. Primitives only, so it serializes cleanly out of server actions.
  * Never holds internal detail (causes, stacks, request context).
  *
- * @property    {string}            code            Registry key, e.g. `AUTH_LOGIN_INVALID_CREDENTIALS`
+ * @property    {string}            code            Registry key, ex. `AUTH_LOGIN_INVALID_CREDENTIALS`
  * @property    {AlertSeverity}     severity        Severity used for styling and live-region role
  * @property    {string}            message         Final, user-safe text
  * @property    {AlertPresentation} presentation    Where the alert should be rendered
@@ -86,7 +86,8 @@ export interface AlertOverrides {
 }
 
 /**
- * TODO:: document
+ * Client-side logging interface with severity-specific methods and support for child loggers.
+ * Each method accepts a message and optional structured context; child loggers inherit fixed bindings.
  */
 export interface ClientLogger {
     debug(message: string, context?: ClientLogContext): void;
@@ -95,3 +96,20 @@ export interface ClientLogger {
     error(message: string, context?: ClientLogContext): void;
     child(bindings: ClientLogContext): ClientLogger;
 }
+
+
+/** Toast notification enriched with a stable per-instance identifier for rendering and dismissal. */
+export interface Toast extends PublicAlert {
+    id: string;
+}
+
+/** Operations exposed by the shared toast context to descendant components. */
+export interface ToastContextValue {
+    notify: (alert: PublicAlert) => void;
+    dismiss: (id: string) => void;
+}
+
+/** Discriminated actions consumed by the toast reducer. */
+export type ToastAction =
+    | { type: "add"; toast: Toast }
+    | { type: "dismiss"; id: string };

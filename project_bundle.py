@@ -720,7 +720,7 @@ def plan_src_nested(all_files):
     Bundle only src/.
 
     Files directly in src/ go into src_bundle.md.
-    Every immediate child directory gets its own recursive bundle, e.g.
+    Every immediate child directory gets its own recursive bundle, ex.
     src_components_bundle.md and src_modules_bundle.md.
     """
     src_dir = PROJECT_ROOT / "src"

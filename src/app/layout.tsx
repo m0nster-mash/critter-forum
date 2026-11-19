@@ -6,10 +6,10 @@ import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import type {Metadata} from "next";
 import "./globals.css";
-import React from "react";
+import React, {JSX} from "react";
 
 /**
- * TODO:: document
+ * Default document metadata used by the application, including its browser title and description.
  */
 export const metadata: Metadata = {
     title: "critter-forum",
@@ -17,13 +17,13 @@ export const metadata: Metadata = {
 };
 
 /**
- * TODO:: document
+ * Renders the root document shell and wraps every route in the shared alert provider and global error listeners.
+ * The navigation links expose the public pages and authenticated dashboard entry point.
  *
- * @param param0
- * @param param0.children
- * @constructor
+ * @param   {Readonly<{ children: React.ReactNode }>} props  Root layout props containing the active route content
+ * @return  {JSX.Element}                                    The complete HTML document for the application
  */
-export default function RootLayout({children,}: Readonly<{ children: React.ReactNode; }>) {
+export default function RootLayout({children,}: Readonly<{ children: React.ReactNode; }>): JSX.Element {
     return (
         <html lang="en">
         <body>

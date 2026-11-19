@@ -5,7 +5,7 @@ import type {PublicAlert} from "@/lib/alerts/types";
  *
  * @property    {true}          ok      Discriminant
  * @property    {T}             data    Payload returned to the caller. Must be serializable.
- * @property    {PublicAlert}   [alert] Optional; a confirmation to show the user (e.g. "Account created")
+ * @property    {PublicAlert}   [alert] Optional; a confirmation to show the user (ex. "Account created")
  */
 export interface ActionSuccess<T> {
     ok: true;
@@ -34,13 +34,29 @@ export type ActionResult<T = undefined> = ActionSuccess<T> | ActionFailure;
 /**
  * Builds a success result.
  *
+ * @return  {ActionSuccess<T>}  The success result.
+ */
+export function succeed(): ActionSuccess<undefined>;
+
+/**
+ * Builds a success result.
+ *
  * @param   {T}             [data]  Optional; payload for the caller. Must be serializable.
  * @param   {PublicAlert}   [alert] Optional; a confirmation to show the user
  *
  * @return  {ActionSuccess<T>}  The success result.
  */
-export function succeed(): ActionSuccess<undefined>;
 export function succeed<T>(data: T, alert?: PublicAlert): ActionSuccess<T>;
+
+
+/**
+ * Builds a success result.
+ *
+ * @param   {T}             [data]  Optional; payload for the caller. Must be serializable.
+ * @param   {PublicAlert}   [alert] Optional; a confirmation to show the user
+ *
+ * @return  {ActionSuccess<T>}  The success result.
+ */
 export function succeed<T>(data?: T, alert?: PublicAlert): ActionSuccess<T | undefined> {
     return alert ? {ok: true, data, alert} : {ok: true, data};
 }
