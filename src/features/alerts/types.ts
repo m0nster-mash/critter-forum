@@ -1,10 +1,12 @@
-import {AlertVariant} from "@/features/alerts/constants/alert-codes";
+import type {AlertVariant} from "@/features/alerts/constants/alert-codes";
+import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
+import {LOG_LEVELS, LOG_FORMATS} from "@/features/alerts/constants/logger";
+import type {TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
 import type {ReactNode} from "react";
 
 /**
  * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
  */
-export const ALERT_SEVERITIES = ["success", "info", "warn", "error"] as const; // TODO:: clean this (magic/const, types)
 export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
 
 /**
@@ -14,13 +16,13 @@ export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
  * - `inline`: persistent banner rendered in context (page, form, or field level)
  * - `none`:   not shown to the user (logging only)
  */
-export const ALERT_PRESENTATIONS = ["toast", "inline", "none"] as const; // TODO:: clean this (magic/const, types)
 export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
 
 /**
  * Log levels shared by the server and client loggers.
  */
-export type AlertLogLevel = "debug" | "info" | "warn" | "error"; // TODO:: clean this (magic/const, types)
+export type AlertLogLevel = (typeof LOG_LEVELS)[keyof typeof LOG_LEVELS];
+export type LogFormat = (typeof LOG_FORMATS)[keyof typeof LOG_FORMATS];
 
 /**
  * Free-form structured data attached to a log entry.
@@ -130,13 +132,32 @@ export interface AlertBannerProps {
     action?: ReactNode;
 }
 
-/**
- * Options for an AlertError.
- *
- * @property    {unknown}       [cause]     Optional; the underlying error. Logged on the server, never sent to the client.
- * @property    {LogContext}    [detail]    Optional; internal-only context to log. Never sent to the client.
- */
+
+/** A toast currently displayed in the notification stack. */
+export interface ToastItem {
+    id: string;
+    alert: PublicAlert;
+    count: number;
+    version: number;
+}
+
+/** Actions accepted by the toast stack reducer. */
+export type ToastAction =
+    | { type: typeof TOAST_ACTION_TYPES.ADD; id: string; alert: PublicAlert }
+    | { type: typeof TOAST_ACTION_TYPES.DISMISS; id: string }
+    | { type: typeof TOAST_ACTION_TYPES.CLEAR };
+
+/** Options for an AlertError. */
 export interface AlertErrorOptions extends AlertOverrides {
     cause?: unknown;
     detail?: LogContext;
+}
+
+/** Normalized representation of an Error used by the server logger. */
+export interface SerializedError {
+    name: string;
+    message: string;
+    stack?: string;
+    cause?: unknown;
+    [extra: string]: unknown;
 }

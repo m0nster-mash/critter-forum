@@ -1,8 +1,7 @@
 import {ALERT_ERROR_NAME} from "@/features/alerts/constants/alert-codes";
 import type {AlertCode} from "@/features/alerts/registry";
 import type {LogContext} from "@/features/alerts/server/logger";
-import {AlertErrorOptions, AlertOverrides} from "@/features/alerts/types";
-
+import type {AlertErrorOptions, AlertOverrides} from "@/features/alerts/types";
 
 /**
  * Throw to signal an *expected* failure from deep inside server code (a helper, a guard) without threading a result

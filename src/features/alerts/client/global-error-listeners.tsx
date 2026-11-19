@@ -2,7 +2,7 @@
 
 import {useAlertContext} from "@/features/alerts/client/alert-provider";
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
-import {BROWSER_ERROR_EVENTS, LOG_SCOPES} from "@/features/alerts/constants/observability";
+import {BROWSER_ERROR_EVENTS, BROWSER_ERROR_MESSAGES, BROWSER_ERROR_PATTERNS, LOG_SCOPES} from "@/features/alerts/constants/observability";
 import {createAlert} from "@/features/alerts/create-alert";
 import {useEffect} from "react";
 
@@ -12,8 +12,8 @@ import {useEffect} from "react";
  */
 function isNoise(event: ErrorEvent): boolean {
 
-    if (/ResizeObserver loop/i.test(event.message)) return true; // TODO:: replace magic string with consts
-    if (event.message === "Script error.") return true; // TODO:: replace magic string with consts
+    if (BROWSER_ERROR_PATTERNS.RESIZE_OBSERVER_LOOP.test(event.message)) return true;
+    if (event.message === BROWSER_ERROR_MESSAGES.SCRIPT_ERROR) return true;
 
     return Boolean(event.filename) && !event.filename.startsWith(window.location.origin);
 }

@@ -13,6 +13,7 @@ import type {LogContext, PublicAlert} from "@/features/alerts/types";
  * @param   {LogContext}    [detail]    Optional; extra context such as `{err}` or `{scope}`
  */
 export function logClientAlert(alert: PublicAlert, detail: LogContext = {}): void {
+
     const level = getAlertDefinition(alert.code).log.client;
     if (!level) {
         return;

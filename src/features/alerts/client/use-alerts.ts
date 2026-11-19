@@ -1,6 +1,7 @@
 "use client";
 
 import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {ALERT_PRESENTATION_TYPES} from "@/features/alerts/constants/alert-codes";
 import {useAlertContext} from "@/features/alerts/client/alert-provider";
 import type {LogContext, PublicAlert} from "@/features/alerts/types";
 import {useCallback, useState} from "react";
@@ -25,14 +26,14 @@ export function useAlerts(): object {
 
     const present = useCallback((alert: PublicAlert, detail?: LogContext) => {
         switch (alert.presentation) {
-            case "toast": // TODO:: replace magic string with consts
+            case ALERT_PRESENTATION_TYPES.TOAST:
                 notify(alert, detail);
                 break;
-            case "inline": // TODO:: replace magic string with consts
+            case ALERT_PRESENTATION_TYPES.INLINE:
                 logClientAlert(alert, detail);
                 setInline(alert);
                 break;
-            case "none": // TODO:: replace magic string with consts
+            case ALERT_PRESENTATION_TYPES.NONE:
                 logClientAlert(alert, detail);
                 break;
         }

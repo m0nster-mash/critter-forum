@@ -1,6 +1,6 @@
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
-import {AlertDefinition} from "@/features/alerts/types";
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
+import {AlertDefinition} from "@/features/alerts/types";
 
 /**
  * Application-wide components that don't belong to any single feature.

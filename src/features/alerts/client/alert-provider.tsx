@@ -2,10 +2,10 @@
 
 import {GlobalErrorListeners} from "@/features/alerts/client/global-error-listeners";
 import {logClientAlert} from "@/features/alerts/client/log-alert";
-import {type ToastItem, toastReducer} from "@/features/alerts/client/toast-state";
+import {toastReducer} from "@/features/alerts/client/toast-state";
 import {ToastViewport} from "@/features/alerts/components/toast-viewport";
-import {DISPATCH_TYPES} from "@/features/alerts/constants/observability";
-import type {LogContext, PublicAlert} from "@/features/alerts/types";
+import {TOAST_ACTION_TYPES, TOAST_ID_PREFIX} from "@/features/alerts/constants/toast";
+import type {LogContext, PublicAlert, ToastItem} from "@/features/alerts/types";
 import {createContext, type JSX, type ReactNode, useCallback, useContext, useMemo, useReducer, useRef} from "react";
 
 /**
@@ -46,14 +46,14 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
         logClientAlert(alert, detail);
         counter.current += 1;
         dispatch({
-            type: DISPATCH_TYPES.ADD,
-            id: `toast-${counter.current}`, // TODO:: clean this
+            type: TOAST_ACTION_TYPES.ADD,
+            id: `${TOAST_ID_PREFIX}${counter.current}`,
             alert
         });
     }, []);
 
-    const dismiss = useCallback((id: string) => dispatch({type: DISPATCH_TYPES.DISMISS, id}), []);
-    const clear = useCallback(() => dispatch({type: DISPATCH_TYPES.CLEAR}), []);
+    const dismiss = useCallback((id: string) => dispatch({type: TOAST_ACTION_TYPES.DISMISS, id}), []);
+    const clear = useCallback(() => dispatch({type: TOAST_ACTION_TYPES.CLEAR}), []);
     const value = useMemo(() => (
             {toasts, notify, dismiss, clear}),
         [toasts, notify, dismiss, clear]);

@@ -1,7 +1,7 @@
-import type {AlertSeverity} from "@/features/alerts/types";
-
 /**
  * Alert codes for application-wide errors and feedback.
+ *
+ * These identifiers correspond to entries in CORE_ALERTS.
  */
 export const APP_ALERT_CODES = {
     UNKNOWN_ERROR: "APP_UNKNOWN_ERROR",
@@ -13,6 +13,8 @@ export const APP_ALERT_CODES = {
 
 /**
  * Alert codes for authentication flows.
+ *
+ * These identifiers correspond to entries in AUTH_ALERTS.
  */
 export const AUTH_ALERT_CODES = {
     LOGIN_SUCCESS: "AUTH_LOGIN_SUCCESS",
@@ -26,14 +28,14 @@ export const AUTH_ALERT_CODES = {
     REGISTER_PASSWORD_TOO_SHORT: "AUTH_REGISTER_PASSWORD_TOO_SHORT",
     REGISTER_EMAIL_TAKEN: "AUTH_REGISTER_EMAIL_TAKEN",
     REGISTER_FAILED: "AUTH_REGISTER_FAILED",
-    REGISTER_SIGN_IN_FAILED: "AUTH_REGISTER_SIGNIN_FAILED",
+    REGISTER_SIGNIN_FAILED: "AUTH_REGISTER_SIGNIN_FAILED",
 
     LOGOUT_SUCCESS: "AUTH_LOGOUT_SUCCESS",
     LOGOUT_FAILED: "AUTH_LOGOUT_FAILED",
 } as const;
 
 /**
- * Combined alert-code lookup.
+ * Combined lookup for callers that use both application and auth components.
  */
 export const ALERT_CODES = {
     ...APP_ALERT_CODES,
@@ -44,51 +46,23 @@ export type AppAlertCode = typeof APP_ALERT_CODES[keyof typeof APP_ALERT_CODES];
 export type AuthAlertCode = typeof AUTH_ALERT_CODES[keyof typeof AUTH_ALERT_CODES];
 export type KnownAlertCode = typeof ALERT_CODES[keyof typeof ALERT_CODES];
 
-/**
- * Alert severity values.
- */
-export const ALERT_SEVERITY = {
-    SUCCESS: "success",
-    INFO: "info",
-    WARN: "warn",
-    ERROR: "error",
-} as const;
+/** Canonical alert severities accepted by the registry and public alert types. */
+export const ALERT_SEVERITIES = ["success", "info", "warn", "error"] as const;
+export type AlertSeverityValue = (typeof ALERT_SEVERITIES)[number];
 
-export const ALERT_SEVERITIES = [
-    ALERT_SEVERITY.SUCCESS,
-    ALERT_SEVERITY.INFO,
-    ALERT_SEVERITY.WARN,
-    ALERT_SEVERITY.ERROR,
-] as const;
-
-/**
- * Alert presentation values.
- */
-export const ALERT_PRESENTATION = {
+/** Canonical presentation modes accepted by alert definitions. */
+export const ALERT_PRESENTATION_TYPES = {
     TOAST: "toast",
     INLINE: "inline",
     NONE: "none",
 } as const;
 
 export const ALERT_PRESENTATIONS = [
-    ALERT_PRESENTATION.TOAST,
-    ALERT_PRESENTATION.INLINE,
-    ALERT_PRESENTATION.NONE,
+    ALERT_PRESENTATION_TYPES.TOAST,
+    ALERT_PRESENTATION_TYPES.INLINE,
+    ALERT_PRESENTATION_TYPES.NONE,
 ] as const;
 
-/**
- * Logger level values.
- */
-export const LOG_LEVELS = {
-    DEBUG: "debug",
-    INFO: "info",
-    WARN: "warn",
-    ERROR: "error",
-} as const;
-
-/**
- * Existing severity lookup, retained for current component usage.
- */
 export const SEVERITY_LEVELS = {
     INFO: "info",
     DEBUG: "debug",
@@ -96,16 +70,13 @@ export const SEVERITY_LEVELS = {
     ERROR: "error",
 } as const;
 
-export const SEVERITY_LABELS: Record<AlertSeverity, string> = {
+export const SEVERITY_LABELS: Record<AlertSeverityValue, string> = {
     success: "Success",
     info: "Information",
     warn: "Warning",
     error: "Error",
 };
 
-/**
- * Alert component variants.
- */
 export const VARIANT_TYPES = {
     BANNER: "banner",
     FIELD: "field",
@@ -117,23 +88,17 @@ export const ALERT_VARIANTS = [
     VARIANT_TYPES.FIELD,
     VARIANT_TYPES.TOAST,
 ] as const;
-
 export type AlertVariant = (typeof ALERT_VARIANTS)[number];
 
-/**
- * Accessibility roles used by alert components.
- */
 export const ALERT_ROLES = {
     ALERT: "alert",
     STATUS: "status",
 } as const;
 
-/**
- * Error class identifier used by AlertError.
- */
-export const ALERT_ERROR_NAME = "AlertError";
+/** Property names used when inspecting unknown error-like values. */
+export const ERROR_PROPERTY_KEYS = {
+    DIGEST: "digest",
+} as const;
 
-/**
- * Token pattern used to interpolate alert message templates.
- */
-export const ALERT_TEMPLATE_TOKEN_PATTERN = /\{(\w+)}/g;
+/** Stable Error.name assigned to errors raised by the alerts feature. */
+export const ALERT_ERROR_NAME = "AlertError";

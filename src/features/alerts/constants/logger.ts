@@ -1,125 +1,86 @@
 import type {AlertLogLevel} from "@/features/alerts/types";
 
-/**
- * Logging output formats.
- */
+/** Supported logger levels and their stable order. */
+export const LOG_LEVELS = {
+    DEBUG: "debug",
+    INFO: "info",
+    WARN: "warn",
+    ERROR: "error",
+} as const;
+
+export const LOG_LEVEL_ORDER: Record<AlertLogLevel, number> = {
+    [LOG_LEVELS.DEBUG]: 10,
+    [LOG_LEVELS.INFO]: 20,
+    [LOG_LEVELS.WARN]: 30,
+    [LOG_LEVELS.ERROR]: 40,
+};
+
+/** Supported output encodings. */
 export const LOG_FORMATS = {
     PRETTY: "pretty",
     JSON: "json",
 } as const;
 
-export type LogFormat = typeof LOG_FORMATS[keyof typeof LOG_FORMATS];
-
-/**
- * Runtime environment identifiers.
- */
-export const RUNTIME_ENVIRONMENTS = {
-    DEVELOPMENT: "development",
+export const LOGGER_ENVIRONMENTS = {
     PRODUCTION: "production",
 } as const;
 
-/**
- * Default logging levels by runtime environment.
- */
-export const DEFAULT_LOG_LEVELS = {
-    DEVELOPMENT: "debug",
-    SERVER_PRODUCTION: "info",
-    CLIENT_PRODUCTION: "warn",
+/** Default verbosity by runtime and environment. */
+export const LOGGER_DEFAULT_LEVELS = {
+    SERVER_DEVELOPMENT: LOG_LEVELS.DEBUG,
+    SERVER_PRODUCTION: LOG_LEVELS.INFO,
+    CLIENT_DEVELOPMENT: LOG_LEVELS.DEBUG,
+    CLIENT_PRODUCTION: LOG_LEVELS.WARN,
 } as const;
 
-/**
- * Numeric ordering used to compare log levels.
- */
-export const LOGGER_LEVEL_ORDER: Record<AlertLogLevel, number> = {
-    debug: 10,
-    info: 20,
-    warn: 30,
-    error: 40,
-};
-
-/**
- * ANSI terminal colors for pretty log output.
- */
-export const LOGGER_LEVEL_COLORS: Record<AlertLogLevel, string> = {
-    debug: "90",
-    info: "36",
-    warn: "33",
-    error: "31",
-};
-
-/**
- * Keys reserved by the structured server log envelope.
- */
-export const LOGGER_RESERVED_KEYS = [
-    "level",
-    "time",
-    "msg",
-] as const;
-
-/**
- * Fields permitted in sanitized production browser logs.
- */
-export const CLIENT_LOG_SAFE_KEYS = new Set([
-    "code",
-    "ref",
-    "severity",
-    "field",
-    "scope",
-    "digest",
-    "status",
-]);
-
-/**
- * Logger serialization limits.
- */
-export const LOGGER_LIMITS = {
-    MAX_DEPTH: 6,
-    MAX_CLIENT_SAFE_LENGTH: 120,
+export const LOGGER_DEFAULT_FORMATS = {
+    DEVELOPMENT: LOG_FORMATS.PRETTY,
+    PRODUCTION: LOG_FORMATS.JSON,
 } as const;
 
-/**
- * Sensitive-key detection.
- */
-export const LOGGER_SENSITIVE_KEY_PATTERN =
-    /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i;
+/** Browser-safe context allow-list and truncation limit. */
+export const CLIENT_LOG_SAFE_KEYS = ["code", "ref", "severity", "field", "scope", "digest", "status"] as const;
+export const MAX_CLIENT_LOG_VALUE_LENGTH = 120;
+export const CLIENT_LOG_ERROR_KEY = "err";
+export const CLIENT_LOG_ERROR_NAME_KEY = "errorName";
 
-/**
- * Values used when serializing or redacting data.
- */
-export const LOGGER_SERIALIZATION_VALUES = {
+/** Server log normalization and redaction rules. */
+export const LOGGER_REDACTION = {
     REDACTED: "[REDACTED]",
     FUNCTION: "[Function]",
     MAX_DEPTH: "[MaxDepth]",
     CIRCULAR: "[Circular]",
+    MAX_NESTING_DEPTH: 6,
 } as const;
 
-/**
- * Drizzle query-parameter matching and replacement.
- *
- * The parameters may contain private data such as emails and password hashes.
- */
-export const LOGGER_QUERY_PARAMS = {
-    PATTERN: /\nparams:[\s\S]*?(?=\n\s+at |$)/,
-    REDACTED_REPLACEMENT: "\nparams: [REDACTED]",
+export const SENSITIVE_LOG_KEY_PATTERN = /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i;
+export const QUERY_PARAMS_PATTERN = /\nparams:[\s\S]*?(?=\n\s+at |$)/;
+export const QUERY_PARAMS_REDACTION = "\nparams: [REDACTED]";
+
+/** JSON fields owned by the logger; colliding context keys are namespaced. */
+export const LOGGER_RESERVED_JSON_KEYS: readonly string[] = ["level", "time", "msg"];
+export const LOGGER_JSON_KEYS = {
+    LEVEL: "level",
+    TIME: "time",
+    MESSAGE: "msg",
+    CONTEXT_PREFIX: "ctx_",
 } as const;
 
-/**
- * Text used when rendering nested error causes.
- */
-export const LOGGER_ERROR_TEXT = {
+/** Human-readable labels used by pretty output. */
+export const LOGGER_TEXT = {
     CAUSED_BY: "caused by:",
 } as const;
 
-/**
- * Environment variable names used by logger configuration.
- *
- * Keep process.env references statically written in the logger modules
- * where Next.js needs to inline public environment variables.
- */
-export const LOGGER_ENV_KEYS = {
-    NODE_ENV: "NODE_ENV",
-    LOG_LEVEL: "LOG_LEVEL",
-    LOG_FORMAT: "LOG_FORMAT",
-    NEXT_PUBLIC_LOG_LEVEL: "NEXT_PUBLIC_LOG_LEVEL",
-    NO_COLOR: "NO_COLOR",
+/** ANSI foreground color codes used for pretty terminal output. */
+export const LOGGER_ANSI_COLORS: Record<AlertLogLevel, string> = {
+    [LOG_LEVELS.DEBUG]: "90",
+    [LOG_LEVELS.INFO]: "36",
+    [LOG_LEVELS.WARN]: "33",
+    [LOG_LEVELS.ERROR]: "31",
+};
+
+export const LOGGER_ANSI = {
+    RESET: "\x1b[0m",
+    PREFIX: "\x1b[",
+    COLOR_SUFFIX: "m",
 } as const;

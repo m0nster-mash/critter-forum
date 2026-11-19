@@ -1,14 +1,9 @@
 import type {AlertSeverity} from "@/features/alerts/types";
 
-/**
- * Maximum number of simultaneously visible toasts.
- * The oldest toast is dropped when this limit is exceeded.
- */
+/** Most toasts shown at once. When exceeded, the oldest is dropped. */
 export const MAX_VISIBLE_TOASTS = 4;
 
-/**
- * Toast auto-dismiss durations, in milliseconds, by severity.
- */
+/** Auto-dismiss delay in milliseconds, by severity. */
 export const TOAST_DURATIONS: Record<AlertSeverity, number> = {
     success: 4000,
     info: 5000,
@@ -16,7 +11,12 @@ export const TOAST_DURATIONS: Record<AlertSeverity, number> = {
     error: 12000,
 };
 
-/**
- * Prefix used when generating toast IDs.
- */
+/** Reducer action discriminants. */
+export const TOAST_ACTION_TYPES = {
+    ADD: "add",
+    DISMISS: "dismiss",
+    CLEAR: "clear",
+} as const;
+
+/** Prefix for generated toast IDs. */
 export const TOAST_ID_PREFIX = "toast-";

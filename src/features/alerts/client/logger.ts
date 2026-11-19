@@ -1,4 +1,14 @@
 import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
+import {
+    CLIENT_LOG_ERROR_KEY,
+    CLIENT_LOG_ERROR_NAME_KEY,
+    CLIENT_LOG_SAFE_KEYS,
+    LOGGER_DEFAULT_LEVELS,
+    LOGGER_ENVIRONMENTS,
+    LOG_LEVELS,
+    LOG_LEVEL_ORDER,
+    MAX_CLIENT_LOG_VALUE_LENGTH,
+} from "@/features/alerts/constants/logger";
 
 /**
  * Browser-side logger. Same interface as the server logger, but the browser console is public, so output is
@@ -13,9 +23,7 @@ import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
  * `warn` in production. It controls how much is logged, never how much detail: detail is development-only.
  */
 
-const LEVEL_ORDER: Record<AlertLogLevel, number> = {debug: 10, info: 20, warn: 30, error: 40}; // TODO:: migrate to const file
-const SAFE_KEYS = new Set(["code", "ref", "severity", "field", "scope", "digest", "status"]); // TODO:: replace magic string with consts, migrate
-const MAX_SAFE_LENGTH = 120; // TODO:: migrate to const file
+const SAFE_KEYS = new Set<string>(CLIENT_LOG_SAFE_KEYS);
 
 /**
  * Reads config from the environment on every call. `process.env.NEXT_PUBLIC_*` must be referenced statically so
@@ -24,13 +32,13 @@ const MAX_SAFE_LENGTH = 120; // TODO:: migrate to const file
  * @return TODO:: document
  */
 function getConfig(): { minLevel: AlertLogLevel; verbose: boolean } {
-    const isProduction = process.env.NODE_ENV === "production"; // TODO:: replace magic string with consts
+    const isProduction = process.env.NODE_ENV === LOGGER_ENVIRONMENTS.PRODUCTION;
     const requested = process.env.NEXT_PUBLIC_LOG_LEVEL?.toLowerCase();
 
     return {
-        minLevel: requested && Object.hasOwn(LEVEL_ORDER, requested)
+        minLevel: requested && Object.hasOwn(LOG_LEVEL_ORDER, requested)
             ? (requested as AlertLogLevel)
-            : isProduction ? "warn" : "debug", // TODO:: replace magic string with consts
+            : isProduction ? LOGGER_DEFAULT_LEVELS.CLIENT_PRODUCTION : LOGGER_DEFAULT_LEVELS.CLIENT_DEVELOPMENT,
         verbose: !isProduction,
     };
 }
@@ -46,12 +54,12 @@ function sanitize(context: LogContext): LogContext {
     for (const [key, value] of Object.entries(context)) {
         if (SAFE_KEYS.has(key)) {
             if (typeof value === "string") {
-                safe[key] = value.slice(0, MAX_SAFE_LENGTH);
+                safe[key] = value.slice(0, MAX_CLIENT_LOG_VALUE_LENGTH);
             } else if (typeof value === "number" || typeof value === "boolean") {
                 safe[key] = value;
             }
-        } else if (key === "err" && value instanceof Error) {
-            safe.errorName = value.name;
+        } else if (key === CLIENT_LOG_ERROR_KEY && value instanceof Error) {
+            safe[CLIENT_LOG_ERROR_NAME_KEY] = value.name;
         }
     }
 
@@ -68,7 +76,7 @@ function sanitize(context: LogContext): LogContext {
  */
 function emit(level: AlertLogLevel, message: string, bindings: LogContext, context?: LogContext): void {
     const {minLevel, verbose} = getConfig();
-    if (LEVEL_ORDER[level] < LEVEL_ORDER[minLevel]) return;
+    if (LOG_LEVEL_ORDER[level] < LOG_LEVEL_ORDER[minLevel]) return;
 
     const merged = {...bindings, ...context};
     const data = verbose ? merged : sanitize(merged);
@@ -89,12 +97,11 @@ function emit(level: AlertLogLevel, message: string, bindings: LogContext, conte
  */
 export function createClientLogger(bindings: LogContext = {}): Logger {
 
-    // TODO:: migrate, replace with const
     return {
-        debug: (message, context) => emit("debug", message, bindings, context),
-        info: (message, context) => emit("info", message, bindings, context),
-        warn: (message, context) => emit("warn", message, bindings, context),
-        error: (message, context) => emit("error", message, bindings, context),
+        debug: (message, context) => emit(LOG_LEVELS.DEBUG, message, bindings, context),
+        info: (message, context) => emit(LOG_LEVELS.INFO, message, bindings, context),
+        warn: (message, context) => emit(LOG_LEVELS.WARN, message, bindings, context),
+        error: (message, context) => emit(LOG_LEVELS.ERROR, message, bindings, context),
         child: (childBindings) => createClientLogger({...bindings, ...childBindings}),
     };
 }

@@ -2,7 +2,8 @@
 
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import styles from "@/features/alerts/styles/alerts.module.css";
-import {TOAST_DURATIONS, type ToastItem} from "@/features/alerts/client/toast-state";
+import {TOAST_DURATIONS} from "@/features/alerts/constants/toast";
+import type {ToastItem} from "@/features/alerts/types";
 import {VARIANT_TYPES} from "@/features/alerts/constants/alert-codes";
 import {TOAST_KEYSTROKE, TOAST_LABELS} from "@/features/alerts/constants/ui";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";

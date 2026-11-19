@@ -1,5 +1,5 @@
-import {ALERT_TEMPLATE_TOKEN_PATTERN} from "@/features/alerts/constants/alert-codes";
 import {ALERT_REGISTRY, AlertCode, FALLBACK_ALERT_CODE} from "@/features/alerts/registry";
+import {ALERT_TEMPLATE_PATTERNS} from "@/features/alerts/constants/observability";
 import {AlertDefinition, AlertOverrides, PublicAlert} from "@/features/alerts/types";
 
 /**
@@ -37,7 +37,7 @@ function interpolate(template: string, params?: Record<string, string | number>)
     if (!params) {
         return template;
     }
-    return template.replace(ALERT_TEMPLATE_TOKEN_PATTERN, (token, key: string) =>
+    return template.replace(ALERT_TEMPLATE_PATTERNS.PARAMETER, (token, key: string) =>
         Object.hasOwn(params, key) ? String(params[key]) : token
     );
 }

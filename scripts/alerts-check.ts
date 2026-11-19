@@ -5,7 +5,7 @@
 import assert from "node:assert/strict";
 import {createAlert, getAlertDefinition, isAlertCode} from "@/features/alerts/create-alert";
 import {ALERT_REGISTRY, AlertCode} from "@/features/alerts/registry";
-import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/types";
+import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
 
 // Registry integrity
 for (const [code, def] of Object.entries(ALERT_REGISTRY)) {

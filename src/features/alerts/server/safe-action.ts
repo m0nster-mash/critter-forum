@@ -1,4 +1,4 @@
-import {ALERT_SEVERITY, APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
+import {APP_ALERT_CODES, SEVERITY_LEVELS} from "@/features/alerts/constants/alert-codes";
 import {createAlert, getAlertDefinition} from "@/features/alerts/create-alert";
 import {ActionResult, fail} from "@/features/alerts/result";
 import {isAlertError} from "@/features/alerts/server/alert-error";
@@ -11,22 +11,13 @@ import {unstable_rethrow} from "next/navigation";
 /**
  * Logs an alert per its registry policy and, when that produces a log entry for a warning or error, stamps the alert
  * with a reference ID. A ref on the client therefore always matches a line in the server log.
- *
- * @param alert
- * @param context
  */
-function record(
-    alert: PublicAlert,
-    context: LogContext
-): PublicAlert {
-
+function record(alert: PublicAlert, context: LogContext): PublicAlert {
     if (!getAlertDefinition(alert.code).log.server) {
         return alert;
     }
 
-    const needsRef = alert.ref === undefined
-        && (alert.severity === ALERT_SEVERITY.ERROR
-            || alert.severity === ALERT_SEVERITY.WARN);
+    const needsRef = alert.ref === undefined && (alert.severity === SEVERITY_LEVELS.ERROR || alert.severity === SEVERITY_LEVELS.WARN);
     const stamped = needsRef ? {...alert, ref: generateRef()} : alert;
 
     logAlert(stamped, context);
@@ -47,15 +38,14 @@ function record(
  * Usage, in a `"use server"` file: `export const saveThing = safeAction("things.save", async (input: Input) => {...})`
  *
  * @param   {string}                                    name    Stable identifier for logs, e.g. `auth.register`
- * @param   {(...args: Args) => Promise<ActionResult>}   action  The action body
+ * @param   {(...args: Args) => Promise<ActionResult<T>>}   action  The action body
  *
- * @return  {(...args: Args) => Promise<ActionResult>}  The wrapped action.
+ * @return  {(...args: Args) => Promise<ActionResult<T>>}  The wrapped action.
  */
 export function safeAction<Args extends unknown[], T>(
     name: string,
     action: (...args: Args) => Promise<ActionResult<T>>,
 ): (...args: Args) => Promise<ActionResult<T>> {
-
     return async (...args: Args): Promise<ActionResult<T>> => {
         try {
             const result = await action(...args);
@@ -65,16 +55,8 @@ export function safeAction<Args extends unknown[], T>(
                 return fail(record(result.alert, {action: name}));
             }
             return result.alert
-                ? {
-                    ok: true,
-                    data: result.data,
-                    alert: record(result.alert, {action: name}
-                    )
-                }
-                : {
-                    ok: true,
-                    data: result.data
-                };
+                ? {ok: true, data: result.data, alert: record(result.alert, {action: name})}
+                : {ok: true, data: result.data};
 
         } catch (error) {
             unstable_rethrow(error);
@@ -82,18 +64,11 @@ export function safeAction<Args extends unknown[], T>(
             if (isAlertError(error)) {
                 return fail(record(
                     createAlert(error.code, error.overrides),
-                    {
-                        action: name,
-                        ...error.detail, err:
-                        error.cause
-                    },
+                    {action: name, ...error.detail, err: error.cause},
                 ));
             }
 
-            return fail(record(createAlert(APP_ALERT_CODES.UNKNOWN_ERROR), {
-                action: name,
-                err: error
-            }));
+            return fail(record(createAlert(APP_ALERT_CODES.UNKNOWN_ERROR), {action: name, err: error}));
         }
     };
 }
