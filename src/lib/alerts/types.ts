@@ -1,17 +1,25 @@
+import {ClientLogContext} from "@/lib/alerts/client/logger";
+import {number} from "better-auth";
+
 /**
- * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
+ * Alert severity levels.
  */
-export const ALERT_SEVERITIES = ["success", "info", "warning", "error"] as const;
+export const ALERT_SEVERITIES = [
+    "success",
+    "info",
+    "warning",
+    "error",
+] as const;
 export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
 
 /**
- * Where an alert is shown on-page.
- *
- * - `toast`:  transient, non-blocking snackbar
- * - `inline`: persistent banner rendered in context (page, form, or field level)
- * - `none`:   not shown to the user (logging only)
+ * How an alert is displayed on-page. `none` indicates backend logging only.
  */
-export const ALERT_PRESENTATIONS = ["toast", "inline", "none"] as const;
+export const ALERT_PRESENTATIONS = [
+    "toast",
+    "inline",
+    "none",
+] as const;
 export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
 
 /**
@@ -20,10 +28,10 @@ export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
 export type AlertLogLevel = "debug" | "info" | "warn" | "error";
 
 /**
- * Per-environment logging rules for an alert. `false` means the alert is never logged in that environment.
+ * Per-env logging rules. 'false' indicates that the alert is never logged.
  *
- * @property    {AlertLogLevel | false} server  Level written to the terminal / server logs
- * @property    {AlertLogLevel | false} client  Level written to the browser console (production output is sanitized)
+ * @property    {AlertLogLevel | false} server  Terminal / server logs
+ * @property    {AlertLogLevel | false} client  Browser console (sanitized)
  */
 export interface AlertLogPolicy {
     server: AlertLogLevel | false;
@@ -31,12 +39,13 @@ export interface AlertLogPolicy {
 }
 
 /**
- * A registry entry: the single source of truth for what an alert says, how it looks, and how it is logged.
+ * Registry of the single source of truth for an alert's content.
  *
  * @property    {AlertSeverity}     severity        Default severity
- * @property    {string}            message         User-safe text. May contain `{name}` tokens filled via `params`.
+ * @property    {string}            message         User-safe text
  * @property    {AlertPresentation} presentation    Default on-page presentation
  * @property    {AlertLogPolicy}    log             Default logging rules
+ *
  */
 export interface AlertDefinition {
     severity: AlertSeverity;
@@ -49,10 +58,10 @@ export interface AlertDefinition {
  * The alert as it crosses the server/client boundary. Primitives only, so it serializes cleanly out of server actions.
  * Never holds internal detail (causes, stacks, request context).
  *
- * @property    {string}            code            Registry key, e.g. `AUTH_LOGIN_INVALID_CREDENTIALS`
- * @property    {AlertSeverity}     severity        Severity used for styling and live-region role
- * @property    {string}            message         Final, user-safe text
- * @property    {AlertPresentation} presentation    Where the alert should be rendered
+ * @property    {string}            code            Registry key
+ * @property    {AlertSeverity}     severity        Default severity
+ * @property    {string}            message         User-safe text
+ * @property    {AlertPresentation} presentation    Default on-page presentation
  * @property    {string}            [field]         Optional; form field name for field-level inline alerts
  * @property    {string}            [ref]           Optional; reference ID matching a server log entry
  */
@@ -64,6 +73,7 @@ export interface PublicAlert {
     field?: string;
     ref?: string;
 }
+
 
 /**
  * Per-call adjustments when creating an alert. There is deliberately no `message` override: user-facing text lives
@@ -81,4 +91,60 @@ export interface AlertOverrides {
     field?: string;
     ref?: string;
     params?: Record<string, string | number>;
+}
+
+
+/**
+ * Client-side logging interface with severity-specific methods and support for child loggers.
+ * Each method accepts a message and optional structured context; child loggers inherit fixed bindings.
+ *
+ * @property {} debug TODO::document
+ * @property {} info TODO::document
+ * @property {} warn TODO::document
+ * @property {} error TODO::document
+ * @property {} child TODO::document
+ */
+export interface ClientLogger {
+    debug(message: string, context?: ClientLogContext): void;
+    info(message: string, context?: ClientLogContext): void;
+    warn(message: string, context?: ClientLogContext): void;
+    error(message: string, context?: ClientLogContext): void;
+    child(bindings: ClientLogContext): ClientLogger;
+}
+
+
+/**
+ * Toast notification enriched with a stable per-instance identifier for rendering and dismissal.
+ *
+ * @property    {string}    id  TODO:: document
+ */
+export interface Toast extends PublicAlert {
+    id: string;
+}
+
+/**
+ * Operations exposed by the shared toast context to descendant components.
+ *
+ * @property    {(alert: PublicAlert) => void}  notify  TODO:: document
+ * @property    {(id: string) => void}          dismiss TODO:: document
+ */
+export interface ToastContextValue {
+    notify: (alert: PublicAlert) => void;
+    dismiss: (id: string) => void;
+}
+
+/**
+ * Discriminated actions consumed by the toast reducer.
+ */
+export type ToastAction =
+    | { type: "add"; toast: Toast }
+    | { type: "dismiss"; id: string };
+
+/**
+ * Properties required to render an alert banner.
+ *
+ * @property    {PublicAlert}   alert   Public, user-safe alert data to display in the banner
+ */
+export interface AlertBannerProps {
+    alert: PublicAlert;
 }

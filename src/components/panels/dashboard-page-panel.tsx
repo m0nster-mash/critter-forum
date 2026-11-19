@@ -7,7 +7,7 @@ import {JSX} from "react";
  * @param   {DashboardPageProps}    props       The component properties containing user context
  * @param   {UserPropItems}         props.user  The authenticated user data
  *
- * @return  {JSX.Element}    The rendered dashboard panel JSX element.
+ * @return  {JSX.Element}                       The rendered dashboard panel JSX element.
  */
 export function DashboardPagePanel({user}: DashboardPageProps): JSX.Element {
 
