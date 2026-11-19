@@ -9,7 +9,7 @@ import {
     PRODUCTION_LOG_LEVEL,
     REDACTED,
     SENSITIVE_LOG_KEY,
-} from "@/lib/constants/alerts";
+} from "@/lib/alerts/constants/alerts";
 
 export type ClientLogContext = Record<string, unknown>;
 

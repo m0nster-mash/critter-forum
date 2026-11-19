@@ -4,7 +4,7 @@ import type {PublicAlert} from "@/lib/alerts/types";
  * Successful outcome of a server action.
  *
  * @property    {true}          ok      Discriminant
- * @property    {T}             data    Payload returned to the caller. Must be serializable.
+ * @property    {<T}>           data    Payload returned to the caller. Must be serializable.
  * @property    {PublicAlert}   [alert] Optional; a confirmation to show the user (ex. "Account created")
  */
 export interface ActionSuccess<T> {
@@ -34,17 +34,17 @@ export type ActionResult<T = undefined> = ActionSuccess<T> | ActionFailure;
 /**
  * Builds a success result.
  *
- * @return  {ActionSuccess<T>}  The success result.
+ * @return  {ActionSuccess} The success result.
  */
 export function succeed(): ActionSuccess<undefined>;
 
 /**
  * Builds a success result.
  *
- * @param   {T}             [data]  Optional; payload for the caller. Must be serializable.
+ * @param   {<T>}           [data]  Optional; payload for the caller. Must be serializable.
  * @param   {PublicAlert}   [alert] Optional; a confirmation to show the user
  *
- * @return  {ActionSuccess<T>}  The success result.
+ * @return  {ActionSuccess}  The success result.
  */
 export function succeed<T>(data: T, alert?: PublicAlert): ActionSuccess<T>;
 
@@ -52,13 +52,15 @@ export function succeed<T>(data: T, alert?: PublicAlert): ActionSuccess<T>;
 /**
  * Builds a success result.
  *
- * @param   {T}             [data]  Optional; payload for the caller. Must be serializable.
+ * @param   {<T>}           [data]  Optional; payload for the caller. Must be serializable.
  * @param   {PublicAlert}   [alert] Optional; a confirmation to show the user
  *
- * @return  {ActionSuccess<T>}  The success result.
+ * @return  {ActionSuccess}  The success result.
  */
 export function succeed<T>(data?: T, alert?: PublicAlert): ActionSuccess<T | undefined> {
-    return alert ? {ok: true, data, alert} : {ok: true, data};
+    return alert
+        ? {ok: true, data, alert}
+        : {ok: true, data};
 }
 
 /**

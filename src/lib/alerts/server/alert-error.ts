@@ -1,7 +1,7 @@
 import type {AlertCode} from "@/lib/alerts/registry";
 import type {LogContext} from "@/lib/alerts/server/logger";
 import type {AlertOverrides} from "@/lib/alerts/types";
-import {ALERT_ERROR_NAME} from "@/lib/constants/alerts";
+import {ALERT_ERROR_NAME} from "@/lib/alerts/constants/alerts";
 
 /**
  * Options for an AlertError.

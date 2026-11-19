@@ -73,9 +73,10 @@ export interface PublicAlert {
  *
  * @property    {AlertSeverity}                     [severity]      Override the registry severity
  * @property    {AlertPresentation}                 [presentation]  Override the registry presentation
- * @property    {string}                            [field]         Form field name for field-level alerts
- * @property    {string}                            [ref]           Reference ID matching a server log entry
- * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in message
+ * @property    {string}                            [field]         Optional; form field name for field-level alerts
+ * @property    {string}                            [ref]           Optional; reference ID matching a server log entry
+ * @property    {Record<string, string | number>}   [params]        Optional; values substituted for `{name}` tokens
+ *                                                                  in message
  */
 export interface AlertOverrides {
     severity?: AlertSeverity;
@@ -86,8 +87,8 @@ export interface AlertOverrides {
 }
 
 /**
- * Client-side logging interface with severity-specific methods and support for child loggers.
- * Each method accepts a message and optional structured context; child loggers inherit fixed bindings.
+ * Client-side logging interface with severity-specific methods and support for child loggers. Each method accepts a
+ * message and optional structured context; child loggers inherit fixed bindings.
  */
 export interface ClientLogger {
     debug(message: string, context?: ClientLogContext): void;
@@ -102,18 +103,38 @@ export interface ClientLogger {
 }
 
 
-/** Toast notification enriched with a stable per-instance identifier for rendering and dismissal. */
+/**
+ * Toast notification enriched with a stable per-instance identifier for rendering and dismissal.
+ *
+ * @property    {string}    id  TODO:: document
+ */
 export interface Toast extends PublicAlert {
     id: string;
 }
 
-/** Operations exposed by the shared toast context to descendant components. */
+/**
+ * Operations exposed by the shared toast context to descendant components.
+ *
+ * @property    {(alert: PublicAlert) => void}  notify  TODO:: document
+ * @property    {(id: string)}                  dismiss TODO:: document
+ */
 export interface ToastContextValue {
     notify: (alert: PublicAlert) => void;
     dismiss: (id: string) => void;
 }
 
-/** Discriminated actions consumed by the toast reducer. */
+/**
+ * Discriminated actions consumed by the toast reducer.
+ */
 export type ToastAction =
     | { type: "add"; toast: Toast }
     | { type: "dismiss"; id: string };
+
+/**
+ * Properties required to render an alert banner.
+ *
+ * @property {PublicAlert} alert  Public, user-safe alert data to display in the banner
+ */
+export interface AlertBannerProps {
+    alert: PublicAlert;
+}

@@ -17,9 +17,7 @@ export function logAlert(
 ): void {
 
     const level = getAlertDefinition(alert.code).log.server;
-    if (!level) {
-        return;
-    }
+    if (!level) return;
 
     logger[level](alert.code, {
         severity: alert.severity,

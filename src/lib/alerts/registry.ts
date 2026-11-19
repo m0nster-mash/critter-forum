@@ -1,9 +1,9 @@
 import {AlertDefinition} from "@/lib/alerts/types";
 
+// TODO:: replace magic strings with consts in entire class
+
 /**
  * Application-wide alerts that don't belong to any single feature.
- *
- * Naming convention: `FEATURE_ACTION_REASON`. Core codes use the `APP_` prefix.
  */
 const CORE_ALERTS = {
     APP_UNKNOWN_ERROR: {

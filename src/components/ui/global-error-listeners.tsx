@@ -9,7 +9,7 @@ import {
     WINDOW_UNHANDLED_ERROR,
     WINDOW_UNHANDLED_REJECTION,
     WINDOW_UNHANDLED_REJECTION_EVENT,
-} from "@/lib/constants/alerts";
+} from "@/lib/alerts/constants/alerts";
 import {useEffect} from "react";
 
 /**

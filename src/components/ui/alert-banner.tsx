@@ -1,4 +1,3 @@
-import {AlertBannerProps} from "@/features/auth/types";
 import {
     ALERT_ARIA_LIVE,
     ALERT_BANNER_CLASSES,
@@ -6,7 +5,8 @@ import {
     ALERT_REF_LABEL,
     ALERT_ROLES,
     ALERT_SEVERITY_ERROR,
-} from "@/lib/constants/alerts";
+} from "@/lib/alerts/constants/alerts";
+import {AlertBannerProps} from "@/lib/alerts/types";
 import {JSX} from "react";
 
 /**

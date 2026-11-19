@@ -1,4 +1,3 @@
-import type {PublicAlert} from "@/lib/alerts/types";
 import {ReactNode} from "react";
 
 /**
@@ -36,13 +35,4 @@ export interface LogoutProps {
     redirectTo?: string;
     onSuccess?: () => void;
     onBeforeLogout?: () => void | Promise<unknown>;
-}
-
-/**
- * Properties required to render an alert banner.
- *
- * @property {PublicAlert} alert  Public, user-safe alert data to display in the banner
- */
-export interface AlertBannerProps {
-    alert: PublicAlert;
 }
