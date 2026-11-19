@@ -24,7 +24,7 @@ export interface Logger {
     error(message: string, context?: LogContext): void;
 
     /**
-     * Creates a logger that adds the given bindings (e.g. `{scope: "seed"}`) to every entry it writes.
+     * Creates a logger that adds the given bindings (ex. `{scope: "seed"}`) to every entry it writes.
      */
     child(bindings: LogContext): Logger;
 }

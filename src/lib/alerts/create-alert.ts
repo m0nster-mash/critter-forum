@@ -14,7 +14,7 @@ export function isAlertCode(code: string): code is AlertCode {
 
 /**
  * Looks up the registry definition for a code, falling back to the unknown-error definition if the code is not
- * registered (e.g. stale or untyped data arriving from elsewhere).
+ * registered (ex. stale or untyped data arriving from elsewhere).
  *
  * @param   {string}    code    The alert code to look up
  *
