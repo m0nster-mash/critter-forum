@@ -19,6 +19,8 @@ export const BROWSER_ERROR_EVENTS = {
 
 /**
  * Structured log event names.
+ *
+ * TODO:: only seems to be used by `src/instrumentation.ts`; delete?
  */
 export const LOG_EVENT_NAMES = {
     REQUEST_UNHANDLED_ERROR: "request.unhandled_error",
@@ -26,6 +28,8 @@ export const LOG_EVENT_NAMES = {
 
 /**
  * Prefixes used when logging messages from external integrations.
+ *
+ * TODO:: if there are no uses for this, delete it
  */
 export const LOGGER_MESSAGES = {
     BETTER_AUTH_PREFIX: "better-auth: ",

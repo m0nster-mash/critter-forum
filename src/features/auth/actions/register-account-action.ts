@@ -1,5 +1,6 @@
 "use server";
 
+import {AUTH_ACTION_NAMES} from "@/features/auth/constants/integration";
 import {
     AUTH_ALERT_PARAMS,
     isAuthApiError,
@@ -29,7 +30,7 @@ import {headers} from "next/headers";
  *
  * @return  {Promise<ActionResult<undefined>>}  Resolves to a success or failure result; never throws to the client.
  */
-export const registerAccountAction = safeAction("auth.register", async (input: RegistrationInput) => {
+export const registerAccountAction = safeAction(AUTH_ACTION_NAMES.REGISTER, async (input: RegistrationInput) => {
 
     const normalized: RegistrationInput = {
         name: input.name.trim(),

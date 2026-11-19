@@ -1,7 +1,8 @@
 "use client";
 
 import {useAlertContext} from "@/lib/alerts/client/alert-provider";
-import {LOG_SCOPES} from "@/lib/alerts/constants/observability";
+import {APP_ALERT_CODES} from "@/lib/alerts/constants/alert-codes";
+import {BROWSER_ERROR_EVENTS, LOG_SCOPES} from "@/lib/alerts/constants/observability";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {useEffect} from "react";
 
@@ -10,36 +11,46 @@ import {useEffect} from "react";
  * cross-origin "Script error." noise, and the benign ResizeObserver notification.
  */
 function isNoise(event: ErrorEvent): boolean {
+
     if (/ResizeObserver loop/i.test(event.message)) return true;
     if (event.message === "Script error.") return true;
+
     return Boolean(event.filename) && !event.filename.startsWith(window.location.origin);
 }
 
 /**
- * Catches what React error boundaries can't (errors thrown in event handlers and timers, unhandled promise
- * rejections) and routes them through the same alert system as everything else. Renders nothing.
+ * Catches what React error boundaries can't (errors thrown in event handlers and timers, unhandled promise rejections)
+ * and routes them through the same alert system as everything else. Renders nothing.
  *
  * Repeats are merged by the toast stack, so a failing loop can't flood the screen.
  *
  * @return  {null}  Nothing; mounted for its side effects.
  */
 export function GlobalErrorListeners(): null {
+
     const {notify} = useAlertContext();
 
     useEffect(() => {
         const onError = (event: ErrorEvent) => {
             if (isNoise(event)) return;
-            notify(createAlert("APP_UNKNOWN_ERROR"), {err: event.error ?? event.message, scope: LOG_SCOPES.WINDOW_ERROR});
+            notify(createAlert(APP_ALERT_CODES.UNKNOWN_ERROR), {
+                err: event.error ?? event.message,
+                scope: LOG_SCOPES.WINDOW_ERROR
+            });
         };
         const onRejection = (event: PromiseRejectionEvent) => {
-            notify(createAlert("APP_UNKNOWN_ERROR"), {err: event.reason, scope: LOG_SCOPES.UNHANDLED_REJECTION});
+            notify(createAlert(APP_ALERT_CODES.UNKNOWN_ERROR), {
+                err: event.reason,
+                scope: LOG_SCOPES.UNHANDLED_REJECTION
+            });
         };
 
-        window.addEventListener("error", onError);
-        window.addEventListener(LOG_SCOPES.UNHANDLED_REJECTION, onRejection);
+        window.addEventListener(BROWSER_ERROR_EVENTS.ERROR, onError);
+        window.addEventListener(BROWSER_ERROR_EVENTS.UNHANDLED_REJECTION, onRejection);
+
         return () => {
-            window.removeEventListener("error", onError);
-            window.removeEventListener(LOG_SCOPES.UNHANDLED_REJECTION, onRejection);
+            window.removeEventListener(BROWSER_ERROR_EVENTS.ERROR, onError);
+            window.removeEventListener(BROWSER_ERROR_EVENTS.UNHANDLED_REJECTION, onRejection);
         };
     }, [notify]);
 

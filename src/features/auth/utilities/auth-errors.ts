@@ -1,3 +1,5 @@
+import {AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";
+import {AUTH_ALERT_CODES} from "@/lib/alerts/constants/alert-codes";
 import type {AlertCode} from "@/lib/alerts/registry";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
 
@@ -68,8 +70,8 @@ export function isAuthApiError(error: unknown): boolean {
 export function resolveAuthAlertCode(error: unknown, fallback: AlertCode): AlertCode {
     const {code, status} = readAuthError(error);
 
-    if (status === 429) {
-        return "AUTH_RATE_LIMITED";
+    if (status === AUTH_HTTP_STATUS.TOO_MANY_REQUESTS) {
+        return AUTH_ALERT_CODES.RATE_LIMITED;
     }
     if (code !== undefined && Object.hasOwn(AUTH_ERROR_ALERT_CODES, code)) {
         return AUTH_ERROR_ALERT_CODES[code];

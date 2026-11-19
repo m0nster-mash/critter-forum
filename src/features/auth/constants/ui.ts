@@ -8,4 +8,7 @@ export const AUTH_LABELS = {
     LOGOUT_PROCESSING: "Signing out...",
     REGISTER_LABEL: "Register Account",
     REGISTER_PROCESSING: "Creating account...",
+    USER_EMAIL: "Email Address",
+    USER_NAME: "Username",
+    USER_PASSWORD: "Password",
 } as const;

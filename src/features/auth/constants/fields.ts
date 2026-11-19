@@ -19,6 +19,10 @@ export const AUTH_FORM_IDS = {
     REGISTER_NAME: "register-username",
     REGISTER_EMAIL: "register-email",
     REGISTER_PASSWORD: "register-password",
+
+    REGISTER_ALERT_NAME: "register-username-alert",
+    REGISTER_ALERT_EMAIL: "register-email-alert",
+    REGISTER_ALERT_PASSWORD: "register-password-alert",
 } as const;
 
 /**
