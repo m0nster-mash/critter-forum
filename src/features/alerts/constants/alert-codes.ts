@@ -1,7 +1,8 @@
 /**
- * Alert codes for application-wide errors and feedback.
+ * @module          `features/alerts`
  *
- * These identifiers correspond to entries in CORE_ALERTS.
+ * @fileOverview    Alert codes for application-wide errors and feedback.
+ * @remark          These identifiers correspond to entries in {@code registry.CORE_ALERTS}.
  */
 export const APP_ALERT_CODES = {
     UNKNOWN_ERROR: "APP_UNKNOWN_ERROR",
@@ -12,9 +13,10 @@ export const APP_ALERT_CODES = {
 } as const;
 
 /**
- * Alert codes for authentication flows.
+ * @module          `features/alerts`
  *
- * These identifiers correspond to entries in AUTH_ALERTS.
+ * @fileOverview    Alert codes for authentication flows.
+ * @remark          These identifiers correspond to entries in AUTH_ALERTS.
  */
 export const AUTH_ALERT_CODES = {
     LOGIN_SUCCESS: "AUTH_LOGIN_SUCCESS",
@@ -35,22 +37,34 @@ export const AUTH_ALERT_CODES = {
 } as const;
 
 /**
- * Combined lookup for callers that use both application and auth components.
+ * @module          `features/alerts`
+ *
+ * @status          Review
+ * @TODO            Only used by the three types below it. Determine intention of this; delete if not needed
+ *
+ * @fileOverview    Combined lookup for callers that use both application and auth components.
  */
 export const ALERT_CODES = {
     ...APP_ALERT_CODES,
     ...AUTH_ALERT_CODES,
 } as const;
 
+// TODO:: determine use or delete
 export type AppAlertCode = typeof APP_ALERT_CODES[keyof typeof APP_ALERT_CODES];
+// TODO:: determine use or delete
 export type AuthAlertCode = typeof AUTH_ALERT_CODES[keyof typeof AUTH_ALERT_CODES];
+// TODO:: determine use or delete
 export type KnownAlertCode = typeof ALERT_CODES[keyof typeof ALERT_CODES];
 
-/** Canonical alert severities accepted by the registry and public alert types. */
+/**
+ * @fileOverview    Canonical alert severities accepted by the registry and public alert types.
+ */
 export const ALERT_SEVERITIES = ["success", "info", "warn", "error"] as const;
 export type AlertSeverityValue = (typeof ALERT_SEVERITIES)[number];
 
-/** Canonical presentation modes accepted by alert definitions. */
+/**
+ * @fileOverview    Canonical presentation modes accepted by alert definitions.
+ */
 export const ALERT_PRESENTATION_TYPES = {
     TOAST: "toast",
     INLINE: "inline",
