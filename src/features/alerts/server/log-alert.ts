@@ -1,5 +1,5 @@
 import {getAlertDefinition} from "@/features/alerts/create-alert";
-import {logger, LogContext} from "@/features/alerts/server/logger";
+import {LogContext, logger} from "@/features/alerts/server/logger";
 import type {PublicAlert} from "@/features/alerts/types";
 
 /**

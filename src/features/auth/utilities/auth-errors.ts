@@ -1,6 +1,6 @@
-import {AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";
 import {AUTH_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import type {AlertCode} from "@/features/alerts/registry";
+import {AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
 
 /**

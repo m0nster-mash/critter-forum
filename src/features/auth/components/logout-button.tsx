@@ -1,11 +1,11 @@
 "use client";
 
-import {AUTH_LABELS} from "@/features/auth/constants/ui";
-import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
 import {useAlerts} from "@/features/alerts/client/use-alerts";
 import {AUTH_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {createAlert} from "@/features/alerts/create-alert";
 import {alertFromThrown} from "@/features/alerts/from-thrown";
+import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
 import {signOut} from "@/lib/auth-client";
 import {REDIRECT} from "@/lib/constants/globals";
 import {useRouter} from "next/navigation";

@@ -5,44 +5,44 @@
 /* ------------------------------------------------------------------ */
 
 .alert {
-    --alert-bg: #e8f0fe;
-    --alert-fg: #0b2f6b;
     --alert-accent: #1a73e8;
-
     align-items: flex-start;
     background: var(--alert-bg);
+
+    --alert-bg: #e8f0fe;
     border: 1px solid var(--alert-accent);
     border-left-width: 4px;
     border-radius: 6px;
     color: var(--alert-fg);
     display: flex;
+    --alert-fg: #0b2f6b;
     gap: 0.625rem;
     line-height: 1.4;
     padding: 0.625rem 0.75rem;
 }
 
 .success {
+    --alert-accent: #1e8e3e;
     --alert-bg: #e6f4ea;
     --alert-fg: #0b4f1f;
-    --alert-accent: #1e8e3e;
 }
 
 .info {
+    --alert-accent: #1a73e8;
     --alert-bg: #e8f0fe;
     --alert-fg: #0b2f6b;
-    --alert-accent: #1a73e8;
 }
 
 .warning {
+    --alert-accent: #e37400;
     --alert-bg: #fff4e0;
     --alert-fg: #5a3a00;
-    --alert-accent: #e37400;
 }
 
 .error {
+    --alert-accent: #d93025;
     --alert-bg: #fdecea;
     --alert-fg: #7a1010;
-    --alert-accent: #d93025;
 }
 
 .icon {
