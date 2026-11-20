@@ -6,7 +6,13 @@ import Link from "next/link";
 import type {JSX} from "react";
 
 /**
- * Rendered when a route doesn't exist or `notFound()` is called. A Server Component, so it needs no client code.
+ * Rendered when a route doesn't exist or {@code NotFound()} is called.
+ *
+ * @fileOverview            A Server Component, so it needs no client code.
+ * @module                  `modules/alerts`
+ * @status                  Requires cleanup
+ *
+ * @TODO:                   Replace magic strings with consts
  *
  * @return  {JSX.Element}   The not-found UI.
  */

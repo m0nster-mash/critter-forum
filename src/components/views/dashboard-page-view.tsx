@@ -10,7 +10,13 @@ import {redirect} from "next/navigation";
 import {JSX} from "react";
 
 /**
- * Renders the protected dashboard page view.
+ * @fileOverview                    Renders the protected dashboard page view. Requires an authenticated session;
+ *                                  unauthenticated users are redirected to the login page while the session is
+ *                                  resolving.
+ * @status                          Requires refactoring
+ *
+ * @TODO                            Replace session checks with proper permission barriers once permissions have been
+ *                                  built out
  *
  * @return  {JSX.Element | null}    The dashboard view component, or null while authentication status is resolving
  */
@@ -18,10 +24,12 @@ export default function DashboardPageView(): JSX.Element | null {
 
     const {data: session, isPending} = useSession();
 
+    // TODO:: replace with proper permission barriers once permissions have been built out
     if (!isPending && !session?.user) {
         redirect(REDIRECT);
     }
 
+    // TODO:: replace with proper permission barriers once permissions have been built out
     if (isPending || !session?.user) {
         return null;
     }

@@ -4,10 +4,15 @@ import {JSX} from "react";
 /**
  * Renders the member dashboard panel view.
  *
+ * @status                          Requires fill replacement
+ *
+ * @TODO                            Replace content with proper dashboard page at a later date
+ *
  * @param   {DashboardPageProps}    props       The component properties containing user context
  * @param   {UserPropItems}         props.user  The authenticated user data
  *
- * @return  {JSX.Element}    The rendered dashboard panel JSX element.
+ * @return  {JSX.Element}           The rendered dashboard panel JSX element.
+
  */
 export function DashboardPagePanel({user}: DashboardPageProps): JSX.Element {
 

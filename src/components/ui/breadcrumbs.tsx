@@ -7,10 +7,13 @@ import {Fragment} from "react";
 /**
  * Renders a breadcrumb navigation trail.
  *
- * Each item is rendered as a link if an `href` is provided, otherwise as plain text.
+ * @fileOverview                Each item is rendered as a link if an `href` is provided, otherwise as plain text.
+ * @status                      Requires restyling
  *
- * @param   {BreadcrumbProps}   props               The props object for the Breadcrumbs component
- * @param   {BreadcrumbItem[]}  [props.breadcrumb]  Optional array of breadcrumb items to render
+ * @TODO                        Restyle breadcrumbs at a later date
+ *
+ * @param   {BreadcrumbProps}   props               The property object for the Breadcrumbs component
+ * @param   {BreadcrumbItem[]}  [props.breadcrumb]  Array of breadcrumb items to render
  */
 export function Breadcrumbs({breadcrumb}: BreadcrumbProps) {
 

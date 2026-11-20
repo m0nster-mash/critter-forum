@@ -5,10 +5,13 @@ import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import type {Metadata} from "next";
 import "./globals.css";
-import React from "react";
+import React, {JSX} from "react";
 
 /**
- * @TODO    Document
+ * Default document metadata used by the application
+ *
+ * @status  Requires refactoring
+ *
  * @TODO    Migrate to global constant
  */
 export const metadata: Metadata = {
@@ -17,18 +20,20 @@ export const metadata: Metadata = {
 };
 
 /**
- * @TODO    Document
+ * Renders the root document shell.
  *
- * @param   param0
- * @param   param0.children
+ * @fileOverview                Wraps every route in the shared alert provider and global error listeners. The
+ *                              navigation links expose the public pages and authenticated dashboard entry point.
+ * @status                      Requires fill replacement
  *
- * @returns
+ * @TODO                        Replace content with proper layout at a later date
+ *
+ * @param   {Readonly}  props   Root layout props containing the active route content
+ *
+ * @return  {JSX.Element}       The complete HTML document for the application
  */
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>): JSX.Element {
+
     return (
         <html lang="en">
         <body>

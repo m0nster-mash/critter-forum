@@ -7,7 +7,10 @@ import {JSX} from "react";
 /**
  * Renders the public home page view.
  *
+ * @status                  Good
+ *
  * @return  {JSX.Element}   The home page view JSX element
+
  */
 export function HomePageView(): JSX.Element {
     return (

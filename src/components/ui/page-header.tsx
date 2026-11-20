@@ -3,11 +3,13 @@ import {Breadcrumbs} from "@/components/ui/breadcrumbs";
 import {PageHeaderProps} from "@/lib/types";
 
 /**
- * A standard header intended to appear at the top of every page.
+ * @fileOverview                A standard header that appears at the top of every page, showing the page title and
+ *                              breadcrumb trail.
+ * @status                      Good; may require re-styling later.
  *
  * @param   {PageHeaderProps}   props               The props object for the PageHeader component
  * @param   {ReactNode}         props.title         The page's title rendered inside the header
- * @param   {BreadcrumbItem[]}  [props.breadcrumb]  Optional; breadcrumb items for the navigation trail
+ * @param   {BreadcrumbItem[]}  [props.breadcrumb]  Breadcrumb items for the navigation trail
  */
 export function PageHeader({title, breadcrumb}: PageHeaderProps) {
 
