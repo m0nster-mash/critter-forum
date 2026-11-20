@@ -1,6 +1,6 @@
 import type {AlertLogLevel} from "@/features/alerts/types";
 
-/** Supported logger levels and their stable order. */
+/** Supported logger levels and their ordering. */
 export const LOG_LEVELS = {
     DEBUG: "debug",
     INFO: "info",
@@ -39,7 +39,16 @@ export const LOGGER_DEFAULT_FORMATS = {
 } as const;
 
 /** Browser-safe context allow-list and truncation limit. */
-export const CLIENT_LOG_SAFE_KEYS = ["code", "ref", "severity", "field", "scope", "digest", "status"] as const;
+export const CLIENT_LOG_SAFE_KEYS = [
+    "code",
+    "ref",
+    "severity",
+    "field",
+    "scope",
+    "digest",
+    "status",
+] as const;
+
 export const MAX_CLIENT_LOG_VALUE_LENGTH = 120;
 export const CLIENT_LOG_ERROR_KEY = "err";
 export const CLIENT_LOG_ERROR_NAME_KEY = "errorName";
@@ -53,12 +62,15 @@ export const LOGGER_REDACTION = {
     MAX_NESTING_DEPTH: 6,
 } as const;
 
-export const SENSITIVE_LOG_KEY_PATTERN = /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i;
+export const SENSITIVE_LOG_KEY_PATTERN =
+    /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i;
+
 export const QUERY_PARAMS_PATTERN = /\nparams:[\s\S]*?(?=\n\s+at |$)/;
 export const QUERY_PARAMS_REDACTION = "\nparams: [REDACTED]";
 
-/** JSON fields owned by the logger; colliding context keys are namespaced. */
-export const LOGGER_RESERVED_JSON_KEYS: readonly string[] = ["level", "time", "msg"];
+/** JSON envelope fields owned by the logger. */
+export const LOGGER_RESERVED_JSON_KEYS = ["level", "time", "msg"] as const;
+
 export const LOGGER_JSON_KEYS = {
     LEVEL: "level",
     TIME: "time",

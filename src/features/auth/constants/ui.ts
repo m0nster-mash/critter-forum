@@ -1,6 +1,4 @@
-/**
- * Immutable object containing UI button and display labels for authentication components.
- */
+/** User-facing labels used by authentication components. */
 export const AUTH_LABELS = {
     LOGIN_LABEL: "Login",
     LOGIN_PROCESSING: "Logging in...",
@@ -13,20 +11,14 @@ export const AUTH_LABELS = {
     USER_PASSWORD: "Password",
 } as const;
 
-/**
- * Authentication form field names.
- *
- * Used for validation results and alert field metadata.
- */
+/** Authentication form field names used by validation and alert metadata. */
 export const AUTH_FIELDS = {
     NAME: "name",
     EMAIL: "email",
     PASSWORD: "password",
 } as const;
 
-/**
- * HTML IDs for authentication form inputs.
- */
+/** HTML IDs used by authentication form inputs and their alert descriptions. */
 export const AUTH_FORM_IDS = {
     LOGIN_EMAIL: "login-email",
     LOGIN_PASSWORD: "login-password",
@@ -38,13 +30,4 @@ export const AUTH_FORM_IDS = {
     REGISTER_ALERT_NAME: "register-username-alert",
     REGISTER_ALERT_EMAIL: "register-email-alert",
     REGISTER_ALERT_PASSWORD: "register-password-alert",
-} as const;
-
-/**
- * HTML IDs for registration field-level components.
- */
-export const AUTH_ALERT_IDS = {
-    REGISTER_NAME: "register-username-alert",
-    REGISTER_EMAIL: "register-email-alert",
-    REGISTER_PASSWORD: "register-password-alert",
 } as const;

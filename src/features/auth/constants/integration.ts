@@ -1,8 +1,4 @@
-/**
- * Error codes returned by Better Auth.
- *
- * Preserve the exact spelling and casing used by the external library.
- */
+/** Error codes returned by Better Auth. Preserve the external spelling and casing. */
 export const BETTER_AUTH_ERROR_CODES = {
     INVALID_EMAIL_OR_PASSWORD: "INVALID_EMAIL_OR_PASSWORD",
     USER_ALREADY_EXISTS: "USER_ALREADY_EXISTS",
@@ -12,16 +8,12 @@ export const BETTER_AUTH_ERROR_CODES = {
     VALIDATION_ERROR: "VALIDATION_ERROR",
 } as const;
 
-/**
- * Stable identifiers for application authentication actions.
- */
+/** Stable identifiers for application authentication actions. */
 export const AUTH_ACTION_NAMES = {
     REGISTER: "auth.register",
 } as const;
 
-/**
- * HTTP status codes used when interpreting authentication responses.
- */
+/** HTTP status codes used when interpreting authentication responses. */
 export const AUTH_HTTP_STATUS = {
     TOO_MANY_REQUESTS: 429,
 } as const;
