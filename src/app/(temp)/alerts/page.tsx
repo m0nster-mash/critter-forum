@@ -4,6 +4,7 @@ import {AlertBanner} from "@/components/alerts/alert-banner";
 import {useAlerts} from "@/lib/alerts/client/use-alerts";
 import {createAlert} from "@/lib/alerts/create-alert";
 import type {AlertCode} from "@/lib/alerts/registry";
+import type {AlertOverrides} from "@/lib/alerts/types";
 
 /**
  * AlertTestPage
@@ -12,18 +13,18 @@ import type {AlertCode} from "@/lib/alerts/registry";
  * registered alert code (no free-form messages), covering each severity and
  * presentation, plus the thrown-error / unhandled-rejection paths.
  *
- * Must be rendered inside <AlertProvider> (mounted by the root layout), because
- * useAlerts() reads alert context.
+ * Must be rendered inside <AlertProvider> (mounted by the root layout at
+ * src/app/layout.tsx), because useAlerts() reads alert context.
  */
 export default function AlertTestPage() {
     const {present, clear, notify, inline} = useAlerts();
 
-    const raiseToast = (code: AlertCode, overrides?: Parameters<typeof createAlert>[1]): void => {
+    const raiseToast = (code: AlertCode, overrides?: AlertOverrides): void => {
         notify(createAlert(code, overrides));
     };
 
-    const raiseInline = (code: AlertCode, overrides?: Parameters<typeof createAlert>[1]): void => {
-        present(createAlert(code, overrides));
+    const raiseInline = (code: AlertCode, overrides?: AlertOverrides): void => {
+        present(createAlert(code, {...overrides, presentation: "inline"}));
     };
 
     return (
@@ -31,8 +32,8 @@ export default function AlertTestPage() {
             <h1>Alert &amp; Error Workflow Test</h1>
             <p>
                 Click a button to trigger an alert type. Toasts appear in the global stack
-                (top-right); inline banners render just beneath their group. All text comes
-                from the alert registry.
+                (top-right); inline banners render beneath their group. All text comes from
+                the alert registry.
             </p>
 
             <section style={{marginTop: 24, marginBottom: 32}}>
@@ -68,21 +69,21 @@ export default function AlertTestPage() {
             <section style={{marginTop: 24, marginBottom: 32}}>
                 <h2>Inline banners</h2>
                 <p style={{fontSize: 13, color: "#555"}}>
-                    One inline alert at a time. Clicking a banner button replaces the current one; "Clear inline"
-                    removes it.
+                    One inline alert at a time. Clicking a banner button replaces the current
+                    one; "Clear inline" removes it.
                 </p>
                 <div style={{display: "flex", flexWrap: "wrap", gap: 8}}>
-                    <button type="button" onClick={() => raiseInline("AUTH_REGISTER_SUCCESS")}>
+                    <button type="button" onClick={() => raiseInline("AUTH_LOGIN_SUCCESS")}>
                         Success banner
                     </button>
-                    <button type="button" onClick={() => raiseInline("AUTH_REGISTER_EMAIL_TAKEN")}>
+                    <button type="button" onClick={() => raiseInline("AUTH_LOGIN_FAILED")}>
                         Error banner
                     </button>
                     <button type="button" onClick={() => raiseInline("AUTH_REGISTER_EMAIL_INVALID")}>
                         Warning banner (field: email)
                     </button>
-                    <button type="button" onClick={() => raiseInline("APP_NOT_FOUND", {severity: "info"})}>
-                        Info banner (severity override)
+                    <button type="button" onClick={() => raiseInline("APP_NOT_FOUND")}>
+                        Warning banner (not found)
                     </button>
                     <button type="button" onClick={clear}>
                         Clear inline
@@ -90,7 +91,7 @@ export default function AlertTestPage() {
                 </div>
                 {inline && (
                     <div style={{marginTop: 12}}>
-                        <AlertBanner alert={inline} variant="banner"/>
+                        <AlertBanner alert={inline} variant="banner" />
                     </div>
                 )}
             </section>
@@ -116,14 +117,15 @@ export default function AlertTestPage() {
                     </button>
                     <button
                         type="button"
-                        onClick={() => raiseInline("APP_UNKNOWN_ERROR", {presentation: "inline"})}
+                        onClick={() => raiseInline("APP_UNKNOWN_ERROR")}
                     >
                         Present unknown-error inline
                     </button>
                 </div>
                 <p style={{fontSize: 13, color: "#555"}}>
-                    Thrown errors and unhandled rejections are handled by the global error listeners and turned into
-                    a generic toast. Open the browser console to see the logged output.
+                    Thrown errors and unhandled rejections are handled by the global error
+                    listeners and turned into a generic toast. Open the browser console to see
+                    the logged output.
                 </p>
             </section>
         </main>
