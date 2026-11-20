@@ -6,15 +6,15 @@ import Link from "next/link";
 import type {JSX} from "react";
 
 /**
- * Rendered when a route doesn't exist or {@code NotFound()} is called.
+ * @module          `features/alerts`
+ * @status          Requires cleanup
  *
- * @fileOverview            A Server Component, so it needs no client code.
- * @module                  `modules/alerts`
- * @status                  Requires cleanup
+ * @TODO            Replace magic strings with consts
  *
- * @TODO:                   Replace magic strings with consts
+ * @fileOverview    Rendered when a route doesn't exist or {@code NotFound()} is called.
+ * @remarks         A Server Component, so it needs no client code.
  *
- * @return  {JSX.Element}   The not-found UI.
+ * @return          {JSX.Element}   The not-found UI.
  */
 export default function NotFound(): JSX.Element {
 

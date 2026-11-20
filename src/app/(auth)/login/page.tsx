@@ -3,9 +3,10 @@ import {LoginPageView} from "@/features/auth/views/login-page-view";
 /**
  * Public -> Login Page
  *
- * @fileoverview    Displays the {@link LoginPageView}
- * @module          `modules/auth`
+ * @module          `features/auth`
  * @status          Good
+ *
+ * @fileoverview    Displays the {@link LoginPageView}
  */
 export default function LoginPage() {
     return (

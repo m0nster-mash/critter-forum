@@ -12,8 +12,13 @@ import {createAlert} from "@/features/alerts/create-alert";
 import {useEffect} from "react";
 
 /**
- * Whether a window error is something the user can't act on and the app didn't cause: browser-extension scripts,
- * cross-origin "Script error." noise, and the benign ResizeObserver notification.
+ * @fileOverview    Determines whether a window error is something the user can't act on and the app didn't cause:
+ *                  browser-extension scripts, cross-origin "Script error." noise, and the benign {@link ResizeObserver}
+ *                  notification.
+ * @module          `features/alerts`
+ * @status          Good
+ *
+ * @param           {ErrorEvent}    event   TODO:: document
  */
 function isNoise(event: ErrorEvent): boolean {
 
@@ -22,6 +27,17 @@ function isNoise(event: ErrorEvent): boolean {
 
     return Boolean(event.filename) && !event.filename.startsWith(window.location.origin);
 }
+
+
+/**
+ * @fileOverview    Mounts global browser error and unhandled rejection listeners that route errors through the alert
+ *                  system. Renders nothing; mounted for its side effects.
+ * @module          features/alerts/client/global-error-listeners`
+ * @status          Good
+ *
+ * @return  {null}          Nothing; mounted for its side effects.
+ */
+
 
 /**
  * Catches what React error boundaries can't (errors thrown in event handlers and timers, unhandled promise rejections)

@@ -9,7 +9,12 @@ import type {LogContext, PublicAlert, ToastItem} from "@/features/alerts/types";
 import {createContext, type JSX, type ReactNode, useCallback, useContext, useMemo, useReducer, useRef} from "react";
 
 /**
- * Value provided by AlertProvider.
+ * Value provided by {@link AlertProvider}.
+ *
+ * @module      `features/alerts`
+ * @status      Requires relocation
+ *
+ * @TODO        Relocate to `types.ts`
  *
  * @property    {ToastItem[]}   toasts      Toasts currently on screen
  * @property    {Function}      notify      Shows an alert as a toast and logs it per its registry policy
@@ -26,13 +31,18 @@ export interface AlertContextValue {
 const AlertContext = createContext<AlertContextValue | null>(null);
 
 /**
- * Owns the toast stack and the notification region. Mount once, in the root layout, so toasts survive client-side
- * navigation (e.g. "Account created" still shows after the redirect to the dashboard).
+ * @fileOverview            Provides the alert context provider, the context value type, and the low-level
+ *                          {@code useAlertContext} accessor hook. Mount once in the root layout so toasts survive
+ *                          client-side navigation.
+ * @module                  `features/alerts`
+ * @status                  Requires refactoring
  *
- * @param   {Object}    props           Component properties
- * @param   {ReactNode} props.children  The application
+ * @TODO                    Migrate HTML return content into component and turn this file into a `.ts`
  *
- * @return  {JSX.Element}   The provider, with the toast viewport and global error listeners mounted beside the children.
+ * @param   {Object}        props           Component properties
+ * @param   {ReactNode}     props.children  The application
+ *
+ * @return  {JSX.Element}   The provider with the toast viewport and global error listeners mounted beside the children.
  */
 export function AlertProvider({children}: { children: ReactNode }): JSX.Element {
 
@@ -55,9 +65,9 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
     const dismiss = useCallback((id: string) => dispatch({type: TOAST_ACTION_TYPES.DISMISS, id}), []);
     const clear = useCallback(() => dispatch({type: TOAST_ACTION_TYPES.CLEAR}), []);
     const value = useMemo(() => (
-            {toasts, notify, dismiss, clear}),
-        [toasts, notify, dismiss, clear]);
+        {toasts, notify, dismiss, clear}), [toasts, notify, dismiss, clear]);
 
+    // TODO:: migrate into component
     return (
         <AlertContext.Provider value={value}>
             {children}
@@ -68,15 +78,23 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
 }
 
 /**
- * Reads the alert context. Prefer `useAlerts()`; this is the low-level accessor.
+ * Reads the alert context.
+ *
+ * @remarks                     Prefer {@link useAlerts()}; this is the low-level accessor.
+ * @module                      `features/alerts`
+ * @status                      Requires refactoring
+ *
+ * @TODO                        Replace magic strings with consts
+ * @TODO                        Investigate: does this need to be converted into a different error handling method?
  *
  * @return  {AlertContextValue} The context value.
  *
- * @throws  {Error} Throws if called outside an AlertProvider (a programmer error).
+ * @throws  {Error}             Throws if called outside an AlertProvider (a programmer error).
  */
 export function useAlertContext(): AlertContextValue {
     const context = useContext(AlertContext);
     if (!context) {
+        // TODO:: replace magic string and (potentially) convert to correct error handling method
         throw new Error("useAlertContext must be used inside <AlertProvider>.");
     }
     return context;

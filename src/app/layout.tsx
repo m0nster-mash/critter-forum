@@ -8,11 +8,11 @@ import "./globals.css";
 import React, {JSX} from "react";
 
 /**
- * Default document metadata used by the application
+ * @status          Requires refactoring
  *
- * @status  Requires refactoring
+ * @TODO            Migrate to global constant
  *
- * @TODO    Migrate to global constant
+ * @fileOverview    Default document metadata used by the application
  */
 export const metadata: Metadata = {
     title: "critter-forum",
@@ -20,17 +20,17 @@ export const metadata: Metadata = {
 };
 
 /**
- * Renders the root document shell.
+ * @status          Requires fill replacement
  *
- * @fileOverview                Wraps every route in the shared alert provider and global error listeners. The
- *                              navigation links expose the public pages and authenticated dashboard entry point.
- * @status                      Requires fill replacement
+ * @TODO            Replace content with proper layout at a later date
  *
- * @TODO                        Replace content with proper layout at a later date
+ * @fileOverview    Renders the root document shell.
+ * @remarks         Wraps every route in the shared alert provider and global error listeners.
+ * @remarks         The navigation links expose the public pages and authenticated dashboard entry point.
  *
- * @param   {Readonly}  props   Root layout props containing the active route content
+ * @param           {Readonly}  props   Root layout props containing the active route content
  *
- * @return  {JSX.Element}       The complete HTML document for the application
+ * @return          {JSX.Element}       The complete HTML document for the application
  */
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>): JSX.Element {
 

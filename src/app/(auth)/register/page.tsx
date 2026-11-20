@@ -3,9 +3,10 @@ import {RegistrationPageView} from "@/features/auth/views/registration-page-view
 /**
  * Public -> Registration Page
  *
- * @fileoverview    Displays the {@link RegistrationPageView}
- * @module          `modules/auth`
+ * @module          `features/auth`
  * @status          Good
+ *
+ * @fileoverview    Displays the {@link RegistrationPageView}
  */
 export default function RegistrationPage() {
     return (

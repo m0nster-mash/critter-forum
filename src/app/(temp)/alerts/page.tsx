@@ -9,17 +9,17 @@ import {AlertOverrides} from "@/features/alerts/types";
 /**
  * Temp -> Alert and Error Handling test page
  *
- * @fileoverview    Manual test page for the alert and error workflows. Every button raises a registered alert code
- *                  (no free-form messages), covering each severity and presentation, plus the thrown-error /
- *                  unhandled-rejection paths.
- *
- *                  Must be rendered inside {AlertProvider} (mounted by the root layout at src/app/layout.tsx),
- *                  because {@code useAlerts()} reads alert context.
- * @module          `modules/alerts`
+ * @module          `features/alerts`
  * @status          Broken; linting errors
  *
  * @TODO            Fix the {@code useAlerts()} variables
  * @TODO            Replace magic strings with consts
+ *
+ * @fileoverview    Manual test page for the alert and error workflows. Every button raises a registered alert code
+ *                  (no free-form messages), covering each severity and presentation, plus the thrown-error /
+ *                  unhandled-rejection paths.
+ * @remarks         Must be rendered inside {@link AlertProvider} (mounted by the root layout at `src/app/layout.tsx`),
+ *                  because {@code useAlerts()} reads alert context.
  */
 export default function AlertTestPage() {
 

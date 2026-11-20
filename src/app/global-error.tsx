@@ -7,18 +7,19 @@ import {getErrorDigest} from "@/features/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
 
 /**
- * @fileOverview            Last-resort error boundary: replaces the root layout when the layout itself throws, so it
- *                          must render its own {@code <html>} and {@code <body>}. Deliberately independent of the root
- *                          layout and AlertProvider, which aren't available here.
- * @module                  `modules/alerts`
- * @status                  Requires cleanup
+ * @module          `features/alerts`
+ * @status          Requires cleanup
  *
- * @TODO                    Replace magic strings with consts
- * @TODO                    Remove inline styles
+ * @TODO            Replace magic strings with consts
+ * @TODO            Remove inline styles
  *
- * @param   {Object}        props           Component properties
- * @param   {unknown}       props.error     The thrown value; not guaranteed to be an Error
- * @param   {() => void}    props.retry     Re-fetches and re-renders the application
+ * @fileOverview    Last-resort error boundary. Replaces the root layout when the layout itself throws, so it must
+ *                  render its own {@code <html>} and {@code <body>}.
+ * @remarks         Deliberately independent of the root layout and {@link AlertProvider}, which aren't available here.
+ *
+ * @param           {Object}        props           Component properties
+ * @param           {unknown}       props.error     The thrown value; not guaranteed to be an Error
+ * @param           {() => void}    props.retry     Re-fetches and re-renders the application
  *
  * @return  {JSX.Element}   The error UI.
  */

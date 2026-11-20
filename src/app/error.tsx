@@ -7,22 +7,23 @@ import {getErrorDigest} from "@/features/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
 
 /**
- * Route-level error boundary: shown inside the root layout when a page throws while rendering.
  *
- * @fileOverview            The user sees a generic alert with the error's digest as the reference, which matches the
- *                          server log entry written by {@see instrumentation.ts}. The error's message and stack are
- *                          never rendered.
- * @module                  `modules/alerts`
- * @status                  Requires cleanup
+ * @module          `features/alerts`
+ * @status          Requires cleanup
  *
- * @TODO                    Replace magic strings with consts
- * @TODO                    Investigate `instrumentation.ts` claim; that file does not appear to be in use.
+ * @TODO            Replace magic strings with consts
+ * @TODO            Investigate `instrumentation.ts` claim; that file does not appear to be in use.
  *
- * @param   {Object}        props           Component properties
- * @param   {unknown}       props.error     The thrown value; not guaranteed to be an Error
- * @param   {() => void}    props.retry     Re-fetches and re-renders the failed segment
+ * @fileOverview    Route-level error boundary: shown inside the root layout when a page throws while rendering.
+ * @remarks         The user sees a generic alert with the error's digest as the reference, which matches the server
+ *                  log entry written by {@see instrumentation.ts}.
+ * @remarks         The error's message and stack are never rendered.
  *
- * @return  {JSX.Element}   The error UI.
+ * @param           {Object}        props           Component properties
+ * @param           {unknown}       props.error     The thrown value; not guaranteed to be an Error
+ * @param           {() => void}    props.retry     Re-fetches and re-renders the failed segment
+ *
+ * @return          {JSX.Element}   The error UI.
  */
 export default function RouteError({error, retry}: {
     error: unknown;
