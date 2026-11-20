@@ -2,6 +2,9 @@
 
 import {logClientAlert} from "@/features/alerts/client/log-alert";
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
+import {ALERT_PRESENTATION_TYPES} from "@/features/alerts/constants/alert-types";
+import {LOG_SCOPES} from "@/features/alerts/constants/observability";
 import {createAlert} from "@/features/alerts/create-alert";
 import {getErrorDigest} from "@/features/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
@@ -9,9 +12,7 @@ import {type JSX, useEffect, useMemo} from "react";
 /**
  *
  * @module          `features/alerts`
- * @status          Requires cleanup
- * @TODO            Replace magic strings with consts
- * @TODO            Investigate `instrumentation.ts` claim; that file does not appear to be in use.
+ * @status          Good
  *
  * @fileOverview    Route-level error boundary: shown inside the root layout when a page throws while rendering.
  * @remarks         The user sees a generic alert with the error's digest as the reference, which matches the server
@@ -30,8 +31,8 @@ export default function RouteError({error, retry}: {
 }): JSX.Element {
 
     const alert = useMemo(
-        () => createAlert("APP_UNKNOWN_ERROR", { // TODO:: replace magic string with const.
-            presentation: "inline", // TODO:: replace magic string with const.
+        () => createAlert(APP_ALERT_CODES.UNKNOWN_ERROR, {
+            presentation: ALERT_PRESENTATION_TYPES.INLINE,
             ref: getErrorDigest(error)
         }),
         [error],
@@ -40,7 +41,7 @@ export default function RouteError({error, retry}: {
     useEffect(() => {
         logClientAlert(alert, {
             err: error,
-            scope: "route.render_error", // TODO:: replace magic string with const.
+            scope: LOG_SCOPES.ROUTE_RENDER_ERROR,
         });
     }, [alert, error]);
 
@@ -48,7 +49,6 @@ export default function RouteError({error, retry}: {
         <>
             <AlertBanner alert={alert}/>
             <p>
-                {/*TODO:: replace text label with const.*/}
                 <button type="button" onClick={() => retry()}>Try again</button>
             </p>
         </>

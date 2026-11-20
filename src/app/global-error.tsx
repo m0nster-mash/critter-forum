@@ -2,6 +2,9 @@
 
 import {logClientAlert} from "@/features/alerts/client/log-alert";
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
+import {ALERT_PRESENTATION_TYPES} from "@/features/alerts/constants/alert-types";
+import {LOG_SCOPES} from "@/features/alerts/constants/observability";
 import {createAlert} from "@/features/alerts/create-alert";
 import {getErrorDigest} from "@/features/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
@@ -9,7 +12,6 @@ import {type JSX, useEffect, useMemo} from "react";
 /**
  * @module          `features/alerts`
  * @status          Requires cleanup
- * @TODO            Replace magic strings with consts
  * @TODO            Remove inline styles
  *
  * @fileOverview    Last-resort error boundary. Replaces the root layout when the layout itself throws, so it must
@@ -29,9 +31,9 @@ export default function GlobalError({error, retry}: {
 
     const alert = useMemo(
         () => createAlert(
-            "APP_UNKNOWN_ERROR", { // TODO:: replace magic string with const.
-                presentation: "inline",  // TODO:: replace magic string with const.
-                ref: getErrorDigest(error)
+            APP_ALERT_CODES.UNKNOWN_ERROR, {
+                presentation: ALERT_PRESENTATION_TYPES.INLINE,
+                ref: getErrorDigest(error),
             }),
         [error],
     );
@@ -39,7 +41,7 @@ export default function GlobalError({error, retry}: {
     useEffect(() => {
         logClientAlert(alert, {
             err: error,
-            scope: "global.render_error" // TODO:: replace magic string with const.
+            scope: LOG_SCOPES.GLOBAL_RENDER_ERROR,
         });
     }, [alert, error]);
 
