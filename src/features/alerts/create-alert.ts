@@ -1,5 +1,6 @@
-import {ALERT_REGISTRY, AlertCode, FALLBACK_ALERT_CODE} from "@/lib/alerts/registry";
-import {AlertDefinition, AlertOverrides, PublicAlert} from "@/lib/alerts/types";
+import {ALERT_REGISTRY, AlertCode, FALLBACK_ALERT_CODE} from "@/features/alerts/registry";
+import {ALERT_TEMPLATE_PATTERNS} from "@/features/alerts/constants/observability";
+import {AlertDefinition, AlertOverrides, PublicAlert} from "@/features/alerts/types";
 
 /**
  * Type guard confirming a string is a registered alert code.
@@ -36,7 +37,7 @@ function interpolate(template: string, params?: Record<string, string | number>)
     if (!params) {
         return template;
     }
-    return template.replace(/\{(\w+)}/g, (token, key: string) =>
+    return template.replace(ALERT_TEMPLATE_PATTERNS.PARAMETER, (token, key: string) =>
         Object.hasOwn(params, key) ? String(params[key]) : token
     );
 }

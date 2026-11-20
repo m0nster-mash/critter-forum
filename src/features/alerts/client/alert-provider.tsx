@@ -1,10 +1,11 @@
 "use client";
 
-import {ToastViewport} from "@/features/alerts/components/toast-viewport";
 import {GlobalErrorListeners} from "@/features/alerts/client/global-error-listeners";
 import {logClientAlert} from "@/features/alerts/client/log-alert";
-import {type ToastItem, toastReducer} from "@/features/alerts/client/toast-state";
-import type {LogContext, PublicAlert} from "@/lib/alerts/types";
+import {toastReducer} from "@/features/alerts/client/toast-state";
+import {ToastViewport} from "@/features/alerts/components/toast-viewport";
+import {TOAST_ACTION_TYPES, TOAST_ID_PREFIX} from "@/features/alerts/constants/toast";
+import type {LogContext, PublicAlert, ToastItem} from "@/features/alerts/types";
 import {createContext, type JSX, type ReactNode, useCallback, useContext, useMemo, useReducer, useRef} from "react";
 
 /**
@@ -34,19 +35,28 @@ const AlertContext = createContext<AlertContextValue | null>(null);
  * @return  {JSX.Element}   The provider, with the toast viewport and global error listeners mounted beside the children.
  */
 export function AlertProvider({children}: { children: ReactNode }): JSX.Element {
+
     const [toasts, dispatch] = useReducer(toastReducer, []);
     const counter = useRef(0);
 
-    const notify = useCallback((alert: PublicAlert, detail?: LogContext) => {
+    const notify = useCallback((
+        alert: PublicAlert,
+        detail?: LogContext
+    ) => {
         logClientAlert(alert, detail);
         counter.current += 1;
-        dispatch({type: "add", id: `toast-${counter.current}`, alert});
+        dispatch({
+            type: TOAST_ACTION_TYPES.ADD,
+            id: `${TOAST_ID_PREFIX}${counter.current}`,
+            alert
+        });
     }, []);
 
-    const dismiss = useCallback((id: string) => dispatch({type: "dismiss", id}), []);
-    const clear = useCallback(() => dispatch({type: "clear"}), []);
-
-    const value = useMemo(() => ({toasts, notify, dismiss, clear}), [toasts, notify, dismiss, clear]);
+    const dismiss = useCallback((id: string) => dispatch({type: TOAST_ACTION_TYPES.DISMISS, id}), []);
+    const clear = useCallback(() => dispatch({type: TOAST_ACTION_TYPES.CLEAR}), []);
+    const value = useMemo(() => (
+            {toasts, notify, dismiss, clear}),
+        [toasts, notify, dismiss, clear]);
 
     return (
         <AlertContext.Provider value={value}>

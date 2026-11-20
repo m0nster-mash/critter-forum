@@ -1,6 +1,6 @@
 /**
  * Throwaway sanity check for the alert foundation. Safe to delete once real tests exist.
- * Run with: npx tsx scripts/alerts-check.ts
+ * Run with: npx tsx scripts/components-check.ts
  */
 import assert from "node:assert/strict";
 import {createAlert, getAlertDefinition, isAlertCode} from "@/features/alerts/create-alert";

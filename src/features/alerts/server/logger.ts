@@ -1,23 +1,23 @@
-import type {AlertLogLevel, LogContext, Logger} from "@/lib/alerts/types";
+import type {AlertLogLevel, LogContext, Logger, LogFormat, SerializedError} from "@/features/alerts/types";
+import {
+    LOGGER_ANSI,
+    LOGGER_ANSI_COLORS,
+    LOGGER_DEFAULT_FORMATS,
+    LOGGER_DEFAULT_LEVELS,
+    LOGGER_ENVIRONMENTS,
+    LOGGER_REDACTION,
+    LOGGER_RESERVED_JSON_KEYS,
+    LOGGER_TEXT,
+    LOGGER_JSON_KEYS,
+    LOG_LEVELS,
+    LOG_FORMATS,
+    LOG_LEVEL_ORDER,
+    QUERY_PARAMS_PATTERN,
+    QUERY_PARAMS_REDACTION,
+    SENSITIVE_LOG_KEY_PATTERN,
+} from "@/features/alerts/constants/logger";
 
 export type {LogContext, Logger};
-
-const LEVEL_ORDER: Record<AlertLogLevel, number> = {debug: 10, info: 20, warn: 30, error: 40};
-const REDACTED = "[REDACTED]";
-const SENSITIVE_KEY = /pass(word|wd)?|secret|token|authorization|cookie|api[-_]?key|credential/i;
-const MAX_DEPTH = 6;
-const RESERVED_KEYS = ["level", "time", "msg"];
-
-type LogFormat = "pretty" | "json";
-
-interface SerializedError {
-    name: string;
-    message: string;
-    stack?: string;
-    cause?: unknown;
-
-    [extra: string]: unknown;
-}
 
 // ============================================================================
 // CONFIG
@@ -30,17 +30,17 @@ interface SerializedError {
  * - `LOG_FORMAT`: `pretty | json`. Default: `json` in production, `pretty` everywhere else.
  */
 function getConfig(): { minLevel: AlertLogLevel; format: LogFormat } {
-    const isProduction = process.env.NODE_ENV === "production";
+    const isProduction = process.env.NODE_ENV === LOGGER_ENVIRONMENTS.PRODUCTION;
     const requestedLevel = process.env.LOG_LEVEL?.toLowerCase();
     const requestedFormat = process.env.LOG_FORMAT?.toLowerCase();
 
     return {
-        minLevel: requestedLevel && Object.hasOwn(LEVEL_ORDER, requestedLevel)
+        minLevel: requestedLevel && Object.hasOwn(LOG_LEVEL_ORDER, requestedLevel)
             ? (requestedLevel as AlertLogLevel)
-            : isProduction ? "info" : "debug",
-        format: requestedFormat === "json" || requestedFormat === "pretty"
+            : isProduction ? LOGGER_DEFAULT_LEVELS.SERVER_PRODUCTION : LOGGER_DEFAULT_LEVELS.SERVER_DEVELOPMENT,
+        format: requestedFormat === LOG_FORMATS.JSON || requestedFormat === LOG_FORMATS.PRETTY
             ? requestedFormat
-            : isProduction ? "json" : "pretty",
+            : isProduction ? LOGGER_DEFAULT_FORMATS.PRODUCTION : LOGGER_DEFAULT_FORMATS.DEVELOPMENT,
     };
 }
 
@@ -53,10 +53,8 @@ function getConfig(): { minLevel: AlertLogLevel; format: LogFormat } {
  * Those can hold emails and password hashes, and key-based redaction can't see inside a message string, so the
  * parameter list is cut out of both the message and the stack. The SQL itself is kept.
  */
-const QUERY_PARAMS = /\nparams:[\s\S]*?(?=\n\s+at |$)/;
-
 function redactQueryParams(text: string): string {
-    return text.replace(QUERY_PARAMS, "\nparams: [REDACTED]");
+    return text.replace(QUERY_PARAMS_PATTERN, QUERY_PARAMS_REDACTION);
 }
 
 function serializeError(error: Error, depth: number, ancestors: WeakSet<object>): SerializedError {
@@ -70,8 +68,8 @@ function serializeError(error: Error, depth: number, ancestors: WeakSet<object>)
 
     for (const key of Object.keys(error)) {
         if (key in serialized) continue;
-        serialized[key] = SENSITIVE_KEY.test(key)
-            ? REDACTED
+        serialized[key] = SENSITIVE_LOG_KEY_PATTERN.test(key)
+            ? LOGGER_REDACTION.REDACTED
             : normalize((error as unknown as Record<string, unknown>)[key], depth + 1, ancestors);
     }
 
@@ -95,14 +93,14 @@ function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): u
         case "symbol":
             return value.toString();
         case "function":
-            return "[Function]";
+            return LOGGER_REDACTION.FUNCTION;
     }
 
     if (value === null) return null;
 
     const object = value as object;
-    if (depth >= MAX_DEPTH) return "[MaxDepth]";
-    if (ancestors.has(object)) return "[Circular]";
+    if (depth >= LOGGER_REDACTION.MAX_NESTING_DEPTH) return LOGGER_REDACTION.MAX_DEPTH;
+    if (ancestors.has(object)) return LOGGER_REDACTION.CIRCULAR;
 
     if (object instanceof Error) return serializeError(object, depth, ancestors);
     if (object instanceof Date) return object.toISOString();
@@ -116,7 +114,7 @@ function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): u
         const entries: Record<string, unknown> = {};
         for (const [key, inner] of Object.entries(object)) {
             if (inner === undefined) continue;
-            entries[key] = SENSITIVE_KEY.test(key) ? REDACTED : normalize(inner, depth + 1, ancestors);
+            entries[key] = SENSITIVE_LOG_KEY_PATTERN.test(key) ? LOGGER_REDACTION.REDACTED : normalize(inner, depth + 1, ancestors);
         }
         result = entries;
     }
@@ -137,10 +135,14 @@ function isSerializedError(value: unknown): value is SerializedError {
 }
 
 function formatJson(level: AlertLogLevel, message: string, data: LogContext): string {
-    const record: LogContext = {level, time: new Date().toISOString(), msg: message};
+    const record: LogContext = {
+        [LOGGER_JSON_KEYS.LEVEL]: level,
+        [LOGGER_JSON_KEYS.TIME]: new Date().toISOString(),
+        [LOGGER_JSON_KEYS.MESSAGE]: message,
+    };
 
     for (const [key, value] of Object.entries(data)) {
-        record[RESERVED_KEYS.includes(key) ? `ctx_${key}` : key] = value;
+        record[LOGGER_RESERVED_JSON_KEYS.includes(key) ? `${LOGGER_JSON_KEYS.CONTEXT_PREFIX}${key}` : key] = value;
     }
 
     return JSON.stringify(record);
@@ -154,15 +156,13 @@ function describeError(error: SerializedError, indent: string): string[] {
         lines.push(`${indent}  ${JSON.stringify(extras)}`);
     }
     if (isSerializedError(cause)) {
-        lines.push(`${indent}caused by:`, ...describeError(cause, indent));
+        lines.push(`${indent}${LOGGER_TEXT.CAUSED_BY}`, ...describeError(cause, indent));
     } else if (cause !== undefined) {
-        lines.push(`${indent}caused by: ${JSON.stringify(cause)}`);
+        lines.push(`${indent}${LOGGER_TEXT.CAUSED_BY} ${JSON.stringify(cause)}`);
     }
 
     return lines;
 }
-
-const LEVEL_COLORS: Record<AlertLogLevel, string> = {debug: "90", info: "36", warn: "33", error: "31"};
 
 /**
  * Whether to color pretty output. Reads `stdout` through `globalThis` so the Edge bundler, which also compiles
@@ -183,14 +183,14 @@ function formatPretty(level: AlertLogLevel, message: string, data: LogContext): 
 
     for (const [key, value] of Object.entries(data)) {
         if (isSerializedError(value)) {
-            errorLines.push(`  ${key} →`, ...describeError(value, "    "));
+            errorLines.push(`  ${key} →`, ...describeError(value, "    ")); // TODO:: replace → with icon
         } else {
             plain[key] = value;
         }
     }
 
     const label = level.toUpperCase().padEnd(5);
-    const colored = colorEnabled() ? `\x1b[${LEVEL_COLORS[level]}m${label}\x1b[0m` : label;
+    const colored = colorEnabled() ? `${LOGGER_ANSI.PREFIX}${LOGGER_ANSI_COLORS[level]}${LOGGER_ANSI.COLOR_SUFFIX}${label}${LOGGER_ANSI.RESET}` : label;
     const context = Object.keys(plain).length > 0 ? ` ${JSON.stringify(plain)}` : "";
 
     return [`${time} ${colored} ${message}${context}`, ...errorLines].join("\n");
@@ -202,10 +202,10 @@ function formatPretty(level: AlertLogLevel, message: string, data: LogContext): 
 
 function emit(level: AlertLogLevel, message: string, bindings: LogContext, context?: LogContext): void {
     const {minLevel, format} = getConfig();
-    if (LEVEL_ORDER[level] < LEVEL_ORDER[minLevel]) return;
+    if (LOG_LEVEL_ORDER[level] < LOG_LEVEL_ORDER[minLevel]) return;
 
     const data = normalize({...bindings, ...context}, 0, new WeakSet()) as LogContext;
-    const line = format === "json" ? formatJson(level, message, data) : formatPretty(level, message, data);
+    const line = format === LOG_FORMATS.JSON ? formatJson(level, message, data) : formatPretty(level, message, data);
 
     console[level](line);
 }
@@ -218,11 +218,12 @@ function emit(level: AlertLogLevel, message: string, bindings: LogContext, conte
  * @return  {Logger}    The logger instance.
  */
 export function createLogger(bindings: LogContext = {}): Logger {
+
     return {
-        debug: (message, context) => emit("debug", message, bindings, context),
-        info: (message, context) => emit("info", message, bindings, context),
-        warn: (message, context) => emit("warn", message, bindings, context),
-        error: (message, context) => emit("error", message, bindings, context),
+        debug: (message, context) => emit(LOG_LEVELS.DEBUG, message, bindings, context),
+        info: (message, context) => emit(LOG_LEVELS.INFO, message, bindings, context),
+        warn: (message, context) => emit(LOG_LEVELS.WARN, message, bindings, context),
+        error: (message, context) => emit(LOG_LEVELS.ERROR, message, bindings, context),
         child: (childBindings) => createLogger({...bindings, ...childBindings}),
     };
 }

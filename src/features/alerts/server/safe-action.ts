@@ -1,10 +1,11 @@
-import {createAlert, getAlertDefinition} from "@/lib/alerts/create-alert";
-import {ActionResult, fail} from "@/lib/alerts/result";
+import {APP_ALERT_CODES, SEVERITY_LEVELS} from "@/features/alerts/constants/alert-codes";
+import {createAlert, getAlertDefinition} from "@/features/alerts/create-alert";
+import {ActionResult, fail} from "@/features/alerts/result";
 import {isAlertError} from "@/features/alerts/server/alert-error";
 import {logAlert} from "@/features/alerts/server/log-alert";
 import type {LogContext} from "@/features/alerts/server/logger";
 import {generateRef} from "@/features/alerts/server/ref";
-import type {PublicAlert} from "@/lib/alerts/types";
+import type {PublicAlert} from "@/features/alerts/types";
 import {unstable_rethrow} from "next/navigation";
 
 /**
@@ -16,7 +17,7 @@ function record(alert: PublicAlert, context: LogContext): PublicAlert {
         return alert;
     }
 
-    const needsRef = alert.ref === undefined && (alert.severity === "error" || alert.severity === "warning");
+    const needsRef = alert.ref === undefined && (alert.severity === SEVERITY_LEVELS.ERROR || alert.severity === SEVERITY_LEVELS.WARN);
     const stamped = needsRef ? {...alert, ref: generateRef()} : alert;
 
     logAlert(stamped, context);
@@ -67,7 +68,7 @@ export function safeAction<Args extends unknown[], T>(
                 ));
             }
 
-            return fail(record(createAlert("APP_UNKNOWN_ERROR"), {action: name, err: error}));
+            return fail(record(createAlert(APP_ALERT_CODES.UNKNOWN_ERROR), {action: name, err: error}));
         }
     };
 }

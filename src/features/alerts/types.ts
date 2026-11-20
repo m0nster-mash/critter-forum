@@ -1,7 +1,12 @@
+import type {AlertVariant} from "@/features/alerts/constants/alert-codes";
+import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
+import {LOG_LEVELS, LOG_FORMATS} from "@/features/alerts/constants/logger";
+import type {TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
+import type {ReactNode} from "react";
+
 /**
  * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
  */
-export const ALERT_SEVERITIES = ["success", "info", "warning", "error"] as const;
 export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
 
 /**
@@ -11,13 +16,13 @@ export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
  * - `inline`: persistent banner rendered in context (page, form, or field level)
  * - `none`:   not shown to the user (logging only)
  */
-export const ALERT_PRESENTATIONS = ["toast", "inline", "none"] as const;
 export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
 
 /**
  * Log levels shared by the server and client loggers.
  */
-export type AlertLogLevel = "debug" | "info" | "warn" | "error";
+export type AlertLogLevel = (typeof LOG_LEVELS)[keyof typeof LOG_LEVELS];
+export type LogFormat = (typeof LOG_FORMATS)[keyof typeof LOG_FORMATS];
 
 /**
  * Free-form structured data attached to a log entry.
@@ -78,7 +83,7 @@ export interface AlertDefinition {
  * @property    {AlertSeverity}     severity        Severity used for styling and live-region role
  * @property    {string}            message         Final, user-safe text
  * @property    {AlertPresentation} presentation    Where the alert should be rendered
- * @property    {string}            [field]         Optional; form field name for field-level inline alerts
+ * @property    {string}            [field]         Optional; form field name for field-level inline components
  * @property    {string}            [ref]           Optional; reference ID matching a server log entry
  */
 export interface PublicAlert {
@@ -96,7 +101,7 @@ export interface PublicAlert {
  *
  * @property    {AlertSeverity}                     [severity]      Override the registry severity
  * @property    {AlertPresentation}                 [presentation]  Override the registry presentation
- * @property    {string}                            [field]         Form field name for field-level alerts
+ * @property    {string}                            [field]         Form field name for field-level components
  * @property    {string}                            [ref]           Reference ID matching a server log entry
  * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in the message
  */
@@ -106,4 +111,53 @@ export interface AlertOverrides {
     field?: string;
     ref?: string;
     params?: Record<string, string | number>;
+}
+
+/**
+ * Properties for the AlertBanner component.
+ *
+ * @property    {PublicAlert | null}    [alert]     The alert to render; renders nothing if absent
+ * @property    {string}                [id]        Optional; element id, so an input can reference it via
+ *                                                  `aria-describedby`
+ * @property    {string}                [variant]   Optional; `banner` (default, page or form level), `field` (compact,
+ *                                                  under an input) or `toast` (floating)
+ * @property    {number}                [count]     Optional; how many identical components this represents
+ * @property    {ReactNode}             [action]    Optional; trailing content such as a dismiss button
+ */
+export interface AlertBannerProps {
+    alert: PublicAlert | null | undefined;
+    id?: string;
+    variant?: AlertVariant;
+    count?: number;
+    action?: ReactNode;
+}
+
+
+/** A toast currently displayed in the notification stack. */
+export interface ToastItem {
+    id: string;
+    alert: PublicAlert;
+    count: number;
+    version: number;
+}
+
+/** Actions accepted by the toast stack reducer. */
+export type ToastAction =
+    | { type: typeof TOAST_ACTION_TYPES.ADD; id: string; alert: PublicAlert }
+    | { type: typeof TOAST_ACTION_TYPES.DISMISS; id: string }
+    | { type: typeof TOAST_ACTION_TYPES.CLEAR };
+
+/** Options for an AlertError. */
+export interface AlertErrorOptions extends AlertOverrides {
+    cause?: unknown;
+    detail?: LogContext;
+}
+
+/** Normalized representation of an Error used by the server logger. */
+export interface SerializedError {
+    name: string;
+    message: string;
+    stack?: string;
+    cause?: unknown;
+    [extra: string]: unknown;
 }
