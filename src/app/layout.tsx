@@ -1,6 +1,6 @@
 import layoutStyle from "@/components/styles/layout.module.css"
-import LogoutButton from "@/features/auth/components/logout-button";
 import {AlertProvider} from "@/features/alerts/client/alert-provider";
+import LogoutButton from "@/features/auth/components/logout-button";
 import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import type {Metadata} from "next";
@@ -24,11 +24,11 @@ export default function RootLayout({
             <div className="layout">
                 <nav>
                     <h3>Navigation</h3>
-                    <a href={resolvePath(PUBLIC_ROUTES.HOME)}>Home</a>
-                    <a href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>Dashboard</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.HOME)}>{PUBLIC_ROUTES.HOME.label}</a>
+                    <a href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>{PRIVATE_ROUTES.DASHBOARD.label}</a>
                     <h4>Authentication</h4>
-                    <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>Register</a>
-                    <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>Login</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>{PUBLIC_ROUTES.REGISTER.label}</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</a>
                     <h4>Test Routes</h4>
                     <a href="/alerts">Alert Tests</a>
                     <hr/>

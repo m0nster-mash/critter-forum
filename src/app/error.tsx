@@ -1,9 +1,9 @@
 "use client";
 
-import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {logClientAlert} from "@/features/alerts/client/log-alert";
-import {createAlert} from "@/lib/alerts/create-alert";
-import {getErrorDigest} from "@/lib/alerts/error-digest";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {createAlert} from "@/features/alerts/create-alert";
+import {getErrorDigest} from "@/features/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
 
 /**
@@ -18,20 +18,31 @@ import {type JSX, useEffect, useMemo} from "react";
  *
  * @return  {JSX.Element}   The error UI.
  */
-export default function RouteError({error, retry}: { error: unknown; retry: () => void }): JSX.Element {
+export default function RouteError({error, retry}: {
+    error: unknown;
+    retry: () => void
+}): JSX.Element {
+
     const alert = useMemo(
-        () => createAlert("APP_UNKNOWN_ERROR", {presentation: "inline", ref: getErrorDigest(error)}),
+        () => createAlert("APP_UNKNOWN_ERROR", { // TODO:: replace magic string with const.
+            presentation: "inline", // TODO:: replace magic string with const.
+            ref: getErrorDigest(error)
+        }),
         [error],
     );
 
     useEffect(() => {
-        logClientAlert(alert, {err: error, scope: "route.render_error"});
+        logClientAlert(alert, {
+            err: error,
+            scope: "route.render_error", // TODO:: replace magic string with const.
+        });
     }, [alert, error]);
 
     return (
         <>
             <AlertBanner alert={alert}/>
             <p>
+                {/*TODO:: replace text label with const.*/}
                 <button type="button" onClick={() => retry()}>Try again</button>
             </p>
         </>
