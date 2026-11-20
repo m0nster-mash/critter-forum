@@ -1,12 +1,6 @@
 import {MAX_VISIBLE_TOASTS, TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
-import type {ToastAction, ToastItem, PublicAlert} from "@/features/alerts/types";
+import type {PublicAlert, ToastAction, ToastItem} from "@/features/alerts/types";
 
-/**
- * TODO:: document
- *
- * @param a
- * @param b
- */
 function isSameAlert(a: PublicAlert, b: PublicAlert): boolean {
     return a.code === b.code && a.message === b.message && a.field === b.field;
 }

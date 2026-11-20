@@ -1,6 +1,6 @@
 import {AlertIcon} from "@/features/alerts/components/alert-icon";
+import {SEVERITY_LABELS} from "@/features/alerts/constants/alert-codes";
 import styles from "@/features/alerts/styles/alerts.module.css";
-import {ALERT_ROLES, SEVERITY_LABELS, SEVERITY_LEVELS, VARIANT_TYPES} from "@/features/alerts/constants/alert-codes";
 import {AlertBannerProps} from "@/features/alerts/types";
 import type {JSX} from "react";
 

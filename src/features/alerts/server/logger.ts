@@ -1,21 +1,21 @@
-import type {AlertLogLevel, LogContext, Logger, LogFormat, SerializedError} from "@/features/alerts/types";
 import {
+    LOG_FORMATS,
+    LOG_LEVEL_ORDER,
+    LOG_LEVELS,
     LOGGER_ANSI,
     LOGGER_ANSI_COLORS,
     LOGGER_DEFAULT_FORMATS,
     LOGGER_DEFAULT_LEVELS,
     LOGGER_ENVIRONMENTS,
+    LOGGER_JSON_KEYS,
     LOGGER_REDACTION,
     LOGGER_RESERVED_JSON_KEYS,
     LOGGER_TEXT,
-    LOGGER_JSON_KEYS,
-    LOG_LEVELS,
-    LOG_FORMATS,
-    LOG_LEVEL_ORDER,
     QUERY_PARAMS_PATTERN,
     QUERY_PARAMS_REDACTION,
     SENSITIVE_LOG_KEY_PATTERN,
 } from "@/features/alerts/constants/logger";
+import type {AlertLogLevel, LogContext, LogFormat, Logger, SerializedError} from "@/features/alerts/types";
 
 export type {LogContext, Logger};
 
@@ -169,7 +169,9 @@ function describeError(error: SerializedError, indent: string): string[] {
  * `instrumentation.ts`, doesn't flag a Node-only API; on Edge the property is simply absent and colors are off.
  */
 function colorEnabled(): boolean {
-    const runtime = (globalThis as { process?: { stdout?: { isTTY?: boolean }; env?: Record<string, string | undefined> } }).process;
+    const runtime = (globalThis as {
+        process?: { stdout?: { isTTY?: boolean }; env?: Record<string, string | undefined> }
+    }).process;
     return Boolean(runtime?.stdout?.isTTY) && !runtime?.env?.NO_COLOR;
 }
 

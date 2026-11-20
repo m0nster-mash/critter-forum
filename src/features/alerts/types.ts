@@ -1,6 +1,6 @@
 import type {AlertVariant} from "@/features/alerts/constants/alert-codes";
 import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
-import {LOG_LEVELS, LOG_FORMATS} from "@/features/alerts/constants/logger";
+import {LOG_FORMATS, LOG_LEVELS} from "@/features/alerts/constants/logger";
 import type {TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
 import type {ReactNode} from "react";
 
@@ -159,5 +159,6 @@ export interface SerializedError {
     message: string;
     stack?: string;
     cause?: unknown;
+
     [extra: string]: unknown;
 }

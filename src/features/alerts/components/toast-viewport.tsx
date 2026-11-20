@@ -1,11 +1,11 @@
 "use client";
 
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
-import styles from "@/features/alerts/styles/alerts.module.css";
-import {TOAST_DURATIONS} from "@/features/alerts/constants/toast";
-import type {ToastItem} from "@/features/alerts/types";
 import {VARIANT_TYPES} from "@/features/alerts/constants/alert-codes";
+import {TOAST_DURATIONS} from "@/features/alerts/constants/toast";
 import {TOAST_KEYSTROKE, TOAST_LABELS} from "@/features/alerts/constants/ui";
+import styles from "@/features/alerts/styles/alerts.module.css";
+import type {ToastItem} from "@/features/alerts/types";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";
 
 /**

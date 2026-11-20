@@ -2,12 +2,12 @@
  * Throwaway sanity check for the toast reducer. Safe to delete once real tests exist.
  * Run with: npx tsx scripts/toast-state-check.ts
  */
-import assert from "node:assert/strict";
-import {createAlert} from "@/features/alerts/create-alert";
 import {toastReducer} from "@/features/alerts/client/toast-state";
-import {MAX_VISIBLE_TOASTS, TOAST_DURATIONS, TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
-import type {ToastItem} from "@/features/alerts/types";
 import {ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
+import {MAX_VISIBLE_TOASTS, TOAST_ACTION_TYPES, TOAST_DURATIONS} from "@/features/alerts/constants/toast";
+import {createAlert} from "@/features/alerts/create-alert";
+import type {ToastItem} from "@/features/alerts/types";
+import assert from "node:assert/strict";
 
 const limited = createAlert("APP_RATE_LIMITED", {params: {seconds: 5}});
 const network = createAlert("APP_NETWORK_ERROR");
@@ -44,7 +44,10 @@ assert.equal(state[state.length - 1].id, "t6");
 // dismiss / clear
 state = toastReducer(state, {type: TOAST_ACTION_TYPES.DISMISS, id: "t6"});
 assert.ok(!state.some((t) => t.id === "t6"));
-assert.equal(toastReducer(state, {type: TOAST_ACTION_TYPES.DISMISS, id: "nope"}).length, state.length, "unknown id is a no-op");
+assert.equal(toastReducer(state, {
+    type: TOAST_ACTION_TYPES.DISMISS,
+    id: "nope"
+}).length, state.length, "unknown id is a no-op");
 assert.deepEqual(toastReducer(state, {type: TOAST_ACTION_TYPES.CLEAR}), []);
 
 // purity: input state is never mutated

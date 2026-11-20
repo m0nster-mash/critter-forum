@@ -1,14 +1,14 @@
-import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 import {
     CLIENT_LOG_ERROR_KEY,
     CLIENT_LOG_ERROR_NAME_KEY,
     CLIENT_LOG_SAFE_KEYS,
+    LOG_LEVEL_ORDER,
+    LOG_LEVELS,
     LOGGER_DEFAULT_LEVELS,
     LOGGER_ENVIRONMENTS,
-    LOG_LEVELS,
-    LOG_LEVEL_ORDER,
     MAX_CLIENT_LOG_VALUE_LENGTH,
 } from "@/features/alerts/constants/logger";
+import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 
 /**
  * Browser-side logger. Same interface as the server logger, but the browser console is public, so output is

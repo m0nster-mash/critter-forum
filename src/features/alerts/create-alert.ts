@@ -1,5 +1,5 @@
-import {ALERT_REGISTRY, AlertCode, FALLBACK_ALERT_CODE} from "@/features/alerts/registry";
 import {ALERT_TEMPLATE_PATTERNS} from "@/features/alerts/constants/observability";
+import {ALERT_REGISTRY, AlertCode, FALLBACK_ALERT_CODE} from "@/features/alerts/registry";
 import {AlertDefinition, AlertOverrides, PublicAlert} from "@/features/alerts/types";
 
 /**

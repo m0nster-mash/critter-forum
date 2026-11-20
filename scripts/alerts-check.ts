@@ -2,10 +2,10 @@
  * Throwaway sanity check for the alert foundation. Safe to delete once real tests exist.
  * Run with: npx tsx scripts/components-check.ts
  */
-import assert from "node:assert/strict";
+import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
 import {createAlert, getAlertDefinition, isAlertCode} from "@/features/alerts/create-alert";
 import {ALERT_REGISTRY, AlertCode} from "@/features/alerts/registry";
-import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
+import assert from "node:assert/strict";
 
 // Registry integrity
 for (const [code, def] of Object.entries(ALERT_REGISTRY)) {
