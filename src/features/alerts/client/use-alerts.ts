@@ -7,32 +7,48 @@ import type {LogContext, PublicAlert} from "@/features/alerts/types";
 import {useCallback, useState} from "react";
 
 /**
- * The one hook components use to raise components.
+ * @module          `features/alerts`
+ * @status          Requires documentation
+ * @TODO            Document function
  *
- * `present(alert)` routes by the alert's registry-defined presentation, so no component decides how an alert looks:
- * - `toast`:  shown in the global toast stack
- * - `inline`: held in this hook's state for the component to render with `<AlertBanner>`
- * - `none`:   logged only
- * In every case the alert is logged per its client log policy.
+ * @fileOverview    The one hook components use to raise components.
+ * @remark          {@code present(alert)} routes by the alert's registry-defined presentation, so no component decides
+ *                  how an alert looks:
  *
- * The hook holds one inline alert at a time. Call `clear()` when a new attempt starts.
+ *                  {@code toast}   shown in the global toast stack
+ *                  {@code inline}  held in this hook's state for the component to render with {@link AlertBanner}
+ *                  {@code none}    logged only
  *
- * @return  {Object}    `present`, `clear`, `notify` (force a toast), `inline` (the current inline alert),
- *                      `formAlert` (inline alert without a field) and `fieldAlert(name)` (inline alert for one field).
+ *                  In every case the alert is logged per its client log policy.
+ * @remark          The hook holds one inline alert at a time. Call `clear()` when a new attempt starts.
+ *
+ * @return          {Object}    {@code present},
+ *                              {@code clear},
+ *                              {@code notify} (force a toast),
+ *                              {@code inline} (the current inline alert),
+ *                              {@code formAlert} (inline alert without a field),
+ *                              {@code fieldAlert(name)} (inline alert for one field)
  */
 export function useAlerts(): object {
+
     const {notify} = useAlertContext();
     const [inline, setInline] = useState<PublicAlert | null>(null);
 
     const present = useCallback((alert: PublicAlert, detail?: LogContext) => {
         switch (alert.presentation) {
+
+            // Toast Presentations
             case ALERT_PRESENTATION_TYPES.TOAST:
                 notify(alert, detail);
                 break;
+
+            // Inline Presentations
             case ALERT_PRESENTATION_TYPES.INLINE:
                 logClientAlert(alert, detail);
                 setInline(alert);
                 break;
+
+            // No Presentations
             case ALERT_PRESENTATION_TYPES.NONE:
                 logClientAlert(alert, detail);
                 break;

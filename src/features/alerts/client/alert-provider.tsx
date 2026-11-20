@@ -9,17 +9,16 @@ import type {LogContext, PublicAlert, ToastItem} from "@/features/alerts/types";
 import {createContext, type JSX, type ReactNode, useCallback, useContext, useMemo, useReducer, useRef} from "react";
 
 /**
- * Value provided by {@link AlertProvider}.
+ * @module          `features/alerts`
+ * @status          Requires relocation
+ * @TODO            Relocate to `types.ts`
  *
- * @module      `features/alerts`
- * @status      Requires relocation
+ * @fileOverview    Value provided by {@link AlertProvider}.
  *
- * @TODO        Relocate to `types.ts`
- *
- * @property    {ToastItem[]}   toasts      Toasts currently on screen
- * @property    {Function}      notify      Shows an alert as a toast and logs it per its registry policy
- * @property    {Function}      dismiss     Removes one toast by id
- * @property    {Function}      clear       Removes every toast
+ * @property        {ToastItem[]}   toasts      Toasts currently on screen
+ * @property        {Function}      notify      Shows an alert as a toast and logs it per its registry policy
+ * @property        {Function}      dismiss     Removes one toast by id
+ * @property        {Function}      clear       Removes every toast
  */
 export interface AlertContextValue {
     toasts: ToastItem[];
@@ -31,18 +30,19 @@ export interface AlertContextValue {
 const AlertContext = createContext<AlertContextValue | null>(null);
 
 /**
- * @fileOverview            Provides the alert context provider, the context value type, and the low-level
- *                          {@code useAlertContext} accessor hook. Mount once in the root layout so toasts survive
- *                          client-side navigation.
- * @module                  `features/alerts`
- * @status                  Requires refactoring
+ * @module          `features/alerts`
+ * @status          Requires refactoring
+ * @TODO            Migrate HTML return content into component and turn this file into a `.ts`
  *
- * @TODO                    Migrate HTML return content into component and turn this file into a `.ts`
+ * @fileOverview    Provides the alert context provider, the context value type, and the low-level
+ *                  {@code useAlertContext} accessor hook. Mount once in the root layout so toasts survive client-side
+ *                  navigation.
  *
- * @param   {Object}        props           Component properties
- * @param   {ReactNode}     props.children  The application
+ * @param           {Object}        props           Component properties
+ * @param           {ReactNode}     props.children  The application
  *
- * @return  {JSX.Element}   The provider with the toast viewport and global error listeners mounted beside the children.
+ * @return          {JSX.Element}   The provider with the toast viewport and global error listeners mounted beside the
+ *                                  children.
  */
 export function AlertProvider({children}: { children: ReactNode }): JSX.Element {
 
@@ -78,18 +78,16 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
 }
 
 /**
- * Reads the alert context.
+ * @module          `features/alerts`
+ * @status          Requires refactoring
+ * @TODO            Migrate HTML return content into component and turn this file into a `.ts`
  *
- * @remarks                     Prefer {@link useAlerts()}; this is the low-level accessor.
- * @module                      `features/alerts`
- * @status                      Requires refactoring
+ * @fileOverview    Reads the alert context.
+ * @remarks         Prefer {@link useAlerts()}; this is the low-level accessor.
  *
- * @TODO                        Replace magic strings with consts
- * @TODO                        Investigate: does this need to be converted into a different error handling method?
+ * @return          {AlertContextValue}     The context value.
  *
- * @return  {AlertContextValue} The context value.
- *
- * @throws  {Error}             Throws if called outside an AlertProvider (a programmer error).
+ * @throws          {Error}                 Throws if called outside an AlertProvider (a programmer error).
  */
 export function useAlertContext(): AlertContextValue {
     const context = useContext(AlertContext);

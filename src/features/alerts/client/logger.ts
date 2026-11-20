@@ -10,28 +10,23 @@ import {
 } from "@/features/alerts/constants/logger";
 import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 
-/**
- * Browser-side logger. Same interface as the server logger, but the browser console is public, so output is
- * sanitized in production.
- *
- * - Development: everything is passed to the console as-is, so devtools can inspect errors and objects.
- * - Production: only allow-listed keys with primitive values survive (code, ref, severity, field, scope, digest,
- *   status), strings are truncated, and an `err` is reduced to its name. Messages, stacks and anything else are
- *   dropped.
- *
- * `NEXT_PUBLIC_LOG_LEVEL` (`debug | info | warn | error`) sets the minimum level. Default: `debug` in development,
- * `warn` in production. It controls how much is logged, never how much detail: detail is development-only.
- */
-
 const SAFE_KEYS = new Set<string>(CLIENT_LOG_SAFE_KEYS);
 
 /**
- * Reads config from the environment on every call. `process.env.NEXT_PUBLIC_*` must be referenced statically so
- * Next can inline it into the client bundle.
+ * @module          `features/alerts`
+ * @status          Requires documentation
+ * @TODO            Document function
  *
- * @return TODO:: document
+ * @fileOverview    Reads config from the environment on every call. {@code process.env.NEXT_PUBLIC_*} must be
+ *                  referenced statically so Next can inline it into the client bundle.
+ *
+ * @return          {AlertLogLevel, boolean} TODO:: document
  */
-function getConfig(): { minLevel: AlertLogLevel; verbose: boolean } {
+function getConfig(): {
+    minLevel: AlertLogLevel;
+    verbose: boolean
+} {
+
     const isProduction = process.env.NODE_ENV === LOGGER_ENVIRONMENTS.PRODUCTION;
     const requested = process.env.NEXT_PUBLIC_LOG_LEVEL?.toLowerCase();
 
@@ -44,11 +39,18 @@ function getConfig(): { minLevel: AlertLogLevel; verbose: boolean } {
 }
 
 /**
- * TODO:: document
+ * @module          `features/alerts`
+ * @status          Requires documentation
+ * @TODO            Document function
  *
- * @param context TODO:: document
+ * @fileOverview    TODO:: document
+ *
+ * @param           {LogContext}    context     TODO:: document
+ *
+ * @return          {LogContext}    TODO:: document
  */
 function sanitize(context: LogContext): LogContext {
+
     const safe: LogContext = {};
 
     for (const [key, value] of Object.entries(context)) {
@@ -67,14 +69,26 @@ function sanitize(context: LogContext): LogContext {
 }
 
 /**
- * TODO:: document
+ * @module          `features/alerts`
+ * @status          Requires documentation
+ * @TODO            Document function
  *
- * @param level TODO:: document
- * @param message TODO:: document
- * @param bindings TODO:: document
- * @param context TODO:: document
+ * @fileOverview    TODO:: document
+ *
+ * @param           {AlertLogLevel}     level       TODO:: document
+ * @param           {string}            message     TODO:: document
+ * @param           {LogContext}        bindings    TODO:: document
+ * @param           {LogContext}        context     TODO:: document
+ *
+ * @return          {void}              TODO:: document
  */
-function emit(level: AlertLogLevel, message: string, bindings: LogContext, context?: LogContext): void {
+function emit(
+    level: AlertLogLevel,
+    message: string,
+    bindings: LogContext,
+    context?: LogContext
+): void {
+
     const {minLevel, verbose} = getConfig();
     if (LOG_LEVEL_ORDER[level] < LOG_LEVEL_ORDER[minLevel]) return;
 
@@ -89,11 +103,14 @@ function emit(level: AlertLogLevel, message: string, bindings: LogContext, conte
 }
 
 /**
- * Creates a client logger with optional fixed bindings added to every entry.
+ * @module          `features/alerts`
+ * @status          Good
  *
- * @param   {LogContext}    [bindings]  Optional; key-value pairs merged into every entry
+ * @fileOverview    Creates a client logger with optional fixed bindings added to every entry.
  *
- * @return  {Logger}    The logger instance.
+ * @param           {LogContext}    [bindings]  Key-value pairs merged into every entry
+ *
+ * @return          {Logger}        The logger instance.
  */
 export function createClientLogger(bindings: LogContext = {}): Logger {
 
@@ -106,7 +123,4 @@ export function createClientLogger(bindings: LogContext = {}): Logger {
     };
 }
 
-/**
- * The shared client logger.
- */
 export const clientLogger: Logger = createClientLogger();

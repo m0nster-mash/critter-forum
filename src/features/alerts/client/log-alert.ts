@@ -4,34 +4,23 @@ import type {LogContext, PublicAlert} from "@/features/alerts/types";
 
 
 /**
- * @fileOverview            Writes client alerts to the browser console according to their registry log client policy.
- *                          Client counterpart of the server's logAlert; does nothing if the policy is false.
- * @module                  `features/alerts/client/log-alert`
- * @status                  Good
+ * @module          `features/alerts`
+ * @status          Good
  *
- * @param   {PublicAlert}   alert           The alert being raised
- * @param   {LogContext}    [detail]        Optional; extra context such as {err} or {scope}
+ * @fileOverview    Writes an alert to the browser console according to its registry `log.client` policy. Does nothing if the policy is `false`. Client counterpart of the server's `logAlert`. In production only the sanitized fields (code, severity, ref, field, scope) reach the console; `detail` is development-only.
  *
- * @return  {void}
+ * @param           {PublicAlert}   alert       The alert being raised
+ * @param           {LogContext}    [detail]    Extra context such as {err} or {scope}
+ *
+ * @return          {void}  TODO:: document
  */
-
-
-/**
- * Writes an alert to the browser console according to its registry `log.client` policy. Does nothing if the policy is
- * `false`. Client counterpart of the server's `logAlert`.
- *
- * In production only the sanitized fields (code, severity, ref, field, scope) reach the console; `detail` is
- * development-only.
- *
- * @param   {PublicAlert}   alert       The alert being raised
- * @param   {LogContext}    [detail]    Optional; extra context such as `{err}` or `{scope}`
- */
-export function logClientAlert(alert: PublicAlert, detail: LogContext = {}): void {
+export function logClientAlert(
+    alert: PublicAlert,
+    detail: LogContext = {}
+): void {
 
     const level = getAlertDefinition(alert.code).log.client;
-    if (!level) {
-        return;
-    }
+    if (!level) return;
 
     clientLogger[level](alert.code, {
         severity: alert.severity,

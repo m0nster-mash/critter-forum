@@ -12,13 +12,14 @@ import {createAlert} from "@/features/alerts/create-alert";
 import {useEffect} from "react";
 
 /**
- * @fileOverview    Determines whether a window error is something the user can't act on and the app didn't cause:
- *                  browser-extension scripts, cross-origin "Script error." noise, and the benign {@link ResizeObserver}
- *                  notification.
  * @module          `features/alerts`
  * @status          Good
  *
- * @param           {ErrorEvent}    event   TODO:: document
+ * @fileOverview    Determines whether a window error is something the user can't act on and the app didn't cause:
+ *                  browser-extension scripts, cross-origin "Script error." noise, and the benign {@link ResizeObserver}
+ *                  notification.
+ *
+ * @param           {ErrorEvent}    event   The error event
  */
 function isNoise(event: ErrorEvent): boolean {
 
@@ -28,24 +29,15 @@ function isNoise(event: ErrorEvent): boolean {
     return Boolean(event.filename) && !event.filename.startsWith(window.location.origin);
 }
 
-
 /**
- * @fileOverview    Mounts global browser error and unhandled rejection listeners that route errors through the alert
- *                  system. Renders nothing; mounted for its side effects.
- * @module          features/alerts/client/global-error-listeners`
+ * @module          `features/alerts`
  * @status          Good
  *
- * @return  {null}          Nothing; mounted for its side effects.
- */
-
-
-/**
- * Catches what React error boundaries can't (errors thrown in event handlers and timers, unhandled promise rejections)
- * and routes them through the same alert system as everything else. Renders nothing.
+ * @fileOverview    Catches what React error boundaries can't (errors thrown in event handlers and timers, unhandled
+ *                  promise rejections) and routes them through the same alert system as everything else. Renders
+ *                  nothing. Repeats are merged by the toast stack, so a failing loop can't flood the screen.
  *
- * Repeats are merged by the toast stack, so a failing loop can't flood the screen.
- *
- * @return  {null}  Nothing; mounted for its side effects.
+ * @return          {null}  Nothing; mounted for its side effects.
  */
 export function GlobalErrorListeners(): null {
 
