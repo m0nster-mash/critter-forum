@@ -11,7 +11,6 @@ import {AlertOverrides} from "@/features/alerts/types";
  *
  * @module          `features/alerts`
  * @status          Broken; linting errors
- *
  * @TODO            Fix the {@code useAlerts()} variables
  * @TODO            Replace magic strings with consts
  *

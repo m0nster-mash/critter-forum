@@ -9,7 +9,6 @@ import {type JSX, useEffect, useMemo} from "react";
 /**
  * @module          `features/alerts`
  * @status          Requires cleanup
- *
  * @TODO            Replace magic strings with consts
  * @TODO            Remove inline styles
  *

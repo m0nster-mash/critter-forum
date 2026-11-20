@@ -10,7 +10,6 @@ import {type JSX, useEffect, useMemo} from "react";
  *
  * @module          `features/alerts`
  * @status          Requires cleanup
- *
  * @TODO            Replace magic strings with consts
  * @TODO            Investigate `instrumentation.ts` claim; that file does not appear to be in use.
  *

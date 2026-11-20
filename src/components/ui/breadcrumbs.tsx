@@ -2,20 +2,21 @@ import layoutStyle from "@/components/styles/layout.module.css";
 import {BREADCRUMBS} from "@/lib/constants/ui";
 import {BreadcrumbProps} from "@/lib/types";
 import Link from "next/link";
-import {Fragment} from "react";
+import {Fragment, JSX} from "react";
 
 /**
- * Renders a breadcrumb navigation trail.
+ * @status          Requires restyling
+ * @TODO            Restyle breadcrumbs at a later date
  *
- * @fileOverview                Each item is rendered as a link if an `href` is provided, otherwise as plain text.
- * @status                      Requires restyling
+ * @fileOverview    Renders a breadcrumb navigation trail.
+ *                  Each item is rendered as a link if an `href` is provided, otherwise as plain text.
  *
- * @TODO                        Restyle breadcrumbs at a later date
+ * @param           {BreadcrumbProps}   props               The property object for the Breadcrumbs component
+ * @param           {BreadcrumbItem[]}  [props.breadcrumb]  Array of breadcrumb items to render
  *
- * @param   {BreadcrumbProps}   props               The property object for the Breadcrumbs component
- * @param   {BreadcrumbItem[]}  [props.breadcrumb]  Array of breadcrumb items to render
+ * @return          {JSX.Element}       Breadcrumb UI
  */
-export function Breadcrumbs({breadcrumb}: BreadcrumbProps) {
+export function Breadcrumbs({breadcrumb}: BreadcrumbProps): JSX.Element {
 
     return (
         <>

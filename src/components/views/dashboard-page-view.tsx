@@ -10,15 +10,13 @@ import {redirect} from "next/navigation";
 import {JSX} from "react";
 
 /**
- * @fileOverview                    Renders the protected dashboard page view. Requires an authenticated session;
- *                                  unauthenticated users are redirected to the login page while the session is
- *                                  resolving.
- * @status                          Requires refactoring
+ * @status          Requires refactoring
+ * @TODO            Replace session checks with proper permission barriers once permissions have been built out
  *
- * @TODO                            Replace session checks with proper permission barriers once permissions have been
- *                                  built out
+ * @fileOverview    Renders the protected dashboard page view. Requires an authenticated session; unauthenticated users
+ *                  are redirected to the login page while the session is resolving.
  *
- * @return  {JSX.Element | null}    The dashboard view component, or null while authentication status is resolving
+ * @return          {JSX.Element | null}    The dashboard view, or null while authentication status is resolving
  */
 export default function DashboardPageView(): JSX.Element | null {
 

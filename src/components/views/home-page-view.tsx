@@ -5,12 +5,11 @@ import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 import {JSX} from "react";
 
 /**
- * Renders the public home page view.
+ * @status          Good
  *
- * @status                  Good
+ * @fileOverview    Renders the public home page view.
  *
- * @return  {JSX.Element}   The home page view JSX element
-
+ * @return          {JSX.Element}   The home page view JSX element
  */
 export function HomePageView(): JSX.Element {
     return (

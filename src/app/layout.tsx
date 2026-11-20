@@ -9,7 +9,6 @@ import React, {JSX} from "react";
 
 /**
  * @status          Requires refactoring
- *
  * @TODO            Migrate to global constant
  *
  * @fileOverview    Default document metadata used by the application
@@ -21,7 +20,6 @@ export const metadata: Metadata = {
 
 /**
  * @status          Requires fill replacement
- *
  * @TODO            Replace content with proper layout at a later date
  *
  * @fileOverview    Renders the root document shell.

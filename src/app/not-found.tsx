@@ -8,7 +8,6 @@ import type {JSX} from "react";
 /**
  * @module          `features/alerts`
  * @status          Requires cleanup
- *
  * @TODO            Replace magic strings with consts
  *
  * @fileOverview    Rendered when a route doesn't exist or {@code NotFound()} is called.
