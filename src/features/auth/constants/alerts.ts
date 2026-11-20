@@ -1,12 +1,12 @@
-import type {AlertDefinition} from "@/lib/alerts/types";
+import type {AlertDefinition} from "@/features/alerts/types";
 
 /**
  * Registry entries for every authentication alert. This is the single place that decides what each auth message says,
- * how it is shown, and whether it is logged. Merged into the application-wide registry in `lib/alerts/registry.ts`.
+ * how it is shown, and whether it is logged. Merged into the application-wide registry in `lib/components/registry.ts`.
  *
  * Naming: `AUTH_<ACTION>_<REASON>`.
  *
- * Note on `log.server` for the login alerts: sign-in goes straight from the browser to better-auth rather than through
+ * Note on `log.server` for the login components: sign-in goes straight from the browser to better-auth rather than through
  * a server action, so failed sign-ins are written to the server log by the better-auth logger hook in
  * `lib/db/auth/auth.ts`, not by these entries.
  */
@@ -31,7 +31,7 @@ export const AUTH_ALERTS = {
         log: {server: false, client: "warn"},
     },
     AUTH_RATE_LIMITED: {
-        severity: "warning",
+        severity: "warn",
         message: "Too many attempts. Please wait a moment and try again.",
         presentation: "inline",
         log: {server: false, client: "warn"},
@@ -45,21 +45,21 @@ export const AUTH_ALERTS = {
         log: {server: "info", client: false},
     },
     AUTH_REGISTER_NAME_REQUIRED: {
-        severity: "warning",
+        severity: "warn",
         message: "Please enter a username.",
         presentation: "inline",
         field: "name",
         log: {server: false, client: false},
     },
     AUTH_REGISTER_EMAIL_INVALID: {
-        severity: "warning",
+        severity: "warn",
         message: "Please enter a valid email address.",
         presentation: "inline",
         field: "email",
         log: {server: false, client: false},
     },
     AUTH_REGISTER_PASSWORD_TOO_SHORT: {
-        severity: "warning",
+        severity: "warn",
         message: "Password must be at least {min} characters long.",
         presentation: "inline",
         field: "password",
@@ -79,7 +79,7 @@ export const AUTH_ALERTS = {
         log: {server: "error", client: "warn"},
     },
     AUTH_REGISTER_SIGNIN_FAILED: {
-        severity: "warning",
+        severity: "warn",
         message: "Your account was created, but we couldn't sign you in automatically. Please sign in.",
         presentation: "toast",
         log: {server: false, client: "warn"},

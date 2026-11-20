@@ -1,5 +1,5 @@
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
-import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
+import {AUTH_ALERTS} from "@/features/alerts/constants/alerts";
 import {AlertDefinition} from "@/features/alerts/types";
 
 /**

@@ -1,22 +1,28 @@
 "use client";
 
-import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {useAlerts} from "@/features/alerts/client/use-alerts";
-import {createAlert} from "@/lib/alerts/create-alert";
-import type {AlertCode} from "@/lib/alerts/registry";
-import type {AlertOverrides} from "@/lib/alerts/types";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {createAlert} from "@/features/alerts/create-alert";
+import {AlertCode} from "@/features/alerts/registry";
+import {AlertOverrides} from "@/features/alerts/types";
 
 /**
- * AlertTestPage
+ * Temp -> Alert and Error Handling test page
  *
- * Manual test page for the alert and error workflows. Every button raises a
- * registered alert code (no free-form messages), covering each severity and
- * presentation, plus the thrown-error / unhandled-rejection paths.
+ * @fileoverview    Manual test page for the alert and error workflows. Every button raises a registered alert code
+ *                  (no free-form messages), covering each severity and presentation, plus the thrown-error /
+ *                  unhandled-rejection paths.
  *
- * Must be rendered inside <AlertProvider> (mounted by the root layout at
- * src/app/layout.tsx), because useAlerts() reads alert context.
+ *                  Must be rendered inside {AlertProvider} (mounted by the root layout at src/app/layout.tsx),
+ *                  because {@code useAlerts()} reads alert context.
+ * @module          `modules/alerts`
+ * @status          Broken; linting errors
+ *
+ * @TODO            Fix the {@code useAlerts()} variables
+ * @TODO            Replace magic strings with consts
  */
 export default function AlertTestPage() {
+
     const {present, clear, notify, inline} = useAlerts();
 
     const raiseToast = (code: AlertCode, overrides?: AlertOverrides): void => {
@@ -45,10 +51,8 @@ export default function AlertTestPage() {
                     <button type="button" onClick={() => raiseToast("AUTH_LOGIN_SUCCESS", {severity: "info"})}>
                         Info toast (severity override)
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => raiseToast("APP_RATE_LIMITED", {params: {seconds: 30}})}
-                    >
+                    <button type="button"
+                            onClick={() => raiseToast("APP_RATE_LIMITED", {params: {seconds: 30}})}>
                         Warning toast (with params)
                     </button>
                     <button type="button" onClick={() => raiseToast("AUTH_LOGIN_FAILED")}>
@@ -57,10 +61,8 @@ export default function AlertTestPage() {
                     <button type="button" onClick={() => raiseToast("APP_NETWORK_ERROR")}>
                         Network error toast
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => raiseToast("APP_UNKNOWN_ERROR", {ref: "ref-abc-123"})}
-                    >
+                    <button type="button"
+                            onClick={() => raiseToast("APP_UNKNOWN_ERROR", {ref: "ref-abc-123"})}>
                         Error toast with ref
                     </button>
                 </div>
@@ -91,7 +93,7 @@ export default function AlertTestPage() {
                 </div>
                 {inline && (
                     <div style={{marginTop: 12}}>
-                        <AlertBanner alert={inline} variant="banner" />
+                        <AlertBanner alert={inline} variant="banner"/>
                     </div>
                 )}
             </section>
@@ -99,26 +101,20 @@ export default function AlertTestPage() {
             <section style={{marginTop: 24, marginBottom: 32}}>
                 <h2>Error paths</h2>
                 <div style={{display: "flex", flexWrap: "wrap", gap: 8}}>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            throw new Error("Simulated unhandled error");
-                        }}
-                    >
+                    <button type="button"
+                            onClick={() => {
+                                throw new Error("Simulated unhandled error");
+                            }}>
                         Throw unhandled error
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            void Promise.reject(new Error("Simulated unhandled rejection"));
-                        }}
-                    >
+                    <button type="button"
+                            onClick={() => {
+                                void Promise.reject(new Error("Simulated unhandled rejection"));
+                            }}>
                         Unhandled promise rejection
                     </button>
-                    <button
-                        type="button"
-                        onClick={() => raiseInline("APP_UNKNOWN_ERROR")}
-                    >
+                    <button type="button"
+                            onClick={() => raiseInline("APP_UNKNOWN_ERROR")}>
                         Present unknown-error inline
                     </button>
                 </div>

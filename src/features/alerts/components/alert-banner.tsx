@@ -1,32 +1,8 @@
 import {AlertIcon} from "@/features/alerts/components/alert-icon";
-import styles from "@/features/alerts/components/alerts.module.css";
-import type {AlertSeverity, PublicAlert} from "@/lib/alerts/types";
-import type {JSX, ReactNode} from "react";
-
-const SEVERITY_LABELS: Record<AlertSeverity, string> = {
-    success: "Success",
-    info: "Information",
-    warning: "Warning",
-    error: "Error",
-};
-
-/**
- * Properties for the AlertBanner component.
- *
- * @property    {PublicAlert | null}    [alert]     The alert to render; renders nothing if absent
- * @property    {string}                [id]        Optional; element id, so an input can reference it via `aria-describedby`
- * @property    {string}                [variant]   Optional; `banner` (default, page or form level), `field` (compact,
- *                                                  under an input) or `toast` (floating)
- * @property    {number}                [count]     Optional; how many identical alerts this represents
- * @property    {ReactNode}             [action]    Optional; trailing content such as a dismiss button
- */
-export interface AlertBannerProps {
-    alert: PublicAlert | null | undefined;
-    id?: string;
-    variant?: "banner" | "field" | "toast";
-    count?: number;
-    action?: ReactNode;
-}
+import styles from "@/features/alerts/styles/alerts.module.css";
+import {ALERT_ROLES, SEVERITY_LABELS, SEVERITY_LEVELS, VARIANT_TYPES} from "@/features/alerts/constants/alert-codes";
+import {AlertBannerProps} from "@/features/alerts/types";
+import type {JSX} from "react";
 
 /**
  * Renders one alert. Stateless and free of client-only code, so it works in Server Components, Client Components,
@@ -42,7 +18,7 @@ export function AlertBanner({alert, id, variant = "banner", count = 1, action}: 
         return null;
     }
 
-    const role = alert.severity === "error" || alert.severity === "warning" ? "alert" : "status";
+    const role = alert.severity === "error" || alert.severity === "warn" ? "alert" : "status";
     const className = [styles.alert, styles[alert.severity], variant !== "banner" && styles[variant]]
         .filter(Boolean)
         .join(" ");

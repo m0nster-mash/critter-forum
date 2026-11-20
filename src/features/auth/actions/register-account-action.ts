@@ -1,13 +1,14 @@
 "use server";
 
+import {AUTH_ACTION_NAMES} from "@/features/auth/constants/integration";
 import {
     AUTH_ALERT_PARAMS,
     isAuthApiError,
     resolveAuthAlertCode,
 } from "@/features/auth/utilities/auth-errors";
 import {type RegistrationInput, validateRegistration} from "@/features/auth/validation";
-import {createAlert} from "@/lib/alerts/create-alert";
-import {fail, succeed} from "@/lib/alerts/result";
+import {createAlert} from "@/features/alerts/create-alert";
+import {fail, succeed} from "@/features/alerts/result";
 import {AlertError} from "@/features/alerts/server/alert-error";
 import {safeAction} from "@/features/alerts/server/safe-action";
 import {auth} from "@/lib/db/auth/auth";
@@ -29,7 +30,7 @@ import {headers} from "next/headers";
  *
  * @return  {Promise<ActionResult<undefined>>}  Resolves to a success or failure result; never throws to the client.
  */
-export const registerAccountAction = safeAction("auth.register", async (input: RegistrationInput) => {
+export const registerAccountAction = safeAction(AUTH_ACTION_NAMES.REGISTER, async (input: RegistrationInput) => {
 
     const normalized: RegistrationInput = {
         name: input.name.trim(),

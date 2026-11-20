@@ -11,6 +11,7 @@ import type {JSX} from "react";
  * @return  {JSX.Element}   The not-found UI.
  */
 export default function NotFound(): JSX.Element {
+
     return (
         <>
             {/* TODO:: replace magic string with const. */}

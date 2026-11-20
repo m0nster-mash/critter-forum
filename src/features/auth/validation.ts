@@ -1,5 +1,5 @@
-import {createAlert} from "@/lib/alerts/create-alert";
-import type {PublicAlert} from "@/lib/alerts/types";
+import {createAlert} from "@/features/alerts/create-alert";
+import type {PublicAlert} from "@/features/alerts/types";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
 
 /**

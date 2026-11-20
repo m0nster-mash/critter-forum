@@ -7,11 +7,23 @@ import type {Metadata} from "next";
 import "./globals.css";
 import React from "react";
 
+/**
+ * @TODO    Document
+ * @TODO    Migrate to global constant
+ */
 export const metadata: Metadata = {
     title: "critter-forum",
     description: "critters: pangaea, maybe?",
 };
 
+/**
+ * @TODO    Document
+ *
+ * @param   param0
+ * @param   param0.children
+ *
+ * @returns
+ */
 export default function RootLayout({
                                        children,
                                    }: Readonly<{

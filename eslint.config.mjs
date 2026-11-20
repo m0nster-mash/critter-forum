@@ -13,14 +13,14 @@ const eslintConfig = defineConfig([
         "build/**",
         "next-env.d.ts",
     ]),
-    // All logging goes through the shared loggers (src/lib/alerts). Nothing else may call console.*.
+    // All logging goes through the shared loggers (src/features/components). Nothing else may call console.*.
     {
         rules: {
             "no-console": "error",
         },
     },
     {
-        files: ["src/lib/alerts/server/logger.ts", "src/lib/alerts/client/logger.ts"],
+        files: ["src/features/alerts/server/logger.ts", "src/features/alerts/client/logger.ts"],
         rules: {
             "no-console": "off",
         },

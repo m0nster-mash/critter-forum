@@ -49,7 +49,7 @@ src/features/<feature>/constants/alerts.ts   each feature's registry entries
 
 ### Add an alert
 
-In the feature's `constants/alerts.ts` (see `src/features/auth/constants/alerts.ts`), then spread it into
+In the feature's `constants/alerts.ts` (see `../src/features/alerts/constants/alerts.ts`), then spread it into
 `ALERT_REGISTRY` in `src/lib/alerts/registry.ts`:
 
 ```ts

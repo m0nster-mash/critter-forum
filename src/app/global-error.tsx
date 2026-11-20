@@ -9,8 +9,14 @@ import {getErrorDigest} from "@/features/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
 
 /**
- * Last-resort error boundary: replaces the root layout when the layout itself throws, so it must render its own
- * `<html>` and `<body>`. Deliberately independent of the root layout and AlertProvider, which aren't available here.
+ * @fileOverview            Last-resort error boundary: replaces the root layout when the layout itself throws, so it
+ *                          must render its own {@code <html>} and {@code <body>}. Deliberately independent of the root
+ *                          layout and AlertProvider, which aren't available here.
+ * @module                  `modules/alerts`
+ * @status                  Requires cleanup
+ *
+ * @TODO                    Replace magic strings with consts
+ * @TODO                    Remove inline styles
  *
  * @param   {Object}        props           Component properties
  * @param   {unknown}       props.error     The thrown value; not guaranteed to be an Error

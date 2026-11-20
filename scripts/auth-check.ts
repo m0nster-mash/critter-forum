@@ -3,7 +3,7 @@
  * Run with: npx tsx scripts/auth-check.ts
  */
 import assert from "node:assert/strict";
-import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
+import {AUTH_ALERTS} from "@/features/alerts/constants/alerts";
 import {isAuthApiError, readAuthError, resolveAuthAlertCode} from "@/features/auth/utilities/auth-errors";
 import {validateRegistration} from "@/features/auth/validation";
 import {createAlert, isAlertCode} from "@/lib/alerts/create-alert";
