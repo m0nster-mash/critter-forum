@@ -1,4 +1,4 @@
-import {AlertBanner} from "@/components/alerts/alert-banner";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
