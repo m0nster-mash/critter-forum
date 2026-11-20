@@ -63,8 +63,9 @@ export function createAlert(code: AlertCode, overrides: AlertOverrides = {}): Pu
         presentation: overrides.presentation ?? definition.presentation,
     };
 
-    if (overrides.field !== undefined) {
-        alert.field = overrides.field;
+    const field = overrides.field ?? definition.field;
+    if (field !== undefined) {
+        alert.field = field;
     }
     if (overrides.ref !== undefined) {
         alert.ref = overrides.ref;

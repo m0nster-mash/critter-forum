@@ -22,7 +22,8 @@ export function resolvePath(
     }
 
     if (!params) {
-        // TODO:: migrate to proper error handling
+        // Programmer error: a dynamic route was resolved without its parameters. Thrown deliberately, not turned into a
+        // user alert: it surfaces through the error boundary on the client and `onRequestError` (logged) on the server.
         throw new Error(`Route requires parameters: ${route.label}`);
     }
     return route.path(params);

@@ -1,0 +1,56 @@
+"use client";
+
+import {logClientAlert} from "@/lib/alerts/client/log-alert";
+import {useAlertContext} from "@/lib/alerts/client/alert-provider";
+import type {LogContext, PublicAlert} from "@/lib/alerts/types";
+import {useCallback, useState} from "react";
+
+/**
+ * The one hook components use to raise alerts.
+ *
+ * `present(alert)` routes by the alert's registry-defined presentation, so no component decides how an alert looks:
+ * - `toast`:  shown in the global toast stack
+ * - `inline`: held in this hook's state for the component to render with `<AlertBanner>`
+ * - `none`:   logged only
+ * In every case the alert is logged per its client log policy.
+ *
+ * The hook holds one inline alert at a time. Call `clear()` when a new attempt starts.
+ *
+ * @return  {Object}    `present`, `clear`, `notify` (force a toast), `inline` (the current inline alert),
+ *                      `formAlert` (inline alert without a field) and `fieldAlert(name)` (inline alert for one field).
+ */
+export function useAlerts() {
+    const {notify} = useAlertContext();
+    const [inline, setInline] = useState<PublicAlert | null>(null);
+
+    const present = useCallback((alert: PublicAlert, detail?: LogContext) => {
+        switch (alert.presentation) {
+            case "toast":
+                notify(alert, detail);
+                break;
+            case "inline":
+                logClientAlert(alert, detail);
+                setInline(alert);
+                break;
+            case "none":
+                logClientAlert(alert, detail);
+                break;
+        }
+    }, [notify]);
+
+    const clear = useCallback(() => setInline(null), []);
+
+    const fieldAlert = useCallback(
+        (field: string): PublicAlert | null => (inline?.field === field ? inline : null),
+        [inline],
+    );
+
+    return {
+        inline,
+        formAlert: inline && !inline.field ? inline : null,
+        fieldAlert,
+        present,
+        clear,
+        notify,
+    };
+}
