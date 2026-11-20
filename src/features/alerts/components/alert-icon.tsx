@@ -10,13 +10,18 @@ const PATHS: Record<AlertSeverity, string> = {
 };
 
 /**
- * Decorative severity icon. Hidden from assistive tech; the banner carries a screen-reader-only severity label.
+ * @module          `features/alerts`
+ * @status          Require refactoring
+ * @TODO            Replace `PATHS` content with proper icons once the icon system is implemented
  *
- * @param   {Object}            props           Component properties
- * @param   {AlertSeverity}     props.severity  Which icon to draw
- * @param   {string}            [props.className]   Optional; class applied to the SVG
+ * @fileOverview    Renders the decorative severity icon for the {@link AlertBanner}
+ * @remark          Hidden from assistive tech; the banner carries a screen-reader-only severity label.
  *
- * @return  {JSX.Element}   The icon.
+ * @param           {Object}            props               Component properties
+ * @param           {AlertSeverity}     props.severity      Which icon to draw
+ * @param           {string}            [props.className]   Optional; class applied to the SVG
+ *
+ * @return          {JSX.Element}       The icon.
  */
 export function AlertIcon({severity, className}: {
     severity: AlertSeverity;

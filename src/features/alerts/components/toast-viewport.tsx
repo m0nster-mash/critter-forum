@@ -9,16 +9,21 @@ import type {ToastItem} from "@/features/alerts/types";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";
 
 /**
- * One toast: an AlertBanner plus auto-dismiss.
+ * @module          `features/alerts`
+ * @status          Require refactoring
+ * @TODO            Replace `×` text-icon with proper icons once the icon system is implemented
+ * @TODO            Document function
  *
- * The timer pauses while the pointer is over the toast or focus is inside it, resumes with at least one second
- * left, and restarts whenever an identical alert is merged into it (`version` changes). Escape dismisses it.
+ * @fileOverview    Renders a single toast: an {@link AlertBanner} with auto-dismiss.
+ * @remark          The timer pauses while the pointer is over the toast or focus is inside it, resumes with at least
+ *                  one second left, and restarts whenever an identical alert is merged into it (`version` changes).
+ *                  Escape dismisses it.
  *
- * @param   {} param  TODO:: document
- * @param   {ToastItem }param.item  TODO:: document
- * @param   {(id: string) => void} param.onDismiss  TODO:: document
+ * @param           {}                      param               TODO:: document
+ * @param           {ToastItem}             param.item          TODO:: document
+ * @param           {(id: string) => void}  param.onDismiss     TODO:: document
  *
- * @return TODO:: document
+ * @return          TODO:: document
  */
 function Toast({item, onDismiss}: {
     item: ToastItem;
@@ -107,10 +112,14 @@ function Toast({item, onDismiss}: {
 }
 
 /**
- * Properties for the ToastViewport component.
+ * @module          `features/alerts`
+ * @status          Require relocation
+ * @TODO            Relocate onto `types.ts`
  *
- * @property    {ToastItem[]}               toasts      The toasts to show, oldest first
- * @property    {(id: string) => void}      onDismiss   Called when a toast is dismissed or times out
+ * @fileOverview    Properties for the {@link ToastViewport} component.
+ *
+ * @property        {ToastItem[]}           toasts      The toasts to show, oldest first
+ * @property        {(id: string) => void}  onDismiss   Called when a toast is dismissed or times out
  */
 export interface ToastViewportProps {
     toasts: ToastItem[];
@@ -118,11 +127,14 @@ export interface ToastViewportProps {
 }
 
 /**
- * Fixed-position stack of toasts. Rendered once, by AlertProvider.
+ * @module          `features/alerts`
+ * @status          Good
  *
- * @param   {ToastViewportProps}    props   Component properties
+ * @fileOverview    Fixed-position stack of toasts. Rendered once, by {@link AlertProvider}.
  *
- * @return  {JSX.Element}   The notification region.
+ * @param           {ToastViewportProps}    props   Component properties
+ *
+ * @return          {JSX.Element}           The notification region.
  */
 export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Element {
     return (

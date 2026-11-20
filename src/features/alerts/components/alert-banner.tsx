@@ -5,15 +5,28 @@ import {AlertBannerProps} from "@/features/alerts/types";
 import type {JSX} from "react";
 
 /**
- * Renders one alert. Stateless and free of client-only code, so it works in Server Components, Client Components,
- * and error boundaries alike. Errors and warnings use `role="alert"` (announced immediately); success and info use
- * `role="status"` (announced politely).
+ * @module          `features/alerts`
+ * @status          Require refactoring
+ * @TODO            Replace magic strings with constants
  *
- * @param   {AlertBannerProps}  props   Component properties
+ * @fileOverview    Renders one alert in a visible banner.
+ * @remark          Stateless and free of client-only code, so it works in Server Components, Client Components, and
+ *                  error boundaries alike.
+ * @remark          Errors and warnings use {@code role="alert"} (announced immediately);
+ *                  Success and info use {@code role="status"} (announced politely).
  *
- * @return  {JSX.Element | null}    The alert, or null when there is nothing to show.
+ * @param           {AlertBannerProps}      props   Component properties
+ *
+ * @return          {JSX.Element | null}    The alert, or null when there is nothing to show.
  */
-export function AlertBanner({alert, id, variant = "banner", count = 1, action}: AlertBannerProps): JSX.Element | null {
+export function AlertBanner({
+                                alert,
+                                id,
+                                variant = "banner",
+                                count = 1,
+                                action
+                            }: AlertBannerProps): JSX.Element | null {
+
     if (!alert) {
         return null;
     }

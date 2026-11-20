@@ -8,8 +8,7 @@ import {useCallback, useState} from "react";
 
 /**
  * @module          `features/alerts`
- * @status          Requires documentation
- * @TODO            Document function
+ * @status          Good
  *
  * @fileOverview    The one hook components use to raise components.
  * @remark          {@code present(alert)} routes by the alert's registry-defined presentation, so no component decides
