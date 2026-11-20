@@ -1,4 +1,4 @@
-import {logger} from "@/lib/alerts/server/logger";
+import {logger} from "@/features/alerts/server/logger";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
 import {db} from "@/lib/db/auth/db";
 import {drizzleAdapter} from "@better-auth/drizzle-adapter";

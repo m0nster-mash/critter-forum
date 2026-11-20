@@ -1,9 +1,9 @@
 import {createAlert, getAlertDefinition} from "@/lib/alerts/create-alert";
 import {ActionResult, fail} from "@/lib/alerts/result";
-import {isAlertError} from "@/lib/alerts/server/alert-error";
-import {logAlert} from "@/lib/alerts/server/log-alert";
-import type {LogContext} from "@/lib/alerts/server/logger";
-import {generateRef} from "@/lib/alerts/server/ref";
+import {isAlertError} from "@/features/alerts/server/alert-error";
+import {logAlert} from "@/features/alerts/server/log-alert";
+import type {LogContext} from "@/features/alerts/server/logger";
+import {generateRef} from "@/features/alerts/server/ref";
 import type {PublicAlert} from "@/lib/alerts/types";
 import {unstable_rethrow} from "next/navigation";
 

@@ -1,9 +1,9 @@
 "use client";
 
-import {ToastViewport} from "@/components/alerts/toast-viewport";
-import {GlobalErrorListeners} from "@/lib/alerts/client/global-error-listeners";
-import {logClientAlert} from "@/lib/alerts/client/log-alert";
-import {type ToastItem, toastReducer} from "@/lib/alerts/client/toast-state";
+import {ToastViewport} from "@/features/alerts/components/toast-viewport";
+import {GlobalErrorListeners} from "@/features/alerts/client/global-error-listeners";
+import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {type ToastItem, toastReducer} from "@/features/alerts/client/toast-state";
 import type {LogContext, PublicAlert} from "@/lib/alerts/types";
 import {createContext, type JSX, type ReactNode, useCallback, useContext, useMemo, useReducer, useRef} from "react";
 

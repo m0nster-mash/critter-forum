@@ -1,8 +1,8 @@
 "use client";
 
-import {AlertBanner} from "@/components/alerts/alert-banner";
-import styles from "@/components/alerts/alerts.module.css";
-import {type ToastItem, TOAST_DURATIONS} from "@/lib/alerts/client/toast-state";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import styles from "@/features/alerts/components/alerts.module.css";
+import {type ToastItem, TOAST_DURATIONS} from "@/features/alerts/client/toast-state";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";
 
 /**

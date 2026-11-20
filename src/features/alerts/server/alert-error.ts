@@ -1,5 +1,5 @@
 import type {AlertCode} from "@/lib/alerts/registry";
-import type {LogContext} from "@/lib/alerts/server/logger";
+import type {LogContext} from "@/features/alerts/server/logger";
 import type {AlertOverrides} from "@/lib/alerts/types";
 
 /**

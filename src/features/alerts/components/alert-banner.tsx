@@ -1,5 +1,5 @@
-import {AlertIcon} from "@/components/alerts/alert-icon";
-import styles from "@/components/alerts/alerts.module.css";
+import {AlertIcon} from "@/features/alerts/components/alert-icon";
+import styles from "@/features/alerts/components/alerts.module.css";
 import type {AlertSeverity, PublicAlert} from "@/lib/alerts/types";
 import type {JSX, ReactNode} from "react";
 

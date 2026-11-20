@@ -8,8 +8,8 @@ import {
 import {type RegistrationInput, validateRegistration} from "@/features/auth/validation";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {fail, succeed} from "@/lib/alerts/result";
-import {AlertError} from "@/lib/alerts/server/alert-error";
-import {safeAction} from "@/lib/alerts/server/safe-action";
+import {AlertError} from "@/features/alerts/server/alert-error";
+import {safeAction} from "@/features/alerts/server/safe-action";
 import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
 

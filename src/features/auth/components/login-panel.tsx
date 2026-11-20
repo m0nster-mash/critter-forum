@@ -1,11 +1,11 @@
 "use client";
 
-import {AlertBanner} from "@/components/alerts/alert-banner";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {resolveAuthAlertCode} from "@/features/auth/utilities/auth-errors";
 import {signIn} from "@/lib/auth-client";
-import {useAlerts} from "@/lib/alerts/client/use-alerts";
+import {useAlerts} from "@/features/alerts/client/use-alerts";
 import {alertFromThrown} from "@/lib/alerts/from-thrown";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";

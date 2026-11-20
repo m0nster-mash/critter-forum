@@ -1,6 +1,6 @@
 "use client";
 
-import {useAlertContext} from "@/lib/alerts/client/alert-provider";
+import {useAlertContext} from "@/features/alerts/client/alert-provider";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {useEffect} from "react";
 

@@ -3,9 +3,9 @@
  * Run with: npx tsx scripts/alerts-check.ts
  */
 import assert from "node:assert/strict";
-import {createAlert, getAlertDefinition, isAlertCode} from "@/lib/alerts/create-alert";
-import {ALERT_REGISTRY, AlertCode} from "@/lib/alerts/registry";
-import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/lib/alerts/types";
+import {createAlert, getAlertDefinition, isAlertCode} from "@/features/alerts/create-alert";
+import {ALERT_REGISTRY, AlertCode} from "@/features/alerts/registry";
+import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
 
 // Registry integrity
 for (const [code, def] of Object.entries(ALERT_REGISTRY)) {
@@ -70,4 +70,4 @@ assert.equal(isAlertCode("APP_NETWORK_ERROR"), true);
 assert.equal(isAlertCode("toString"), false, "prototype keys must not count as codes");
 assert.equal(getAlertDefinition("nope").severity, "error");
 
-console.info("alerts-check: all assertions passed");
+console.info("components-check: all assertions passed");

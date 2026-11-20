@@ -1,4 +1,4 @@
-import {logger} from "@/lib/alerts/server/logger";
+import {logger} from "@/features/alerts/server/logger";
 import type {Instrumentation} from "next";
 
 /**

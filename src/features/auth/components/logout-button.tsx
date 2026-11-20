@@ -2,7 +2,7 @@
 
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
-import {useAlerts} from "@/lib/alerts/client/use-alerts";
+import {useAlerts} from "@/features/alerts/client/use-alerts";
 import {alertFromThrown} from "@/lib/alerts/from-thrown";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {signOut} from "@/lib/auth-client";

@@ -1,5 +1,5 @@
 import "dotenv/config";
-import {logger} from "@/lib/alerts/server/logger";
+import {logger} from "@/features/alerts/server/logger";
 import {seedUsers} from "./seed-users";
 
 const log = logger.child({scope: "seed"});

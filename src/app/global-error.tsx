@@ -1,7 +1,7 @@
 "use client";
 
-import {AlertBanner} from "@/components/alerts/alert-banner";
-import {logClientAlert} from "@/lib/alerts/client/log-alert";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {logClientAlert} from "@/features/alerts/client/log-alert";
 import {createAlert} from "@/lib/alerts/create-alert";
 import {getErrorDigest} from "@/lib/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";

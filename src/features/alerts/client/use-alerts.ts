@@ -1,7 +1,7 @@
 "use client";
 
-import {logClientAlert} from "@/lib/alerts/client/log-alert";
-import {useAlertContext} from "@/lib/alerts/client/alert-provider";
+import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {useAlertContext} from "@/features/alerts/client/alert-provider";
 import type {LogContext, PublicAlert} from "@/lib/alerts/types";
 import {useCallback, useState} from "react";
 
