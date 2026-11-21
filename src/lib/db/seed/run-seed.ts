@@ -1,5 +1,5 @@
 /**
- * TODO: document
+ * @fileOverview    TODO: document
  *
  * @module lib/db/seed/run-seed
  * @status Requires documentation
