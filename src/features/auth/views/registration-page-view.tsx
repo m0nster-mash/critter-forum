@@ -2,7 +2,7 @@
  * @fileOverview    TODO: document
  * @module          features/auth
  *
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import {PageHeader} from "@/components/ui/page-header";
@@ -15,12 +15,6 @@ import {JSX} from "react";
  * Renders the full account registration page view composition.
  *
  * @returns {JSX.Element}   The registration page view JSX element.
- */
-/**
- * TODO: document
- *
- * @status Requires documentation
- * @returns TODO: document
  */
 export function RegistrationPageView(): JSX.Element {
     return (

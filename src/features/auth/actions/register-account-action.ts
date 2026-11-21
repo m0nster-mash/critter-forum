@@ -2,7 +2,9 @@
  * @fileOverview    TODO: document
  * @module          features/auth
  *
- * @status Requires documentation
+ * @status          Requires documentation
+ * @TODO            Document file and function
+ * @TODO            Replace magic strings with consts
  */
 
 "use server";
@@ -19,6 +21,9 @@ import {headers} from "next/headers";
 
 /**
  * Server action that registers a new user account using email and password credentials.
+ *
+ * @TODO    Replace magic strings with consts
+ * @TODO    Document method
  *
  * @return  TODO:: document
  */

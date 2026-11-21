@@ -1,8 +1,9 @@
 /**
- @fileOverview    TODO: document
- @module          features/auth
-
- @status Requires documentation
+ * @fileOverview    TODO: document
+ * @module          features/auth
+ *
+ * @status          Requires documentation
+ * @TODO            Fix typing issues on RegistrationPanel
  */
 
 "use client";
@@ -25,24 +26,23 @@ import {JSX, type SubmitEvent, useState} from "react";
 /**
  * Renders the registration form panel enabling account creation.
  *
- * Validation and server failures appear inline (field-level where the alert names a field, form-level otherwise); the
- * "account created" confirmation is a toast that survives the redirect.
+ * @remarks     Validation and server failures appear inline (field-level where the alert names a field, form-level
+ *              otherwise); the "account created" confirmation is a toast that survives the redirect.
  *
- * @param   {AuthFlowProps} props               Component properties handling registration callbacks
- * @param   {Function}      [props.onSuccess]   Optional callback function executed upon successful account registration
+ * @TODO        Fix type issues:
+ *              - TS2339: Property 'present' does not exist on type '{}'.
+ *              - TS2339: Property 'clear' does not exist on type '{}'.
+ *              - TS2339: Property 'formAlert' does not exist on type '{}'.
+ *              - TS2339: Property 'fieldAlert' does not exist on type '{}'.
  *
- * @returns {JSX.Element}   The registration panel JSX element.
- */
-/**
- * TODO: document
+ * @param       onSuccess       Optional callback function executed upon successful account registration
  *
- * @status Requires documentation
- * @param props - TODO: document
- * @returns TODO: document
+ * @returns     {JSX.Element}   The registration panel JSX element.
  */
 export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
     const router = useRouter();
+    // TODO:: fix these issues
     const {present, clear, formAlert, fieldAlert} = useAlerts();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");

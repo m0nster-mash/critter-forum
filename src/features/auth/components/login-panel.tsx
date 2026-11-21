@@ -1,8 +1,9 @@
 /**
- @fileOverview    TODO: document
- @module          features/auth
-
- @status Requires documentation
+ * @fileOverview    TODO: document
+ * @module          features/auth
+ *
+ * @status          Requires documentation
+ * @TODO            Fix typing issues on LoginPanel
  */
 
 "use client";
@@ -26,6 +27,11 @@ import {JSX, type SubmitEvent, useState} from "react";
  *
  * @remarks     Failures appear inline above the form; the success confirmation is a toast that survives the redirect.
  *
+ * @TODO        Fix type issues:
+ *              - TS2339: Property 'present' does not exist on type '{}'.
+ *              - TS2339: Property 'clear' does not exist on type '{}'.
+ *              - TS2339: Property 'formAlert' does not exist on type '{}'.
+ *
  * @param       onSuccess       Optional callback executed after successful authentication
  *
  * @returns     {JSX.Element}   The login form panel JSX element
@@ -33,6 +39,7 @@ import {JSX, type SubmitEvent, useState} from "react";
 export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
     const router = useRouter();
+    // TODO:: fix these issues
     const {present, clear, formAlert} = useAlerts();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

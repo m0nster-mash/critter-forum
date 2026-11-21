@@ -12,11 +12,11 @@ import type {PublicAlert} from "@/features/alerts/types";
  *
  * TODO         Migrate to `types.ts`
  *
- * @typeParam   T - TODO: document
+ * @typeParam   T       TODO: document
  *
- * @property    ok      Discriminant
- * @property    data    Payload returned to the caller. Must be serializable.
- * @property    alert   Optional; a confirmation to show the user (ex. "Account created")
+ * @property    ok          Discriminant
+ * @property    data        Payload returned to the caller. Must be serializable.
+ * @property    [alert]     Optional; a confirmation to show the user (ex. "Account created")
  */
 export interface ActionSuccess<T> {
     ok: true;
@@ -53,10 +53,10 @@ export function succeed(): ActionSuccess<undefined>;
 /**
  * Builds a success result.
  *
- * @typeParam   T       TODO: document
+ * @typeParam   T           TODO: document
  *
- * @param       data    TODO: document
- * @param       alert   TODO: document
+ * @param       data        TODO: document
+ * @param       [alert]     TODO: document
  *
  * @returns     TODO: document
  */
@@ -68,10 +68,10 @@ export function succeed<T>(
 /**
  * Builds a success result.
  *
- * @typeParam   T       TODO: document
+ * @typeParam   T           TODO: document
  *
- * @param       data    TODO: document
- * @param       alert   TODO: document
+ * @param       data        TODO: document
+ * @param       [alert]     TODO: document
  *
  * @returns     TODO: document
  */

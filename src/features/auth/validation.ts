@@ -1,12 +1,13 @@
 /**
- @fileOverview    TODO: document
- @module          features/auth
-
- @status Requires documentation
+ * @fileOverview    TODO: document
+ * @module          features/auth
+ *
+ * @status          Requires documentation
  */
 
 import {createAlert} from "@/features/alerts/create-alert";
 import type {PublicAlert} from "@/features/alerts/types";
+import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
 
 /**
@@ -22,7 +23,10 @@ export interface RegistrationInput {
     password: string;
 }
 
-/** TODO: document */
+/**
+ * @TODO    document
+ * @TODO    migrate to regex const file
+ */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
@@ -38,13 +42,13 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  */
 export function validateRegistration(input: RegistrationInput): PublicAlert | null {
     if (!input.name) {
-        return createAlert("AUTH_REGISTER_NAME_REQUIRED");
+        return createAlert(AUTH_ALERT_CODES.REGISTER_NAME_REQUIRED);
     }
     if (!EMAIL_PATTERN.test(input.email)) {
-        return createAlert("AUTH_REGISTER_EMAIL_INVALID");
+        return createAlert(AUTH_ALERT_CODES.REGISTER_EMAIL_INVALID);
     }
     if (input.password.length < PASSWORD_MIN_LENGTH) {
-        return createAlert("AUTH_REGISTER_PASSWORD_TOO_SHORT", {params: {min: PASSWORD_MIN_LENGTH}});
+        return createAlert(AUTH_ALERT_CODES.REGISTER_PASSWORD_TOO_SHORT, {params: {min: PASSWORD_MIN_LENGTH}});
     }
     return null;
 }

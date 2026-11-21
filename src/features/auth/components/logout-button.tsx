@@ -2,7 +2,8 @@
  * @fileOverview    TODO: document
  * @module          features/auth
  *
- * @status Requires documentation
+ * @status          Requires documentation
+ * @TODO            Fix typing issues on Logout
  */
 
 "use client";
@@ -42,6 +43,9 @@ export function LogoutButton({
 /**
  * Wrapper component providing click-to-logout handling and session termination logic for child UI elements.
  *
+ * @TODO        Fix type issues:
+ *              - TS2339: Property 'present' does not exist on type '{}'.
+ *
  * @param   children        Child elements wrapped within the interactive logout container
  * @param   redirectTo      The target route to navigate to after sign-out completes
  * @param   onSuccess       Optional callback executed upon successful logout
@@ -56,6 +60,7 @@ export function Logout({
                            onBeforeLogout,
                        }: LogoutProps): JSX.Element {
     const router = useRouter();
+    // TODO:: fix this issue
     const {present} = useAlerts();
     const [loading, setLoading] = useState(false);
 

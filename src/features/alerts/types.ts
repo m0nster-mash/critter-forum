@@ -39,7 +39,7 @@ export interface Logger {
      * TODO: document
      *
      * @param   message     TODO: document
-     * @param   context     TODO: document
+     * @param   [context]   TODO: document
      */
     debug(message: string, context?: LogContext): void;
 
@@ -47,7 +47,7 @@ export interface Logger {
      * TODO: document
      *
      * @param   message     TODO: document
-     * @param   context     TODO: document
+     * @param   [context]   TODO: document
      */
     info(message: string, context?: LogContext): void;
 
@@ -55,7 +55,7 @@ export interface Logger {
      * TODO: document
      *
      * @param   message     TODO: document
-     * @param   context     TODO: document
+     * @param   [context]   TODO: document
      */
     warn(message: string, context?: LogContext): void;
 
@@ -63,7 +63,7 @@ export interface Logger {
      * TODO: document
      *
      * @param   message     TODO: document
-     * @param   context     TODO: document
+     * @param   [context]   TODO: document
      */
     error(message: string, context?: LogContext): void;
 
@@ -97,7 +97,7 @@ export interface AlertLogPolicy {
  * @property    message         User-safe text. May contain `{name}` tokens filled via `params`.
  * @property    presentation    Default on-page presentation
  * @property    log             Default logging rules
- * @property    field           Optional; form field this alert belongs to by default
+ * @property    [field]         Optional; form field this alert belongs to by default
  */
 export interface AlertDefinition {
     severity: AlertSeverity;
@@ -117,8 +117,8 @@ export interface AlertDefinition {
  * @property    severity        Severity used for styling and live-region role
  * @property    message         Final, user-safe text
  * @property    presentation    Where the alert should be rendered
- * @property    field           Optional; form field name for field-level inline components
- * @property    ref             Optional; reference ID matching a server log entry
+ * @property    [field]         Optional; form field name for field-level inline components
+ * @property    [ref]           Optional; reference ID matching a server log entry
  */
 export interface PublicAlert {
     code: string;
@@ -136,9 +136,9 @@ export interface PublicAlert {
  *
  * @property    severity        Override the registry severity
  * @property    presentation    Override the registry presentation
- * @property    field           Form field name for field-level components
- * @property    ref             Reference ID matching a server log entry
- * @property    params          Values substituted for `{name}` tokens in the message
+ * @property    [field]         Form field name for field-level components
+ * @property    [ref]           Reference ID matching a server log entry
+ * @property    [params]        Values substituted for `{name}` tokens in the message
  */
 export interface AlertOverrides {
     severity?: AlertSeverity;
@@ -152,11 +152,11 @@ export interface AlertOverrides {
  * Properties for the AlertBanner component.
  *
  * @property    alert       The alert to render; renders nothing if absent
- * @property    id          Optional; element id, so an input can reference it via `aria-describedby`
- * @property    variant     Optional; `banner` (default, page or form level), `field` (compact, under an input) or
+ * @property    [id]        Optional; element id, so an input can reference it via `aria-describedby`
+ * @property    [variant]   Optional; `banner` (default, page or form level), `field` (compact, under an input) or
  *                          `toast` (floating)
- * @property    count       Optional; how many identical components this represents
- * @property    action      Optional; trailing content such as a dismiss button
+ * @property    [count]     Optional; how many identical components this represents
+ * @property    [action]        Optional; trailing content such as a dismiss button
  */
 export interface AlertBannerProps {
     alert: PublicAlert | null | undefined;
@@ -191,8 +191,8 @@ export type ToastAction =
 /**
  * Options for an {@link AlertError}.
  *
- * @property    cause       Optional; TODO:: document
- * @property    detail      Optional; TODO:: document
+ * @property    [cause]     Optional; TODO:: document
+ * @property    [detail]    Optional; TODO:: document
  *
  */
 export interface AlertErrorOptions extends AlertOverrides {
@@ -205,8 +205,8 @@ export interface AlertErrorOptions extends AlertOverrides {
  *
  * @property    name        TODO:: document
  * @property    message     TODO:: document
- * @property    stack       Optional;   TODO:: document
- * @property    cause       Optional;   TODO:: document
+ * @property    [stack]     Optional;   TODO:: document
+ * @property    [cause]     Optional;   TODO:: document
  * @property    extra       TODO:: document
  */
 export interface SerializedError {
