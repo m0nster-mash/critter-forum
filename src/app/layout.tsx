@@ -36,7 +36,7 @@ export const metadata: Metadata = {
  *
  * @param       children        Root layout props containing the active route content
  *
- * @return      {JSX.Element}   The complete HTML document for the application
+ * @returns     {JSX.Element}   The complete HTML document for the application
  */
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>): JSX.Element {
 

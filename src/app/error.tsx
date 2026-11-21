@@ -30,7 +30,7 @@ import {type JSX, useEffect, useMemo} from "react";
  * @param       error           The thrown value; not guaranteed to be an Error
  * @param       retry           Re-fetches and re-renders the failed segment
  *
- * @return      {JSX.Element}   The error UI.
+ * @returns     {JSX.Element}   The error UI.
  */
 export default function RouteError({error, retry}: {
     error: unknown;

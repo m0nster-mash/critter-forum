@@ -16,7 +16,7 @@ import type {JSX} from "react";
 /**
  * Rendered when a route doesn't exist or {@code NotFound()} is called.
  *
- * @return  {JSX.Element}   The not-found UI.
+ * @returns {JSX.Element}   The not-found UI.
  */
 export default function NotFound(): JSX.Element {
 
