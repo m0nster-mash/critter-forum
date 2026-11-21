@@ -1,5 +1,5 @@
 /**
- * @fileOverview    The default home page panel view.
+ * @fileOverview    The public home page panel content.
  * @module          core-application
  *
  * @status          Requires full replacement
@@ -9,7 +9,7 @@
 import {JSX} from "react";
 
 /**
- * Renders the default home panel.
+ * Renders the public home panel.
  *
  * @TODO    Replace content with proper home page at a later date
  *

@@ -1,8 +1,9 @@
 /**
- * TODO: document
+ * @fileOverview    Renders the dashboard view
+ * @module          core-application
  *
- * @module components/views/dashboard-page-view
- * @status Requires documentation
+ * @status          Requires refactoring
+ * @TODO            Replace session checks with proper permission barriers once permissions have been built out
  */
 
 "use client";
@@ -17,13 +18,14 @@ import {redirect} from "next/navigation";
 import {JSX} from "react";
 
 /**
- * @status          Requires refactoring
- * @TODO            Replace session checks with proper permission barriers once permissions have been built out
+ * Renders the protected dashboard page view.
  *
- * @fileOverview    Renders the protected dashboard page view. Requires an authenticated session; unauthenticated users
- *                  are redirected to the login page while the session is resolving.
+ * @remarks     Requires an authenticated session; unauthenticated users are redirected to the login page while the
+ *              session is resolving.
  *
- * @return          {JSX.Element | null}    The dashboard view, or null while authentication status is resolving
+ * @TODO        Replace session checks with proper permission barriers once permissions have been built out
+ *
+ * @return      {JSX.Element | null}    The dashboard view, or null while authentication status is resolving
  */
 export default function DashboardPageView(): JSX.Element | null {
 
