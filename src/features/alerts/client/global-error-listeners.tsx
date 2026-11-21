@@ -27,6 +27,8 @@ import {useEffect} from "react";
  *              - the benign {@link ResizeObserver} notification.
  *
  * @param       event   The error event
+ *
+ * @returns     TODO: document
  */
 function isNoise(event: ErrorEvent): boolean {
 
@@ -46,7 +48,7 @@ function isNoise(event: ErrorEvent): boolean {
  * @remarks     Renders nothing.
  * @remarks     Repeats are merged by the toast stack, so a failing loop can't flood the screen.
  *
- * @return      Nothing; mounted for its side effects.
+ * @returns     Nothing; mounted for its side effects.
  */
 export function GlobalErrorListeners(): null {
 

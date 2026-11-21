@@ -14,26 +14,24 @@ import type {LogContext, PublicAlert} from "@/features/alerts/types";
 import {useCallback, useState} from "react";
 
 /**
- * @module          `features/alerts`
- * @status          Good
+ * The one hook components use to raise components.
  *
- * @fileOverview    The one hook components use to raise components.
- * @remark          {@code present(alert)} routes by the alert's registry-defined presentation, so no component decides
- *                  how an alert looks:
+ * @remark  {@code present(alert)} routes by the alert's registry-defined presentation, so no component decides how an
+ *          alert looks:
  *
- *                  {@code toast}   shown in the global toast stack
- *                  {@code inline}  held in this hook's state for the component to render with {@link AlertBanner}
- *                  {@code none}    logged only
+ *          {@code toast}   shown in the global toast stack
+ *          {@code inline}  held in this hook's state for the component to render with {@link AlertBanner}
+ *          {@code none}    logged only
  *
- *                  In every case the alert is logged per its client log policy.
- * @remark          The hook holds one inline alert at a time. Call `clear()` when a new attempt starts.
+ * @remark  In every case the alert is logged per its client log policy.
+ * @remark  The hook holds one inline alert at a time. Call `clear()` when a new attempt starts.
  *
- * @return          {Object}    {@code present},
- *                              {@code clear},
- *                              {@code notify} (force a toast),
- *                              {@code inline} (the current inline alert),
- *                              {@code formAlert} (inline alert without a field),
- *                              {@code fieldAlert(name)} (inline alert for one field)
+ * @returns {Object}    {@code present},
+ *                      {@code clear},
+ *                      {@code notify} (force a toast),
+ *                      {@code inline} (the current inline alert),
+ *                      {@code formAlert} (inline alert without a field),
+ *                      {@code fieldAlert(name)} (inline alert for one field)
  */
 export function useAlerts(): object {
 

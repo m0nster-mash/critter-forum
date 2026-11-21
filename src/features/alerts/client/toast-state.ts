@@ -9,16 +9,12 @@ import {MAX_VISIBLE_TOASTS, TOAST_ACTION_TYPES} from "@/features/alerts/constant
 import type {PublicAlert, ToastAction, ToastItem} from "@/features/alerts/types";
 
 /**
- * @module          `features/alerts`
- * @status          Requires documentation
- * @TODO            Document function
+ * TODO:: document
  *
- * @fileOverview    TODO:: document
+ * @param   alertA      TODO:: document
+ * @param   alertB      TODO:: document
  *
- * @param           {PublicAlert}   alertA  TODO:: document
- * @param           {PublicAlert}   alertB  TODO:: document
- *
- * @return          {boolean}       TODO:: document
+ * @returns {boolean}   TODO:: document
  */
 function isSameAlert(
     alertA: PublicAlert,
@@ -31,19 +27,16 @@ function isSameAlert(
 }
 
 /**
- * @module          `features/alerts`
- * @status          Requires documentation
- * @TODO            Document function
+ * Pure reducer for the toast stack.
  *
- * @fileOverview    Pure reducer for the toast stack.
- * @remark          {@code add}         an identical toast is merged, bumping its count and version to restart its timer
- *                  {@code dismiss}     removes one toast
- *                  {@code clear}       removes all toasts
+ * @remark  {@code add}     an identical toast is merged, bumping its count and version to restart its timer
+ *          {@code dismiss} removes one toast
+ *          {@code clear}   removes all toasts
  *
- * @param           {ToastItem[]}   state   TODO:: document
- * @param           {ToastAction}   action  TODO:: document
+ * @param   state           TODO:: document
+ * @param   action          TODO:: document
  *
- * @retun           {ToastItem[]}   TODO:: document
+ * @retuns  {ToastItem[]}   TODO:: document
  */
 export function toastReducer(
     state: ToastItem[],

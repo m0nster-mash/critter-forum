@@ -4,6 +4,12 @@
  *
  * @status          Requires documentation
  */
+/**
+ * TODO: document
+ *
+ * @module features/alerts/server/alert-error
+ * @status Requires documentation
+ */
 
 import {ALERT_ERROR_NAME} from "@/features/alerts/constants/errors";
 import type {AlertCode} from "@/features/alerts/registry";
@@ -30,7 +36,7 @@ export class AlertError extends Error {
 
     /**
      * @param   code        Registry code of the alert to raise
-     * @param   [options]   Optional; alert overrides plus `cause` and `detail`
+     * @param   options     Optional; alert overrides plus `cause` and `detail`
      */
     constructor(
         code: AlertCode,
@@ -54,7 +60,7 @@ export class AlertError extends Error {
  *
  * @param       value       The caught value
  *
- * @return      {boolean}   True if the value is an AlertError.
+ * @returns     {boolean}   True if the value is an AlertError.
  */
 export function isAlertError(value: unknown): value is AlertError {
 

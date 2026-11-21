@@ -17,43 +17,60 @@ import type {PublicAlert} from "@/features/alerts/types";
 import {unstable_rethrow} from "next/navigation";
 
 /**
- * Logs an alert per its registry policy and, when that produces a log entry for a warning or error, stamps the alert
- * with a reference ID. A ref on the client therefore always matches a line in the server log.
+ * Logs an alert per its registry policy.
+ *
+ * @remarks     When an alert produces a log entry for a warning or error, stamps the alert with a reference ID.
+ * @remarks     A ref on the client therefore always matches a line in the server log.
+ *
+ * @param       alert       TODO: document
+ * @param       context     TODO: document
+ *
+ * @returns     TODO: document
  */
-function record(alert: PublicAlert, context: LogContext): PublicAlert {
+function record(
+    alert: PublicAlert,
+    context: LogContext
+): PublicAlert {
+
     if (!getAlertDefinition(alert.code).log.server) {
         return alert;
     }
 
-    const needsRef = alert.ref === undefined && (alert.severity === LOG_LEVELS.ERROR || alert.severity === LOG_LEVELS.WARN);
+    const needsRef = alert.ref === undefined
+        && (alert.severity === LOG_LEVELS.ERROR || alert.severity === LOG_LEVELS.WARN);
     const stamped = needsRef ? {...alert, ref: generateRef()} : alert;
 
     logAlert(stamped, context);
+
     return stamped;
 }
 
 /**
  * Wraps a server action so that it always resolves to an ActionResult and never throws to the client.
  *
- * - Returned results: the alert (if any) is logged per its registry policy, then the result is passed through.
- * - Thrown `AlertError`: converted to a failure result with the registered alert. Its cause and detail are logged.
- * - Any other thrown value: logged in full (with stack) and converted to a generic `APP_UNKNOWN_ERROR` failure
- *   carrying a reference ID. The message and stack never reach the client.
- * - Next.js control-flow errors (`redirect()`, `notFound()`, etc.) are rethrown untouched so navigation still works.
+ * @remarks     Next.js control-flow errors (`redirect()`, `notFound()`, etc.) are rethrown untouched so navigation
+ *              still works.
+ * @remarks     The action's arguments are never logged, since they commonly contain passwords.
+
+ * @typeParam   Args    TODO: document
+ * @typeParam   T       TODO: document
  *
- * The action's arguments are never logged, since they commonly contain passwords.
+ * @param       name    Stable identifier for logs, (ex. `auth.register`)
+ * @param       action  The action body
  *
- * Usage, in a `"use server"` file: `export const saveThing = safeAction("things.save", async (input: Input) => {...})`
+ * @returns     {ActionResult}  The wrapped action; the alert (if any) is logged per its registry policy, then the
+ *                              result is passed through.
  *
- * @param   {string}                                    name    Stable identifier for logs, e.g. `auth.register`
- * @param   {(...args: Args) => Promise<ActionResult<T>>}   action  The action body
- *
- * @return  {(...args: Args) => Promise<ActionResult<T>>}  The wrapped action.
+ * @throws      {AlertError}    Converted to failure result with the registered alert. Its cause and detail are logged.
+ * @throws                      Any other thrown value is logged in full (with stack) and converted to a generic
+ *                              `APP_UNKNOWN_ERROR` failure carrying a reference ID. The message and stack never reach
+ *                              the client.
  */
 export function safeAction<Args extends unknown[], T>(
     name: string,
     action: (...args: Args) => Promise<ActionResult<T>>,
 ): (...args: Args) => Promise<ActionResult<T>> {
+
     return async (...args: Args): Promise<ActionResult<T>> => {
         try {
             const result = await action(...args);

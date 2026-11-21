@@ -115,7 +115,7 @@ function Toast({item, onDismiss}: {
  * @param   toasts          TODO:: document
  * @param   onDismiss       TODO:: document
  *
- * @return  {JSX.Element}   The notification region.
+ * @returns {JSX.Element}   The notification region.
  */
 export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Element {
     return (
@@ -134,6 +134,8 @@ export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Elem
  * @TODO    Document function
  *
  * @param   dismiss TODO:: document
+ *
+ * @returns TODO: document
  */
 function getDismissButton(dismiss: () => void) {
     return <button type="button"

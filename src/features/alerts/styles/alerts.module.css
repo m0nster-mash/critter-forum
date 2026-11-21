@@ -1,8 +1,8 @@
-/* ------------------------------------------------------------------ */
-/* Alert banner (inline) and toast share one visual language.          */
-/* Severity is conveyed by icon + text, never by color alone.          */
-/* Colors are tokens on each severity class, so no global CSS needed.  */
-/* ------------------------------------------------------------------ */
+/* -------------------------------------------------------------------- */
+/* Alert banner (inline) and toast share one visual language.           */
+/* Severity is conveyed by icon + text, never by color alone.           */
+/* Colors are tokens on each severity class, so no global CSS needed.   */
+/* -------------------------------------------------------------------- */
 
 .alert {
     --alert-accent: #1a73e8;

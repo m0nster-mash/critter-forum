@@ -48,7 +48,7 @@ const AlertContext = createContext<AlertContextValue | null>(null);
  *
  * @param       children        The application content
  *
- * @return      {JSX.Element}   The provider with the toast viewport and global error listeners mounted beside the
+ * @returns     {JSX.Element}   The provider with the toast viewport and global error listeners mounted beside the
  *                              children.
  */
 export function AlertProvider({children}: { children: ReactNode }): JSX.Element {
@@ -91,7 +91,7 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
  *
  * @TODO        Investigate error handling; determine if this needs to be refactored.
  *
- * @return      {AlertContextValue}     The context value.
+ * @returns     {AlertContextValue}     The context value.
  *
  * @throws      {Error}                 Throws if called outside an AlertProvider (a programmer error).
  */

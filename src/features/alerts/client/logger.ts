@@ -29,7 +29,7 @@ const SAFE_KEYS = new Set<string>(CLIENT_LOG_SAFE_KEYS);
  * @remarks     {@code process.env.NEXT_PUBLIC_*} must be referenced statically so Next can inline it into the client
  *              bundle.
  *
- * @return      {AlertLogLevel, boolean}    Alert configuration data.
+ * @returns     {AlertLogLevel, boolean}    Alert configuration data.
  */
 function getConfig(): {
     minLevel: AlertLogLevel;
@@ -54,7 +54,7 @@ function getConfig(): {
  *
  * @param   context         Raw event-submitted log data
  *
- * @return  {LogContext}    Sanitized log data
+ * @returns {LogContext}    Sanitized log data
  */
 function sanitize(context: LogContext): LogContext {
 
@@ -82,8 +82,6 @@ function sanitize(context: LogContext): LogContext {
  * @param   message     TODO:: document
  * @param   bindings    TODO:: document
  * @param   context     TODO:: document
- *
- * @return  {void}      TODO:: document
  */
 function emit(
     level: AlertLogLevel,
@@ -110,7 +108,7 @@ function emit(
  *
  * @param   bindings    Key-value pairs merged into every entry
  *
- * @return  {Logger}    The logger instance.
+ * @returns {Logger}    The logger instance.
  */
 export function createClientLogger(bindings: LogContext = {}): Logger {
 

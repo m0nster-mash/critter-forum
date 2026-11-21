@@ -3,6 +3,7 @@
  * @module          features/alerts
  *
  * @status          Requires documentation
+ * @TODO            Fix linting error in `formatJson()`
  */
 
 import {
@@ -26,17 +27,19 @@ import type {AlertLogLevel, LogContext, LogFormat, Logger, SerializedError} from
 
 export type {LogContext, Logger};
 
-// ============================================================================
-// CONFIG
-// ============================================================================
-
 /**
  * Resolves logging config from the environment on every call, so it can change without a restart of the module.
  *
- * - `LOG_LEVEL`:  `debug | info | warn | error`. Default: `debug` in development, `info` in production.
- * - `LOG_FORMAT`: `pretty | json`. Default: `json` in production, `pretty` everywhere else.
+ * @remarks `LOG_LEVEL`:  `debug | info | warn | error`. Default: `debug` in development, `info` in production.
+ * @remarks `LOG_FORMAT`: `pretty | json`. Default: `json` in production, `pretty` everywhere else.
+ *
+ * @returns TODO: document
  */
-function getConfig(): { minLevel: AlertLogLevel; format: LogFormat } {
+function getConfig(): {
+    minLevel: AlertLogLevel;
+    format: LogFormat
+} {
+
     const isProduction = process.env.NODE_ENV === LOGGER_ENVIRONMENTS.PRODUCTION;
     const requestedLevel = process.env.LOG_LEVEL?.toLowerCase();
     const requestedFormat = process.env.LOG_FORMAT?.toLowerCase();
@@ -51,35 +54,45 @@ function getConfig(): { minLevel: AlertLogLevel; format: LogFormat } {
     };
 }
 
-// ============================================================================
-// NORMALIZATION (safe to serialize: no circular refs, no raw Errors, secrets redacted)
-// ============================================================================
-
 /**
- * Drizzle appends the bound query parameters to failed-query errors (`Failed query: ...\nparams: a@b.c,<hash>`).
- * Those can hold emails and password hashes, and key-based redaction can't see inside a message string, so the
- * parameter list is cut out of both the message and the stack. The SQL itself is kept.
+ * Drizzle appends the bound query parameters to failed-query errors.
+ *
+ * @remarks     Those can hold emails and password hashes, and key-based redaction can't see inside a message string,
+ *              so the parameter list is cut out of both the message and the stack.
+ * @remarks     The SQL itself is kept.
+ *
+ * @param       text    TODO: document
+ *
+ * @returns     TODO: document
  */
 function redactQueryParams(text: string): string {
+
     return text.replace(QUERY_PARAMS_PATTERN, QUERY_PARAMS_REDACTION);
 }
 
 /**
  * TODO: document
  *
- * @status Requires documentation
- * @param error - TODO: document
- * @param depth - TODO: document
- * @param ancestors - TODO: document
+ * @param   error       TODO: document
+ * @param   depth       TODO: document
+ * @param   ancestors   TODO: document
+ *
  * @returns TODO: document
  */
-function serializeError(error: Error, depth: number, ancestors: WeakSet<object>): SerializedError {
+function serializeError(
+    error: Error,
+    depth: number,
+    ancestors: WeakSet<object>
+): SerializedError {
+
     ancestors.add(error);
 
     const serialized: SerializedError = {
         name: error.name,
         message: redactQueryParams(error.message),
-        stack: error.stack === undefined ? undefined : redactQueryParams(error.stack),
+        stack: error.stack === undefined
+            ? undefined
+            : redactQueryParams(error.stack),
     };
 
     for (const key of Object.keys(error)) {
@@ -100,13 +113,18 @@ function serializeError(error: Error, depth: number, ancestors: WeakSet<object>)
 /**
  * TODO: document
  *
- * @status Requires documentation
- * @param value - TODO: document
- * @param depth - TODO: document
- * @param ancestors - TODO: document
+ * @param   value       TODO: document
+ * @param   depth       TODO: document
+ * @param   ancestors   TODO: document
+ *
  * @returns TODO: document
  */
-function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): unknown {
+function normalize(
+    value: unknown,
+    depth: number,
+    ancestors: WeakSet<object>
+): unknown {
+
     switch (typeof value) {
         case "string":
         case "number":
@@ -124,9 +142,9 @@ function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): u
     if (value === null) return null;
 
     const object = value as object;
+
     if (depth >= LOGGER_REDACTION.MAX_NESTING_DEPTH) return LOGGER_REDACTION.MAX_DEPTH;
     if (ancestors.has(object)) return LOGGER_REDACTION.CIRCULAR;
-
     if (object instanceof Error) return serializeError(object, depth, ancestors);
     if (object instanceof Date) return object.toISOString();
 
@@ -139,7 +157,9 @@ function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): u
         const entries: Record<string, unknown> = {};
         for (const [key, inner] of Object.entries(object)) {
             if (inner === undefined) continue;
-            entries[key] = SENSITIVE_LOG_KEY_PATTERN.test(key) ? LOGGER_REDACTION.REDACTED : normalize(inner, depth + 1, ancestors);
+            entries[key] = SENSITIVE_LOG_KEY_PATTERN.test(key)
+                ? LOGGER_REDACTION.REDACTED
+                : normalize(inner, depth + 1, ancestors);
         }
         result = entries;
     }
@@ -155,11 +175,12 @@ function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): u
 /**
  * TODO: document
  *
- * @status Requires documentation
- * @param value - TODO: document
+ * @param   value   TODO: document
+ *
  * @returns TODO: document
  */
 function isSerializedError(value: unknown): value is SerializedError {
+
     return typeof value === "object" && value !== null
         && typeof (value as SerializedError).name === "string"
         && typeof (value as SerializedError).message === "string"
@@ -169,13 +190,20 @@ function isSerializedError(value: unknown): value is SerializedError {
 /**
  * TODO: document
  *
- * @status Requires documentation
- * @param level - TODO: document
- * @param message - TODO: document
- * @param data - TODO: document
+ * @TODO            Fix linting error
+ *
+ * @param   level   TODO: document
+ * @param   message TODO: document
+ * @param   data    TODO: document
+ *
  * @returns TODO: document
  */
-function formatJson(level: AlertLogLevel, message: string, data: LogContext): string {
+function formatJson(
+    level: AlertLogLevel,
+    message: string,
+    data: LogContext
+): string {
+
     const record: LogContext = {
         [LOGGER_JSON_KEYS.LEVEL]: level,
         [LOGGER_JSON_KEYS.TIME]: new Date().toISOString(),
@@ -184,7 +212,9 @@ function formatJson(level: AlertLogLevel, message: string, data: LogContext): st
 
     for (const [key, value] of Object.entries(data)) {
         // TODO:: fix this linting error
-        record[LOGGER_RESERVED_JSON_KEYS.includes(key) ? `${LOGGER_JSON_KEYS.CONTEXT_PREFIX}${key}` : key] = value;
+        record[LOGGER_RESERVED_JSON_KEYS.includes(key)
+            ? `${LOGGER_JSON_KEYS.CONTEXT_PREFIX}${key}`
+            : key] = value;
     }
 
     return JSON.stringify(record);
@@ -193,9 +223,9 @@ function formatJson(level: AlertLogLevel, message: string, data: LogContext): st
 /**
  * TODO: document
  *
- * @status Requires documentation
- * @param error - TODO: document
- * @param indent - TODO: document
+ * @param   error   TODO: document
+ * @param   indent  TODO: document
+ *
  * @returns TODO: document
  */
 function describeError(error: SerializedError, indent: string): string[] {
@@ -215,26 +245,41 @@ function describeError(error: SerializedError, indent: string): string[] {
 }
 
 /**
- * Whether to color pretty output. Reads `stdout` through `globalThis` so the Edge bundler, which also compiles
- * `instrumentation.ts`, doesn't flag a Node-only API; on Edge the property is simply absent and colors are off.
+ *  */
+/**
+ * Determines whether to colour pretty output.
+ *
+ * @remarks     Reads `stdout` through `globalThis` so the Edge bundler, which also compiles `instrumentation.ts`.
+ * @remarks     Doesn't flag a Node-only API; on Edge the property is simply absent and colors are off.
+ *
+ * @TODO        Investigate relationship with `instrumentation.ts` (which may be deleted)
+ *
+ * @returns     TODO: document
  */
 function colorEnabled(): boolean {
+
     const runtime = (globalThis as {
         process?: { stdout?: { isTTY?: boolean }; env?: Record<string, string | undefined> }
     }).process;
+
     return Boolean(runtime?.stdout?.isTTY) && !runtime?.env?.NO_COLOR;
 }
 
 /**
  * TODO: document
  *
- * @status Requires documentation
- * @param level - TODO: document
- * @param message - TODO: document
- * @param data - TODO: document
+ * @param   level   TODO: document
+ * @param   message TODO: document
+ * @param   data    TODO: document
+ *
  * @returns TODO: document
  */
-function formatPretty(level: AlertLogLevel, message: string, data: LogContext): string {
+function formatPretty(
+    level: AlertLogLevel,
+    message: string,
+    data: LogContext
+): string {
+
     const now = new Date();
     const pad = (n: number, width = 2) => String(n).padStart(width, "0");
     const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${pad(now.getMilliseconds(), 3)}`;
@@ -244,7 +289,7 @@ function formatPretty(level: AlertLogLevel, message: string, data: LogContext): 
 
     for (const [key, value] of Object.entries(data)) {
         if (isSerializedError(value)) {
-            errorLines.push(`  ${key} →`, ...describeError(value, "    ")); // TODO:: replace → with icon
+            errorLines.push(`  ${key} →`, ...describeError(value, "    "));
         } else {
             plain[key] = value;
         }
@@ -257,25 +302,29 @@ function formatPretty(level: AlertLogLevel, message: string, data: LogContext): 
     return [`${time} ${colored} ${message}${context}`, ...errorLines].join("\n");
 }
 
-// ============================================================================
-// LOGGER
-// ============================================================================
-
 /**
  * TODO: document
  *
- * @status Requires documentation
- * @param level - TODO: document
- * @param message - TODO: document
- * @param bindings - TODO: document
- * @param context - TODO: document
+ * @param level     TODO: document
+ * @param message   TODO: document
+ * @param bindings  TODO: document
+ *
+ * @param context   TODO: document
  */
-function emit(level: AlertLogLevel, message: string, bindings: LogContext, context?: LogContext): void {
+function emit(
+    level: AlertLogLevel,
+    message: string,
+    bindings: LogContext,
+    context?: LogContext
+): void {
+
     const {minLevel, format} = getConfig();
     if (LOG_LEVEL_ORDER[level] < LOG_LEVEL_ORDER[minLevel]) return;
 
     const data = normalize({...bindings, ...context}, 0, new WeakSet()) as LogContext;
-    const line = format === LOG_FORMATS.JSON ? formatJson(level, message, data) : formatPretty(level, message, data);
+    const line = format === LOG_FORMATS.JSON
+        ? formatJson(level, message, data)
+        : formatPretty(level, message, data);
 
     console[level](line);
 }
@@ -283,9 +332,9 @@ function emit(level: AlertLogLevel, message: string, bindings: LogContext, conte
 /**
  * Creates a logger with optional fixed bindings added to every entry.
  *
- * @param   {LogContext}    [bindings]  Optional; key-value pairs merged into every entry
+ * @param   bindings    Optional; key-value pairs merged into every entry
  *
- * @return  {Logger}    The logger instance.
+ * @returns {Logger}    The logger instance.
  */
 export function createLogger(bindings: LogContext = {}): Logger {
 
@@ -298,7 +347,5 @@ export function createLogger(bindings: LogContext = {}): Logger {
     };
 }
 
-/**
- * The shared server logger.
- */
+/** The shared server logger. */
 export const logger: Logger = createLogger();

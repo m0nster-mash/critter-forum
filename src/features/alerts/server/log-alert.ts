@@ -17,8 +17,8 @@ import type {PublicAlert} from "@/features/alerts/types";
  *              request info) that must never reach the browser.
  * @remarks     The alert code is the log message, so entries are easy to grep.
  *
- * @param       alert       The alert being raised
- * @param       [detail]    Optional; internal-only context (ex. `{err}`)
+ * @param       alert   The alert being raised
+ * @param       detail  Optional; internal-only context (ex. `{err}`)
  */
 export function logAlert(alert: PublicAlert, detail: LogContext = {}): void {
 
