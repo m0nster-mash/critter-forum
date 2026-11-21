@@ -30,7 +30,7 @@ import {JSX, type MouseEvent, useState} from "react";
  */
 export function LogoutButton({
                                  label = AUTH_LABELS.LOGOUT_LABEL,
-                                 redirectTo = REDIRECT,
+                                 redirectTo = AUTH_REDIRECT,
                                  onBeforeLogout,
                              }: LogoutButtonProps): JSX.Element {
     return (

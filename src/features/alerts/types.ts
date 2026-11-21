@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/types
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import type {AlertVariant} from "@/features/alerts/constants/alert-types";

@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/create-alert
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import {ALERT_TEMPLATE_PATTERNS} from "@/features/alerts/constants/templates";

@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/server/alert-error
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import {ALERT_ERROR_NAME} from "@/features/alerts/constants/errors";

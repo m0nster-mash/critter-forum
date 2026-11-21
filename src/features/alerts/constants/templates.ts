@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/constants/templates
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 /**

@@ -1,14 +1,14 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/constants/alert-codes
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 /**
  * Application-wide alert codes.
  *
- * Feature-specific alert codes belong to their owning feature.
+ * @remarks     Feature-specific alert codes belong to their owning feature.
  */
 export const APP_ALERT_CODES = {
     UNKNOWN_ERROR: "APP_UNKNOWN_ERROR",

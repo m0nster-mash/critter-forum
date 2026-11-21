@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/from-thrown
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";

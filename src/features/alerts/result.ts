@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/result
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import type {PublicAlert} from "@/features/alerts/types";
