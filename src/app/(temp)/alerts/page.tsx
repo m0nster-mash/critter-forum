@@ -9,16 +9,16 @@ import {AlertOverrides} from "@/features/alerts/types";
 /**
  * Temp -> Alert and Error Handling test page
  *
- * @module          `features/alerts`
- * @status          Broken; linting errors
- * @TODO            Fix the {@code useAlerts()} variables
- * @TODO            Replace magic strings with consts
+ * @module      `features/alerts`
+ * @status      Broken; require refactoring
+ * @TODO        Fix the {@code useAlerts()} variables
+ * @TODO        Replace magic strings with consts
  *
- * @fileoverview    Manual test page for the alert and error workflows. Every button raises a registered alert code
- *                  (no free-form messages), covering each severity and presentation, plus the thrown-error /
- *                  unhandled-rejection paths.
- * @remarks         Must be rendered inside {@link AlertProvider} (mounted by the root layout at `src/app/layout.tsx`),
- *                  because {@code useAlerts()} reads alert context.
+ * @remarks     Manual test page for the alert and error workflows.
+ * @remarks     Every button raises a registered alert code (no free-form messages), covering each severity and
+ *              presentation, plus the thrown-error / unhandled-rejection paths.
+ * @remarks     Must be rendered inside {@link AlertProvider} (mounted by the root layout at `src/app/layout.tsx`),
+ *              because {@code useAlerts()} reads alert context.
  */
 export default function AlertTestPage() {
 
@@ -36,9 +36,8 @@ export default function AlertTestPage() {
         <main style={{padding: 24, maxWidth: 800, fontFamily: "system-ui, sans-serif"}}>
             <h1>Alert &amp; Error Workflow Test</h1>
             <p>
-                Click a button to trigger an alert type. Toasts appear in the global stack
-                (top-right); inline banners render beneath their group. All text comes from
-                the alert registry.
+                Click a button to trigger an alert type. Toasts appear in the global stack (top-right); inline banners
+                render beneath their group. All text comes from the alert registry.
             </p>
 
             <section style={{marginTop: 24, marginBottom: 32}}>
@@ -118,9 +117,8 @@ export default function AlertTestPage() {
                     </button>
                 </div>
                 <p style={{fontSize: 13, color: "#555"}}>
-                    Thrown errors and unhandled rejections are handled by the global error
-                    listeners and turned into a generic toast. Open the browser console to see
-                    the logged output.
+                    Thrown errors and unhandled rejections are handled by the global error listeners and turned into a
+                    generic toast. Open the browser console to see the logged output.
                 </p>
             </section>
         </main>
