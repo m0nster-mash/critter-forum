@@ -1,8 +1,10 @@
 /**
- * TODO: document
+ * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/client/logger
- * @status Requires documentation
+ * @status          Requires documentation
+ * @TODO            Write file-level documentation
+ * @TODO            Complete documentation for all file content
  */
 
 import {
@@ -21,14 +23,13 @@ import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 const SAFE_KEYS = new Set<string>(CLIENT_LOG_SAFE_KEYS);
 
 /**
- * @module          `features/alerts`
- * @status          Requires documentation
- * @TODO            Document function
+ * Reads config from the environment on every call.
  *
- * @fileOverview    Reads config from the environment on every call. {@code process.env.NEXT_PUBLIC_*} must be
- *                  referenced statically so Next can inline it into the client bundle.
+ * @remarks     Reads config from the environment on every call.
+ * @remarks     {@code process.env.NEXT_PUBLIC_*} must be referenced statically so Next can inline it into the client
+ *              bundle.
  *
- * @return          {AlertLogLevel, boolean} TODO:: document
+ * @return      {AlertLogLevel, boolean}    Alert configuration data.
  */
 function getConfig(): {
     minLevel: AlertLogLevel;
@@ -41,21 +42,19 @@ function getConfig(): {
     return {
         minLevel: requested && Object.hasOwn(LOG_LEVEL_ORDER, requested)
             ? (requested as AlertLogLevel)
-            : isProduction ? LOGGER_DEFAULT_LEVELS.CLIENT_PRODUCTION : LOGGER_DEFAULT_LEVELS.CLIENT_DEVELOPMENT,
+            : isProduction
+                ? LOGGER_DEFAULT_LEVELS.CLIENT_PRODUCTION
+                : LOGGER_DEFAULT_LEVELS.CLIENT_DEVELOPMENT,
         verbose: !isProduction,
     };
 }
 
 /**
- * @module          `features/alerts`
- * @status          Requires documentation
- * @TODO            Document function
+ * Sanitizes log data.
  *
- * @fileOverview    TODO:: document
+ * @param   context         Raw event-submitted log data
  *
- * @param           {LogContext}    context     TODO:: document
- *
- * @return          {LogContext}    TODO:: document
+ * @return  {LogContext}    Sanitized log data
  */
 function sanitize(context: LogContext): LogContext {
 
@@ -77,18 +76,14 @@ function sanitize(context: LogContext): LogContext {
 }
 
 /**
- * @module          `features/alerts`
- * @status          Requires documentation
- * @TODO            Document function
+ * TODO:: document
  *
- * @fileOverview    TODO:: document
+ * @param   level       TODO:: document
+ * @param   message     TODO:: document
+ * @param   bindings    TODO:: document
+ * @param   context     TODO:: document
  *
- * @param           {AlertLogLevel}     level       TODO:: document
- * @param           {string}            message     TODO:: document
- * @param           {LogContext}        bindings    TODO:: document
- * @param           {LogContext}        context     TODO:: document
- *
- * @return          {void}              TODO:: document
+ * @return  {void}      TODO:: document
  */
 function emit(
     level: AlertLogLevel,
@@ -111,14 +106,11 @@ function emit(
 }
 
 /**
- * @module          `features/alerts`
- * @status          Good
+ * Creates a client logger with optional fixed bindings added to every entry.
  *
- * @fileOverview    Creates a client logger with optional fixed bindings added to every entry.
+ * @param   bindings    Key-value pairs merged into every entry
  *
- * @param           {LogContext}    [bindings]  Key-value pairs merged into every entry
- *
- * @return          {Logger}        The logger instance.
+ * @return  {Logger}    The logger instance.
  */
 export function createClientLogger(bindings: LogContext = {}): Logger {
 

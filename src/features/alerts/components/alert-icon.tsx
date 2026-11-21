@@ -1,5 +1,5 @@
 /**
- * TODO: document
+ * @fileOverview    TODO: document
  *
  * @module features/alerts/components/alert-icon
  * @status Requires documentation

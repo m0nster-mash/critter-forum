@@ -1,5 +1,5 @@
 /**
- * TODO: document
+ * @fileOverview    TODO: document
  *
  * @module features/alerts/error-digest
  * @status Requires documentation

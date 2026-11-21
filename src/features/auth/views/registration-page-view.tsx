@@ -1,5 +1,5 @@
 /**
- * TODO: document
+ * @fileOverview    TODO: document
  *
  * @module features/auth/views/registration-page-view
  * @status Requires documentation

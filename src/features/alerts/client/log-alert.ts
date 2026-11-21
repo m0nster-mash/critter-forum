@@ -1,25 +1,23 @@
 /**
- * TODO: document
+ * @fileOverview    Handling writing the alert to the browser console.
+ * @module          features/alerts
  *
- * @module features/alerts/client/log-alert
- * @status Requires documentation
+ * @status          Good
  */
 
 import {clientLogger} from "@/features/alerts/client/logger";
 import {getAlertDefinition} from "@/features/alerts/create-alert";
 import type {LogContext, PublicAlert} from "@/features/alerts/types";
 
-
 /**
- * @module          `features/alerts`
- * @status          Good
+ * Writes an alert to the browser console according to its registry `log.client` policy.
  *
- * @fileOverview    Writes an alert to the browser console according to its registry `log.client` policy. Does nothing if the policy is `false`. Client counterpart of the server's `logAlert`. In production only the sanitized fields (code, severity, ref, field, scope) reach the console; `detail` is development-only.
+ * @remarks     Does nothing if the policy is `false`. Client counterpart of the server's `logAlert`.
+ * @remarks     In production only the sanitized fields (code, severity, ref, field, scope) reach the console; `detail`
+ *              is development-only.
  *
- * @param           {PublicAlert}   alert       The alert being raised
- * @param           {LogContext}    [detail]    Extra context such as {err} or {scope}
- *
- * @return          {void}  TODO:: document
+ * @param       alert   The alert being raised
+ * @param       detail  Extra context such as {err} or {scope}
  */
 export function logClientAlert(
     alert: PublicAlert,

@@ -1,5 +1,5 @@
 /**
- * TODO: document
+ * @fileOverview    TODO: document
  *
  * @module features/auth/actions/register-account-action
  * @status Requires documentation

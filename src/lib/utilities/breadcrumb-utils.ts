@@ -1,5 +1,5 @@
 /**
- * TODO: document
+ * @fileOverview    TODO: document
  *
  * @module lib/utilities/breadcrumb-utils
  * @status Requires documentation

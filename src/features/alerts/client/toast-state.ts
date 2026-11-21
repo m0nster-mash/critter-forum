@@ -1,7 +1,7 @@
 /**
- * TODO: document
+ * @fileOverview    TODO: document
  *
- * @module features/alerts/client/toast-state
+ * @module features/alerts
  * @status Requires documentation
  */
 

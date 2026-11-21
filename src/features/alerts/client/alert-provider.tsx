@@ -1,9 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module          `features/alerts`
  * @status          Requires refactoring
- *
  * @TODO            Update file-level documentation
  * @TODO            Migrate `AlertContextValue` into `types.ts
  * @TODO            Migrate the HTML out of `AlertProvider` and into a component file; turn this tile into a `.ts`
@@ -21,24 +20,19 @@ import type {LogContext, PublicAlert, ToastItem} from "@/features/alerts/types";
 import {createContext, type JSX, type ReactNode, useCallback, useContext, useMemo, useReducer, useRef} from "react";
 
 /**
- * @status      Requires relocation
+ * Values provided by {@link AlertProvider}.
+ *
  * @TODO        Relocate to `types.ts`
  *
- * @remarks     Value provided by {@link AlertProvider}.
- *
- * @property    {ToastItem[]}   toasts      Toasts currently on screen
- * @property    {Function}      notify      Shows an alert as a toast and logs it per its registry policy
- * @property    {Function}      dismiss     Removes one toast by id
- * @property    {Function}      clear       Removes every toast
+ * @property    toasts      Toasts currently on screen
+ * @property    notify      Shows an alert as a toast and logs it per its registry policy
+ * @property    dismiss     Removes one toast by id
+ * @property    clear       Removes every toast
  */
 export interface AlertContextValue {
-    /** TODO: document */
     toasts: ToastItem[];
-    /** TODO: document */
     notify: (alert: PublicAlert, detail?: LogContext) => void;
-    /** TODO: document */
     dismiss: (id: string) => void;
-    /** TODO: document */
     clear: () => void;
 }
 
@@ -46,15 +40,13 @@ export interface AlertContextValue {
 const AlertContext = createContext<AlertContextValue | null>(null);
 
 /**
- * @status      Requires refactoring
- * @TODO        Migrate HTML return content into component and turn this file into a `.ts`
+ * Provides the alert context provider, the context value type, and the low-level {@code useAlertContext} accessor hook.
  *
- * @remarks     Provides the alert context provider, the context value type, and the low-level {@code useAlertContext}
- *              accessor hook.
  * @remarks     Mount once in the root layout so toasts survive client-side navigation.
  *
- * @param       {Object}        props           Component properties
- * @param       {ReactNode}     props.children  The application
+ * @TODO        Migrate HTML return content into component and turn this file into a `.ts`
+ *
+ * @param       children        The application content
  *
  * @return      {JSX.Element}   The provider with the toast viewport and global error listeners mounted beside the
  *                              children.
@@ -93,12 +85,11 @@ export function AlertProvider({children}: { children: ReactNode }): JSX.Element 
 }
 
 /**
- * @module      `features/alerts`
- * @status      Requires refactoring
- * @TODO        Investigate error handling; determine if this needs to be refactored.
+ * Reads the alert context.
  *
- * @remarks     Reads the alert context.
  * @remarks     Prefer {@link useAlerts()}; this is the low-level accessor.
+ *
+ * @TODO        Investigate error handling; determine if this needs to be refactored.
  *
  * @return      {AlertContextValue}     The context value.
  *
