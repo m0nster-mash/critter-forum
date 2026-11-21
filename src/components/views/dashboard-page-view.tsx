@@ -25,7 +25,7 @@ import {JSX} from "react";
  *
  * @TODO        Replace session checks with proper permission barriers once permissions have been built out
  *
- * @return      {JSX.Element | null}    The dashboard view, or null while authentication status is resolving
+ * @returns     {JSX.Element | null}    The dashboard view, or null while authentication status is resolving
  */
 export default function DashboardPageView(): JSX.Element | null {
 
