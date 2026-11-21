@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
- *
- * @module features/auth/components/registration-panel
- * @status Requires documentation
+ @fileOverview    TODO: document
+ @module          features/auth
+
+ @status Requires documentation
  */
 
 "use client";
@@ -31,7 +31,14 @@ import {JSX, type SubmitEvent, useState} from "react";
  * @param   {AuthFlowProps} props               Component properties handling registration callbacks
  * @param   {Function}      [props.onSuccess]   Optional callback function executed upon successful account registration
  *
- * @return  {JSX.Element}   The registration panel JSX element.
+ * @returns {JSX.Element}   The registration panel JSX element.
+ */
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @param props - TODO: document
+ * @returns TODO: document
  */
 export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 

@@ -1,7 +1,7 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/auth
  *
- * @module features/auth/actions/register-account-action
  * @status Requires documentation
  */
 
@@ -20,20 +20,10 @@ import {headers} from "next/headers";
 /**
  * Server action that registers a new user account using email and password credentials.
  *
- * Wrapped in `safeAction`, so it always resolves to an ActionResult:
- * - invalid input -> a failure carrying the validation alert for the offending field
- * - better-auth rejected the request (e.g. email taken) -> a failure carrying the mapped alert
- * - anything unexpected (database down, bug) -> a generic failure with a reference ID, full detail in the server log
- * - success -> a success result carrying the "account created" alert
- *
- * @param   {RegistrationInput} input           The user registration payload
- * @param   {string}            input.name      The display name of the user registering
- * @param   {string}            input.email     The email address of the registering user
- * @param   {string}            input.password  The plain-text password for account creation
- *
- * @return  {Promise<ActionResult<undefined>>}  Resolves to a success or failure result; never throws to the client.
+ * @return  TODO:: document
  */
-export const registerAccountAction = safeAction(AUTH_ACTION_NAMES.REGISTER, async (input: RegistrationInput) => {
+export const registerAccountAction = safeAction(
+    AUTH_ACTION_NAMES.REGISTER, async (input: RegistrationInput) => {
 
     const normalized: RegistrationInput = {
         name: input.name.trim(),

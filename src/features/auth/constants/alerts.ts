@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
- *
- * @module features/auth/constants/alerts
- * @status Requires documentation
+ @fileOverview    TODO: document
+ @module          features/auth
+
+ @status Requires documentation
  */
 
 import type {AlertDefinition} from "@/features/alerts/types";
@@ -29,9 +29,9 @@ export const AUTH_ALERT_CODES = {
 /**
  * Authentication alert definitions.
  *
- * This registry owns the user-facing message, presentation and logging policy for auth outcomes.
- * Sign-in requests go directly from the browser to Better Auth; their server-side logging is handled
- * by the Better Auth logger configured in lib/db/auth/auth.ts.
+ * @remarks     This registry owns the user-facing message, presentation and logging policy for auth outcomes.
+ * @remarks     Sign-in requests go directly from the browser to Better Auth; their server-side logging is handled by
+ *              the Better Auth logger configured in `lib/db/auth/auth.ts`.
  */
 export const AUTH_ALERTS = {
     AUTH_LOGIN_SUCCESS: {

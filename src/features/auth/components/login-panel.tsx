@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
- *
- * @module features/auth/components/login-panel
- * @status Requires documentation
+ @fileOverview    TODO: document
+ @module          features/auth
+
+ @status Requires documentation
  */
 
 "use client";
@@ -24,12 +24,11 @@ import {JSX, type SubmitEvent, useState} from "react";
 /**
  * Renders the authentication login form panel.
  *
- * Failures appear inline above the form; the success confirmation is a toast that survives the redirect.
+ * @remarks     Failures appear inline above the form; the success confirmation is a toast that survives the redirect.
  *
- * @param   {AuthFlowProps} props               Component properties for managing auth flow callbacks
- * @param   {Function}      [props.onSuccess]   Optional callback executed after successful authentication
+ * @param       onSuccess       Optional callback executed after successful authentication
  *
- * @return  {JSX.Element}   The login form panel JSX element
+ * @returns     {JSX.Element}   The login form panel JSX element
  */
 export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
 

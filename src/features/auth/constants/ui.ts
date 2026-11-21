@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
- *
- * @module features/auth/constants/ui
- * @status Requires documentation
+ @fileOverview    TODO: document
+ @module          features/auth
+
+ @status Requires documentation
  */
 
 /** User-facing labels used by authentication components. */

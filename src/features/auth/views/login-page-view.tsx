@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
- *
- * @module features/auth/views/login-page-view
- * @status Requires documentation
+ @fileOverview    TODO: document
+ @module          features/auth
+
+ @status Requires documentation
  */
 
 import {PageHeader} from "@/components/ui/page-header";
@@ -14,7 +14,13 @@ import {JSX} from "react";
 /**
  * Renders the full login page view composition.
  *
- * @return  {JSX.Element}   The login page view JSX element.
+ * @returns {JSX.Element}   The login page view JSX element.
+ */
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @returns TODO: document
  */
 export function LoginPageView(): JSX.Element {
     return (

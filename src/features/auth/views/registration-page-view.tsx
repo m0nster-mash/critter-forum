@@ -1,7 +1,7 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/auth
  *
- * @module features/auth/views/registration-page-view
  * @status Requires documentation
  */
 
@@ -14,7 +14,13 @@ import {JSX} from "react";
 /**
  * Renders the full account registration page view composition.
  *
- * @return  {JSX.Element}   The registration page view JSX element.
+ * @returns {JSX.Element}   The registration page view JSX element.
+ */
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @returns TODO: document
  */
 export function RegistrationPageView(): JSX.Element {
     return (

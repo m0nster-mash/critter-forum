@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
- *
- * @module features/auth/types
- * @status Requires documentation
+ @fileOverview    TODO: document
+ @module          features/auth
+
+ @status Requires documentation
  */
 
 import {ReactNode} from "react";
@@ -10,44 +10,36 @@ import {ReactNode} from "react";
 /**
  * Properties for authentication (login and registration) handling.
  *
- * @property    {void}  onSuccess   Optional; behaviour on successful login attempt
+ * @property    onSuccess   Optional; behaviour on successful login attempt
  */
 export interface AuthFlowProps {
-    /** TODO: document */
     onSuccess?: () => void;
 }
 
 /**
  * Properties for configuring the LogoutButton UI component.
  *
- * @property    {string}    [label]             Custom text label rendered on the logout button
- * @property    {string}    [redirectTo]        Navigation route path to redirect user to after logging out
- * @property    {Function}  [onBeforeLogout]    Pre-logout handler executed prior to sign-out execution
+ * @property    label           Optional; custom text label rendered on the logout button
+ * @property    redirectTo      Optional; navigation route path to redirect user to after logging out
+ * @property    onBeforeLogout  Optional; pre-logout handler executed prior to sign-out execution
  */
 export interface LogoutButtonProps {
-    /** TODO: document */
     label?: string;
-    /** TODO: document */
     redirectTo?: string;
-    /** TODO: document */
     onBeforeLogout?: () => void | Promise<unknown>;
 }
 
 /**
  * Properties for configuring the Logout container wrapper component.
  *
- * @property    {ReactNode} [children]          Child components wrapped within the interactive logout container
- * @property    {string}    [redirectTo]        Target navigation path following successful sign-out
- * @property    {Function}  [onSuccess]         Callback function executed upon successful session logout
- * @property    {Function}  [onBeforeLogout]    Callback executed prior to invoking sign-out
+ * @property    children        Child components wrapped within the interactive logout container
+ * @property    redirectTo      Target navigation path following successful sign-out
+ * @property    onSuccess       Callback function executed upon successful session logout
+ * @property    onBeforeLogout  Callback executed prior to invoking sign-out
  */
 export interface LogoutProps {
-    /** TODO: document */
     children?: ReactNode;
-    /** TODO: document */
     redirectTo?: string;
-    /** TODO: document */
     onSuccess?: () => void;
-    /** TODO: document */
     onBeforeLogout?: () => void | Promise<unknown>;
 }

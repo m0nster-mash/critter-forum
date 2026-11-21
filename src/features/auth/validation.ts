@@ -1,27 +1,24 @@
 /**
- * @fileOverview    TODO: document
- *
- * @module features/auth/validation
- * @status Requires documentation
+ @fileOverview    TODO: document
+ @module          features/auth
+
+ @status Requires documentation
  */
 
 import {createAlert} from "@/features/alerts/create-alert";
 import type {PublicAlert} from "@/features/alerts/types";
-import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
+import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
 
 /**
  * Registration form values, already trimmed and normalized.
  *
- * @property    {string}    name        The display name
- * @property    {string}    email       The email address
- * @property    {string}    password    The plain-text password
+ * @property    name        The display name
+ * @property    email       The email address
+ * @property    password    The plain-text password
  */
 export interface RegistrationInput {
-    /** TODO: document */
     name: string;
-    /** TODO: document */
     email: string;
-    /** TODO: document */
     password: string;
 }
 
@@ -29,14 +26,15 @@ export interface RegistrationInput {
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
- * Validates registration input. Shared by the form (instant feedback) and the server action (authoritative check), so
- * both always agree and neither carries its own copy of the rules.
+ * Validates registration input.
  *
- * Returns the first problem only; each alert carries the field it belongs to.
+ * @remarks     Shared by the form (instant feedback) and the server action (authoritative check), so both always agree
+ *              and neither carries its own copy of the rules.
+ * @remarks     Returns the first problem only; each alert carries the field it belongs to.
  *
- * @param   {RegistrationInput} input   The normalized input to check
+ * @param       input                   The normalized input to check
  *
- * @return  {PublicAlert | null}    The first validation alert, or null if the input is valid.
+ * @returns     {PublicAlert | null}    The first validation alert, or null if the input is valid.
  */
 export function validateRegistration(input: RegistrationInput): PublicAlert | null {
     if (!input.name) {
