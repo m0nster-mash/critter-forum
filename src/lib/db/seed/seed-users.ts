@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          core-application
  *
- * @module lib/db/seed/seed-users
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import {logger} from "@/features/alerts/server/logger";
@@ -31,9 +31,7 @@ const seedUsersData = [
     },
 ] as const;
 
-/**
- * Configures users for the database seeder.
- */
+/** Configures users for the database seeder. */
 export async function seedUsers(): Promise<void> {
     log.info("Seeding users...");
 

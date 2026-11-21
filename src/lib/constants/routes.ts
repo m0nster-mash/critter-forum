@@ -1,24 +1,27 @@
 /**
  * @fileOverview    TODO: document
+ * @module          core-application
  *
- * @module lib/constants/routes
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 /** Access levels supported by application routes. */
 export type AccessLevel = "public" | "private" | "admin";
 
-/** Metadata shared by static and parameterized application routes. */
+/**
+ * Metadata shared by static and parameterized application routes.
+ *
+ * @property    path            TODO:: document
+ * @property    label           TODO:: document
+ * @property    title           TODO:: document
+ * @property    accessLevel     TODO:: document
+ * @property    parent          Optional;   TODO:: document
+ */
 export interface RouteMetadata {
-    /** TODO: document */
     path: string | ((params: Record<string, string>) => string);
-    /** TODO: document */
     label: string;
-    /** TODO: document */
     title: string;
-    /** TODO: document */
     accessLevel: AccessLevel;
-    /** TODO: document */
     parent?: string;
 }
 

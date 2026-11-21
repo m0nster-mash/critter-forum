@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          core-application
  *
- * @module lib/constants/breadcrumbs
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 /** Accessible text and separator used by the breadcrumbs component. */

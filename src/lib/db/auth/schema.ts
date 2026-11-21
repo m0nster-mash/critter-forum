@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          core-application
  *
- * @module lib/db/auth/schema
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import {relations} from "drizzle-orm";

@@ -1,14 +1,14 @@
 /**
  * @fileOverview    TODO: document
+ * @module          core-application
  *
- * @module lib/db/auth/auth
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import {SEVERITY_LEVELS} from "@/features/alerts/constants/alert-codes";
 import {LOGGER_MESSAGES} from "@/features/alerts/constants/observability";
 import {logger} from "@/features/alerts/server/logger";
-import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
+import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
 import {db} from "@/lib/db/auth/db";
 import {drizzleAdapter} from "@better-auth/drizzle-adapter";
 import {betterAuth} from "better-auth";

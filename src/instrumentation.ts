@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/auth
  *
- * @module instrumentation
- * @status Requires documentation
+ * @status          Requires documentation
  */
 
 import {LOG_EVENT_NAMES} from "@/features/alerts/constants/observability";
@@ -14,7 +14,11 @@ import type {Instrumentation} from "next";
  *
  * Request headers are deliberately not logged: they carry cookies and auth tokens.
  *
- * TODO:: this file is not in use; delete?
+ * @TODO    This file is not in use; delete?
+ *
+ * @param   error       TODO: document
+ * @param   request     TODO: document
+ * @param   context     TODO: document
  */
 export const onRequestError: Instrumentation.onRequestError = (error, request, context) => {
     logger.error(LOG_EVENT_NAMES.REQUEST_UNHANDLED_ERROR, {
