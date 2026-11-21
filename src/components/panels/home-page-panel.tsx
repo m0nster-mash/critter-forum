@@ -1,19 +1,19 @@
 /**
- * TODO: document
+ * @fileOverview    The default home page panel view.
+ * @module          core-application
  *
- * @module components/panels/home-page-panel
- * @status Requires documentation
+ * @status          Requires full replacement
+ * @TODO            Replace content with proper home page at a later date
  */
 
 import {JSX} from "react";
 
 /**
- * @status          Requires fill replacement
- * @TODO            Replace content with proper home page at a later dated
+ * Renders the default home panel.
  *
- * @fileOverview    Renders the default home panel.
+ * @TODO    Replace content with proper home page at a later date
  *
- * @return          {JSX.Element}   The rendered home page panel JSX element
+ * @returns {JSX.Element}   The rendered home page panel JSX element
  */
 export function HomePagePanel(): JSX.Element {
     return (
