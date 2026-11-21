@@ -14,7 +14,7 @@ import type {Instrumentation} from "next";
  *
  * Request headers are deliberately not logged: they carry cookies and auth tokens.
  *
- * TODO:: this class is not in use; delete?
+ * TODO:: this file is not in use; delete?
  */
 export const onRequestError: Instrumentation.onRequestError = (error, request, context) => {
     logger.error(LOG_EVENT_NAMES.REQUEST_UNHANDLED_ERROR, {

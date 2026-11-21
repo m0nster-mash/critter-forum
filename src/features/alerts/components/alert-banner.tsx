@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/components/alert-banner
- * @status Requires documentation
+ * @status          Requires refactoring and documentation
  */
 
 import {AlertIcon} from "@/features/alerts/components/alert-icon";
@@ -13,18 +13,22 @@ import {AlertBannerProps} from "@/features/alerts/types";
 import type {JSX} from "react";
 
 /**
- * @module          `features/alerts`
- * @status          Good
+ * Renders one alert in a visible banner.
  *
- * @fileOverview    Renders one alert in a visible banner.
- * @remark          Stateless and free of client-only code, so it works in Server Components, Client Components, and
- *                  error boundaries alike.
- * @remark          Errors and warnings use {@code role="alert"} (announced immediately);
- *                  Success and info use {@code role="status"} (announced politely).
+ * @remark      Stateless and free of client-only code, so it works in Server Components, Client Components, and error
+ *              boundaries alike.
+ * @remark      Errors and warnings use {@code role="alert"} (announced immediately);
+ *              Success and info use {@code role="status"} (announced politely).
  *
- * @param           {AlertBannerProps}      props   Component properties
+ * @TODO        Document function
  *
- * @return          {JSX.Element | null}    The alert, or null when there is nothing to show.
+ * @param       alert       TODO: document
+ * @param       id          TODO: document
+ * @param       variant     TODO: document
+ * @param       count       TODO: document
+ * @param       action      TODO: document
+ *
+ * @returns     {JSX.Element | null}    The alert, or null when there is nothing to show.
  */
 export function AlertBanner({
                                 alert,
@@ -36,7 +40,7 @@ export function AlertBanner({
 
     if (!alert) return null;
 
-    const role = alert.severity === LOG_LEVELS.ERROR || alert.severity === LOG_LEVELS.WARN
+    const role = (alert.severity === LOG_LEVELS.ERROR || alert.severity === LOG_LEVELS.WARN)
         ? ALERT_ROLES.ALERT
         : ALERT_ROLES.STATUS;
     const className = [styles.alert, styles[alert.severity], variant !== VARIANT_TYPES.BANNER && styles[variant]]

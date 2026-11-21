@@ -1,8 +1,8 @@
 /**
  * @fileOverview    TODO: document
+ * @module          features/alerts
  *
- * @module features/alerts/components/toast-viewport
- * @status Requires documentation
+ * @status          Requires refactoring and documentation
  */
 
 "use client";
@@ -16,21 +16,18 @@ import {ToastItem, ToastViewportProps} from "@/features/alerts/types";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";
 
 /**
- * @module          `features/alerts`
- * @status          Require refactoring
- * @TODO            Replace `×` text-icon with proper icons once the icon system is implemented
- * @TODO            Document function
+ * Renders a single toast: an {@link AlertBanner} with auto-dismiss.
  *
- * @fileOverview    Renders a single toast: an {@link AlertBanner} with auto-dismiss.
- * @remark          The timer pauses while the pointer is over the toast or focus is inside it, resumes with at least
- *                  one second left, and restarts whenever an identical alert is merged into it (`version` changes).
- *                  Escape dismisses it.
+ * @remark      The timer pauses while the pointer is over the toast or focus is inside it, resumes with at least one
+ *              second left, and restarts whenever an identical alert is merged into it (`version` changes).
+ * @remark      Escape dismisses the alert toast.
  *
- * @param           {}                      param               TODO:: document
- * @param           {ToastItem}             param.item          TODO:: document
- * @param           {(id: string) => void}  param.onDismiss     TODO:: document
+ * @TODO        Document function
  *
- * @return          TODO:: document
+ * @param       item        TODO:: document
+ * @param       onDismiss   TODO:: document
+ *
+ * @returns     TODO:: document
  */
 function Toast({item, onDismiss}: {
     item: ToastItem;
@@ -79,15 +76,7 @@ function Toast({item, onDismiss}: {
         };
     }, [version, duration, start]);
 
-    const dismissButton = (
-        <button type="button"
-                className={styles.dismiss}
-                aria-label={TOAST_LABELS.DISMISS_NOTIFICATION}
-                onClick={dismiss}>
-            {/* TODO:: replace with icon once proper icon handling has been implemented */}
-            ×
-        </button>
-    );
+    const dismissButton = getDismissButton(dismiss);
 
     return (
         <div className={styles.toastItem}
@@ -119,14 +108,14 @@ function Toast({item, onDismiss}: {
 }
 
 /**
- * @module          `features/alerts`
- * @status          Good
+ * Fixed-position stack of toasts.
  *
- * @fileOverview    Fixed-position stack of toasts. Rendered once, by {@link AlertProvider}.
+ * @remarks Rendered once, by {@link AlertProvider}.
  *
- * @param           {ToastViewportProps}    props   Component properties
+ * @param   toasts          TODO:: document
+ * @param   onDismiss       TODO:: document
  *
- * @return          {JSX.Element}           The notification region.
+ * @return  {JSX.Element}   The notification region.
  */
 export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Element {
     return (
@@ -136,4 +125,22 @@ export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Elem
             ))}
         </div>
     );
+}
+
+/**
+ * Renders the dismiss button.
+ *
+ * @TODO    `×` text-icon with proper icons once the icon system is implemented
+ * @TODO    Document function
+ *
+ * @param   dismiss TODO:: document
+ */
+function getDismissButton(dismiss: () => void) {
+    return <button type="button"
+                   className={styles.dismiss}
+                   aria-label={TOAST_LABELS.DISMISS_NOTIFICATION}
+                   onClick={dismiss}>
+        {/* TODO:: replace with icon once proper icon handling has been implemented */}
+        ×
+    </button>;
 }

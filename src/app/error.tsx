@@ -1,9 +1,9 @@
 /**
  * @fileOverview    Route-level error boundary.
- * @module          features/alert
+ * @module          features/alerts
  *
  * @status          Require refactoring
- * @TODO            Relocate this class into its own directory
+ * @TODO            Relocate this file into its own directory
  * @TODO            Migrate HTML return into its own component file
  */
 

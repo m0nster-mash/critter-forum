@@ -3,7 +3,7 @@
  * @module          features/alerts
  *
  * @status          Requires refactoring
- * @TODO            Relocate this class into its own directory
+ * @TODO            Relocate this file into its own directory
  * @TODO            Migrate HTML return into its own component file
  * @TODO            Remove inline styling from `GlobalError()`
  */
