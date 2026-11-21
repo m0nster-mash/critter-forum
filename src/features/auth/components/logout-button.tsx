@@ -8,9 +8,9 @@
 "use client";
 
 import {useAlerts} from "@/features/alerts/client/use-alerts";
-import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {createAlert} from "@/features/alerts/create-alert";
 import {alertFromThrown} from "@/features/alerts/from-thrown";
+import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {AUTH_REDIRECT} from "@/features/auth/constants/navigation";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";

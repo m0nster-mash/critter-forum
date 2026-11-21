@@ -25,36 +25,36 @@ import {headers} from "next/headers";
 export const registerAccountAction = safeAction(
     AUTH_ACTION_NAMES.REGISTER, async (input: RegistrationInput) => {
 
-    const normalized: RegistrationInput = {
-        name: input.name.trim(),
-        email: input.email.trim().toLowerCase(),
-        password: input.password,
-    };
+        const normalized: RegistrationInput = {
+            name: input.name.trim(),
+            email: input.email.trim().toLowerCase(),
+            password: input.password,
+        };
 
-    const invalid = validateRegistration(normalized);
-    if (invalid) {
-        return fail(invalid);
-    }
-
-    let registerResult;
-    try {
-        registerResult = await auth.api.signUpEmail({
-            body: normalized,
-            headers: await headers(),
-        });
-    } catch (error) {
-        if (isAuthApiError(error)) {
-            throw new AlertError(resolveAuthAlertCode(error, "AUTH_REGISTER_FAILED"), {
-                cause: error,
-                params: AUTH_ALERT_PARAMS,
-            });
+        const invalid = validateRegistration(normalized);
+        if (invalid) {
+            return fail(invalid);
         }
-        throw error;
-    }
 
-    if (!registerResult.user?.id) {
-        throw new AlertError("AUTH_REGISTER_FAILED", {detail: {reason: "signUpEmail returned no user id"}});
-    }
+        let registerResult;
+        try {
+            registerResult = await auth.api.signUpEmail({
+                body: normalized,
+                headers: await headers(),
+            });
+        } catch (error) {
+            if (isAuthApiError(error)) {
+                throw new AlertError(resolveAuthAlertCode(error, "AUTH_REGISTER_FAILED"), {
+                    cause: error,
+                    params: AUTH_ALERT_PARAMS,
+                });
+            }
+            throw error;
+        }
 
-    return succeed(undefined, createAlert("AUTH_REGISTER_SUCCESS"));
-});
+        if (!registerResult.user?.id) {
+            throw new AlertError("AUTH_REGISTER_FAILED", {detail: {reason: "signUpEmail returned no user id"}});
+        }
+
+        return succeed(undefined, createAlert("AUTH_REGISTER_SUCCESS"));
+    });
