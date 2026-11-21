@@ -142,6 +142,7 @@ function formatJson(level: AlertLogLevel, message: string, data: LogContext): st
     };
 
     for (const [key, value] of Object.entries(data)) {
+        // TODO:: fix this linting error
         record[LOGGER_RESERVED_JSON_KEYS.includes(key) ? `${LOGGER_JSON_KEYS.CONTEXT_PREFIX}${key}` : key] = value;
     }
 

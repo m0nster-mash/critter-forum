@@ -1,7 +1,7 @@
-import {AUTH_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import type {AlertCode} from "@/features/alerts/registry";
+import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";
-import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
+import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
 
 /**
  * better-auth error code -> alert code. Codes not listed here fall back to whatever the caller passes.

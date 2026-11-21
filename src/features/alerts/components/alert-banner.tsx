@@ -1,13 +1,13 @@
 import {AlertIcon} from "@/features/alerts/components/alert-icon";
-import {SEVERITY_LABELS} from "@/features/alerts/constants/alert-codes";
+import {ALERT_ROLES, SEVERITY_LABELS, VARIANT_TYPES} from "@/features/alerts/constants/alert-types";
+import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import styles from "@/features/alerts/styles/alerts.module.css";
 import {AlertBannerProps} from "@/features/alerts/types";
 import type {JSX} from "react";
 
 /**
  * @module          `features/alerts`
- * @status          Require refactoring
- * @TODO            Replace magic strings with constants
+ * @status          Good
  *
  * @fileOverview    Renders one alert in a visible banner.
  * @remark          Stateless and free of client-only code, so it works in Server Components, Client Components, and
@@ -22,17 +22,17 @@ import type {JSX} from "react";
 export function AlertBanner({
                                 alert,
                                 id,
-                                variant = "banner",
+                                variant = VARIANT_TYPES.BANNER,
                                 count = 1,
                                 action
                             }: AlertBannerProps): JSX.Element | null {
 
-    if (!alert) {
-        return null;
-    }
+    if (!alert) return null;
 
-    const role = alert.severity === "error" || alert.severity === "warn" ? "alert" : "status";
-    const className = [styles.alert, styles[alert.severity], variant !== "banner" && styles[variant]]
+    const role = alert.severity === LOG_LEVELS.ERROR || alert.severity === LOG_LEVELS.WARN
+        ? ALERT_ROLES.ALERT
+        : ALERT_ROLES.STATUS;
+    const className = [styles.alert, styles[alert.severity], variant !== VARIANT_TYPES.BANNER && styles[variant]]
         .filter(Boolean)
         .join(" ");
 

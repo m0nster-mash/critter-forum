@@ -1,8 +1,10 @@
-import type {AlertVariant} from "@/features/alerts/constants/alert-codes";
-import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-codes";
+import type {AlertVariant} from "@/features/alerts/constants/alert-types";
+import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
 import {LOG_FORMATS, LOG_LEVELS} from "@/features/alerts/constants/logger";
 import type {TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
-import type {ReactNode} from "react";
+import {TOAST_LABELS} from "@/features/alerts/constants/toast-ui";
+import styles from "@/features/alerts/styles/alerts.module.css";
+import type {JSX, ReactNode} from "react";
 
 /**
  * Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike.
@@ -161,4 +163,16 @@ export interface SerializedError {
     cause?: unknown;
 
     [extra: string]: unknown;
+}
+
+
+/**
+ * @fileOverview    Properties for the {@link ToastViewport} component.
+ *
+ * @property        {ToastItem[]}           toasts      The toasts to show, oldest first
+ * @property        {(id: string) => void}  onDismiss   Called when a toast is dismissed or times out
+ */
+export interface ToastViewportProps {
+    toasts: ToastItem[];
+    onDismiss: (id: string) => void;
 }

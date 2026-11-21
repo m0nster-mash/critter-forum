@@ -1,11 +1,11 @@
 "use client";
 
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
-import {VARIANT_TYPES} from "@/features/alerts/constants/alert-codes";
+import {VARIANT_TYPES} from "@/features/alerts/constants/alert-types";
 import {TOAST_DURATIONS} from "@/features/alerts/constants/toast";
-import {TOAST_KEYSTROKE, TOAST_LABELS} from "@/features/alerts/constants/ui";
+import {TOAST_KEYSTROKE, TOAST_LABELS} from "@/features/alerts/constants/toast-ui";
 import styles from "@/features/alerts/styles/alerts.module.css";
-import type {ToastItem} from "@/features/alerts/types";
+import {ToastItem, ToastViewportProps} from "@/features/alerts/types";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";
 
 /**
@@ -109,21 +109,6 @@ function Toast({item, onDismiss}: {
                          action={dismissButton}/>
         </div>
     );
-}
-
-/**
- * @module          `features/alerts`
- * @status          Require relocation
- * @TODO            Relocate onto `types.ts`
- *
- * @fileOverview    Properties for the {@link ToastViewport} component.
- *
- * @property        {ToastItem[]}           toasts      The toasts to show, oldest first
- * @property        {(id: string) => void}  onDismiss   Called when a toast is dismissed or times out
- */
-export interface ToastViewportProps {
-    toasts: ToastItem[];
-    onDismiss: (id: string) => void;
 }
 
 /**

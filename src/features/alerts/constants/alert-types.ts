@@ -1,21 +1,30 @@
-/** Canonical alert severities used by alert definitions and public alerts. */
+/**
+ * Canonical alert severities used by alert definitions and public alerts.
+ */
 export const ALERT_SEVERITIES = ["success", "info", "warn", "error"] as const;
 export type AlertSeverityValue = (typeof ALERT_SEVERITIES)[number];
 
-/** Presentation modes supported by the alert system. */
+/**
+ * Presentation modes supported by the alert system.
+ */
 export const ALERT_PRESENTATION_TYPES = {
     TOAST: "toast",
     INLINE: "inline",
     NONE: "none",
 } as const;
 
+/**
+ * TODO:: document
+ */
 export const ALERT_PRESENTATIONS = [
     ALERT_PRESENTATION_TYPES.TOAST,
     ALERT_PRESENTATION_TYPES.INLINE,
     ALERT_PRESENTATION_TYPES.NONE,
 ] as const;
 
-/** Human-readable severity labels, including the canonical severity keys. */
+/**
+ * Human-readable severity labels, including the canonical severity keys.
+ */
 export const SEVERITY_LABELS: Record<AlertSeverityValue, string> = {
     success: "Success",
     info: "Information",
@@ -23,17 +32,24 @@ export const SEVERITY_LABELS: Record<AlertSeverityValue, string> = {
     error: "Error",
 };
 
-/** Visual variants supported by alert components. */
+/**
+ * Visual variants supported by alert components.
+ **/
 export const ALERT_VARIANTS = ["banner", "field", "toast"] as const;
 export type AlertVariant = (typeof ALERT_VARIANTS)[number];
 
+/**
+ * TODO:: document
+ */
 export const VARIANT_TYPES = {
     BANNER: "banner",
     FIELD: "field",
     TOAST: "toast",
 } as const;
 
-/** Accessible roles associated with alert severities. */
+/**
+ * Accessible roles associated with alert severities.
+ */
 export const ALERT_ROLES = {
     ALERT: "alert",
     STATUS: "status",

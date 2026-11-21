@@ -2,9 +2,9 @@
 
 import {useAlerts} from "@/features/alerts/client/use-alerts";
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
-import {AUTH_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {createAlert} from "@/features/alerts/create-alert";
 import {alertFromThrown} from "@/features/alerts/from-thrown";
+import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {AUTH_FORM_IDS, AUTH_LABELS} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {resolveAuthAlertCode} from "@/features/auth/utilities/auth-errors";

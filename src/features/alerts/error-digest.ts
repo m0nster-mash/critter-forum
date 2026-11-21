@@ -1,4 +1,4 @@
-import {ERROR_PROPERTY_KEYS} from "@/features/alerts/constants/alert-codes";
+import {ERROR_PROPERTY_KEYS} from "@/features/alerts/constants/errors";
 
 /**
  * Reads the `digest` Next.js attaches to errors forwarded from the server. The digest matches the server log entry

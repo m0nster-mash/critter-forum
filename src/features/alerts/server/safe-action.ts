@@ -1,4 +1,5 @@
-import {APP_ALERT_CODES, SEVERITY_LEVELS} from "@/features/alerts/constants/alert-codes";
+import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
+import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import {createAlert, getAlertDefinition} from "@/features/alerts/create-alert";
 import {ActionResult, fail} from "@/features/alerts/result";
 import {isAlertError} from "@/features/alerts/server/alert-error";
@@ -17,7 +18,7 @@ function record(alert: PublicAlert, context: LogContext): PublicAlert {
         return alert;
     }
 
-    const needsRef = alert.ref === undefined && (alert.severity === SEVERITY_LEVELS.ERROR || alert.severity === SEVERITY_LEVELS.WARN);
+    const needsRef = alert.ref === undefined && (alert.severity === LOG_LEVELS.ERROR || alert.severity === LOG_LEVELS.WARN);
     const stamped = needsRef ? {...alert, ref: generateRef()} : alert;
 
     logAlert(stamped, context);

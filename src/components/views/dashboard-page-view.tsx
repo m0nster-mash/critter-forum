@@ -2,8 +2,8 @@
 
 import {DashboardPagePanel} from "@/components/panels/dashboard-page-panel";
 import {PageHeader} from "@/components/ui/page-header";
+import {AUTH_REDIRECT} from "@/features/auth/constants/navigation";
 import {useSession} from "@/lib/auth-client";
-import {REDIRECT} from "@/lib/constants/globals";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 import {redirect} from "next/navigation";
@@ -24,7 +24,7 @@ export default function DashboardPageView(): JSX.Element | null {
 
     // TODO:: replace with proper permission barriers once permissions have been built out
     if (!isPending && !session?.user) {
-        redirect(REDIRECT);
+        redirect(AUTH_REDIRECT);
     }
 
     // TODO:: replace with proper permission barriers once permissions have been built out

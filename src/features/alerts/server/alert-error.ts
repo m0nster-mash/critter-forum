@@ -1,4 +1,4 @@
-import {ALERT_ERROR_NAME} from "@/features/alerts/constants/alert-codes";
+import {ALERT_ERROR_NAME} from "@/features/alerts/constants/errors";
 import type {AlertCode} from "@/features/alerts/registry";
 import type {LogContext} from "@/features/alerts/server/logger";
 import type {AlertErrorOptions, AlertOverrides} from "@/features/alerts/types";
