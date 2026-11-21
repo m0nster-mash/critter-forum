@@ -1,13 +1,22 @@
+/**
+ * @fileOverview    The private dashboard panel content.
+ * @module          core-application
+ *
+ * @status          Requires full replacement
+ * @TODO            Replace content with proper dashboard page at a later date
+ */
+
 import {DashboardPageProps} from "@/lib/types";
 import {JSX} from "react";
 
 /**
- * Renders the member dashboard panel view.
+ * Renders the private / members-only dashboard panel view.
  *
- * @param   {DashboardPageProps}    props       The component properties containing user context
- * @param   {UserPropItems}         props.user  The authenticated user data
+ * @TODO    Replace content with proper dashboard page at a later date
  *
- * @return  {JSX.Element}    The rendered dashboard panel JSX element.
+ * @param   user            Authenticated user data
+ *
+ * @returns {JSX.Element}   The rendered dashboard panel JSX element.
  */
 export function DashboardPagePanel({user}: DashboardPageProps): JSX.Element {
 

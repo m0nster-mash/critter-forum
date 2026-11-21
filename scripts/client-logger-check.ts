@@ -4,8 +4,8 @@
  */
 import assert from "node:assert/strict";
 import {createAlert} from "@/lib/alerts/create-alert";
-import {logClientAlert} from "@/lib/alerts/client/log-alert";
-import {createClientLogger, clientLogger} from "@/lib/alerts/client/logger";
+import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {createClientLogger, clientLogger} from "@/features/alerts/client/logger";
 
 type Call = { method: string; args: unknown[] };
 

@@ -1,13 +1,23 @@
-import {logger} from "@/lib/alerts/server/logger";
+/**
+ * @fileOverview    TODO: document
+ * @module          core-application
+ *
+ * @status          Requires documentation
+ */
+
+import {logger} from "@/features/alerts/server/logger";
 import {auth} from "@/lib/db/auth/auth";
 import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
 
+/** TODO: document */
 const log = logger.child({scope: "seed"});
 
+/** TODO: document */
 const TEST_PASSWORD = "password00";
 
+/** TODO: document */
 const seedUsersData = [
     {
         name: "Test User",
@@ -21,9 +31,7 @@ const seedUsersData = [
     },
 ] as const;
 
-/**
- * Configures users for the database seeder.
- */
+/** Configures users for the database seeder. */
 export async function seedUsers(): Promise<void> {
     log.info("Seeding users...");
 

@@ -1,15 +1,24 @@
+/**
+ * @fileOverview    The standard page header component.
+ * @module          core-application
+ *
+ * @status          Good
+ */
+
 import layoutStyle from "@/components/styles/layout.module.css";
 import {Breadcrumbs} from "@/components/ui/breadcrumbs";
 import {PageHeaderProps} from "@/lib/types";
+import {JSX} from "react";
 
 /**
- * A standard header intended to appear at the top of every page.
+ * A standard header that appears at the top of every page, showing page title and breadcrumb trail.
  *
- * @param   {PageHeaderProps}   props               The props object for the PageHeader component
- * @param   {ReactNode}         props.title         The page's title rendered inside the header
- * @param   {BreadcrumbItem[]}  [props.breadcrumb]  Optional; breadcrumb items for the navigation trail
+ * @param   title           The page's title rendered inside the header
+ * @param   breadcrumb      Breadcrumb items for the navigation trail
+ *
+ * @returns {JSX.Element}   Page Header UI
  */
-export function PageHeader({title, breadcrumb}: PageHeaderProps) {
+export function PageHeader({title, breadcrumb}: PageHeaderProps): JSX.Element {
 
     return (
         <>

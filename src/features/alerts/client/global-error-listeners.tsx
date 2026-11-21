@@ -1,0 +1,82 @@
+/**
+ * @fileOverview    Providers global-level listeners for alert event handling.
+ * @module          features/alerts
+ *
+ * @status          Good
+ */
+
+"use client";
+
+import {useAlertContext} from "@/features/alerts/client/alert-provider";
+import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
+import {
+    BROWSER_ERROR_EVENTS,
+    BROWSER_ERROR_MESSAGES,
+    BROWSER_ERROR_PATTERNS,
+    LOG_SCOPES
+} from "@/features/alerts/constants/observability";
+import {createAlert} from "@/features/alerts/create-alert";
+import {useEffect} from "react";
+
+/**
+ * Determine whether a window error is user-actionable.
+ *
+ * @remarks     Determines whether a window error is something the user can't act on and the app didn't cause:
+ *              - browser-extension scripts,
+ *              - cross-origin "script error" noise, and
+ *              - the benign {@link ResizeObserver} notification.
+ *
+ * @param       event   The error event
+ *
+ * @returns     TODO: document
+ */
+function isNoise(event: ErrorEvent): boolean {
+
+    if (BROWSER_ERROR_PATTERNS.RESIZE_OBSERVER_LOOP.test(event.message)) return true;
+    if (event.message === BROWSER_ERROR_MESSAGES.SCRIPT_ERROR) return true;
+
+    return Boolean(event.filename) && !event.filename.startsWith(window.location.origin);
+}
+
+/**
+ * Catches what React error boundaries cannot
+ *
+ * @remarks     Catches what React error boundaries can't:
+ *              - errors thrown in event handlers and timers,
+ *              - unhandled promise rejections
+ * @remarks     Routes these errors through the same alert system as everything else.
+ * @remarks     Renders nothing.
+ * @remarks     Repeats are merged by the toast stack, so a failing loop can't flood the screen.
+ *
+ * @returns     Nothing; mounted for its side effects.
+ */
+export function GlobalErrorListeners(): null {
+
+    const {notify} = useAlertContext();
+
+    useEffect(() => {
+        const onError = (event: ErrorEvent) => {
+            if (isNoise(event)) return;
+            notify(createAlert(APP_ALERT_CODES.UNKNOWN_ERROR), {
+                err: event.error ?? event.message,
+                scope: LOG_SCOPES.WINDOW_ERROR
+            });
+        };
+        const onRejection = (event: PromiseRejectionEvent) => {
+            notify(createAlert(APP_ALERT_CODES.UNKNOWN_ERROR), {
+                err: event.reason,
+                scope: LOG_SCOPES.UNHANDLED_REJECTION
+            });
+        };
+
+        window.addEventListener(BROWSER_ERROR_EVENTS.ERROR, onError);
+        window.addEventListener(BROWSER_ERROR_EVENTS.UNHANDLED_REJECTION, onRejection);
+
+        return () => {
+            window.removeEventListener(BROWSER_ERROR_EVENTS.ERROR, onError);
+            window.removeEventListener(BROWSER_ERROR_EVENTS.UNHANDLED_REJECTION, onRejection);
+        };
+    }, [notify]);
+
+    return null;
+}

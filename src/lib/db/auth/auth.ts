@@ -1,5 +1,15 @@
-import {logger} from "@/lib/alerts/server/logger";
-import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
+/**
+ * @fileOverview    TODO: document
+ * @module          core-application
+ *
+ * @status          Requires documentation
+ */
+
+import {ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
+import {LOG_LEVELS} from "@/features/alerts/constants/logger";
+import {LOGGER_MESSAGES} from "@/features/alerts/constants/observability";
+import {logger} from "@/features/alerts/server/logger";
+import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
 import {db} from "@/lib/db/auth/db";
 import {drizzleAdapter} from "@better-auth/drizzle-adapter";
 import {betterAuth} from "better-auth";
@@ -20,9 +30,12 @@ export const auth = betterAuth({
     // format, level control and redaction as everything else. Sign-in goes browser -> better-auth directly, so this is
     // where failed sign-ins reach the server log.
     logger: {
-        level: "warn",
+        level: LOG_LEVELS.WARN,
         log: (level, message, ...args) => {
-            logger[level](`better-auth: ${message}`, args.length > 0 ? {args} : undefined);
+            logger[level](`${LOGGER_MESSAGES.BETTER_AUTH_PREFIX} ${message}`, args.length > 0
+                ? {args}
+                : undefined
+            );
         },
     },
 });

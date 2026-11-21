@@ -1,33 +1,58 @@
+/**
+ * @fileOverview    Route-level error boundary.
+ * @module          features/alerts
+ *
+ * @status          Require refactoring
+ * @TODO            Relocate this file into its own directory
+ * @TODO            Migrate HTML return into its own component file
+ */
+
 "use client";
 
-import {AlertBanner} from "@/components/alerts/alert-banner";
-import {logClientAlert} from "@/lib/alerts/client/log-alert";
-import {createAlert} from "@/lib/alerts/create-alert";
-import {getErrorDigest} from "@/lib/alerts/error-digest";
+import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
+import {ALERT_PRESENTATION_TYPES} from "@/features/alerts/constants/alert-types";
+import {LOG_SCOPES} from "@/features/alerts/constants/observability";
+import {createAlert} from "@/features/alerts/create-alert";
+import {getErrorDigest} from "@/features/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
 
 /**
  * Route-level error boundary: shown inside the root layout when a page throws while rendering.
  *
- * The user sees a generic alert with the error's digest as the reference, which matches the server log entry written
- * by `instrumentation.ts`. The error's message and stack are never rendered.
+ * @remarks     The user sees a generic alert with the error's digest as the reference, which matches the server log
+ *              entry written by {@see instrumentation.ts}.
+ * @remarks     The error's message and stack are never rendered.
  *
- * @param   {Object}        props           Component properties
- * @param   {unknown}       props.error     The thrown value; not guaranteed to be an Error
- * @param   {() => void}    props.retry     Re-fetches and re-renders the failed segment
+ * @TODO        Migrate HTML return into its own component file
  *
- * @return  {JSX.Element}   The error UI.
+ * @param       error           The thrown value; not guaranteed to be an Error
+ * @param       retry           Re-fetches and re-renders the failed segment
+ *
+ * @returns     {JSX.Element}   The error UI.
  */
-export default function RouteError({error, retry}: { error: unknown; retry: () => void }): JSX.Element {
+export default function RouteError({error, retry}: {
+    error: unknown;
+    retry: () => void
+}): JSX.Element {
+
     const alert = useMemo(
-        () => createAlert("APP_UNKNOWN_ERROR", {presentation: "inline", ref: getErrorDigest(error)}),
+        () => createAlert(APP_ALERT_CODES.UNKNOWN_ERROR, {
+            presentation: ALERT_PRESENTATION_TYPES.INLINE,
+            ref: getErrorDigest(error)
+        }),
         [error],
     );
 
     useEffect(() => {
-        logClientAlert(alert, {err: error, scope: "route.render_error"});
+        logClientAlert(alert, {
+            err: error,
+            scope: LOG_SCOPES.ROUTE_RENDER_ERROR,
+        });
     }, [alert, error]);
 
+    // TODO:: migrate this into a component
     return (
         <>
             <AlertBanner alert={alert}/>

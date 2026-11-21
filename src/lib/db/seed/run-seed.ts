@@ -1,12 +1,18 @@
+/**
+ * @fileOverview    TODO: document
+ * @module          core-application
+ *
+ * @status          Requires documentation
+ */
+
 import "dotenv/config";
-import {logger} from "@/lib/alerts/server/logger";
+import {logger} from "@/features/alerts/server/logger";
 import {seedUsers} from "./seed-users";
 
+/** TODO: document */
 const log = logger.child({scope: "seed"});
 
-/**
- * runs the database seeder.
- */
+/** Runs the database seeder. */
 async function main() {
     try {
         log.info("Starting database seed runner...");

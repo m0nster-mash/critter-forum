@@ -1,13 +1,22 @@
+/**
+ * @fileOverview    TODO: document
+ * @module          features/auth
+ *
+ * @status          Requires documentation
+ * @TODO            Fix typing issues on LoginPanel
+ */
+
 "use client";
 
-import {AlertBanner} from "@/components/alerts/alert-banner";
-import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {useAlerts} from "@/features/alerts/client/use-alerts";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {createAlert} from "@/features/alerts/create-alert";
+import {alertFromThrown} from "@/features/alerts/from-thrown";
+import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
+import {AUTH_FORM_IDS, AUTH_LABELS} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {resolveAuthAlertCode} from "@/features/auth/utilities/auth-errors";
 import {signIn} from "@/lib/auth-client";
-import {useAlerts} from "@/lib/alerts/client/use-alerts";
-import {alertFromThrown} from "@/lib/alerts/from-thrown";
-import {createAlert} from "@/lib/alerts/create-alert";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import {useRouter} from "next/navigation";
@@ -16,16 +25,21 @@ import {JSX, type SubmitEvent, useState} from "react";
 /**
  * Renders the authentication login form panel.
  *
- * Failures appear inline above the form; the success confirmation is a toast that survives the redirect.
+ * @remarks     Failures appear inline above the form; the success confirmation is a toast that survives the redirect.
  *
- * @param   {AuthFlowProps} props               Component properties for managing auth flow callbacks
- * @param   {Function}      [props.onSuccess]   Optional callback executed after successful authentication
+ * @TODO        Fix type issues:
+ *              - TS2339: Property 'present' does not exist on type '{}'.
+ *              - TS2339: Property 'clear' does not exist on type '{}'.
+ *              - TS2339: Property 'formAlert' does not exist on type '{}'.
  *
- * @return  {JSX.Element}   The login form panel JSX element
+ * @param       onSuccess       Optional callback executed after successful authentication
+ *
+ * @returns     {JSX.Element}   The login form panel JSX element
  */
 export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
     const router = useRouter();
+    // TODO:: fix these issues
     const {present, clear, formAlert} = useAlerts();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -43,11 +57,14 @@ export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
             });
 
             if (attemptSignIn.error) {
-                present(createAlert(resolveAuthAlertCode(attemptSignIn.error, "AUTH_LOGIN_FAILED")));
+                present(createAlert(resolveAuthAlertCode(
+                    attemptSignIn.error,
+                    AUTH_ALERT_CODES.LOGIN_FAILED
+                )));
                 return;
             }
 
-            present(createAlert("AUTH_LOGIN_SUCCESS"));
+            present(createAlert(AUTH_ALERT_CODES.LOGIN_SUCCESS));
             onSuccess?.();
             router.push(resolvePath(PRIVATE_ROUTES.DASHBOARD));
             router.refresh();
@@ -63,8 +80,8 @@ export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
             <AlertBanner alert={formAlert}/>
             <form onSubmit={handleSubmit} noValidate>
                 <div>
-                    <label htmlFor="login-email"> Email Address </label>
-                    <input id="login-email"
+                    <label htmlFor={AUTH_FORM_IDS.LOGIN_EMAIL}>{AUTH_LABELS.USER_EMAIL}</label>
+                    <input id={AUTH_FORM_IDS.LOGIN_EMAIL}
                            type="email"
                            autoComplete="email"
                            placeholder="email@address.com"
@@ -74,8 +91,8 @@ export function LoginPanel({onSuccess}: AuthFlowProps): JSX.Element {
                            required/>
                 </div>
                 <div>
-                    <label htmlFor="login-password">Password</label>
-                    <input id="login-password"
+                    <label htmlFor={AUTH_FORM_IDS.LOGIN_PASSWORD}>{AUTH_LABELS.USER_PASSWORD}</label>
+                    <input id={AUTH_FORM_IDS.LOGIN_PASSWORD}
                            type="password"
                            autoComplete="current-password"
                            value={password}
