@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/views/login-page-view
+ * @status Requires documentation
+ */
+
 import {PageHeader} from "@/components/ui/page-header";
 import {LoginPanel} from "@/features/auth/components/login-panel";
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";

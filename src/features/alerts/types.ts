@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/types
+ * @status Requires documentation
+ */
+
 import type {AlertVariant} from "@/features/alerts/constants/alert-types";
 import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
 import {LOG_FORMATS, LOG_LEVELS} from "@/features/alerts/constants/logger";
@@ -24,6 +31,11 @@ export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
  * Log levels shared by the server and client loggers.
  */
 export type AlertLogLevel = (typeof LOG_LEVELS)[keyof typeof LOG_LEVELS];
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ */
 export type LogFormat = (typeof LOG_FORMATS)[keyof typeof LOG_FORMATS];
 
 /**
@@ -35,12 +47,36 @@ export type LogContext = Record<string, unknown>;
  * The logging interface shared by the server and client loggers, so calling code reads the same on both sides.
  */
 export interface Logger {
+    /**
+     * TODO: document
+     *
+     * @param message - TODO: document
+     * @param context - TODO: document
+     */
     debug(message: string, context?: LogContext): void;
 
+    /**
+     * TODO: document
+     *
+     * @param message - TODO: document
+     * @param context - TODO: document
+     */
     info(message: string, context?: LogContext): void;
 
+    /**
+     * TODO: document
+     *
+     * @param message - TODO: document
+     * @param context - TODO: document
+     */
     warn(message: string, context?: LogContext): void;
 
+    /**
+     * TODO: document
+     *
+     * @param message - TODO: document
+     * @param context - TODO: document
+     */
     error(message: string, context?: LogContext): void;
 
     /**
@@ -56,7 +92,9 @@ export interface Logger {
  * @property    {AlertLogLevel | false} client  Level written to the browser console (production output is sanitized)
  */
 export interface AlertLogPolicy {
+    /** TODO: document */
     server: AlertLogLevel | false;
+    /** TODO: document */
     client: AlertLogLevel | false;
 }
 
@@ -70,10 +108,15 @@ export interface AlertLogPolicy {
  * @property    {string}            [field]         Optional; form field this alert belongs to by default
  */
 export interface AlertDefinition {
+    /** TODO: document */
     severity: AlertSeverity;
+    /** TODO: document */
     message: string;
+    /** TODO: document */
     presentation: AlertPresentation;
+    /** TODO: document */
     log: AlertLogPolicy;
+    /** TODO: document */
     field?: string;
 }
 
@@ -89,11 +132,17 @@ export interface AlertDefinition {
  * @property    {string}            [ref]           Optional; reference ID matching a server log entry
  */
 export interface PublicAlert {
+    /** TODO: document */
     code: string;
+    /** TODO: document */
     severity: AlertSeverity;
+    /** TODO: document */
     message: string;
+    /** TODO: document */
     presentation: AlertPresentation;
+    /** TODO: document */
     field?: string;
+    /** TODO: document */
     ref?: string;
 }
 
@@ -108,10 +157,15 @@ export interface PublicAlert {
  * @property    {Record<string, string | number>}   [params]        Values substituted for `{name}` tokens in the message
  */
 export interface AlertOverrides {
+    /** TODO: document */
     severity?: AlertSeverity;
+    /** TODO: document */
     presentation?: AlertPresentation;
+    /** TODO: document */
     field?: string;
+    /** TODO: document */
     ref?: string;
+    /** TODO: document */
     params?: Record<string, string | number>;
 }
 
@@ -127,19 +181,28 @@ export interface AlertOverrides {
  * @property    {ReactNode}             [action]    Optional; trailing content such as a dismiss button
  */
 export interface AlertBannerProps {
+    /** TODO: document */
     alert: PublicAlert | null | undefined;
+    /** TODO: document */
     id?: string;
+    /** TODO: document */
     variant?: AlertVariant;
+    /** TODO: document */
     count?: number;
+    /** TODO: document */
     action?: ReactNode;
 }
 
 
 /** A toast currently displayed in the notification stack. */
 export interface ToastItem {
+    /** TODO: document */
     id: string;
+    /** TODO: document */
     alert: PublicAlert;
+    /** TODO: document */
     count: number;
+    /** TODO: document */
     version: number;
 }
 
@@ -151,15 +214,21 @@ export type ToastAction =
 
 /** Options for an AlertError. */
 export interface AlertErrorOptions extends AlertOverrides {
+    /** TODO: document */
     cause?: unknown;
+    /** TODO: document */
     detail?: LogContext;
 }
 
 /** Normalized representation of an Error used by the server logger. */
 export interface SerializedError {
+    /** TODO: document */
     name: string;
+    /** TODO: document */
     message: string;
+    /** TODO: document */
     stack?: string;
+    /** TODO: document */
     cause?: unknown;
 
     [extra: string]: unknown;
@@ -173,6 +242,8 @@ export interface SerializedError {
  * @property        {(id: string) => void}  onDismiss   Called when a toast is dismissed or times out
  */
 export interface ToastViewportProps {
+    /** TODO: document */
     toasts: ToastItem[];
+    /** TODO: document */
     onDismiss: (id: string) => void;
 }

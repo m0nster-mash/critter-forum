@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module lib/utilities/breadcrumb-utils
+ * @status Requires documentation
+ */
+
 import {ALL_ROUTES, RouteMetadata} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 

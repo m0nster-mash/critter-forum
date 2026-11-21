@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module lib/auth-client
+ * @status Requires documentation
+ */
+
 import {createAuthClient} from "better-auth/react";
 
 /**
@@ -12,4 +19,5 @@ export const authClient = createAuthClient({
     baseURL: process.env.NEXT_PUBLIC_APP_URL,
 });
 
+/** TODO: document */
 export const {signIn, signOut, useSession} = authClient;

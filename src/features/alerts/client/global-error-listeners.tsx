@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/client/global-error-listeners
+ * @status Requires documentation
+ */
+
 "use client";
 
 import {useAlertContext} from "@/features/alerts/client/alert-provider";

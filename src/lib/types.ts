@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module lib/types
+ * @status Requires documentation
+ */
+
 import {ReactNode} from "react";
 
 /**
@@ -7,7 +14,9 @@ import {ReactNode} from "react";
  * @property    {BreadcrumbItem[]}  [breadcrumb]    Optional array of breadcrumb items for the navigation trail
  */
 export interface PageHeaderProps {
+    /** TODO: document */
     title: ReactNode;
+    /** TODO: document */
     breadcrumb?: BreadcrumbItem[];
 }
 
@@ -17,6 +26,7 @@ export interface PageHeaderProps {
  * @property    {BreadcrumbItem[]}  [breadcrumb]    Optional array of breadcrumb items to render
  */
 export interface BreadcrumbProps {
+    /** TODO: document */
     breadcrumb: BreadcrumbItem[];
 }
 
@@ -28,7 +38,9 @@ export interface BreadcrumbProps {
  *                                  rendered as plain text without a link.
  */
 export type BreadcrumbItem = {
+    /** TODO: document */
     label: string;
+    /** TODO: document */
     href?: string;
 };
 
@@ -38,6 +50,7 @@ export type BreadcrumbItem = {
  * @property    {UserPropItems} user    User metadata object required for rendering dashboard user UI details.
  */
 export interface DashboardPageProps {
+    /** TODO: document */
     user: UserPropItems;
 }
 
@@ -47,5 +60,6 @@ export interface DashboardPageProps {
  * @property    {string}    name    The display name of the authenticated user.
  */
 export type UserPropItems = {
+    /** TODO: document */
     name: string;
 }

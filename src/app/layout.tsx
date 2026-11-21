@@ -1,3 +1,12 @@
+/**
+ * @fileOverview    The root document shell.
+ * @module          core-application
+ *
+ * @status          Requires refactoring
+ * @TODO            Migrate `metadata` content into global-level constants
+ * @TODO            Replace content with proper layout at a later date
+ */
+
 import layoutStyle from "@/components/styles/layout.module.css"
 import {AlertProvider} from "@/features/alerts/client/alert-provider";
 import LogoutButton from "@/features/auth/components/logout-button";
@@ -8,10 +17,9 @@ import "./globals.css";
 import React, {JSX} from "react";
 
 /**
- * @status          Requires refactoring
- * @TODO            Migrate to global constant
+ * Default document metadata used by the application
  *
- * @fileOverview    Default document metadata used by the application
+ * @TODO    Migrate to global constant
  */
 export const metadata: Metadata = {
     title: "critter-forum",
@@ -19,16 +27,16 @@ export const metadata: Metadata = {
 };
 
 /**
- * @status          Requires fill replacement
- * @TODO            Replace content with proper layout at a later date
+ * Renders the root document shell.
  *
- * @fileOverview    Renders the root document shell.
- * @remarks         Wraps every route in the shared alert provider and global error listeners.
- * @remarks         The navigation links expose the public pages and authenticated dashboard entry point.
+ * @remarks     Wraps every route in the shared alert provider and global error listeners.
+ * @remarks     The navigation links expose the public pages and authenticated dashboard entry point.
  *
- * @param           {Readonly}  props   Root layout props containing the active route content
+ * @TODO        Replace content with proper layout at a later date
  *
- * @return          {JSX.Element}       The complete HTML document for the application
+ * @param       children        Root layout props containing the active route content
+ *
+ * @return      {JSX.Element}   The complete HTML document for the application
  */
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>): JSX.Element {
 

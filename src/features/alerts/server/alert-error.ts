@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/server/alert-error
+ * @status Requires documentation
+ */
+
 import {ALERT_ERROR_NAME} from "@/features/alerts/constants/errors";
 import type {AlertCode} from "@/features/alerts/registry";
 import type {LogContext} from "@/features/alerts/server/logger";
@@ -10,9 +17,13 @@ import type {AlertErrorOptions, AlertOverrides} from "@/features/alerts/types";
  * Only the alert reaches the client. `cause` and `detail` go to the server log.
  */
 export class AlertError extends Error {
+    /** TODO: document */
     readonly isAlertError = true as const;
+    /** TODO: document */
     readonly code: AlertCode;
+    /** TODO: document */
     readonly overrides: AlertOverrides;
+    /** TODO: document */
     readonly detail: LogContext;
 
     /**

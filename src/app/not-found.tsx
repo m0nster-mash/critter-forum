@@ -1,3 +1,10 @@
+/**
+ * @fileOverview    Handles navigation attempts on routes that don't exist.
+ * @module          core-application
+ *
+ * @status          Good
+ */
+
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {createAlert} from "@/features/alerts/create-alert";
@@ -7,13 +14,9 @@ import Link from "next/link";
 import type {JSX} from "react";
 
 /**
- * @module          `features/alerts`
- * @status          Good
+ * Rendered when a route doesn't exist or {@code NotFound()} is called.
  *
- * @fileOverview    Rendered when a route doesn't exist or {@code NotFound()} is called.
- * @remarks         A Server Component, so it needs no client code.
- *
- * @return          {JSX.Element}   The not-found UI.
+ * @return  {JSX.Element}   The not-found UI.
  */
 export default function NotFound(): JSX.Element {
 

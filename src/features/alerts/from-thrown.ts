@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/from-thrown
+ * @status Requires documentation
+ */
+
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {BROWSER_ERROR_PATTERNS} from "@/features/alerts/constants/observability";
 import {createAlert} from "@/features/alerts/create-alert";

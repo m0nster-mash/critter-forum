@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/constants/logger
+ * @status Requires documentation
+ */
+
 import type {AlertLogLevel} from "@/features/alerts/types";
 
 /**

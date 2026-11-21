@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module components/ui/page-header
+ * @status Requires documentation
+ */
+
 import layoutStyle from "@/components/styles/layout.module.css";
 import {Breadcrumbs} from "@/components/ui/breadcrumbs";
 import {PageHeaderProps} from "@/lib/types";

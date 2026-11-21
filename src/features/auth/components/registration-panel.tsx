@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/components/registration-panel
+ * @status Requires documentation
+ */
+
 "use client";
 
 import {useAlerts} from "@/features/alerts/client/use-alerts";

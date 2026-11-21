@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/components/alert-banner
+ * @status Requires documentation
+ */
+
 import {AlertIcon} from "@/features/alerts/components/alert-icon";
 import {ALERT_ROLES, SEVERITY_LABELS, VARIANT_TYPES} from "@/features/alerts/constants/alert-types";
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";

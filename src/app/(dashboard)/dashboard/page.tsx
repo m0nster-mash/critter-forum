@@ -1,12 +1,14 @@
+/**
+ * @fileOverview    Private -> User-facing Dashboard Page
+ * @module          features/user
+ *
+ * @status          Good
+ */
+
 import DashboardPageView from "@/components/views/dashboard-page-view";
 
 /**
- * Private -> User-facing Dashboard Page
- *
- * @module      modules/user`
- * @status      Good
- *
- * @remarks     Displays the {@link DashboardPageView}
+ * Displays the {@link DashboardPageView}
  */
 export default function DashboardPage() {
     return (

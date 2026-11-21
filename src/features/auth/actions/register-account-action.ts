@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/actions/register-account-action
+ * @status Requires documentation
+ */
+
 "use server";
 
 import {createAlert} from "@/features/alerts/create-alert";

@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/server/log-alert
+ * @status Requires documentation
+ */
+
 import {getAlertDefinition} from "@/features/alerts/create-alert";
 import {LogContext, logger} from "@/features/alerts/server/logger";
 import type {PublicAlert} from "@/features/alerts/types";

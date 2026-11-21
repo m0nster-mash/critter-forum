@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module lib/db/auth/auth
+ * @status Requires documentation
+ */
+
 import {SEVERITY_LEVELS} from "@/features/alerts/constants/alert-codes";
 import {LOGGER_MESSAGES} from "@/features/alerts/constants/observability";
 import {logger} from "@/features/alerts/server/logger";

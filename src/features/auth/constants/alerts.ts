@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/constants/alerts
+ * @status Requires documentation
+ */
+
 import type {AlertDefinition} from "@/features/alerts/types";
 
 /** Stable identifiers for authentication alerts. */

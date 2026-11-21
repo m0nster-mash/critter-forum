@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/client/logger
+ * @status Requires documentation
+ */
+
 import {
     CLIENT_LOG_ERROR_KEY,
     CLIENT_LOG_ERROR_NAME_KEY,
@@ -10,6 +17,7 @@ import {
 } from "@/features/alerts/constants/logger";
 import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 
+/** TODO: document */
 const SAFE_KEYS = new Set<string>(CLIENT_LOG_SAFE_KEYS);
 
 /**
@@ -123,4 +131,5 @@ export function createClientLogger(bindings: LogContext = {}): Logger {
     };
 }
 
+/** TODO: document */
 export const clientLogger: Logger = createClientLogger();

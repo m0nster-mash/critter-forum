@@ -32,12 +32,17 @@ import {createContext, type JSX, type ReactNode, useCallback, useContext, useMem
  * @property    {Function}      clear       Removes every toast
  */
 export interface AlertContextValue {
+    /** TODO: document */
     toasts: ToastItem[];
+    /** TODO: document */
     notify: (alert: PublicAlert, detail?: LogContext) => void;
+    /** TODO: document */
     dismiss: (id: string) => void;
+    /** TODO: document */
     clear: () => void;
 }
 
+/** TODO: document */
 const AlertContext = createContext<AlertContextValue | null>(null);
 
 /**

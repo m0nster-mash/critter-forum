@@ -1,12 +1,24 @@
+/**
+ * TODO: document
+ *
+ * @module lib/constants/routes
+ * @status Requires documentation
+ */
+
 /** Access levels supported by application routes. */
 export type AccessLevel = "public" | "private" | "admin";
 
 /** Metadata shared by static and parameterized application routes. */
 export interface RouteMetadata {
+    /** TODO: document */
     path: string | ((params: Record<string, string>) => string);
+    /** TODO: document */
     label: string;
+    /** TODO: document */
     title: string;
+    /** TODO: document */
     accessLevel: AccessLevel;
+    /** TODO: document */
     parent?: string;
 }
 

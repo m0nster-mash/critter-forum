@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/components/toast-viewport
+ * @status Requires documentation
+ */
+
 "use client";
 
 import {AlertBanner} from "@/features/alerts/components/alert-banner";

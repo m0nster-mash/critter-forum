@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module components/ui/breadcrumbs
+ * @status Requires documentation
+ */
+
 import layoutStyle from "@/components/styles/layout.module.css";
 import {BREADCRUMBS} from "@/lib/constants/breadcrumbs";
 import {BreadcrumbProps} from "@/lib/types";

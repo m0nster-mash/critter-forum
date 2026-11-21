@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module components/views/dashboard-page-view
+ * @status Requires documentation
+ */
+
 "use client";
 
 import {DashboardPagePanel} from "@/components/panels/dashboard-page-panel";

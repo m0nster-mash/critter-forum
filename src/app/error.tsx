@@ -1,3 +1,12 @@
+/**
+ * @fileOverview    Route-level error boundary.
+ * @module          features/alert
+ *
+ * @status          Require refactoring
+ * @TODO            Relocate this class into its own directory
+ * @TODO            Migrate HTML return into its own component file
+ */
+
 "use client";
 
 import {logClientAlert} from "@/features/alerts/client/log-alert";
@@ -10,20 +19,18 @@ import {getErrorDigest} from "@/features/alerts/error-digest";
 import {type JSX, useEffect, useMemo} from "react";
 
 /**
+ * Route-level error boundary: shown inside the root layout when a page throws while rendering.
  *
- * @module          `features/alerts`
- * @status          Good
+ * @remarks     The user sees a generic alert with the error's digest as the reference, which matches the server log
+ *              entry written by {@see instrumentation.ts}.
+ * @remarks     The error's message and stack are never rendered.
  *
- * @fileOverview    Route-level error boundary: shown inside the root layout when a page throws while rendering.
- * @remarks         The user sees a generic alert with the error's digest as the reference, which matches the server
- *                  log entry written by {@see instrumentation.ts}.
- * @remarks         The error's message and stack are never rendered.
+ * @TODO        Migrate HTML return into its own component file
  *
- * @param           {Object}        props           Component properties
- * @param           {unknown}       props.error     The thrown value; not guaranteed to be an Error
- * @param           {() => void}    props.retry     Re-fetches and re-renders the failed segment
+ * @param       error           The thrown value; not guaranteed to be an Error
+ * @param       retry           Re-fetches and re-renders the failed segment
  *
- * @return          {JSX.Element}   The error UI.
+ * @return      {JSX.Element}   The error UI.
  */
 export default function RouteError({error, retry}: {
     error: unknown;
@@ -45,6 +52,7 @@ export default function RouteError({error, retry}: {
         });
     }, [alert, error]);
 
+    // TODO:: migrate this into a component
     return (
         <>
             <AlertBanner alert={alert}/>

@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/views/registration-page-view
+ * @status Requires documentation
+ */
+
 import {PageHeader} from "@/components/ui/page-header";
 import {RegistrationPanel} from "@/features/auth/components/registration-panel";
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";

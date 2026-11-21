@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module components/views/home-page-view
+ * @status Requires documentation
+ */
+
 import {HomePagePanel} from "@/components/panels/home-page-panel";
 import {PageHeader} from "@/components/ui/page-header";
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";

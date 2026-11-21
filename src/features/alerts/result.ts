@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/result
+ * @status Requires documentation
+ */
+
 import type {PublicAlert} from "@/features/alerts/types";
 
 /**
@@ -8,8 +15,11 @@ import type {PublicAlert} from "@/features/alerts/types";
  * @property    {PublicAlert}   [alert] Optional; a confirmation to show the user (e.g. "Account created")
  */
 export interface ActionSuccess<T> {
+    /** TODO: document */
     ok: true;
+    /** TODO: document */
     data: T;
+    /** TODO: document */
     alert?: PublicAlert;
 }
 
@@ -20,7 +30,9 @@ export interface ActionSuccess<T> {
  * @property    {PublicAlert}   alert   What to tell the user. Never contains internal detail.
  */
 export interface ActionFailure {
+    /** TODO: document */
     ok: false;
+    /** TODO: document */
     alert: PublicAlert;
 }
 
@@ -40,6 +52,15 @@ export type ActionResult<T = undefined> = ActionSuccess<T> | ActionFailure;
  * @return  {ActionSuccess<T>}  The success result.
  */
 export function succeed(): ActionSuccess<undefined>;
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @typeParam T - TODO: document
+ * @param data - TODO: document
+ * @param alert - TODO: document
+ * @returns TODO: document
+ */
 export function succeed<T>(data: T, alert?: PublicAlert): ActionSuccess<T>;
 export function succeed<T>(data?: T, alert?: PublicAlert): ActionSuccess<T | undefined> {
     return alert ? {ok: true, data, alert} : {ok: true, data};

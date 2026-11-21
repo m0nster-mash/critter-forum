@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module components/panels/home-page-panel
+ * @status Requires documentation
+ */
+
 import {JSX} from "react";
 
 /**

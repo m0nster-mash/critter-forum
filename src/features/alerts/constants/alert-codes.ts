@@ -1,4 +1,11 @@
 /**
+ * TODO: document
+ *
+ * @module features/alerts/constants/alert-codes
+ * @status Requires documentation
+ */
+
+/**
  * Application-wide alert codes.
  *
  * Feature-specific alert codes belong to their owning feature.

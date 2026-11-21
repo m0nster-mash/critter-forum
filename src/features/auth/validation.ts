@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/validation
+ * @status Requires documentation
+ */
+
 import {createAlert} from "@/features/alerts/create-alert";
 import type {PublicAlert} from "@/features/alerts/types";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
@@ -10,11 +17,15 @@ import {PASSWORD_MIN_LENGTH} from "@/lib/constants/globals";
  * @property    {string}    password    The plain-text password
  */
 export interface RegistrationInput {
+    /** TODO: document */
     name: string;
+    /** TODO: document */
     email: string;
+    /** TODO: document */
     password: string;
 }
 
+/** TODO: document */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**

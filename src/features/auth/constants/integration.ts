@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/constants/integration
+ * @status Requires documentation
+ */
+
 /** Error codes returned by Better Auth. Preserve the external spelling and casing. */
 export const BETTER_AUTH_ERROR_CODES = {
     INVALID_EMAIL_OR_PASSWORD: "INVALID_EMAIL_OR_PASSWORD",

@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/server/logger
+ * @status Requires documentation
+ */
+
 import {
     LOG_FORMATS,
     LOG_LEVEL_ORDER,
@@ -57,6 +64,15 @@ function redactQueryParams(text: string): string {
     return text.replace(QUERY_PARAMS_PATTERN, QUERY_PARAMS_REDACTION);
 }
 
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @param error - TODO: document
+ * @param depth - TODO: document
+ * @param ancestors - TODO: document
+ * @returns TODO: document
+ */
 function serializeError(error: Error, depth: number, ancestors: WeakSet<object>): SerializedError {
     ancestors.add(error);
 
@@ -81,6 +97,15 @@ function serializeError(error: Error, depth: number, ancestors: WeakSet<object>)
     return serialized;
 }
 
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @param value - TODO: document
+ * @param depth - TODO: document
+ * @param ancestors - TODO: document
+ * @returns TODO: document
+ */
 function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): unknown {
     switch (typeof value) {
         case "string":
@@ -127,6 +152,13 @@ function normalize(value: unknown, depth: number, ancestors: WeakSet<object>): u
 // FORMATTING
 // ============================================================================
 
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @param value - TODO: document
+ * @returns TODO: document
+ */
 function isSerializedError(value: unknown): value is SerializedError {
     return typeof value === "object" && value !== null
         && typeof (value as SerializedError).name === "string"
@@ -134,6 +166,15 @@ function isSerializedError(value: unknown): value is SerializedError {
         && ("stack" in value);
 }
 
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @param level - TODO: document
+ * @param message - TODO: document
+ * @param data - TODO: document
+ * @returns TODO: document
+ */
 function formatJson(level: AlertLogLevel, message: string, data: LogContext): string {
     const record: LogContext = {
         [LOGGER_JSON_KEYS.LEVEL]: level,
@@ -149,6 +190,14 @@ function formatJson(level: AlertLogLevel, message: string, data: LogContext): st
     return JSON.stringify(record);
 }
 
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @param error - TODO: document
+ * @param indent - TODO: document
+ * @returns TODO: document
+ */
 function describeError(error: SerializedError, indent: string): string[] {
     const {name, message, stack, cause, ...extras} = error;
     const lines = [`${indent}${stack ?? `${name}: ${message}`}`];
@@ -176,6 +225,15 @@ function colorEnabled(): boolean {
     return Boolean(runtime?.stdout?.isTTY) && !runtime?.env?.NO_COLOR;
 }
 
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @param level - TODO: document
+ * @param message - TODO: document
+ * @param data - TODO: document
+ * @returns TODO: document
+ */
 function formatPretty(level: AlertLogLevel, message: string, data: LogContext): string {
     const now = new Date();
     const pad = (n: number, width = 2) => String(n).padStart(width, "0");
@@ -203,6 +261,15 @@ function formatPretty(level: AlertLogLevel, message: string, data: LogContext): 
 // LOGGER
 // ============================================================================
 
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ * @param level - TODO: document
+ * @param message - TODO: document
+ * @param bindings - TODO: document
+ * @param context - TODO: document
+ */
 function emit(level: AlertLogLevel, message: string, bindings: LogContext, context?: LogContext): void {
     const {minLevel, format} = getConfig();
     if (LOG_LEVEL_ORDER[level] < LOG_LEVEL_ORDER[minLevel]) return;

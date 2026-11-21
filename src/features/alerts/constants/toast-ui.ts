@@ -1,4 +1,11 @@
 /**
+ * TODO: document
+ *
+ * @module features/alerts/constants/toast-ui
+ * @status Requires documentation
+ */
+
+/**
  * Accessible labels used by toast components.
  */
 export const TOAST_LABELS = {

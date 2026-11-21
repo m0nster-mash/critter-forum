@@ -1,7 +1,19 @@
 /**
+ * TODO: document
+ *
+ * @module features/alerts/constants/alert-types
+ * @status Requires documentation
+ */
+
+/**
  * Canonical alert severities used by alert definitions and public alerts.
  */
 export const ALERT_SEVERITIES = ["success", "info", "warn", "error"] as const;
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ */
 export type AlertSeverityValue = (typeof ALERT_SEVERITIES)[number];
 
 /**
@@ -36,6 +48,11 @@ export const SEVERITY_LABELS: Record<AlertSeverityValue, string> = {
  * Visual variants supported by alert components.
  **/
 export const ALERT_VARIANTS = ["banner", "field", "toast"] as const;
+/**
+ * TODO: document
+ *
+ * @status Requires documentation
+ */
 export type AlertVariant = (typeof ALERT_VARIANTS)[number];
 
 /**

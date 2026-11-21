@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/error-digest
+ * @status Requires documentation
+ */
+
 import {ERROR_PROPERTY_KEYS} from "@/features/alerts/constants/errors";
 
 /**

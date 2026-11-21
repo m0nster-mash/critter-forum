@@ -1,6 +1,14 @@
+/**
+ * TODO: document
+ *
+ * @module lib/db/auth/schema
+ * @status Requires documentation
+ */
+
 import {relations} from "drizzle-orm";
 import {boolean, index, pgTable, text, timestamp} from "drizzle-orm/pg-core";
 
+/** TODO: document */
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
@@ -14,6 +22,7 @@ export const user = pgTable("user", {
         .notNull(),
 });
 
+/** TODO: document */
 export const session = pgTable(
     "session",
     {
@@ -33,6 +42,7 @@ export const session = pgTable(
     (table) => [index("session_userId_idx").on(table.userId)],
 );
 
+/** TODO: document */
 export const account = pgTable(
     "account",
     {
@@ -57,6 +67,7 @@ export const account = pgTable(
     (table) => [index("account_userId_idx").on(table.userId)],
 );
 
+/** TODO: document */
 export const verification = pgTable(
     "verification",
     {
@@ -73,11 +84,13 @@ export const verification = pgTable(
     (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+/** TODO: document */
 export const userRelations = relations(user, ({many}) => ({
     sessions: many(session),
     accounts: many(account),
 }));
 
+/** TODO: document */
 export const sessionRelations = relations(session, ({one}) => ({
     user: one(user, {
         fields: [session.userId],
@@ -85,6 +98,7 @@ export const sessionRelations = relations(session, ({one}) => ({
     }),
 }));
 
+/** TODO: document */
 export const accountRelations = relations(account, ({one}) => ({
     user: one(user, {
         fields: [account.userId],

@@ -1,4 +1,11 @@
 /**
+ * TODO: document
+ *
+ * @module features/alerts/constants/observability
+ * @status Requires documentation
+ */
+
+/**
  * Logger scopes identifying the origin of an event.
  */
 export const LOG_SCOPES = {

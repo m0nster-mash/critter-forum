@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/server/safe-action
+ * @status Requires documentation
+ */
+
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import {createAlert, getAlertDefinition} from "@/features/alerts/create-alert";

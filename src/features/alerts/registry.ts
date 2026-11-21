@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/registry
+ * @status Requires documentation
+ */
+
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {AlertDefinition} from "@/features/alerts/types";
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";

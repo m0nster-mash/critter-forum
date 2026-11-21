@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/utilities/auth-errors
+ * @status Requires documentation
+ */
+
 import type {AlertCode} from "@/features/alerts/registry";
 import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";

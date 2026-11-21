@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/types
+ * @status Requires documentation
+ */
+
 import {ReactNode} from "react";
 
 /**
@@ -6,6 +13,7 @@ import {ReactNode} from "react";
  * @property    {void}  onSuccess   Optional; behaviour on successful login attempt
  */
 export interface AuthFlowProps {
+    /** TODO: document */
     onSuccess?: () => void;
 }
 
@@ -17,8 +25,11 @@ export interface AuthFlowProps {
  * @property    {Function}  [onBeforeLogout]    Pre-logout handler executed prior to sign-out execution
  */
 export interface LogoutButtonProps {
+    /** TODO: document */
     label?: string;
+    /** TODO: document */
     redirectTo?: string;
+    /** TODO: document */
     onBeforeLogout?: () => void | Promise<unknown>;
 }
 
@@ -31,8 +42,12 @@ export interface LogoutButtonProps {
  * @property    {Function}  [onBeforeLogout]    Callback executed prior to invoking sign-out
  */
 export interface LogoutProps {
+    /** TODO: document */
     children?: ReactNode;
+    /** TODO: document */
     redirectTo?: string;
+    /** TODO: document */
     onSuccess?: () => void;
+    /** TODO: document */
     onBeforeLogout?: () => void | Promise<unknown>;
 }

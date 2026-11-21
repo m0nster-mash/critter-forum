@@ -1,3 +1,12 @@
+/**
+ * @fileOverview    Temp -> Alert and Error Handling test page
+ * @module          features/alerts
+ *
+ * @status          Requires refactoring
+ * @TODO            Fix the {@code useAlerts()} variables
+ * @TODO            Replace magic strings with consts
+ */
+
 "use client";
 
 import {useAlerts} from "@/features/alerts/client/use-alerts";
@@ -7,21 +16,23 @@ import {AlertCode} from "@/features/alerts/registry";
 import {AlertOverrides} from "@/features/alerts/types";
 
 /**
- * Temp -> Alert and Error Handling test page
+ * Manual test page for the alert and error workflows.
  *
- * @module      `features/alerts`
- * @status      Broken; require refactoring
- * @TODO        Fix the {@code useAlerts()} variables
- * @TODO        Replace magic strings with consts
- *
- * @remarks     Manual test page for the alert and error workflows.
  * @remarks     Every button raises a registered alert code (no free-form messages), covering each severity and
  *              presentation, plus the thrown-error / unhandled-rejection paths.
  * @remarks     Must be rendered inside {@link AlertProvider} (mounted by the root layout at `src/app/layout.tsx`),
  *              because {@code useAlerts()} reads alert context.
+ *
+ * @TODO        Fix the {@code useAlerts()} variables
+ *              - TS2339: Property 'present' does not exist on type '{}'.
+ *              - TS2339: Property 'clear' does not exist on type '{}'.
+ *              - TS2339: Property 'notify' does not exist on type '{}'.
+ *              - TS2339: Property 'inline' does not exist on type '{}'.
+ * @TODO        Replace magic strings with consts
  */
 export default function AlertTestPage() {
 
+    // TODO:: fix these vars
     const {present, clear, notify, inline} = useAlerts();
 
     const raiseToast = (code: AlertCode, overrides?: AlertOverrides): void => {

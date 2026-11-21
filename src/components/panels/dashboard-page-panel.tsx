@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module components/panels/dashboard-page-panel
+ * @status Requires documentation
+ */
+
 import {DashboardPageProps} from "@/lib/types";
 import {JSX} from "react";
 

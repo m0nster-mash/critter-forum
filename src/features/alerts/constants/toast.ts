@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/constants/toast
+ * @status Requires documentation
+ */
+
 import type {AlertSeverity} from "@/features/alerts/types";
 
 /**

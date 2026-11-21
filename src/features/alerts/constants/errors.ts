@@ -1,4 +1,11 @@
 /**
+ * TODO: document
+ *
+ * @module features/alerts/constants/errors
+ * @status Requires documentation
+ */
+
+/**
  * Property names inspected on unknown error-like values.
  */
 export const ERROR_PROPERTY_KEYS = {

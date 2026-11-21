@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/create-alert
+ * @status Requires documentation
+ */
+
 import {ALERT_TEMPLATE_PATTERNS} from "@/features/alerts/constants/templates";
 import {ALERT_REGISTRY, AlertCode, FALLBACK_ALERT_CODE} from "@/features/alerts/registry";
 import {AlertDefinition, AlertOverrides, PublicAlert} from "@/features/alerts/types";

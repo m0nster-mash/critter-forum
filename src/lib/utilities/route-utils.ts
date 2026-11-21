@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module lib/utilities/route-utils
+ * @status Requires documentation
+ */
+
 import {MISSING_ROUTE_PARMS, RouteMetadata} from "@/lib/constants/routes";
 import {getBreadcrumbs} from "@/lib/utilities/breadcrumb-utils";
 

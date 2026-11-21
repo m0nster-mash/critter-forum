@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/auth/constants/ui
+ * @status Requires documentation
+ */
+
 /** User-facing labels used by authentication components. */
 export const AUTH_LABELS = {
     LOGIN_LABEL: "Login",

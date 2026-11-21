@@ -1,3 +1,10 @@
+/**
+ * TODO: document
+ *
+ * @module features/alerts/client/toast-state
+ * @status Requires documentation
+ */
+
 import {MAX_VISIBLE_TOASTS, TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
 import type {PublicAlert, ToastAction, ToastItem} from "@/features/alerts/types";
 
