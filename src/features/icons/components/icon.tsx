@@ -1,36 +1,32 @@
 /**
  * @fileOverview    Standardized Icon Component Wrapper.
  * @module          features/icons
- *
- * @TODO            Document `Icon` function
- * @TODO            Update alert-handling
  */
 
-import {ICON_SIZE, SIZE_MAP, VARIANT_CLASSES} from "@/features/icons/constants/groups";
 import {resolveIcon} from "@/features/icons";
+import {ICON_SIZE, SIZE_MAP, VARIANT_CLASSES} from "@/features/icons/constants/groups";
 import {IconProps} from "@/features/icons/types";
 import React from "react";
 
 /**
- * <one-line description>
+ * Renders a named or directly-supplied SVG icon with consistent sizing, variant styling, and optional accessibility
+ * labelling.
  *
- * @remarks     <details>
- * @remarks     <details>
+ * @remarks     The icon component is resolved from the `icon` prop when supplied, otherwise looked up by `name` in the
+ *              central registry (`resolveIcon`) with a question-mark fallback.
+ * @remarks     When `semantic` is true, `aria-label` and `role="img"` are exposed for screen readers; a `label` is
+ *              required in that case and a warning is emitted if it is missing.
  *
- * @TODO        <something to do>
- * @TODO        <something to do>
+ * @param       icon        Direct SVG component to render; takes precedence over `name`
+ * @param       name        String key looked up in the central icon registry when `icon` is not supplied
+ * @param       size        Display size key; defaults to `ICON_SIZE.MEDIUM`
+ * @param       variant     Colour variant key; defaults to `"default"`
+ * @param       semantic    When true, exposes accessibility attributes; defaults to `false`
+ * @param       label       Accessible label for screen readers; required when `semantic` is true
+ * @param       className   Extra CSS classes appended to the variant class; defaults to `""`
+ * @param       props       Additional SVG element props spread onto the rendered icon
  *
- * @param param0
- * @param param0.icon
- * @param param0.name
- * @param param0.size
- * @param param0.variant
- * @param param0.semantic
- * @param param0.label
- * @param param0.className
- * @param param0.props
- *
- * @returns     {<type>}    <return statement>
+ * @returns     {JSX.Element}   The rendered SVG icon element.
  */
 export function Icon({
                          icon,

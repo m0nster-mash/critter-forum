@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO:: document
+ * @fileOverview    Defines the shared types used by the icon system.
  * @module          features/icons
- *
- * @TODO            Complete documentation
  */
 
 import {ICON_SIZE} from "@/features/icons/constants/groups";
@@ -10,21 +8,14 @@ import {IconName} from "@/features/icons/index";
 import {ComponentType, SVGProps} from "react";
 
 /**
- * <one-line description>
+ * Properties accepted by the `Icon` component.
  *
- * @remarks     <additional details>
- * @remarks     <additional details>
- *
- * @TODO        <something to do>
- * @TODO        <something to do>
- *
- * @param       param1      <A simple param>
- * @param       [param2]    Optional; <an optional param>
- *
- * @property    property    <A simple param>
- * @property    [property]  Optional; <an optional param>
- *
- * @returns     {<type>}    <return statement>
+ * @property    [icon]      Direct SVG component to render; takes precedence over `name`
+ * @property    [name]      String key looked up in the central icon registry when `icon` is not supplied
+ * @property    [size]      Display size key; defaults to `ICON_SIZE.MEDIUM`
+ * @property    [variant]   Colour variant key; defaults to `"default"`
+ * @property    [semantic]  When true, exposes accessibility attributes (`aria-label`, `role="img"`)
+ * @property    [label]     Accessible label for screen readers; required when `semantic` is true
  */
 export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "width" | "height"> {
     icon?: ComponentType<SVGProps<SVGSVGElement>>;
@@ -36,21 +27,7 @@ export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "width" | "heig
 }
 
 /**
- * <one-line description>
- *
- * @remarks     <additional details>
- * @remarks     <additional details>
- *
- * @TODO        <something to do>
- * @TODO        <something to do>
- *
- * @param       param1      <A simple param>
- * @param       [param2]    Optional; <an optional param>
- *
- * @property    property    <A simple param>
- * @property    [property]  Optional; <an optional param>
- *
- * @returns     {<type>}    <return statement>
+ * Valid display size keys for an icon; one of `sm`, `md`, `lg` or `xl`.
  */
 export type IconSize =
     typeof ICON_SIZE.SMALL |
@@ -59,21 +36,6 @@ export type IconSize =
     typeof ICON_SIZE.X_LARGE;
 
 /**
- * <one-line description>
- *
- * @remarks     <additional details>
- * @remarks     <additional details>
- *
- * @TODO        <something to do>
- * @TODO        <something to do>
- *
- * @param       param1      <A simple param>
- * @param       [param2]    Optional; <an optional param>
- *
- * @property    property    <A simple param>
- * @property    [property]  Optional; <an optional param>
- *
- * @returns     {<type>}    <return statement>
+ * Colour variant keys used to style an icon (`default`, `accent`, `danger`, `success`, `muted`).
  */
 export type IconVariant = "default" | "accent" | "danger" | "success" | "muted";
-
