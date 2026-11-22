@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines toast stack limits and severity-based dismissal durations.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 import type {AlertSeverity} from "@/features/alerts/types";

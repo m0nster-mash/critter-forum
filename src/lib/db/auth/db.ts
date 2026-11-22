@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Initializes the PostgreSQL connection pool and Drizzle database client.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
 import {drizzle} from "drizzle-orm/node-postgres";
@@ -14,5 +12,5 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
 });
 
-/** TODO: document */
+/** Provides the db functionality. */
 export const db = drizzle(pool, {schema});

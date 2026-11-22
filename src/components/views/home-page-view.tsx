@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Renders the home page view.
  * @module          core-application
- *
- * @status          Good
  */
 
 import {HomePagePanel} from "@/components/panels/home-page-panel";
@@ -14,7 +12,7 @@ import {JSX} from "react";
 /**
  * Renders the public home page view.
  *
- * @returns {JSX.Element}   The home page view JSX element
+ * @returns     {JSX.Element}   The home page view JSX element
  */
 export function HomePageView(): JSX.Element {
     return (

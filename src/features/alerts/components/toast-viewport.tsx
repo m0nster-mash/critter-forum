@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Renders and manages the timed, dismissible toast notification stack.
  * @module          features/alerts
  *
- * @status          Requires refactoring and documentation
+ * @status          Requires refactoring
  */
 
 "use client";
@@ -22,12 +22,11 @@ import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "reac
  *              second left, and restarts whenever an identical alert is merged into it (`version` changes).
  * @remark      Escape dismisses the alert toast.
  *
- * @TODO        Document function
  *
- * @param       item        TODO:: document
- * @param       onDismiss   TODO:: document
+ * @param       item        Toast item containing the alert and its display state.
+ * @param       onDismiss   Callback invoked with the ID of the toast to dismiss.
  *
- * @returns     TODO:: document
+ * @returns     The value produced by this operation.
  */
 function Toast({item, onDismiss}: {
     item: ToastItem;
@@ -110,12 +109,12 @@ function Toast({item, onDismiss}: {
 /**
  * Fixed-position stack of toasts.
  *
- * @remarks Rendered once, by {@link AlertProvider}.
+ * @remarks     Rendered once, by {@link AlertProvider}.
  *
- * @param   toasts          TODO:: document
- * @param   onDismiss       TODO:: document
+ * @param       toasts          Toast items to render, ordered from oldest to newest.
+ * @param       onDismiss       Callback invoked with the ID of the toast to dismiss.
  *
- * @returns {JSX.Element}   The notification region.
+ * @returns     {JSX.Element}   The notification region.
  */
 export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Element {
     return (
@@ -130,12 +129,11 @@ export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Elem
 /**
  * Renders the dismiss button.
  *
- * @TODO    `×` text-icon with proper icons once the icon system is implemented
- * @TODO    Document function
+ * @TODO        `×` text-icon with proper icons once the icon system is implemented
  *
- * @param   dismiss TODO:: document
+ * @param       dismiss Callback that dismisses the current toast.
  *
- * @returns TODO: document
+ * @returns     The value produced by this operation.
  */
 function getDismissButton(dismiss: () => void) {
     return <button type="button"

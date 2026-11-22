@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines stable identifiers for application-wide alerts.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 /**

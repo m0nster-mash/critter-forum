@@ -1,9 +1,8 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Implements the server action that validates and creates a user account.
  * @module          features/auth
  *
- * @status          Requires documentation
- * @TODO            Document file and function
+ * @status          Requires refactoring
  * @TODO            Replace magic strings with consts
  */
 
@@ -23,9 +22,8 @@ import {headers} from "next/headers";
  * Server action that registers a new user account using email and password credentials.
  *
  * @TODO    Replace magic strings with consts
- * @TODO    Document method
  *
- * @return  TODO:: document
+ * @return  The value produced by this operation.
  */
 export const registerAccountAction = safeAction(
     AUTH_ACTION_NAMES.REGISTER, async (input: RegistrationInput) => {

@@ -11,9 +11,9 @@ import {JSX} from "react";
 /**
  * Renders the public home panel.
  *
- * @TODO    Replace content with proper home page at a later date
+ * @TODO        Replace content with proper home page at a later date
  *
- * @returns {JSX.Element}   The rendered home page panel JSX element
+ * @returns     {JSX.Element}   The rendered home page panel JSX element
  */
 export function HomePagePanel(): JSX.Element {
     return (

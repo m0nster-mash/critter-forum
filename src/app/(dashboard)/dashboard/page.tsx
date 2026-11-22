@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Private -> User-facing Dashboard Page
  * @module          features/user
- *
- * @status          Good
  */
 
 import DashboardPageView from "@/components/views/dashboard-page-view";

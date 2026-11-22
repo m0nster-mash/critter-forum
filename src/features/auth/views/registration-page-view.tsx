@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Composes the page header and registration panel for account creation.
  * @module          features/auth
- *
- * @status          Requires documentation
  */
 
 import {PageHeader} from "@/components/ui/page-header";

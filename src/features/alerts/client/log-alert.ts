@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Handling writing the alert to the browser console.
  * @module          features/alerts
- *
- * @status          Good
  */
 
 import {clientLogger} from "@/features/alerts/client/logger";

@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Composes the page header and login panel for the login route.
  * @module          features/auth
- *
- * @status          Requires documentation
  */
 
 import {PageHeader} from "@/components/ui/page-header";
@@ -14,7 +12,7 @@ import {JSX} from "react";
 /**
  * Renders the full login page view composition.
  *
- * @returns {JSX.Element}   The login page view JSX element.
+ * @returns     {JSX.Element}   The login page view JSX element.
  */
 export function LoginPageView(): JSX.Element {
     return (

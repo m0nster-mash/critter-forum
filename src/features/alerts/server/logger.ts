@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Provides structured logging with environment-specific filtering and sanitization.
  * @module          features/alerts
  *
- * @status          Requires documentation
+ * @status          Requires refactoring
  * @TODO            Fix linting error in `formatJson()`
  */
 
@@ -30,10 +30,10 @@ export type {LogContext, Logger};
 /**
  * Resolves logging config from the environment on every call, so it can change without a restart of the module.
  *
- * @remarks `LOG_LEVEL`:  `debug | info | warn | error`. Default: `debug` in development, `info` in production.
- * @remarks `LOG_FORMAT`: `pretty | json`. Default: `json` in production, `pretty` everywhere else.
+ * @remarks     `LOG_LEVEL`:  `debug | info | warn | error`. Default: `debug` in development, `info` in production.
+ * @remarks     `LOG_FORMAT`: `pretty | json`. Default: `json` in production, `pretty` everywhere else.
  *
- * @returns TODO: document
+ * @returns     The value produced by this operation.
  */
 function getConfig(): {
     minLevel: AlertLogLevel;
@@ -61,9 +61,9 @@ function getConfig(): {
  *              so the parameter list is cut out of both the message and the stack.
  * @remarks     The SQL itself is kept.
  *
- * @param       text    TODO: document
+ * @param       text    Value used by this text operation.
  *
- * @returns     TODO: document
+ * @returns     The value produced by this operation.
  */
 function redactQueryParams(text: string): string {
 
@@ -71,13 +71,13 @@ function redactQueryParams(text: string): string {
 }
 
 /**
- * TODO: document
+ * Provides structured logging with environment-specific filtering and sanitization.
  *
- * @param   error       TODO: document
- * @param   depth       TODO: document
- * @param   ancestors   TODO: document
+ * @param   error       Thrown value or error object to inspect.
+ * @param   depth       Maximum or current traversal depth for nested values.
+ * @param   ancestors   Values already visited while traversing nested data.
  *
- * @returns TODO: document
+ * @returns The value produced by this operation.
  */
 function serializeError(
     error: Error,
@@ -111,13 +111,13 @@ function serializeError(
 }
 
 /**
- * TODO: document
+ * Provides structured logging with environment-specific filtering and sanitization.
  *
- * @param   value       TODO: document
- * @param   depth       TODO: document
- * @param   ancestors   TODO: document
+ * @param   value       Value being inspected or transformed.
+ * @param   depth       Maximum or current traversal depth for nested values.
+ * @param   ancestors   Values already visited while traversing nested data.
  *
- * @returns TODO: document
+ * @returns The value produced by this operation.
  */
 function normalize(
     value: unknown,
@@ -168,16 +168,12 @@ function normalize(
     return result;
 }
 
-// ============================================================================
-// FORMATTING
-// ============================================================================
-
 /**
- * TODO: document
+ * Provides the isSerializedError functionality.
  *
- * @param   value   TODO: document
+ * @param   value   Value being inspected or transformed.
  *
- * @returns TODO: document
+ * @returns The value produced by this operation.
  */
 function isSerializedError(value: unknown): value is SerializedError {
 
@@ -188,15 +184,15 @@ function isSerializedError(value: unknown): value is SerializedError {
 }
 
 /**
- * TODO: document
+ * Provides structured logging with environment-specific filtering and sanitization.
  *
- * @TODO            Fix linting error
+ * @TODO    Fix linting error
  *
- * @param   level   TODO: document
- * @param   message TODO: document
- * @param   data    TODO: document
+ * @param   level   Severity level used to filter and emit the log entry.
+ * @param   message Human-readable event message written at the selected log level.
+ * @param   data    Serializable payload returned by the operation.
  *
- * @returns TODO: document
+ * @returns The value produced by this operation.
  */
 function formatJson(
     level: AlertLogLevel,
@@ -221,12 +217,12 @@ function formatJson(
 }
 
 /**
- * TODO: document
+ * Provides the describeError functionality.
  *
- * @param   error   TODO: document
- * @param   indent  TODO: document
+ * @param   error   Thrown value or error object to inspect.
+ * @param   indent  Value used by this indent operation.
  *
- * @returns TODO: document
+ * @returns The value produced by this operation.
  */
 function describeError(error: SerializedError, indent: string): string[] {
     const {name, message, stack, cause, ...extras} = error;
@@ -245,8 +241,6 @@ function describeError(error: SerializedError, indent: string): string[] {
 }
 
 /**
- *  */
-/**
  * Determines whether to colour pretty output.
  *
  * @remarks     Reads `stdout` through `globalThis` so the Edge bundler, which also compiles `instrumentation.ts`.
@@ -254,7 +248,7 @@ function describeError(error: SerializedError, indent: string): string[] {
  *
  * @TODO        Investigate relationship with `instrumentation.ts` (which may be deleted)
  *
- * @returns     TODO: document
+ * @returns     The value produced by this operation.
  */
 function colorEnabled(): boolean {
 
@@ -266,13 +260,13 @@ function colorEnabled(): boolean {
 }
 
 /**
- * TODO: document
+ * Provides structured logging with environment-specific filtering and sanitization.
  *
- * @param   level   TODO: document
- * @param   message TODO: document
- * @param   data    TODO: document
+ * @param       level       Severity level used to filter and emit the log entry.
+ * @param       message     Human-readable event message written at the selected log level.
+ * @param       data        Serializable payload returned by the operation.
  *
- * @returns TODO: document
+ * @returns     The value produced by this operation.
  */
 function formatPretty(
     level: AlertLogLevel,
@@ -303,13 +297,13 @@ function formatPretty(
 }
 
 /**
- * TODO: document
+ * Provides structured logging with environment-specific filtering and sanitization.
  *
- * @param level     TODO: document
- * @param message   TODO: document
- * @param bindings  TODO: document
+ * @param   level       Severity level used to filter and emit the log entry.
+ * @param   message     Human-readable event message written at the selected log level.
+ * @param   bindings    Structured key-value data included with every log entry.
  *
- * @param context   TODO: document
+ * @param   context     Optional structured data attached to this log entry.
  */
 function emit(
     level: AlertLogLevel,
@@ -332,9 +326,9 @@ function emit(
 /**
  * Creates a logger with optional fixed bindings added to every entry.
  *
- * @param   bindings    Optional; key-value pairs merged into every entry
+ * @param       bindings    Optional; key-value pairs merged into every entry
  *
- * @returns {Logger}    The logger instance.
+ * @returns     {Logger}    The logger instance.
  */
 export function createLogger(bindings: LogContext = {}): Logger {
 

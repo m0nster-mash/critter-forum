@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Public -> Publicly Accessible Homepage
  * @module          core-application
- *
- * @status          Good
  */
 
 import {HomePageView} from "@/components/views/home-page-view";

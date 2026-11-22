@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines patterns used to interpolate named values into alert messages.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 /** Token syntax used to interpolate named parameters into alert messages. */

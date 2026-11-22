@@ -1,8 +1,6 @@
 /**
- @fileOverview    TODO: document
+ @fileOverview    Provides the policy functionality used by the application.
  @module          features/auth
-
- @status Requires documentation
  */
 
 /** Minimum password length shared by registration validation and Better Auth configuration. */

@@ -1,9 +1,8 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Provides the application-wide alert context and mounts the toast notification viewport.
  * @module          features/alerts
  *
  * @status          Requires refactoring
- * @TODO            Update file-level documentation
  * @TODO            Migrate `AlertContextValue` into `types.ts
  * @TODO            Migrate the HTML out of `AlertProvider` and into a component file; turn this tile into a `.ts`
  * @TODO            Replace magic string in `useAlertContext()` and convert to correct error handling method
@@ -36,7 +35,7 @@ export interface AlertContextValue {
     clear: () => void;
 }
 
-/** TODO: document */
+/** Provides the alertContext functionality. */
 const AlertContext = createContext<AlertContextValue | null>(null);
 
 /**

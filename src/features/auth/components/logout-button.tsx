@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Renders the sign-out control and reports the result to the user.
  * @module          features/auth
  *
- * @status          Requires documentation
+ * @status          Requires refactoring
  * @TODO            Fix typing issues on Logout
  */
 
@@ -46,12 +46,12 @@ export function LogoutButton({
  * @TODO        Fix type issues:
  *              - TS2339: Property 'present' does not exist on type '{}'.
  *
- * @param   children        Child elements wrapped within the interactive logout container
- * @param   redirectTo      The target route to navigate to after sign-out completes
- * @param   onSuccess       Optional callback executed upon successful logout
- * @param   onBeforeLogout  Optional callback executed prior to initiating sign-out
+ * @param       children        Child elements wrapped within the interactive logout container
+ * @param       redirectTo      The target route to navigate to after sign-out completes
+ * @param       onSuccess       Optional callback executed upon successful logout
+ * @param       onBeforeLogout  Optional callback executed prior to initiating sign-out
  *
- * @returns {JSX.Element}   The interactive container wrapping child elements.
+ * @returns     {JSX.Element}   The interactive container wrapping child elements.
  */
 export function Logout({
                            children,

@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Providers global-level listeners for alert event handling.
  * @module          features/alerts
- *
- * @status          Good
  */
 
 "use client";
@@ -28,7 +26,7 @@ import {useEffect} from "react";
  *
  * @param       event   The error event
  *
- * @returns     TODO: document
+ * @returns     The value produced by this operation.
  */
 function isNoise(event: ErrorEvent): boolean {
 

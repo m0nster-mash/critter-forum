@@ -1,8 +1,6 @@
 /**
- @fileOverview    TODO: document
+ @fileOverview    Provides the ui functionality used by the application.
  @module          features/auth
-
- @status Requires documentation
  */
 
 /** User-facing labels used by authentication components. */

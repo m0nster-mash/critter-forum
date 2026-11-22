@@ -1,14 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines the typed exception used to represent expected, registry-backed failures.
  * @module          features/alerts
- *
- * @status          Requires documentation
- */
-/**
- * TODO: document
- *
- * @module features/alerts/server/alert-error
- * @status Requires documentation
  */
 
 import {ALERT_ERROR_NAME} from "@/features/alerts/constants/errors";
@@ -25,13 +17,13 @@ import type {AlertErrorOptions, AlertOverrides} from "@/features/alerts/types";
  */
 export class AlertError extends Error {
 
-    /** TODO: document */
+    /** Defines the typed exception used to represent expected, registry-backed failures. */
     readonly isAlertError = true as const;
-    /** TODO: document */
+    /** Defines the typed exception used to represent expected, registry-backed failures. */
     readonly code: AlertCode;
-    /** TODO: document */
+    /** Defines the typed exception used to represent expected, registry-backed failures. */
     readonly overrides: AlertOverrides;
-    /** TODO: document */
+    /** Defines the typed exception used to represent expected, registry-backed failures. */
     readonly detail: LogContext;
 
     /**

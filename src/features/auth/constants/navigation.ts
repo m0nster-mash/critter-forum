@@ -1,8 +1,6 @@
 /**
- @fileOverview    TODO: document
+ @fileOverview    Provides the navigation functionality used by the application.
  @module          features/auth
-
- @status Requires documentation
  */
 
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";

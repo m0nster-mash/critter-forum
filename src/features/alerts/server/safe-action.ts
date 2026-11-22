@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Wraps server actions with consistent result handling, alert logging, and error conversion.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
@@ -22,10 +20,10 @@ import {unstable_rethrow} from "next/navigation";
  * @remarks     When an alert produces a log entry for a warning or error, stamps the alert with a reference ID.
  * @remarks     A ref on the client therefore always matches a line in the server log.
  *
- * @param       alert       TODO: document
- * @param       context     TODO: document
+ * @param       alert       Optional public alert associated with the successful result.
+ * @param       context     Optional structured data attached to this log entry.
  *
- * @returns     TODO: document
+ * @returns     The value produced by this operation.
  */
 function record(
     alert: PublicAlert,
@@ -52,11 +50,11 @@ function record(
  *              still works.
  * @remarks     The action's arguments are never logged, since they commonly contain passwords.
 
- * @typeParam   Args    TODO: document
- * @typeParam   T       TODO: document
+ * @typeParam   Args            Value used by this Args operation.
+ * @typeParam   T               Value used by this T operation.
  *
- * @param       name    Stable identifier for logs, (ex. `auth.register`)
- * @param       action  The action body
+ * @param       name            Stable identifier for logs, (ex. `auth.register`)
+ * @param       action          The action body
  *
  * @returns     {ActionResult}  The wrapped action; the alert (if any) is logged per its registry policy, then the
  *                              result is passed through.

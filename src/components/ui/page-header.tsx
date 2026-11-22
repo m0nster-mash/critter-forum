@@ -1,8 +1,6 @@
 /**
  * @fileOverview    The standard page header component.
  * @module          core-application
- *
- * @status          Good
  */
 
 import layoutStyle from "@/components/styles/layout.module.css";

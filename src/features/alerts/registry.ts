@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Combines feature alert definitions into the application-wide alert registry.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";

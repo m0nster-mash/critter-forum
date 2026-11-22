@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines error-related property names and identifiers used by alert handling.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 /** Property names inspected on unknown error-like values. */

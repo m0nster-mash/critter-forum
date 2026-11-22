@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines and applies shared authentication form validation rules.
  * @module          features/auth
- *
- * @status          Requires documentation
  */
 
 import {createAlert} from "@/features/alerts/create-alert";
@@ -24,7 +22,6 @@ export interface RegistrationInput {
 }
 
 /**
- * @TODO    document
  * @TODO    migrate to regex const file
  */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

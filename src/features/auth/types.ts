@@ -1,8 +1,6 @@
 /**
- @fileOverview    TODO: document
+ @fileOverview    Defines shared types for alerts, logging, action results, and toast notifications.
  @module          features/auth
-
- @status Requires documentation
  */
 
 import {ReactNode} from "react";

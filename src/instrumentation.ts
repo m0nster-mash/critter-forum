@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Registers Next.js server instrumentation for logging unhandled request errors.
  * @module          features/auth
- *
- * @status          Requires documentation
  */
 
 import {LOG_EVENT_NAMES} from "@/features/alerts/constants/observability";
@@ -16,9 +14,9 @@ import type {Instrumentation} from "next";
  *
  * @TODO    This file is not in use; delete?
  *
- * @param   error       TODO: document
- * @param   request     TODO: document
- * @param   context     TODO: document
+ * @param   error       Thrown value or error object to inspect.
+ * @param   request     Incoming request associated with the error.
+ * @param   context     Optional structured data attached to this log entry.
  */
 export const onRequestError: Instrumentation.onRequestError = (error, request, context) => {
     logger.error(LOG_EVENT_NAMES.REQUEST_UNHANDLED_ERROR, {

@@ -1,8 +1,6 @@
 /**
- @fileOverview    TODO: document
+ @fileOverview    Normalizes Better Auth errors and maps known conditions to registered alert codes.
  @module          features/auth
-
- @status Requires documentation
  */
 
 import type {AlertCode} from "@/features/alerts/registry";

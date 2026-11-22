@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Creates the development users used to populate a fresh database.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
 import {logger} from "@/features/alerts/server/logger";
@@ -11,13 +9,13 @@ import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
 
-/** TODO: document */
+/** Logger instance bound to the database seeding scope. */
 const log = logger.child({scope: "seed"});
 
-/** TODO: document */
+/** Password assigned to development seed accounts. */
 const TEST_PASSWORD = "password00";
 
-/** TODO: document */
+/** Provides the seedUsersData functionality. */
 const seedUsersData = [
     {
         name: "Test User",

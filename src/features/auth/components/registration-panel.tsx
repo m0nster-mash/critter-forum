@@ -1,5 +1,5 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Renders the account registration form and handles its submission lifecycle.
  * @module          features/auth
  *
  * @status          Requires documentation

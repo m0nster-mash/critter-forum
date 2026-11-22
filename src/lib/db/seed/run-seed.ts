@@ -1,15 +1,13 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Runs the database seed tasks and reports their outcome.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
 import "dotenv/config";
 import {logger} from "@/features/alerts/server/logger";
 import {seedUsers} from "./seed-users";
 
-/** TODO: document */
+/** Logger instance bound to the database seeding scope. */
 const log = logger.child({scope: "seed"});
 
 /** Runs the database seeder. */

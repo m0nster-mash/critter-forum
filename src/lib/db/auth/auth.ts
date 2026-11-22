@@ -1,11 +1,8 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines the authentication database schema and configuration.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
-import {ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import {LOGGER_MESSAGES} from "@/features/alerts/constants/observability";
 import {logger} from "@/features/alerts/server/logger";

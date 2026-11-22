@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Provides helpers for resolving route paths and page metadata.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
 import {MISSING_ROUTE_PARAMS, RouteMetadata} from "@/lib/constants/routes";

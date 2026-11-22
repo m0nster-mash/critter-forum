@@ -11,7 +11,7 @@ import type {AlertSeverity} from "@/features/alerts/types";
 import type {JSX} from "react";
 
 /**
- * TODO:: document
+ * Provides the PATHS functionality.
  * TODO:: relocate?
  * TODO:: replace with proper icons once icon handling is complete
  **/

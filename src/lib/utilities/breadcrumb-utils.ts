@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Provides the breadcrumb utils functionality used by the application.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
 import {ALL_ROUTES, RouteMetadata} from "@/lib/constants/routes";
@@ -11,11 +9,11 @@ import {resolvePath} from "@/lib/utilities/route-utils";
 /**
  * Generates an ordered array of breadcrumb objects tracing parent route hierarchy for navigation elements.
  *
- * @param   route           Target route object to resolve breadcrumbs for
- * @param   params          Optional; key-value object satisfying dynamic route path parameters
- * @param   routeRegistry   Route registry used for parent route hierarchy lookups
+ * @param       route           Target route object to resolve breadcrumbs for
+ * @param       params          Optional; key-value object satisfying dynamic route path parameters
+ * @param       routeRegistry   Route registry used for parent route hierarchy lookups
  *
- * @returns {Array}         Ordered array of breadcrumb items with labels and optional resolved URLs.
+ * @returns     {Array}         Ordered array of breadcrumb items with labels and optional resolved URLs.
  */
 export function getBreadcrumbs(
     route: RouteMetadata,

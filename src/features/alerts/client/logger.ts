@@ -1,10 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Provides structured logging with environment-specific filtering and sanitization.
  * @module          features/alerts
- *
- * @status          Requires documentation
- * @TODO            Write file-level documentation
- * @TODO            Complete documentation for all file content
  */
 
 import {
@@ -19,7 +15,7 @@ import {
 } from "@/features/alerts/constants/logger";
 import type {AlertLogLevel, LogContext, Logger} from "@/features/alerts/types";
 
-/** TODO: document */
+/** Allowlist of fields that may be included in sanitized production browser logs. */
 const SAFE_KEYS = new Set<string>(CLIENT_LOG_SAFE_KEYS);
 
 /**
@@ -52,9 +48,9 @@ function getConfig(): {
 /**
  * Sanitizes log data.
  *
- * @param   context         Raw event-submitted log data
+ * @param       context         Raw event-submitted log data
  *
- * @returns {LogContext}    Sanitized log data
+ * @returns     {LogContext}    Sanitized log data
  */
 function sanitize(context: LogContext): LogContext {
 
@@ -76,12 +72,12 @@ function sanitize(context: LogContext): LogContext {
 }
 
 /**
- * TODO:: document
+ * Writes a log entry after applying the configured level filter and environment-specific sanitization.
  *
- * @param   level       TODO:: document
- * @param   message     TODO:: document
- * @param   bindings    TODO:: document
- * @param   context     TODO:: document
+ * @param   level       Severity level used to filter and emit the log entry.
+ * @param   message     Human-readable event message written at the selected log level.
+ * @param   bindings    Structured key-value data included with every log entry.
+ * @param   context     Optional structured data attached to this log entry.
  */
 function emit(
     level: AlertLogLevel,
@@ -106,9 +102,9 @@ function emit(
 /**
  * Creates a client logger with optional fixed bindings added to every entry.
  *
- * @param   bindings    Key-value pairs merged into every entry
+ * @param       bindings    Key-value pairs merged into every entry
  *
- * @returns {Logger}    The logger instance.
+ * @returns     {Logger}    The logger instance.
  */
 export function createClientLogger(bindings: LogContext = {}): Logger {
 
@@ -121,5 +117,5 @@ export function createClientLogger(bindings: LogContext = {}): Logger {
     };
 }
 
-/** TODO: document */
+/** Default client logger with no fixed bindings. */
 export const clientLogger: Logger = createClientLogger();

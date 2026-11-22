@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Converts thrown values into safe public alerts and optional diagnostic context.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";

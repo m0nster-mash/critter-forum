@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Renders an accessible alert as a banner, field message, or toast.
  * @module          features/alerts
- *
- * @status          Requires refactoring and documentation
  */
 
 import {AlertIcon} from "@/features/alerts/components/alert-icon";
@@ -20,13 +18,12 @@ import type {JSX} from "react";
  * @remark      Errors and warnings use {@code role="alert"} (announced immediately);
  *              Success and info use {@code role="status"} (announced politely).
  *
- * @TODO        Document function
  *
- * @param       alert       TODO: document
- * @param       id          TODO: document
- * @param       variant     TODO: document
- * @param       count       TODO: document
- * @param       action      TODO: document
+ * @param       alert       Optional public alert associated with the successful result.
+ * @param       id          Unique identifier of the toast or element.
+ * @param       variant     Presentation variant that controls the alert layout.
+ * @param       count       Number of occurrences represented by this alert.
+ * @param       action      Optional content rendered alongside the alert.
  *
  * @returns     {JSX.Element | null}    The alert, or null when there is nothing to show.
  */

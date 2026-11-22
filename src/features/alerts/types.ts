@@ -1,5 +1,5 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines shared types for alerts, logging, action results, and toast notifications.
  * @module          features/alerts
  *
  * @status          Requires documentation
@@ -26,7 +26,7 @@ export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
 /** Log levels shared by the server and client loggers. */
 export type AlertLogLevel = (typeof LOG_LEVELS)[keyof typeof LOG_LEVELS];
 
-/** TODO: document */
+/** Provides the logFormat functionality. */
 export type LogFormat = (typeof LOG_FORMATS)[keyof typeof LOG_FORMATS];
 
 /** Free-form structured data attached to a log entry. */
@@ -36,43 +36,43 @@ export type LogContext = Record<string, unknown>;
 export interface Logger {
 
     /**
-     * TODO: document
+     * Defines shared types for alerts, logging, action results, and toast notifications.
      *
-     * @param   message     TODO: document
-     * @param   [context]   TODO: document
+     * @param   message     Human-readable event message written at the selected log level.
+     * @param   [context]   Optional structured data attached to this log entry.
      */
     debug(message: string, context?: LogContext): void;
 
     /**
-     * TODO: document
+     * Defines shared types for alerts, logging, action results, and toast notifications.
      *
-     * @param   message     TODO: document
-     * @param   [context]   TODO: document
+     * @param   message     Human-readable event message written at the selected log level.
+     * @param   [context]   Optional structured data attached to this log entry.
      */
     info(message: string, context?: LogContext): void;
 
     /**
-     * TODO: document
+     * Defines shared types for alerts, logging, action results, and toast notifications.
      *
-     * @param   message     TODO: document
-     * @param   [context]   TODO: document
+     * @param   message     Human-readable event message written at the selected log level.
+     * @param   [context]   Optional structured data attached to this log entry.
      */
     warn(message: string, context?: LogContext): void;
 
     /**
-     * TODO: document
+     * Defines shared types for alerts, logging, action results, and toast notifications.
      *
-     * @param   message     TODO: document
-     * @param   [context]   TODO: document
+     * @param   message     Human-readable event message written at the selected log level.
+     * @param   [context]   Optional structured data attached to this log entry.
      */
     error(message: string, context?: LogContext): void;
 
     /**
      * Creates a logger that adds the given bindings (ex. `{scope: "seed"}`) to every entry it writes.
      *
-     * @param   bindings    TODO: document
+     * @param   bindings    Structured key-value data included with every log entry.
      *
-     * @returns TODO: document
+     * @returns A logger that includes the supplied bindings in every entry.
      */
     child(bindings: LogContext): Logger;
 }
@@ -170,10 +170,10 @@ export interface AlertBannerProps {
 /**
  * A toast currently displayed in the notification stack.
  *
- * @property    id          TODO:: document
- * @property    alert       TODO:: document
- * @property    count       TODO:: document
- * @property    version     TODO:: document
+ * @property    id          Unique identifier of the toast or element.
+ * @property    alert       Public alert represented by this toast.
+ * @property    count       Number of occurrences represented by this alert.
+ * @property    version     Incremented whenever the toast is updated, allowing its dismissal timer to restart.
  */
 export interface ToastItem {
     id: string;
@@ -191,8 +191,8 @@ export type ToastAction =
 /**
  * Options for an {@link AlertError}.
  *
- * @property    [cause]     Optional; TODO:: document
- * @property    [detail]    Optional; TODO:: document
+ * @property    [cause]     Optional; Underlying error that caused this expected failure.
+ * @property    [detail]    Optional; Additional structured diagnostic context for server logging.
  *
  */
 export interface AlertErrorOptions extends AlertOverrides {
@@ -203,11 +203,11 @@ export interface AlertErrorOptions extends AlertOverrides {
 /**
  * Normalized representation of an Error used by the server logger.
  *
- * @property    name        TODO:: document
- * @property    message     TODO:: document
- * @property    [stack]     Optional;   TODO:: document
- * @property    [cause]     Optional;   TODO:: document
- * @property    extra       TODO:: document
+ * @property    name        Name identifying the error or property.
+ * @property    message     Error message retained for diagnostic logging.
+ * @property    [stack]     Optional;   Optional stack trace captured for diagnostics.
+ * @property    [cause]     Optional; nested cause associated with the error.
+ * @property    extra       Additional enumerable error properties retained for logging.
  */
 export interface SerializedError {
     name: string;

@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Applies an alert registry entry’s client logging policy.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 import {getAlertDefinition} from "@/features/alerts/create-alert";

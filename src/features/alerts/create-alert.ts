@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Creates serializable public alerts from the central alert registry.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 import {ALERT_TEMPLATE_PATTERNS} from "@/features/alerts/constants/templates";
@@ -12,9 +10,9 @@ import {AlertDefinition, AlertOverrides, PublicAlert} from "@/features/alerts/ty
 /**
  * Type guard confirming a string is a registered alert code.
  *
- * @param   code        The value to check
+ * @param       code        The value to check
  *
- * @returns {boolean}   True if the code exists in the registry.
+ * @returns     {boolean}   True if the code exists in the registry.
  */
 export function isAlertCode(code: string): code is AlertCode {
 

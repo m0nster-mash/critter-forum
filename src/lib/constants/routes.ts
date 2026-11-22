@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines route metadata, access levels, and the application route registry.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
 /** Access levels supported by application routes. */
@@ -11,11 +9,11 @@ export type AccessLevel = "public" | "private" | "admin";
 /**
  * Metadata shared by static and parameterized application routes.
  *
- * @property    path            TODO:: document
- * @property    label           TODO:: document
- * @property    title           TODO:: document
- * @property    accessLevel     TODO:: document
- * @property    parent          Optional;   TODO:: document
+ * @property    path            URL path associated with the route.
+ * @property    label           Human-readable navigation label for the route.
+ * @property    title           Page title associated with the route.
+ * @property    accessLevel     Access classification required to visit the route.
+ * @property    parent          Optional;   Value used by this parent operation.
  */
 export interface RouteMetadata {
     path: string | ((params: Record<string, string>) => string);

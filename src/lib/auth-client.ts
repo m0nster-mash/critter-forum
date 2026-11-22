@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Initializes the client-side Better Auth API.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
 import {createAuthClient} from "better-auth/react";
@@ -19,5 +17,5 @@ export const authClient = createAuthClient({
     baseURL: process.env.NEXT_PUBLIC_APP_URL,
 });
 
-/** TODO: document */
+/** Initializes the client-side Better Auth API. */
 export const {signIn, signOut, useSession} = authClient;

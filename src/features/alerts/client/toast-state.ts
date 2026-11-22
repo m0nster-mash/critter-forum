@@ -1,20 +1,18 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Implements the pure state reducer used to manage the visible toast stack.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 import {MAX_VISIBLE_TOASTS, TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
 import type {PublicAlert, ToastAction, ToastItem} from "@/features/alerts/types";
 
 /**
- * TODO:: document
+ * Determines whether two alerts represent the same toast for deduplication.
  *
- * @param   alertA      TODO:: document
- * @param   alertB      TODO:: document
+ * @param       alertA      First public alert to compare.
+ * @param       alertB      Second public alert to compare.
  *
- * @returns {boolean}   TODO:: document
+ * @returns     {boolean}   The value produced by this operation.
  */
 function isSameAlert(
     alertA: PublicAlert,
@@ -29,14 +27,14 @@ function isSameAlert(
 /**
  * Pure reducer for the toast stack.
  *
- * @remark  {@code add}     an identical toast is merged, bumping its count and version to restart its timer
- *          {@code dismiss} removes one toast
- *          {@code clear}   removes all toasts
+ * @remark      {@code add}     an identical toast is merged, bumping its count and version to restart its timer
+ *              {@code dismiss} removes one toast
+ *              {@code clear}   removes all toasts
  *
- * @param   state           TODO:: document
- * @param   action          TODO:: document
+ * @param       state           Current ordered list of visible toast items.
+ * @param       action          Optional content rendered alongside the alert.
  *
- * @retuns  {ToastItem[]}   TODO:: document
+ * @returns     {ToastItem[]}   The updated toast stack.
  */
 export function toastReducer(
     state: ToastItem[],

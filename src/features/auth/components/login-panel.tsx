@@ -1,8 +1,8 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Renders the interactive login form and handles its submission lifecycle.
  * @module          features/auth
  *
- * @status          Requires documentation
+ * @status          Requires refactoring
  * @TODO            Fix typing issues on LoginPanel
  */
 

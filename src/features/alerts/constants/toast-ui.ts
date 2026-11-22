@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines accessible labels and keyboard values used by toast controls.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 /** Accessible labels used by toast components. */

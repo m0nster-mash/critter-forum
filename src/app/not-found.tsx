@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Handles navigation attempts on routes that don't exist.
  * @module          core-application
- *
- * @status          Good
  */
 
 import {AlertBanner} from "@/features/alerts/components/alert-banner";

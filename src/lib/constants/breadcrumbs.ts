@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Renders the current route hierarchy as accessible breadcrumb navigation.
  * @module          core-application
- *
- * @status          Requires documentation
  */
 
 /** Accessible text and separator used by the breadcrumbs component. */

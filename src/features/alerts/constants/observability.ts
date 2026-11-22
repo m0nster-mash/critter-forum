@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines event names and messages used for operational logging.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 /** Logger scopes identifying the origin of an event. */

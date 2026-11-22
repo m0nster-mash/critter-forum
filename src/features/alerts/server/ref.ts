@@ -1,20 +1,12 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Generates short reference identifiers for correlating displayed alerts with server logs.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 /**
- * Generates a short reference ID used to match an on-screen alert to its server log entry.
+ * Generates a short reference ID for correlating an on-screen alert with its server log entry.
  *
- * @returns {string}    Eight lowercase hex characters (ex. `a1b2c3d4`)
- */
-/**
- * TODO: document
- *
- * @status Requires documentation
- * @returns TODO: document
+ * @returns     The value produced by this operation.
  */
 export function generateRef(): string {
     return crypto

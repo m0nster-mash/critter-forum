@@ -1,8 +1,6 @@
 /**
- @fileOverview    TODO: document
+ @fileOverview    Provides the alerts functionality used by the application.
  @module          features/auth
-
- @status Requires documentation
  */
 
 import type {AlertDefinition} from "@/features/alerts/types";

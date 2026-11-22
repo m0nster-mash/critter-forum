@@ -1,5 +1,5 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Defines the serializable success and failure results returned by server actions.
  * @module          features/alerts
  *
  * @status          Requires documentation
@@ -12,7 +12,7 @@ import type {PublicAlert} from "@/features/alerts/types";
  *
  * TODO         Migrate to `types.ts`
  *
- * @typeParam   T       TODO: document
+ * @typeParam   T       Value used by this T operation.
  *
  * @property    ok          Discriminant
  * @property    data        Payload returned to the caller. Must be serializable.
@@ -41,7 +41,7 @@ export interface ActionFailure {
  * @remarks     Expected failures (bad credentials, validation) are values, not exceptions, because Next strips the
  *              message from errors thrown out of server actions in production.
  *
- * @typeParam   T   TODO: document
+ * @typeParam   T   Value used by this T operation.
  */
 export type ActionResult<T = undefined> = ActionSuccess<T> | ActionFailure;
 
@@ -53,12 +53,12 @@ export function succeed(): ActionSuccess<undefined>;
 /**
  * Builds a success result.
  *
- * @typeParam   T           TODO: document
+ * @typeParam   T           Value used by this T operation.
  *
- * @param       data        TODO: document
- * @param       [alert]     TODO: document
+ * @param       data        Serializable payload returned by the operation.
+ * @param       [alert]     Optional public alert associated with the successful result.
  *
- * @returns     TODO: document
+ * @returns     The value produced by this operation.
  */
 export function succeed<T>(
     data: T,
@@ -68,12 +68,12 @@ export function succeed<T>(
 /**
  * Builds a success result.
  *
- * @typeParam   T           TODO: document
+ * @typeParam   T           Value used by this T operation.
  *
- * @param       data        TODO: document
- * @param       [alert]     TODO: document
+ * @param       data        Serializable payload returned by the operation.
+ * @param       [alert]     Optional public alert associated with the successful result.
  *
- * @returns     TODO: document
+ * @returns     The value produced by this operation.
  */
 export function succeed<T>(
     data?: T,

@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Public -> Login Page
  * @module          features/auth
- *
- * @status          Good
  */
 
 import {LoginPageView} from "@/features/auth/views/login-page-view";

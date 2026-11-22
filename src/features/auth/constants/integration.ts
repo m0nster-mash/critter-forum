@@ -1,8 +1,6 @@
 /**
- @fileOverview    TODO: document
+ @fileOverview    Provides the integration functionality used by the application.
  @module          features/auth
-
- @status Requires documentation
  */
 
 /** Error codes returned by Better Auth. Preserve the external spelling and casing. */

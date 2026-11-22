@@ -1,8 +1,6 @@
 /**
- * @fileOverview    TODO: document
+ * @fileOverview    Extracts the Next.js error digest used to correlate page errors with server logs.
  * @module          features/alerts
- *
- * @status          Requires documentation
  */
 
 import {ERROR_PROPERTY_KEYS} from "@/features/alerts/constants/errors";
