@@ -88,3 +88,10 @@ using the permission declared on their route.
 
 See [docs/permissions.md](docs/permissions.md) for how it works and how to add a permission.
 
+## Tests
+
+`npm test` runs everything in `tests/` with Node's built-in runner. Tests register through `Suite` in
+`tests/test-config.ts`. Database tests are skipped unless `TEST_DATABASE_URL` is set.
+
+See [docs/testing.md](docs/testing.md).
+

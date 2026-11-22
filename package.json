@@ -9,6 +9,7 @@
     "start": "next start -p 3102",
     "lint": "eslint",
     "noEmit": "npx tsc --noEmit",
+    "test:run": "tsx --test --experimental-test-module-mocks src/tests/*/*.test.ts",
     "alerts:check": "tsx scripts/alerts-check.ts && tsx scripts/logger-check.ts && tsx scripts/safe-action-check.ts && tsx scripts/toast-state-check.ts && tsx scripts/client-logger-check.ts && tsx scripts/auth-check.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
