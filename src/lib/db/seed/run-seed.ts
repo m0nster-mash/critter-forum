@@ -5,6 +5,7 @@
 
 import "dotenv/config";
 import {logger} from "@/features/alerts/server/logger";
+import {seedPermissions} from "./seed-permissions";
 import {seedUsers} from "./seed-users";
 
 /** Logger instance bound to the database seeding scope. */
@@ -15,6 +16,7 @@ async function main() {
     try {
         log.info("Starting database seed runner...");
         await seedUsers();
+        await seedPermissions();
         log.info("All database seeds completed successfully.");
         process.exit(0);
     } catch (error) {

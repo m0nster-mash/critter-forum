@@ -81,3 +81,10 @@ See [docs/alerts.md](docs/alerts.md) for how it works, which presentation to use
 
 Quick checks: `npm run alerts:check` (logic), `npm run noEmit` (types), `npm run lint` (also forbids stray `console.*`).
 
+## Permissions
+
+Independent per-user permissions, defined in code and enforced on the server. Pages call `requirePagePermission(...)`
+using the permission declared on their route.
+
+See [docs/permissions.md](docs/permissions.md) for how it works and how to add a permission.
+

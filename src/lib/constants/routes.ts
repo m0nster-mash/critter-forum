@@ -3,6 +3,9 @@
  * @module          core-application
  */
 
+import {PERMISSIONS} from "@/features/permissions/constants/permissions";
+import type {Permission} from "@/features/permissions/types";
+
 /** Access levels supported by application routes. */
 export type AccessLevel = "public" | "private" | "admin";
 
@@ -14,6 +17,8 @@ export type AccessLevel = "public" | "private" | "admin";
  * @property    title           Page title associated with the route.
  * @property    accessLevel     Access classification required to visit the route.
  * @property    parent          Optional;   Value used by this parent operation.
+ * @property    [permission]    Optional; the permission required to visit the route. Enforced by the page itself with
+ *                              `requirePagePermission`.
  */
 export interface RouteMetadata {
     path: string | ((params: Record<string, string>) => string);
@@ -21,6 +26,7 @@ export interface RouteMetadata {
     title: string;
     accessLevel: AccessLevel;
     parent?: string;
+    permission?: Permission;
 }
 
 /** Publicly accessible route definitions. */
@@ -66,6 +72,15 @@ export const ADMIN_ROUTES = {
         label: "Admin Dashboard",
         title: "Administration Dashboard",
         accessLevel: "admin",
+        permission: PERMISSIONS.ADMIN_ACCESS,
+    } as const satisfies RouteMetadata,
+
+    USERS: {
+        path: "/admin/users",
+        label: "User Management",
+        title: "User Management",
+        accessLevel: "admin",
+        permission: PERMISSIONS.ADMIN_USERS_ACCESS,
     } as const satisfies RouteMetadata,
 };
 
