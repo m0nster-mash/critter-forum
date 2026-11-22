@@ -3,8 +3,10 @@
  * @module          core-application
  */
 
+// Type-only import: drizzle-kit loads this file without resolving the `@/` alias, so no runtime imports from `@/`.
+import type {Permission} from "@/features/permissions/types";
 import {relations} from "drizzle-orm";
-import {boolean, index, pgTable, text, timestamp} from "drizzle-orm/pg-core";
+import {boolean, index, pgTable, primaryKey, text, timestamp} from "drizzle-orm/pg-core";
 
 /** Provides the user functionality. */
 export const user = pgTable("user", {
@@ -82,10 +84,30 @@ export const verification = pgTable(
     (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+/**
+ * Permissions granted directly to a user, one row per grant.
+ *
+ * @remarks     The permissions themselves are defined in code (`features/permissions`), not in the database, so adding
+ *              a permission needs no migration.
+ * @remarks     The composite primary key prevents duplicate grants and covers lookups by user.
+ */
+export const userPermission = pgTable(
+    "user_permission",
+    {
+        userId: text("user_id")
+            .notNull()
+            .references(() => user.id, {onDelete: "cascade"}),
+        permission: text("permission").$type<Permission>().notNull(),
+        createdAt: timestamp("created_at").defaultNow().notNull(),
+    },
+    (table) => [primaryKey({columns: [table.userId, table.permission]})],
+);
+
 /** Provides the userRelations functionality. */
 export const userRelations = relations(user, ({many}) => ({
     sessions: many(session),
     accounts: many(account),
+    permissions: many(userPermission),
 }));
 
 /** Provides the sessionRelations functionality. */
@@ -100,6 +122,14 @@ export const sessionRelations = relations(session, ({one}) => ({
 export const accountRelations = relations(account, ({one}) => ({
     user: one(user, {
         fields: [account.userId],
+        references: [user.id],
+    }),
+}));
+
+/** Provides the userPermissionRelations functionality. */
+export const userPermissionRelations = relations(userPermission, ({one}) => ({
+    user: one(user, {
+        fields: [userPermission.userId],
         references: [user.id],
     }),
 }));

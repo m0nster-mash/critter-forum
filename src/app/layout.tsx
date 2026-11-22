@@ -10,7 +10,7 @@
 import layoutStyle from "@/components/styles/layout.module.css"
 import {AlertProvider} from "@/features/alerts/client/alert-provider";
 import LogoutButton from "@/features/auth/components/logout-button";
-import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
+import {ADMIN_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import type {Metadata} from "next";
 import "./globals.css";
@@ -53,6 +53,9 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                     <h4>Authentication</h4>
                     <Link href={resolvePath(PUBLIC_ROUTES.REGISTER)}>{PUBLIC_ROUTES.REGISTER.label}</Link>
                     <Link href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</Link>
+                    <h4>Administration</h4>
+                    <Link href={resolvePath(ADMIN_ROUTES.DASHBOARD)}>{ADMIN_ROUTES.DASHBOARD.label}</Link>
+                    <Link href={resolvePath(ADMIN_ROUTES.USERS)}>{ADMIN_ROUTES.USERS.label}</Link>
                     <h4>Test Routes</h4>
                     <Link href="/alerts">Alert Tests</Link>
                     <hr/>
