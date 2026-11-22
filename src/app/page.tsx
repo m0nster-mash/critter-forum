@@ -1,9 +1,12 @@
+/**
+ * @fileOverview    Public -> Publicly Accessible Homepage
+ * @module          core-application
+ */
+
 import {HomePageView} from "@/components/views/home-page-view";
 
 /**
- * Public -> Publicly Accessible Homepage
- *
- * @constructor
+ * Displays the {@link HomePageView}
  */
 export default function Home() {
 

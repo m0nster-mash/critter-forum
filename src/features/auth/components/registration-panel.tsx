@@ -1,14 +1,20 @@
+/**
+ * @fileOverview    Renders the account registration form and handles its submission lifecycle.
+ * @module          features/auth
+ */
+
 "use client";
 
-import {AlertBanner} from "@/components/alerts/alert-banner";
+import {useAlerts} from "@/features/alerts/client/use-alerts";
+import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import {createAlert} from "@/features/alerts/create-alert";
+import {alertFromThrown} from "@/features/alerts/from-thrown";
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
-import {AUTH_LABELS} from "@/features/auth/constants/ui";
+import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
+import {AUTH_FIELDS, AUTH_FORM_IDS, AUTH_LABELS} from "@/features/auth/constants/ui";
 import {AuthFlowProps} from "@/features/auth/types";
 import {validateRegistration} from "@/features/auth/validation";
 import {signIn} from "@/lib/auth-client";
-import {useAlerts} from "@/lib/alerts/client/use-alerts";
-import {alertFromThrown} from "@/lib/alerts/from-thrown";
-import {createAlert} from "@/lib/alerts/create-alert";
 import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import {useRouter} from "next/navigation";
@@ -17,13 +23,12 @@ import {JSX, type SubmitEvent, useState} from "react";
 /**
  * Renders the registration form panel enabling account creation.
  *
- * Validation and server failures appear inline (field-level where the alert names a field, form-level otherwise); the
- * "account created" confirmation is a toast that survives the redirect.
+ * @remarks     Validation and server failures appear inline (field-level where the alert names a field, form-level
+ *              otherwise); the "account created" confirmation is a toast that survives the redirect.
  *
- * @param   {AuthFlowProps} props               Component properties handling registration callbacks
- * @param   {Function}      [props.onSuccess]   Optional callback function executed upon successful account registration
+ * @param       onSuccess       Optional callback function executed upon successful account registration
  *
- * @return  {JSX.Element}   The registration panel JSX element.
+ * @returns     {JSX.Element}   The registration panel JSX element.
  */
 export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
@@ -34,9 +39,9 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const nameAlert = fieldAlert("name");
-    const emailAlert = fieldAlert("email");
-    const passwordAlert = fieldAlert("password");
+    const nameAlert = fieldAlert(AUTH_FIELDS.NAME);
+    const emailAlert = fieldAlert(AUTH_FIELDS.EMAIL);
+    const passwordAlert = fieldAlert(AUTH_FIELDS.PASSWORD);
 
     async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -61,12 +66,12 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
             const attemptSignIn = await signIn.email({email: input.email, password});
             if (attemptSignIn.error) {
-                present(createAlert("AUTH_REGISTER_SIGNIN_FAILED"));
+                present(createAlert(AUTH_ALERT_CODES.REGISTER_SIGN_IN_FAILED));
                 router.push(resolvePath(PUBLIC_ROUTES.LOGIN));
                 return;
             }
 
-            present(result.alert ?? createAlert("AUTH_REGISTER_SUCCESS"));
+            present(result.alert ?? createAlert(AUTH_ALERT_CODES.REGISTER_SUCCESS));
             onSuccess?.();
             router.push(resolvePath(PRIVATE_ROUTES.DASHBOARD));
             router.refresh();
@@ -76,7 +81,6 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
         } finally {
             setLoading(false);
         }
-
     }
 
     return (
@@ -85,46 +89,46 @@ export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
             <form onSubmit={handleSubmit} noValidate>
                 <div>
-                    <label htmlFor="register-username">Username</label>
-                    <input id="register-username"
+                    <label htmlFor={AUTH_FORM_IDS.REGISTER_NAME}>{AUTH_LABELS.USER_NAME}</label>
+                    <input id={AUTH_FORM_IDS.REGISTER_NAME}
                            type="text"
                            autoComplete="username"
                            placeholder="Username"
                            value={name}
                            onChange={(registerEvent) => setName(registerEvent.target.value)}
                            aria-invalid={nameAlert ? true : undefined}
-                           aria-describedby={nameAlert ? "register-username-alert" : undefined}
+                           aria-describedby={nameAlert ? AUTH_FORM_IDS.REGISTER_ALERT_NAME : undefined}
                            disabled={loading}
                            required/>
-                    <AlertBanner alert={nameAlert} id="register-username-alert" variant="field"/>
+                    <AlertBanner alert={nameAlert} id={AUTH_FORM_IDS.REGISTER_ALERT_NAME} variant="field"/>
                 </div>
                 <div>
-                    <label htmlFor="register-email">Email</label>
-                    <input id="register-email"
+                    <label htmlFor={AUTH_FORM_IDS.REGISTER_EMAIL}>{AUTH_LABELS.USER_EMAIL}</label>
+                    <input id={AUTH_FORM_IDS.REGISTER_EMAIL}
                            type="email"
                            autoComplete="email"
                            placeholder="email@address.com"
                            value={email}
                            onChange={(registerEvent) => setEmail(registerEvent.target.value)}
                            aria-invalid={emailAlert ? true : undefined}
-                           aria-describedby={emailAlert ? "register-email-alert" : undefined}
+                           aria-describedby={emailAlert ? AUTH_FORM_IDS.REGISTER_ALERT_EMAIL : undefined}
                            disabled={loading}
                            required/>
-                    <AlertBanner alert={emailAlert} id="register-email-alert" variant="field"/>
+                    <AlertBanner alert={emailAlert} id={AUTH_FORM_IDS.REGISTER_ALERT_EMAIL} variant="field"/>
                 </div>
                 <div>
-                    <label htmlFor="register-password">Password</label>
-                    <input id="register-password"
+                    <label htmlFor={AUTH_FORM_IDS.REGISTER_PASSWORD}>{AUTH_LABELS.USER_PASSWORD}</label>
+                    <input id={AUTH_FORM_IDS.REGISTER_PASSWORD}
                            type="password"
                            autoComplete="new-password"
                            placeholder="••••••••"
                            value={password}
                            onChange={(registerEvent) => setPassword(registerEvent.target.value)}
                            aria-invalid={passwordAlert ? true : undefined}
-                           aria-describedby={passwordAlert ? "register-password-alert" : undefined}
+                           aria-describedby={passwordAlert ? AUTH_FORM_IDS.REGISTER_ALERT_PASSWORD : undefined}
                            disabled={loading}
                            required/>
-                    <AlertBanner alert={passwordAlert} id="register-password-alert" variant="field"/>
+                    <AlertBanner alert={passwordAlert} id={AUTH_FORM_IDS.REGISTER_ALERT_PASSWORD} variant="field"/>
                 </div>
                 <div>
                     <button type="submit"

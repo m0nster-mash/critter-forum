@@ -1,17 +1,37 @@
-import type {AlertDefinition} from "@/lib/alerts/types";
+/**
+ @fileOverview    Provides the alerts functionality used by the application.
+ @module          features/auth
+ */
+
+import type {AlertDefinition} from "@/features/alerts/types";
+
+/** Stable identifiers for authentication alerts. */
+export const AUTH_ALERT_CODES = {
+    LOGIN_SUCCESS: "AUTH_LOGIN_SUCCESS",
+    LOGIN_INVALID_CREDENTIALS: "AUTH_LOGIN_INVALID_CREDENTIALS",
+    LOGIN_FAILED: "AUTH_LOGIN_FAILED",
+    RATE_LIMITED: "AUTH_RATE_LIMITED",
+
+    REGISTER_SUCCESS: "AUTH_REGISTER_SUCCESS",
+    REGISTER_NAME_REQUIRED: "AUTH_REGISTER_NAME_REQUIRED",
+    REGISTER_EMAIL_INVALID: "AUTH_REGISTER_EMAIL_INVALID",
+    REGISTER_PASSWORD_TOO_SHORT: "AUTH_REGISTER_PASSWORD_TOO_SHORT",
+    REGISTER_EMAIL_TAKEN: "AUTH_REGISTER_EMAIL_TAKEN",
+    REGISTER_FAILED: "AUTH_REGISTER_FAILED",
+    REGISTER_SIGN_IN_FAILED: "AUTH_REGISTER_SIGN_IN_FAILED",
+
+    LOGOUT_SUCCESS: "AUTH_LOGOUT_SUCCESS",
+    LOGOUT_FAILED: "AUTH_LOGOUT_FAILED",
+} as const;
 
 /**
- * Registry entries for every authentication alert. This is the single place that decides what each auth message says,
- * how it is shown, and whether it is logged. Merged into the application-wide registry in `lib/alerts/registry.ts`.
+ * Authentication alert definitions.
  *
- * Naming: `AUTH_<ACTION>_<REASON>`.
- *
- * Note on `log.server` for the login alerts: sign-in goes straight from the browser to better-auth rather than through
- * a server action, so failed sign-ins are written to the server log by the better-auth logger hook in
- * `lib/db/auth/auth.ts`, not by these entries.
+ * @remarks     This registry owns the user-facing message, presentation and logging policy for auth outcomes.
+ * @remarks     Sign-in requests go directly from the browser to Better Auth; their server-side logging is handled by
+ *              the Better Auth logger configured in `lib/db/auth/auth.ts`.
  */
 export const AUTH_ALERTS = {
-    // Login stream:
     AUTH_LOGIN_SUCCESS: {
         severity: "success",
         message: "You're signed in.",
@@ -31,13 +51,12 @@ export const AUTH_ALERTS = {
         log: {server: false, client: "warn"},
     },
     AUTH_RATE_LIMITED: {
-        severity: "warning",
+        severity: "warn",
         message: "Too many attempts. Please wait a moment and try again.",
         presentation: "inline",
         log: {server: false, client: "warn"},
     },
 
-    // Registration stream:
     AUTH_REGISTER_SUCCESS: {
         severity: "success",
         message: "Your account has been created.",
@@ -45,21 +64,21 @@ export const AUTH_ALERTS = {
         log: {server: "info", client: false},
     },
     AUTH_REGISTER_NAME_REQUIRED: {
-        severity: "warning",
+        severity: "warn",
         message: "Please enter a username.",
         presentation: "inline",
         field: "name",
         log: {server: false, client: false},
     },
     AUTH_REGISTER_EMAIL_INVALID: {
-        severity: "warning",
+        severity: "warn",
         message: "Please enter a valid email address.",
         presentation: "inline",
         field: "email",
         log: {server: false, client: false},
     },
     AUTH_REGISTER_PASSWORD_TOO_SHORT: {
-        severity: "warning",
+        severity: "warn",
         message: "Password must be at least {min} characters long.",
         presentation: "inline",
         field: "password",
@@ -78,14 +97,13 @@ export const AUTH_ALERTS = {
         presentation: "inline",
         log: {server: "error", client: "warn"},
     },
-    AUTH_REGISTER_SIGNIN_FAILED: {
-        severity: "warning",
+    AUTH_REGISTER_SIGN_IN_FAILED: {
+        severity: "warn",
         message: "Your account was created, but we couldn't sign you in automatically. Please sign in.",
         presentation: "toast",
         log: {server: false, client: "warn"},
     },
 
-    // Logout stream:
     AUTH_LOGOUT_SUCCESS: {
         severity: "success",
         message: "You've been signed out.",

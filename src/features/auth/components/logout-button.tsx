@@ -1,28 +1,33 @@
+/**
+ * @fileOverview    Renders the sign-out control and reports the result to the user.
+ * @module          features/auth
+ */
+
 "use client";
 
+import {useAlerts} from "@/features/alerts/client/use-alerts";
+import {createAlert} from "@/features/alerts/create-alert";
+import {alertFromThrown} from "@/features/alerts/from-thrown";
+import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
+import {AUTH_REDIRECT} from "@/features/auth/constants/navigation";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
 import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
-import {useAlerts} from "@/lib/alerts/client/use-alerts";
-import {alertFromThrown} from "@/lib/alerts/from-thrown";
-import {createAlert} from "@/lib/alerts/create-alert";
 import {signOut} from "@/lib/auth-client";
-import {REDIRECT} from "@/lib/constants/globals";
 import {useRouter} from "next/navigation";
 import {JSX, type MouseEvent, useState} from "react";
 
 /**
  * Renders a stylized button component that triggers user sign-out when clicked.
  *
- * @param   {LogoutButtonProps} props                   Configuration options for the logout button
- * @param   {string}            [props.label="Logout"]  The display text label rendered on the button
- * @param   {string}            [props.redirectTo="/"]  The route path to navigate to after completing logout
- * @param   {Function}          [props.onBeforeLogout]  Optional callback executed immediately before signing out
+ * @param   label           The display text label rendered on the button
+ * @param   redirectTo      The route path to navigate to after completing logout
+ * @param   onBeforeLogout  Optional callback executed immediately before signing out
  *
- * @return  {JSX.Element} The rendered logout button JSX element.
+ * @returns {JSX.Element}   The rendered logout button JSX element.
  */
 export function LogoutButton({
                                  label = AUTH_LABELS.LOGOUT_LABEL,
-                                 redirectTo = REDIRECT,
+                                 redirectTo = AUTH_REDIRECT,
                                  onBeforeLogout,
                              }: LogoutButtonProps): JSX.Element {
     return (
@@ -35,19 +40,19 @@ export function LogoutButton({
 /**
  * Wrapper component providing click-to-logout handling and session termination logic for child UI elements.
  *
- * @param {LogoutProps} props    Properties controlling the logout execution container.
- * @param {ReactNode} props.children    Child elements wrapped within the interactive logout container.
- * @param {string} [props.redirectTo="/"]    The target route to navigate to after sign-out completes.
- * @param {Function} [props.onSuccess]    Optional callback executed upon successful logout.
- * @param {Function} [props.onBeforeLogout]    Optional callback executed prior to initiating sign-out.
- * @return {JSX.Element} The interactive container wrapping child elements.
+ * @param       children        Child elements wrapped within the interactive logout container
+ * @param       redirectTo      The target route to navigate to after sign-out completes
+ * @param       onSuccess       Optional callback executed upon successful logout
+ * @param       onBeforeLogout  Optional callback executed prior to initiating sign-out
+ *
+ * @returns     {JSX.Element}   The interactive container wrapping child elements.
  */
 export function Logout({
                            children,
-                           redirectTo = REDIRECT,
+                           redirectTo = AUTH_REDIRECT,
                            onSuccess,
                            onBeforeLogout,
-                       }: LogoutProps) {
+                       }: LogoutProps): JSX.Element {
     const router = useRouter();
     const {present} = useAlerts();
     const [loading, setLoading] = useState(false);
@@ -66,12 +71,12 @@ export function Logout({
 
             const attemptSignOut = await signOut();
             if (attemptSignOut.error) {
-                present(createAlert("AUTH_LOGOUT_FAILED"));
+                present(createAlert(AUTH_ALERT_CODES.LOGOUT_FAILED));
                 setLoading(false);
                 return;
             }
 
-            present(createAlert("AUTH_LOGOUT_SUCCESS"));
+            present(createAlert(AUTH_ALERT_CODES.LOGOUT_SUCCESS));
             if (onSuccess) {
                 onSuccess();
             }

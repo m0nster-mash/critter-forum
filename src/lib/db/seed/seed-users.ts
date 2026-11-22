@@ -1,13 +1,21 @@
-import {logger} from "@/lib/alerts/server/logger";
+/**
+ * @fileOverview    Creates the development users used to populate a fresh database.
+ * @module          core-application
+ */
+
+import {logger} from "@/features/alerts/server/logger";
 import {auth} from "@/lib/db/auth/auth";
 import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
 
+/** Logger instance bound to the database seeding scope. */
 const log = logger.child({scope: "seed"});
 
+/** Password assigned to development seed accounts. */
 const TEST_PASSWORD = "password00";
 
+/** Provides the seedUsersData functionality. */
 const seedUsersData = [
     {
         name: "Test User",
@@ -21,9 +29,7 @@ const seedUsersData = [
     },
 ] as const;
 
-/**
- * Configures users for the database seeder.
- */
+/** Configures users for the database seeder. */
 export async function seedUsers(): Promise<void> {
     log.info("Seeding users...");
 

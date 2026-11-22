@@ -1,3 +1,8 @@
+/**
+ * @fileOverview    Composes the page header and registration panel for account creation.
+ * @module          features/auth
+ */
+
 import {PageHeader} from "@/components/ui/page-header";
 import {RegistrationPanel} from "@/features/auth/components/registration-panel";
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";
@@ -7,7 +12,7 @@ import {JSX} from "react";
 /**
  * Renders the full account registration page view composition.
  *
- * @return  {JSX.Element}   The registration page view JSX element.
+ * @returns {JSX.Element}   The registration page view JSX element.
  */
 export function RegistrationPageView(): JSX.Element {
     return (

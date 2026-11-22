@@ -1,16 +1,19 @@
 /**
- * Union type representing permissible access levels for application routes.
+ * @fileOverview    Defines route metadata, access levels, and the application route registry.
+ * @module          core-application
  */
+
+/** Access levels supported by application routes. */
 export type AccessLevel = "public" | "private" | "admin";
 
 /**
- * Interface defining structural metadata and access constraints associated with an application route.
+ * Metadata shared by static and parameterized application routes.
  *
- * @property    {string | Function} path        The static route path string or builder function producing dynamic paths
- * @property    {string}            label       Human-readable navigation menu text label
- * @property    {string}            title       Header or document title associated with the route
- * @property    {AccessLevel}       accessLevel Permission level required to navigate to the route
- * @property    {string}            [parent]    Optional key identifier linking to a parent route
+ * @property    path            URL path associated with the route.
+ * @property    label           Human-readable navigation label for the route.
+ * @property    title           Page title associated with the route.
+ * @property    accessLevel     Access classification required to visit the route.
+ * @property    parent          Optional;   Value used by this parent operation.
  */
 export interface RouteMetadata {
     path: string | ((params: Record<string, string>) => string);
@@ -20,12 +23,7 @@ export interface RouteMetadata {
     parent?: string;
 }
 
-// ============================================================================
-// PUBLIC ROUTES
-// ============================================================================
-/**
- * Publicly accessible route definitions.
- */
+/** Publicly accessible route definitions. */
 export const PUBLIC_ROUTES = {
     HOME: {
         path: "/",
@@ -49,14 +47,9 @@ export const PUBLIC_ROUTES = {
         accessLevel: "public",
         parent: "HOME",
     } as const satisfies RouteMetadata,
-}
+};
 
-// ============================================================================
-// PRIVATE ROUTES (requires authentication)
-// ============================================================================
-/**
- * Authenticated user private route definitions.
- */
+/** Authenticated user routes. */
 export const PRIVATE_ROUTES = {
     DASHBOARD: {
         path: "/dashboard",
@@ -64,14 +57,9 @@ export const PRIVATE_ROUTES = {
         title: "Your Dashboard",
         accessLevel: "private",
     } as const satisfies RouteMetadata,
-}
+};
 
-// ============================================================================
-// ADMIN ROUTES (requires admin access)
-// ============================================================================
-/**
- * Administrative route definitions restricted to admin users.
- */
+/** Administrative routes. */
 export const ADMIN_ROUTES = {
     DASHBOARD: {
         path: "/admin",
@@ -79,17 +67,14 @@ export const ADMIN_ROUTES = {
         title: "Administration Dashboard",
         accessLevel: "admin",
     } as const satisfies RouteMetadata,
-}
+};
 
-// ============================================================================
-// UNIFIED ROUTE REGISTRY
-// ============================================================================
-
-/**
- * Unified registry combining all public, private, and administrative route definitions.
- */
+/** Unified registry of all application routes. */
 export const ALL_ROUTES = {
     ...PUBLIC_ROUTES,
     ...PRIVATE_ROUTES,
     ...ADMIN_ROUTES,
 } as const;
+
+/** Prefix used when a route builder is called without required parameters. */
+export const MISSING_ROUTE_PARAMS = "Route requires parameters: " as const;

@@ -1,10 +1,15 @@
+/**
+ * @fileOverview    Defines shared types for alerts, logging, action results, and toast notifications.
+ * @module          core-application
+ */
+
 import {ReactNode} from "react";
 
 /**
  * Properties for the PageHeader object.
  *
- * @property    {ReactNode}         title           The page's title rendered inside the header
- * @property    {BreadcrumbItem[]}  [breadcrumb]    Optional array of breadcrumb items for the navigation trail
+ * @property    title           The page's title rendered inside the header
+ * @property    [breadcrumb]    Optional array of breadcrumb items for the navigation trail
  */
 export interface PageHeaderProps {
     title: ReactNode;
@@ -14,7 +19,7 @@ export interface PageHeaderProps {
 /**
  * Properties for the Breadcrumbs component.
  *
- * @property    {BreadcrumbItem[]}  [breadcrumb]    Optional array of breadcrumb items to render
+ * @property    breadcrumb  Array of breadcrumb items to render
  */
 export interface BreadcrumbProps {
     breadcrumb: BreadcrumbItem[];
@@ -23,9 +28,9 @@ export interface BreadcrumbProps {
 /**
  * Represents a single breadcrumb item in the navigation trail.
  *
- * @property    {string}    label   The display text for the breadcrumb item
- * @property    {string}    [href]  Optional; the URL to navigate to when the item is clicked. If omitted, the item is
- *                                  rendered as plain text without a link.
+ * @property    label   The display text for the breadcrumb item
+ * @property    [href]  Optional; the URL to navigate to when the item is clicked. If omitted, the item is rendered as
+ *                      plain text without a link.
  */
 export type BreadcrumbItem = {
     label: string;
@@ -33,9 +38,9 @@ export type BreadcrumbItem = {
 };
 
 /**
- * Property object structure passed into the DashboardPagePanel component.
+ * Property object structure passed into the {@link DashboardPagePanel} component.
  *
- * @property    {UserPropItems} user    User metadata object required for rendering dashboard user UI details.
+ * @property    user    User metadata object required for rendering dashboard user UI details.
  */
 export interface DashboardPageProps {
     user: UserPropItems;
@@ -44,7 +49,7 @@ export interface DashboardPageProps {
 /**
  * Essential user profile attributes required by view panels.
  *
- * @property    {string}    name    The display name of the authenticated user.
+ * @property    name    The display name of the authenticated user.
  */
 export type UserPropItems = {
     name: string;

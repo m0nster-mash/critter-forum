@@ -1,18 +1,29 @@
+/**
+ * @fileOverview    The breadcrumb navigation trail.
+ * @module          core-application
+ *
+ * @status          Requires refactoring (styling)
+ * @TODO            Restyle breadcrumbs at a later date
+ */
+
 import layoutStyle from "@/components/styles/layout.module.css";
-import {BREADCRUMBS} from "@/lib/constants/ui";
+import {BREADCRUMBS} from "@/lib/constants/breadcrumbs";
 import {BreadcrumbProps} from "@/lib/types";
 import Link from "next/link";
-import {Fragment} from "react";
+import {Fragment, JSX} from "react";
 
 /**
  * Renders a breadcrumb navigation trail.
  *
- * Each item is rendered as a link if an `href` is provided, otherwise as plain text.
+ * @remarks     Each item is rendered as a link if an `href` is provided, otherwise as plain text.
  *
- * @param   {BreadcrumbProps}   props               The props object for the Breadcrumbs component
- * @param   {BreadcrumbItem[]}  [props.breadcrumb]  Optional array of breadcrumb items to render
+ * @TODO        Restyle breadcrumbs at a later date
+ *
+ * @param       breadcrumb      Array of breadcrumb items to render
+ *
+ * @returns     {JSX.Element}   Breadcrumb UI
  */
-export function Breadcrumbs({breadcrumb}: BreadcrumbProps) {
+export function Breadcrumbs({breadcrumb}: BreadcrumbProps): JSX.Element {
 
     return (
         <>

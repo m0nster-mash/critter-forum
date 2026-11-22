@@ -1,7 +1,12 @@
+/**
+ * @fileOverview    Public -> Registration Page
+ * @module          features/auth
+ */
+
 import {RegistrationPageView} from "@/features/auth/views/registration-page-view";
 
 /**
- * Public (Auth) -> Registration Page
+ * Displays the {@link RegistrationPageView}
  */
 export default function RegistrationPage() {
     return (

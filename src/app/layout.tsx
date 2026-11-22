@@ -1,22 +1,45 @@
+/**
+ * @fileOverview    The root document shell.
+ * @module          core-application
+ *
+ * @status          Requires refactoring
+ * @TODO            Migrate `metadata` content into global-level constants
+ * @TODO            Replace content with proper layout at a later date
+ */
+
 import layoutStyle from "@/components/styles/layout.module.css"
+import {AlertProvider} from "@/features/alerts/client/alert-provider";
 import LogoutButton from "@/features/auth/components/logout-button";
-import {AlertProvider} from "@/lib/alerts/client/alert-provider";
 import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import type {Metadata} from "next";
 import "./globals.css";
-import React from "react";
+import React, {JSX} from "react";
 
+/**
+ * Default document metadata used by the application
+ *
+ * @TODO    Migrate to global constant
+ */
 export const metadata: Metadata = {
     title: "critter-forum",
     description: "critters: pangaea, maybe?",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+/**
+ * Renders the root document shell.
+ *
+ * @remarks     Wraps every route in the shared alert provider and global error listeners.
+ * @remarks     The navigation links expose the public pages and authenticated dashboard entry point.
+ *
+ * @TODO        Replace content with proper layout at a later date
+ *
+ * @param       children        Root layout props containing the active route content
+ *
+ * @returns     {JSX.Element}   The complete HTML document for the application
+ */
+export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>): JSX.Element {
+
     return (
         <html lang="en">
         <body>
@@ -24,11 +47,11 @@ export default function RootLayout({
             <div className="layout">
                 <nav>
                     <h3>Navigation</h3>
-                    <a href={resolvePath(PUBLIC_ROUTES.HOME)}>Home</a>
-                    <a href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>Dashboard</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.HOME)}>{PUBLIC_ROUTES.HOME.label}</a>
+                    <a href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>{PRIVATE_ROUTES.DASHBOARD.label}</a>
                     <h4>Authentication</h4>
-                    <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>Register</a>
-                    <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>Login</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>{PUBLIC_ROUTES.REGISTER.label}</a>
+                    <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</a>
                     <h4>Test Routes</h4>
                     <a href="/alerts">Alert Tests</a>
                     <hr/>

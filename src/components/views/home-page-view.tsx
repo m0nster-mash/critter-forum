@@ -1,3 +1,8 @@
+/**
+ * @fileOverview    Renders the home page view.
+ * @module          core-application
+ */
+
 import {HomePagePanel} from "@/components/panels/home-page-panel";
 import {PageHeader} from "@/components/ui/page-header";
 import {PUBLIC_ROUTES} from "@/lib/constants/routes";
@@ -7,7 +12,7 @@ import {JSX} from "react";
 /**
  * Renders the public home page view.
  *
- * @return  {JSX.Element}   The home page view JSX element
+ * @returns     {JSX.Element}   The home page view JSX element
  */
 export function HomePageView(): JSX.Element {
     return (
