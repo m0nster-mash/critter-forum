@@ -10,12 +10,12 @@ import {ComponentType, SVGProps} from "react";
 /**
  * Properties accepted by the `Icon` component.
  *
- * @property    [icon]      Direct SVG component to render; takes precedence over `name`
- * @property    [name]      String key looked up in the central icon registry when `icon` is not supplied
- * @property    [size]      Display size key; defaults to `ICON_SIZE.MEDIUM`
- * @property    [variant]   Colour variant key; defaults to `"default"`
- * @property    [semantic]  When true, exposes accessibility attributes (`aria-label`, `role="img"`)
- * @property    [label]     Accessible label for screen readers; required when `semantic` is true
+ * @property    [icon]      Optional; direct SVG component to render; takes precedence over `name`
+ * @property    [name]      Optional; string key looked up in the central icon registry when `icon` is not supplied
+ * @property    [size]      Optional; display size key; defaults to `ICON_SIZE.MEDIUM`
+ * @property    [variant]   Optional; colour variant key; defaults to `"default"`
+ * @property    [semantic]  Optional; when true, exposes accessibility attributes (`aria-label`, `role="img"`)
+ * @property    [label]     Optional; accessible label for screen readers; required when `semantic` is true
  */
 export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "width" | "height"> {
     icon?: ComponentType<SVGProps<SVGSVGElement>>;
@@ -27,7 +27,7 @@ export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "width" | "heig
 }
 
 /**
- * Valid display size keys for an icon; one of `sm`, `md`, `lg` or `xl`.
+ * Valid display size keys for an icon
  */
 export type IconSize =
     typeof ICON_SIZE.SMALL |
@@ -36,6 +36,6 @@ export type IconSize =
     typeof ICON_SIZE.X_LARGE;
 
 /**
- * Colour variant keys used to style an icon (`default`, `accent`, `danger`, `success`, `muted`).
+ * Colour variant keys used to style an icon
  */
 export type IconVariant = "default" | "accent" | "danger" | "success" | "muted";

@@ -38,6 +38,7 @@ export function Icon({
                          className = "",
                          ...props
                      }: IconProps) {
+
     // Resolve component from direct prop or string name registry lookup
     const IconComponent = icon ?? resolveIcon(name);
     const pixelSize = SIZE_MAP[size] ?? SIZE_MAP.md;
