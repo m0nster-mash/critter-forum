@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Renders and manages the timed, dismissible toast notification stack.
  * @module          features/alerts
- *
- * @status          Requires refactoring
  */
 
 "use client";
@@ -13,6 +11,8 @@ import {TOAST_DURATIONS} from "@/features/alerts/constants/toast";
 import {TOAST_KEYSTROKE, TOAST_LABELS} from "@/features/alerts/constants/toast-ui";
 import styles from "@/features/alerts/styles/alerts.module.css";
 import {ToastItem, ToastViewportProps} from "@/features/alerts/types";
+import Icon from "@/features/icons/components/icon";
+import {ICON_SIZE, UI_ICONS} from "@/features/icons/constants/groups";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";
 
 /**
@@ -129,8 +129,6 @@ export function ToastViewport({toasts, onDismiss}: ToastViewportProps): JSX.Elem
 /**
  * Renders the dismiss button.
  *
- * @TODO        `×` text-icon with proper icons once the icon system is implemented
- *
  * @param       dismiss Callback that dismisses the current toast.
  *
  * @returns     The value produced by this operation.
@@ -140,7 +138,6 @@ function getDismissButton(dismiss: () => void) {
                    className={styles.dismiss}
                    aria-label={TOAST_LABELS.DISMISS_NOTIFICATION}
                    onClick={dismiss}>
-        {/* TODO:: replace with icon once proper icon handling has been implemented */}
-        ×
+        <Icon name={UI_ICONS.CLOSE} size={ICON_SIZE.SMALL}/>
     </button>;
 }

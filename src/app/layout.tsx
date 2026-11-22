@@ -14,6 +14,7 @@ import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import type {Metadata} from "next";
 import "./globals.css";
+import Link from "next/link";
 import React, {JSX} from "react";
 
 /**
@@ -47,13 +48,13 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
             <div className="layout">
                 <nav>
                     <h3>Navigation</h3>
-                    <a href={resolvePath(PUBLIC_ROUTES.HOME)}>{PUBLIC_ROUTES.HOME.label}</a>
-                    <a href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>{PRIVATE_ROUTES.DASHBOARD.label}</a>
+                    <Link href={resolvePath(PUBLIC_ROUTES.HOME)}>{PUBLIC_ROUTES.HOME.label}</Link>
+                    <Link href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>{PRIVATE_ROUTES.DASHBOARD.label}</Link>
                     <h4>Authentication</h4>
-                    <a href={resolvePath(PUBLIC_ROUTES.REGISTER)}>{PUBLIC_ROUTES.REGISTER.label}</a>
-                    <a href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</a>
+                    <Link href={resolvePath(PUBLIC_ROUTES.REGISTER)}>{PUBLIC_ROUTES.REGISTER.label}</Link>
+                    <Link href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</Link>
                     <h4>Test Routes</h4>
-                    <a href="/alerts">Alert Tests</a>
+                    <Link href="/alerts">Alert Tests</Link>
                     <hr/>
                     <LogoutButton/>
                 </nav>
