@@ -8,23 +8,30 @@ import {IconName} from "@/features/icons/index";
 import {ComponentType, SVGProps} from "react";
 
 /**
- * Properties accepted by the `Icon` component.
- *
- * @property    [icon]      Optional; direct SVG component to render; takes precedence over `name`
- * @property    [name]      Optional; string key looked up in the central icon registry when `icon` is not supplied
- * @property    [size]      Optional; display size key; defaults to `ICON_SIZE.MEDIUM`
- * @property    [variant]   Optional; colour variant key; defaults to `"default"`
- * @property    [semantic]  Optional; when true, exposes accessibility attributes (`aria-label`, `role="img"`)
- * @property    [label]     Optional; accessible label for screen readers; required when `semantic` is true
+ * Icon accessibility properties.
  */
-export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "width" | "height"> {
+type IconAccessibilityProps =
+    | {
+    semantic?: false;
+    label?: never;
+}
+    | {
+    semantic: true;
+    label: string;
+};
+
+/**
+ * Properties accepted by the {@link Icon} component.
+ */
+export type IconProps =
+    Omit<SVGProps<SVGSVGElement>, "width" | "height"> &
+    IconAccessibilityProps & {
+
     icon?: ComponentType<SVGProps<SVGSVGElement>>;
     name?: IconName | string;
     size?: IconSize;
     variant?: IconVariant;
-    semantic?: boolean;
-    label?: string;
-}
+};
 
 /**
  * Valid display size keys for an icon

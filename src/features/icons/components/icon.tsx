@@ -39,15 +39,9 @@ export function Icon({
                          ...props
                      }: IconProps) {
 
-    // Resolve component from direct prop or string name registry lookup
     const IconComponent = icon ?? resolveIcon(name);
     const pixelSize = SIZE_MAP[size] ?? SIZE_MAP.md;
     const variantClass = VARIANT_CLASSES[variant] ?? VARIANT_CLASSES.default;
-
-    if (semantic && !label) {
-        // TODO:: convert to correct alert-handling system
-        console.warn("[Icon] Semantic icons require a descriptive 'label' prop for screen readers.");
-    }
 
     return React.createElement(IconComponent, {
         width: pixelSize,

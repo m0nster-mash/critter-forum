@@ -1,10 +1,6 @@
 /**
  * @fileOverview    Temp -> Alert and Error Handling test page
  * @module          features/alerts
- *
- * @status          Requires refactoring
- * @TODO            Fix the {@code useAlerts()} variables
- * @TODO            Replace magic strings with consts
  */
 
 "use client";
@@ -22,17 +18,9 @@ import {AlertOverrides} from "@/features/alerts/types";
  *              presentation, plus the thrown-error / unhandled-rejection paths.
  * @remarks     Must be rendered inside {@link AlertProvider} (mounted by the root layout at `src/app/layout.tsx`),
  *              because {@code useAlerts()} reads alert context.
- *
- * @TODO        Fix the {@code useAlerts()} variables
- *              - TS2339: Property 'present' does not exist on type '{}'.
- *              - TS2339: Property 'clear' does not exist on type '{}'.
- *              - TS2339: Property 'notify' does not exist on type '{}'.
- *              - TS2339: Property 'inline' does not exist on type '{}'.
- * @TODO        Replace magic strings with consts
  */
 export default function AlertTestPage() {
 
-    // TODO:: fix these vars
     const {present, clear, notify, inline} = useAlerts();
 
     const raiseToast = (code: AlertCode, overrides?: AlertOverrides): void => {
