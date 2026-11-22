@@ -1,9 +1,6 @@
 /**
  * @fileOverview    Renders the account registration form and handles its submission lifecycle.
  * @module          features/auth
- *
- * @status          Requires documentation
- * @TODO            Fix typing issues on RegistrationPanel
  */
 
 "use client";
@@ -29,12 +26,6 @@ import {JSX, type SubmitEvent, useState} from "react";
  * @remarks     Validation and server failures appear inline (field-level where the alert names a field, form-level
  *              otherwise); the "account created" confirmation is a toast that survives the redirect.
  *
- * @TODO        Fix type issues:
- *              - TS2339: Property 'present' does not exist on type '{}'.
- *              - TS2339: Property 'clear' does not exist on type '{}'.
- *              - TS2339: Property 'formAlert' does not exist on type '{}'.
- *              - TS2339: Property 'fieldAlert' does not exist on type '{}'.
- *
  * @param       onSuccess       Optional callback function executed upon successful account registration
  *
  * @returns     {JSX.Element}   The registration panel JSX element.
@@ -42,7 +33,6 @@ import {JSX, type SubmitEvent, useState} from "react";
 export function RegistrationPanel({onSuccess}: AuthFlowProps): JSX.Element {
 
     const router = useRouter();
-    // TODO:: fix these issues
     const {present, clear, formAlert, fieldAlert} = useAlerts();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");

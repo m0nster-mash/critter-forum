@@ -31,7 +31,7 @@ import {useCallback, useState} from "react";
  *                          {@code formAlert} (inline alert without a field),
  *                          {@code fieldAlert(name)} (inline alert for one field)
  */
-export function useAlerts(): object {
+export function useAlerts(): AlertsApi {
 
     const {notify} = useAlertContext();
     const [inline, setInline] = useState<PublicAlert | null>(null);
@@ -72,4 +72,13 @@ export function useAlerts(): object {
         clear,
         notify,
     };
+}
+
+export interface AlertsApi {
+    inline: PublicAlert | null;
+    formAlert: PublicAlert | null;
+    fieldAlert: (field: string) => PublicAlert | null;
+    present: (alert: PublicAlert, detail?: LogContext) => void;
+    clear: () => void;
+    notify: (alert: PublicAlert, detail?: LogContext) => void;
 }

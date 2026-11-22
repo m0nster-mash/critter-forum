@@ -33,7 +33,7 @@
     --alert-fg: #0b2f6b;
 }
 
-.warning {
+.warn {
     --alert-accent: #e37400;
     --alert-bg: #fff4e0;
     --alert-fg: #5a3a00;
@@ -136,8 +136,7 @@
     flex-direction: column;
     gap: 0.5rem;
     max-width: 26rem;
-    padding: 1rem;
-    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
     pointer-events: none;
     position: fixed;
     right: 0;
