@@ -4,45 +4,25 @@
  * @module          features/icons
  */
 
-import ArrowDownIcon from "@/components/icons/arrow-down.svg";
-import ArrowUpIcon from "@/components/icons/arrow-up.svg";
-import ArrowsVerticalIcon from "@/components/icons/arrows-vertical.svg";
-import BellIcon from "@/components/icons/bell.svg";
-import CaretDownFillIcon from "@/components/icons/caret-down-fill.svg";
-import CaretUpFillIcon from "@/components/icons/caret-up-fill.svg";
-import ChatDotsIcon from "@/components/icons/chat-dots.svg";
-import ChevronDownIcon from "@/components/icons/chevron-down.svg";
-import ChevronExpandIcon from "@/components/icons/chevron-expand.svg";
-import EyeIcon from "@/components/icons/eye.svg";
-import MoonIcon from "@/components/icons/moon.svg";
-import PencilSquareIcon from "@/components/icons/pencil-square.svg";
-import SearchIcon from "@/components/icons/search.svg";
-import SunIcon from "@/components/icons/sun.svg";
-import ThreeDotsVerticalIcon from "@/components/icons/three-dots-vertical.svg";
+import CheckIcon from "@/components/icons/check-circle-fill.svg";
+import AlertIcon from "@/components/icons/exclamation-triangle-fill.svg";
+import InfoIcon from "@/components/icons/info-circle-fill.svg"
+import QuestionIcon from "@/components/icons/question.svg";
+import XCircleICon from "@/components/icons/x-circle-fill.svg";
 import XIcon from "@/components/icons/x.svg";
+import {UI_ICONS} from "@/features/icons/constants/groups";
 import {type ComponentType, type SVGProps} from "react";
 
 /**
  * Union type of all valid icon names in the application.
  */
 export type IconName =
-    | "arrow-down"
-    | "arrow-up"
-    | "arrows-vertical"
-    | "bell"
-    | "caret-down-fill"
-    | "caret-up-fill"
-    | "chat"
-    | "chat-dots"
-    | "chevron-down"
-    | "chevron-expand"
-    | "eye"
-    | "moon"
-    | "pencil-square"
-    | "search"
-    | "sun"
-    | "three-dots-vertical"
-    | "x";
+    | "success"
+    | "warn"
+    | "info"
+    | "question"
+    | "close"
+    | "error";
 
 export type SVGComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
@@ -50,23 +30,12 @@ export type SVGComponent = ComponentType<SVGProps<SVGSVGElement>>;
  * Central mapping from string IconName identifiers to SVG React components.
  */
 export const ICON_REGISTRY: Record<IconName, SVGComponent> = {
-    "arrow-down": ArrowDownIcon,
-    "arrow-up": ArrowUpIcon,
-    "arrows-vertical": ArrowsVerticalIcon,
-    bell: BellIcon,
-    "caret-down-fill": CaretDownFillIcon,
-    "caret-up-fill": CaretUpFillIcon,
-    chat: ChatDotsIcon,
-    "chat-dots": ChatDotsIcon,
-    "chevron-down": ChevronDownIcon,
-    "chevron-expand": ChevronExpandIcon,
-    eye: EyeIcon,
-    moon: MoonIcon,
-    "pencil-square": PencilSquareIcon,
-    search: SearchIcon,
-    sun: SunIcon,
-    "three-dots-vertical": ThreeDotsVerticalIcon,
-    x: XIcon,
+    success: CheckIcon,
+    warn: AlertIcon,
+    info: InfoIcon,
+    question: QuestionIcon,
+    close: XIcon,
+    error: XCircleICon,
 };
 
 /**
@@ -79,7 +48,7 @@ export const ICON_REGISTRY: Record<IconName, SVGComponent> = {
  */
 export function resolveIcon(
     iconName: string | undefined | null,
-    fallback: IconName = "three-dots-vertical"
+    fallback: IconName = UI_ICONS.QUESTION
 ): SVGComponent {
     if (!iconName || !(iconName in ICON_REGISTRY)) {
         if (iconName) {
