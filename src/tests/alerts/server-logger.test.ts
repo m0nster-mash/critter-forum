@@ -3,12 +3,12 @@
  * @module features/alerts
  */
 import {createAlert} from "@/features/alerts/create-alert";
-import {Suite} from "@/tests/test-config";
-import assert from "node:assert/strict";
 import {logAlert} from "@/features/alerts/server/log-alert";
 import {createLogger, logger} from "@/features/alerts/server/logger";
+import {Suite} from "@/tests/test-config";
+import assert from "node:assert/strict";
 
-type Captured = {method: string; line: string};
+type Captured = { method: string; line: string };
 const suite = new Suite("alerts/server-logger", 10);
 const methods = ["debug", "info", "warn", "error"] as const;
 
@@ -21,7 +21,9 @@ function runWithEnv(vars: Record<string, string | undefined>, fn: () => void): C
         else process.env[key] = value;
     }
     for (const method of methods) {
-        console[method] = ((line: string) => { out.push({method, line}); }) as never;
+        console[method] = ((line: string) => {
+            out.push({method, line});
+        }) as never;
     }
     try {
         fn();
@@ -39,7 +41,10 @@ const JSON_MODE = {LOG_FORMAT: "json", LOG_LEVEL: undefined, NODE_ENV: undefined
 
 suite.test("JSON output maps levels to console methods and includes a timestamp", () => {
     const out = runWithEnv(JSON_MODE, () => {
-        logger.debug("d"); logger.info("i"); logger.warn("w"); logger.error("e", {userId: 7});
+        logger.debug("d");
+        logger.info("i");
+        logger.warn("w");
+        logger.error("e", {userId: 7});
     });
     assert.deepEqual(out.map((entry) => entry.method), [...methods]);
     const parsed = JSON.parse(out[3].line);
@@ -77,15 +82,17 @@ suite.test("nested secrets are redacted and circular references are safe", () =>
 });
 
 suite.test("database bound parameters are removed from error messages and stacks", () => {
-    const queryError = new Error('Failed query: select * from "user" where email = $1\\nparams: victim@example.com,$argon2id$HASHVALUE');
+    const queryError = new Error('Failed query: select * from "user" where email = $1\nparams: victim@example.com,$argon2id$HASHVALUE');
     const out = runWithEnv(JSON_MODE, () => logger.error("x", {
-        err: queryError, nested: {inner: new Error("Failed query: insert\\nparams: second@example.com")},
+        err: queryError,
+        nested: {inner: new Error("Failed query: insert\nparams: second@example.com")},
     }));
-    assert.ok(!out[0].line.includes("victim@example.com") && !out[0].line.includes("HASHVALUE") &&
+    assert.ok(!out[0].line.includes("victim@example.com") &&
+        !out[0].line.includes("HASHVALUE") &&
         !out[0].line.includes("second@example.com"));
     const error = JSON.parse(out[0].line).err;
-    assert.match(error.message, /^Failed query: select \\* from "user" where email = \\$1\\nparams: \\[REDACTED\\]$/);
-    assert.match(error.stack, /params: \\[REDACTED\\]\\n\\s+at /);
+    assert.match(error.message, /^Failed query: select \* from "user" where email = \$1\nparams: \[REDACTED\]$/);
+    assert.match(error.stack, /params: \[REDACTED\]\n\s+at /);
 });
 
 suite.test("unusual values and non-Error throwables do not crash serialization", () => {
@@ -105,11 +112,14 @@ suite.test("reserved context keys cannot overwrite the log envelope", () => {
 
 suite.test("level filtering, production defaults, and invalid levels are deterministic", () => {
     let out = runWithEnv({...JSON_MODE, LOG_LEVEL: "warn"}, () => {
-        logger.debug("d"); logger.info("i"); logger.warn("w");
+        logger.debug("d");
+        logger.info("i");
+        logger.warn("w");
     });
     assert.deepEqual(out.map((entry) => JSON.parse(entry.line).msg), ["w"]);
     out = runWithEnv({LOG_FORMAT: undefined, LOG_LEVEL: undefined, NODE_ENV: "production"}, () => {
-        logger.debug("d"); logger.info("i");
+        logger.debug("d");
+        logger.info("i");
     });
     assert.equal(out.length, 1);
     assert.doesNotThrow(() => JSON.parse(out[0].line));
