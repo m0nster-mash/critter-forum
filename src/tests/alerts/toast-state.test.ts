@@ -2,13 +2,13 @@
  * @fileOverview Verifies toast reducer merging, capacity, dismissal, and timing constants.
  * @module features/alerts
  */
-import {ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
-import {Suite} from "@/tests/test-config";
-import assert from "node:assert/strict";
 import {toastReducer} from "@/features/alerts/client/toast-state";
+import {ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
 import {MAX_VISIBLE_TOASTS, TOAST_ACTION_TYPES, TOAST_DURATIONS} from "@/features/alerts/constants/toast";
 import {createAlert} from "@/features/alerts/create-alert";
 import type {ToastItem} from "@/features/alerts/types";
+import {Suite} from "@/tests/test-config";
+import assert from "node:assert/strict";
 
 const suite = new Suite("alerts/toast-state", 6);
 const limited = createAlert("APP_RATE_LIMITED", {params: {seconds: 5}});
@@ -33,7 +33,11 @@ suite.test("merges identical alerts while retaining identity and updating the la
 suite.test("different messages or codes remain separate toasts", () => {
     let state = toastReducer([], {type: TOAST_ACTION_TYPES.ADD, id: "t1", alert: limited});
     state = toastReducer(state, {type: TOAST_ACTION_TYPES.ADD, id: "t2", alert: network});
-    state = toastReducer(state, {type: TOAST_ACTION_TYPES.ADD, id: "t3", alert: createAlert("APP_RATE_LIMITED", {params: {seconds: 9}})});
+    state = toastReducer(state, {
+        type: TOAST_ACTION_TYPES.ADD,
+        id: "t3",
+        alert: createAlert("APP_RATE_LIMITED", {params: {seconds: 9}})
+    });
     assert.equal(state.length, 3);
 });
 

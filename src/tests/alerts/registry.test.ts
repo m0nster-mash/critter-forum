@@ -3,10 +3,10 @@
  * @module features/alerts
  */
 import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
-import {Suite} from "@/tests/test-config";
-import assert from "node:assert/strict";
 import {createAlert, getAlertDefinition, isAlertCode} from "@/features/alerts/create-alert";
 import {ALERT_REGISTRY, type AlertCode} from "@/features/alerts/registry";
+import {Suite} from "@/tests/test-config";
+import assert from "node:assert/strict";
 
 const suite = new Suite("alerts/registry", 8);
 

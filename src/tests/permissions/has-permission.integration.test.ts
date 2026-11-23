@@ -10,11 +10,11 @@
  */
 
 import "dotenv/config";
+import {PERMISSIONS} from "@/features/permissions/constants/permissions";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {randomUUID} from "node:crypto";
 import {after} from "node:test";
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
 
 /** Database dedicated to tests; the integration tests are skipped without it. */
 const TEST_DATABASE_URL = process.env.TEST_DATABASE_URL;

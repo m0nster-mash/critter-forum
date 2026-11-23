@@ -376,14 +376,14 @@ Change only what the request requires.
 
 Follow patterns already established in the project. Match nearby code.
 
-- **Module structure:** keep each module's layout (`actions/`, `queries/`, `components/`, `db/`, `hooks/`, `lib/`, `styles/`, `constants.ts`, `types.ts`, barrel `index.ts`).
+- **Module structure:** keep each module's layout (`actions/`, `queries/`, `components/`, `db/`, `hooks/`, `lib/`, `styles/`, `constants.ts`, `types.ts`, barrel `registry.ts`).
 - **Placement:**
   - Actions go in the module's `/actions`.
   - Queries go in the module's `/queries`.
   - Props and types go in the module's `types.ts`.
   - Constants go in the module's `constants.ts`.
 - **Constants:** no magic strings or numbers. Use judgment: not every literal needs a constant.
-- **Imports:** use barrel (`index.ts`) imports where the surrounding code does.
+- **Imports:** use barrel (`registry.ts`) imports where the surrounding code does.
 - **Styling:** CSS modules only. No inline styles or new styling approaches.
 - **Next.js:** respect the server/client boundary and `"use client"` placement.
 - **Security:** follow existing patterns for guards, permission checks, and audit logging.

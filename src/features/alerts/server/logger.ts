@@ -3,7 +3,6 @@
  * @module          features/alerts
  *
  * @status          Requires refactoring
- * @TODO            Fix linting error in `formatJson()`
  */
 
 import {
@@ -26,6 +25,19 @@ import {
 import type {AlertLogLevel, LogContext, LogFormat, Logger, SerializedError} from "@/features/alerts/types";
 
 export type {LogContext, Logger};
+
+/**
+ * Returns true when `key` is one of the logger-owned JSON envelope fields.
+ *
+ * @remarks     Keys are renamed with a prefix so caller-supplied context cannot collide with them.
+ *
+ * @param       key         The logged JSON key to search for
+ *
+ * @return      {boolean}   `true` if the `key` is found within the array, or else `false`.
+ */
+function isReservedJsonKey(key: string): key is (typeof LOGGER_RESERVED_JSON_KEYS)[number] {
+    return LOGGER_RESERVED_JSON_KEYS.includes(key as (typeof LOGGER_RESERVED_JSON_KEYS)[number]);
+}
 
 /**
  * Resolves logging config from the environment on every call, so it can change without a restart of the module.
@@ -186,8 +198,6 @@ function isSerializedError(value: unknown): value is SerializedError {
 /**
  * Provides structured logging with environment-specific filtering and sanitization.
  *
- * @TODO    Fix linting error
- *
  * @param   level   Severity level used to filter and emit the log entry.
  * @param   message Human-readable event message written at the selected log level.
  * @param   data    Serializable payload returned by the operation.
@@ -207,10 +217,11 @@ function formatJson(
     };
 
     for (const [key, value] of Object.entries(data)) {
-        // TODO:: fix this linting error
-        record[LOGGER_RESERVED_JSON_KEYS.includes(key)
-            ? `${LOGGER_JSON_KEYS.CONTEXT_PREFIX}${key}`
-            : key] = value;
+        if (isReservedJsonKey(key)) {
+            record[`${LOGGER_JSON_KEYS.CONTEXT_PREFIX}${key}`] = value;
+        } else {
+            record[key] = value;
+        }
     }
 
     return JSON.stringify(record);
@@ -243,10 +254,8 @@ function describeError(error: SerializedError, indent: string): string[] {
 /**
  * Determines whether to colour pretty output.
  *
- * @remarks     Reads `stdout` through `globalThis` so the Edge bundler, which also compiles `instrumentation.ts`.
- * @remarks     Doesn't flag a Node-only API; on Edge the property is simply absent and colors are off.
- *
- * @TODO        Investigate relationship with `instrumentation.ts` (which may be deleted)
+ * @remarks     Reads `stdout` through `globalThis` so the Edge bundler.
+ * @remarks     Doesn't flag a Node-only API; on Edge the property is simply absent and colours are off.
  *
  * @returns     The value produced by this operation.
  */

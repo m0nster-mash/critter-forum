@@ -10,6 +10,7 @@ import InfoIcon from "@/components/icons/info-circle-fill.svg"
 import QuestionIcon from "@/components/icons/question.svg";
 import XCircleICon from "@/components/icons/x-circle-fill.svg";
 import XIcon from "@/components/icons/x.svg";
+import {clientLogger} from "@/features/alerts/client/logger";
 import {UI_ICONS} from "@/features/icons/constants/groups";
 import {type ComponentType, type SVGProps} from "react";
 
@@ -52,7 +53,10 @@ export function resolveIcon(
 ): SVGComponent {
     if (!iconName || !(iconName in ICON_REGISTRY)) {
         if (iconName) {
-            console.warn(`[IconRegistry] Icon name "${iconName}" not found in registry. Using fallback "${fallback}".`);
+            clientLogger.warn(
+                `[IconRegistry] Icon name "${iconName}" not found in registry. Using fallback "${fallback}".`,
+                {scope: "icon.registry"}
+            );
         }
         return ICON_REGISTRY[fallback];
     }
