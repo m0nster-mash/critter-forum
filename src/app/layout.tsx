@@ -8,7 +8,7 @@
  */
 
 import layoutStyle from "@/components/styles/layout.module.css"
-import {AlertProvider} from "@/features/alerts/client/alert-provider";
+import {AlertProvider} from "@/features/alerts/client/provider";
 import LogoutButton from "@/features/auth/components/logout-button";
 import {METADATA, SITE_TAG, SITE_TITLE} from "@/lib/constants/global";
 import {ADMIN_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";

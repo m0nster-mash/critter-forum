@@ -49,9 +49,7 @@ function interpolate(
     params?: Record<string, string | number>
 ): string {
 
-    if (!params) {
-        return template;
-    }
+    if (!params)  return template;
 
     return template.replace(ALERT_TEMPLATE_PATTERNS.PARAMETER, (token, key: string) =>
         Object.hasOwn(params, key) ? String(params[key]) : token

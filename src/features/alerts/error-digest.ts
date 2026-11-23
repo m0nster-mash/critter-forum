@@ -19,7 +19,10 @@ export function getErrorDigest(error: unknown): string | undefined {
 
     if (typeof error === "object" && error !== null && ERROR_PROPERTY_KEYS.DIGEST in error) {
         const digest = (error as Record<typeof ERROR_PROPERTY_KEYS.DIGEST, unknown>)[ERROR_PROPERTY_KEYS.DIGEST];
-        return typeof digest === "string" && digest.length > 0 ? digest : undefined;
+
+        return typeof digest === "string" && digest.length > 0
+            ? digest
+            : undefined;
     }
 
     return undefined;
