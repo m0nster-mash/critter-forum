@@ -41,3 +41,16 @@ export interface LogoutProps {
     onSuccess?: () => void;
     onBeforeLogout?: () => void | Promise<unknown>;
 }
+
+/**
+ * Registration form values, already trimmed and normalized.
+ *
+ * @property    name        The display name
+ * @property    email       The email address
+ * @property    password    The plain-text password
+ */
+export interface RegistrationInput {
+    name: string;
+    email: string;
+    password: string;
+}

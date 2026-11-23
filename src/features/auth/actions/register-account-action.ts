@@ -1,9 +1,6 @@
 /**
  * @fileOverview    Implements the server action that validates and creates a user account.
  * @module          features/auth
- *
- * @status          Requires refactoring
- * @TODO            Replace magic strings with consts
  */
 
 "use server";
@@ -12,6 +9,7 @@ import {createAlert} from "@/features/alerts/create-alert";
 import {fail, succeed} from "@/features/alerts/result";
 import {AlertError} from "@/features/alerts/server/alert-error";
 import {safeAction} from "@/features/alerts/server/safe-action";
+import {AUTH_ALERT_CODES, AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {AUTH_ACTION_NAMES} from "@/features/auth/constants/integration";
 import {AUTH_ALERT_PARAMS, isAuthApiError, resolveAuthAlertCode,} from "@/features/auth/utilities/auth-errors";
 import {type RegistrationInput, validateRegistration} from "@/features/auth/validation";
@@ -20,8 +18,6 @@ import {headers} from "next/headers";
 
 /**
  * Server action that registers a new user account using email and password credentials.
- *
- * @TODO    Replace magic strings with consts
  *
  * @return  The value produced by this operation.
  */
@@ -47,7 +43,7 @@ export const registerAccountAction = safeAction(
             });
         } catch (error) {
             if (isAuthApiError(error)) {
-                throw new AlertError(resolveAuthAlertCode(error, "AUTH_REGISTER_FAILED"), {
+                throw new AlertError(resolveAuthAlertCode(error, AUTH_ALERT_CODES.REGISTER_FAILED), {
                     cause: error,
                     params: AUTH_ALERT_PARAMS,
                 });
@@ -56,8 +52,9 @@ export const registerAccountAction = safeAction(
         }
 
         if (!registerResult.user?.id) {
-            throw new AlertError("AUTH_REGISTER_FAILED", {detail: {reason: "signUpEmail returned no user id"}});
+            throw new AlertError(AUTH_ALERT_CODES.REGISTER_FAILED,
+                {detail: {reason: AUTH_ALERTS.AUTH_REGISTER_FAILED.message}});
         }
 
-        return succeed(undefined, createAlert("AUTH_REGISTER_SUCCESS"));
+        return succeed(undefined, createAlert(AUTH_ALERT_CODES.REGISTER_SUCCESS));
     });
