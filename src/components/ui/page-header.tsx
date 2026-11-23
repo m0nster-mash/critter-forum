@@ -1,6 +1,9 @@
 /**
  * @fileOverview    The standard page header component.
  * @module          core-application
+ *
+ * @status          Requires refactoring (styling)
+ * @TODO            Restyle page header at a later date
  */
 
 import layoutStyle from "@/components/styles/layout.module.css";
@@ -10,6 +13,8 @@ import {JSX} from "react";
 
 /**
  * A standard header that appears at the top of every page, showing page title and breadcrumb trail.
+ *
+ * @TODO        Restyle page header at a later date
  *
  * @param   title           The page's title rendered inside the header
  * @param   breadcrumb      Breadcrumb items for the navigation trail
