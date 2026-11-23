@@ -3,12 +3,7 @@
  * @module          core-application
  */
 
-import {AlertBanner} from "@/features/alerts/components/alert-banner";
-import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
-import {createAlert} from "@/features/alerts/create-alert";
-import {PUBLIC_ROUTES} from "@/lib/constants/routes";
-import {resolvePath} from "@/lib/utilities/route-utils";
-import Link from "next/link";
+import PageNotFound from "@/features/alerts/components/page-not-found";
 import type {JSX} from "react";
 
 /**
@@ -18,12 +13,5 @@ import type {JSX} from "react";
  */
 export default function NotFound(): JSX.Element {
 
-    return (
-        <>
-            <AlertBanner alert={createAlert(APP_ALERT_CODES.NOT_FOUND)}/>
-            <p>
-                <Link href={resolvePath(PUBLIC_ROUTES.HOME)}>Back to the home page</Link>
-            </p>
-        </>
-    );
+    return (<PageNotFound/>);
 }

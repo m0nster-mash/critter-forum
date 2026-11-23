@@ -1,16 +1,12 @@
 /**
  * @fileOverview    Route-level error boundary.
  * @module          features/alerts
- *
- * @status          Require refactoring
- * @TODO            Relocate this file into its own directory
- * @TODO            Migrate HTML return into its own component file
  */
 
 "use client";
 
 import {logClientAlert} from "@/features/alerts/client/log-alert";
-import {AlertBanner} from "@/features/alerts/components/alert-banner";
+import ErrorRetryBanner from "@/features/alerts/components/error-retry-banner";
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {ALERT_PRESENTATION_TYPES} from "@/features/alerts/constants/alert-types";
 import {LOG_SCOPES} from "@/features/alerts/constants/observability";
@@ -24,8 +20,6 @@ import {type JSX, useEffect, useMemo} from "react";
  * @remarks     The user sees a generic alert with the error's digest as the reference, which matches the server log
  *              entry written by {@see instrumentation.ts}.
  * @remarks     The error's message and stack are never rendered.
- *
- * @TODO        Migrate HTML return into its own component file
  *
  * @param       error           The thrown value; not guaranteed to be an Error
  * @param       retry           Re-fetches and re-renders the failed segment
@@ -52,13 +46,5 @@ export default function RouteError({error, retry}: {
         });
     }, [alert, error]);
 
-    // TODO:: migrate this into a component
-    return (
-        <>
-            <AlertBanner alert={alert}/>
-            <p>
-                <button type="button" onClick={() => retry()}>Try again</button>
-            </p>
-        </>
-    );
+    return <ErrorRetryBanner alert={alert} retry={retry}/>;
 }
