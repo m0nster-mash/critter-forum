@@ -4,7 +4,7 @@
  */
 
 import {ICON_SIZE} from "@/features/icons/constants/groups";
-import {IconName} from "@/features/icons/index";
+import {IconName} from "@/features/icons/registry";
 import {ComponentType, SVGProps} from "react";
 
 /**

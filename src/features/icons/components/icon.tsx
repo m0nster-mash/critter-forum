@@ -3,7 +3,7 @@
  * @module          features/icons
  */
 
-import {resolveIcon} from "@/features/icons";
+import {resolveIcon} from "@/features/icons/registry";
 import {ICON_SIZE, SIZE_MAP, VARIANT_CLASSES} from "@/features/icons/constants/groups";
 import {IconProps} from "@/features/icons/types";
 import React from "react";
