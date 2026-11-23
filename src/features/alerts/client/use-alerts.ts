@@ -5,8 +5,8 @@
 
 "use client";
 
-import {useAlertContext} from "@/features/alerts/client/provider";
 import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {useAlertContext} from "@/features/alerts/client/provider";
 import {ALERT_PRESENTATION_TYPES} from "@/features/alerts/constants/alert-types";
 import {AlertsApi, LogContext, PublicAlert} from "@/features/alerts/types";
 import {useCallback, useState} from "react";
