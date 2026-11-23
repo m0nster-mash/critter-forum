@@ -17,8 +17,7 @@ import {type JSX, useEffect, useMemo} from "react";
 /**
  * Last-resort error boundary.
  *
- * @remark      Replaces the root layout when the layout itself throws, so it must render its own {@code <html>} and
- *              {@code <body>}.
+ * @remark      Replaces the root layout when the layout itself throws, so it must render its own `<html>` and `<body>`.
  * @remarks     Deliberately independent of the root layout and {@link AlertProvider}, which aren't available here.
  *
  * @param       error           The thrown value; not guaranteed to be an Error

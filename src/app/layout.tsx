@@ -10,6 +10,7 @@
 import layoutStyle from "@/components/styles/layout.module.css"
 import {AlertProvider} from "@/features/alerts/client/alert-provider";
 import LogoutButton from "@/features/auth/components/logout-button";
+import {METADATA, SITE_TAG, SITE_TITLE} from "@/lib/constants/global";
 import {ADMIN_ROUTES, PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import type {Metadata} from "next";
@@ -19,13 +20,8 @@ import React, {JSX} from "react";
 
 /**
  * Default document metadata used by the application
- *
- * @TODO    Migrate to global constant
  */
-export const metadata: Metadata = {
-    title: "critter-forum",
-    description: "critters: pangaea, maybe?",
-};
+export const metadata: Metadata = METADATA;
 
 /**
  * Renders the root document shell.
