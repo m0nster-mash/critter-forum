@@ -4,15 +4,18 @@
  * @module          features/alerts
  */
 
+import {ALERT_REGISTRY, type AlertCode} from "@/features/alerts/registry";
 /* eslint-disable no-console -- These tests intentionally intercept console methods to verify logger output. */
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";
-import {ALERT_REGISTRY, type AlertCode} from "@/features/alerts/registry";
 
 class NavigationSignal extends Error {
-    constructor(readonly digest: string) { super(digest); }
+    constructor(readonly digest: string) {
+        super(digest);
+    }
 }
+
 mock.module("next/navigation", {
     namedExports: {
         redirect: (url: string): never => {
@@ -50,10 +53,13 @@ function withCapturedLogs<T>(fn: (logs: LogEntry[]) => Promise<T>): Promise<T> {
         const logs: LogEntry[] = [];
         process.env.LOG_FORMAT = "json";
         for (const method of ["debug", "info", "warn", "error"] as const) {
-            console[method] = ((line: string) => { logs.push(JSON.parse(line)); }) as never;
+            console[method] = ((line: string) => {
+                logs.push(JSON.parse(line));
+            }) as never;
         }
-        try { return await fn(logs); }
-        finally {
+        try {
+            return await fn(logs);
+        } finally {
             for (const method of ["debug", "info", "warn", "error"] as const) console[method] = originals[method] as never;
             for (const key of ["LOG_FORMAT"]) {
                 if (saved[key] === undefined) delete process.env[key];
@@ -102,9 +108,11 @@ suite.test("logged returned failures receive a reference shared with the log", a
 suite.test("success alerts log at info without adding a reference", async () => {
     await withCapturedLogs(async (logs) => {
         const saved = safeAction("t.saved", async () => succeed({id: 1}, createAlert(TEST_SAVED)));
-        assert.deepEqual(await saved(), {ok: true, data: {id: 1}, alert: {
-            code: "TEST_SAVED", severity: "success", message: "Saved.", presentation: "toast",
-        }});
+        assert.deepEqual(await saved(), {
+            ok: true, data: {id: 1}, alert: {
+                code: "TEST_SAVED", severity: "success", message: "Saved.", presentation: "toast",
+            }
+        });
         assert.equal(logs.length, 1);
         assert.equal(logs[0].level, "info");
         assert.ok(!("ref" in logs[0]));
@@ -133,7 +141,9 @@ suite.test("unexpected errors return a generic alert and keep details only in th
 
 suite.test("non-Error throwables are converted without crashing", async () => {
     await withCapturedLogs(async (logs) => {
-        const result = await safeAction("t.str", async () => { throw "just a string"; })();
+        const result = await safeAction("t.str", async () => {
+            throw "just a string";
+        })();
         assert.equal(result.ok, false);
         assert.equal(logs[0].err, "just a string");
     });
@@ -143,7 +153,12 @@ suite.test("AlertError maps its alert and logs cause plus structured detail", as
     await withCapturedLogs(async (logs) => {
         const cause = Object.assign(new Error("duplicate key"), {code: "23505"});
         const guarded = safeAction("t.guard", async () => {
-            throw new AlertError("APP_RATE_LIMITED", {params: {seconds: 3}, field: "email", cause, detail: {userId: "u1"}});
+            throw new AlertError("APP_RATE_LIMITED", {
+                params: {seconds: 3},
+                field: "email",
+                cause,
+                detail: {userId: "u1"}
+            });
         });
         const result = await guarded();
         assert.equal(result.ok, false);
@@ -160,7 +175,9 @@ suite.test("AlertError maps its alert and logs cause plus structured detail", as
 
 suite.test("AlertError without a cause does not add stack noise", async () => {
     await withCapturedLogs(async (logs) => {
-        const result = await safeAction("t.nocause", async () => { throw new AlertError("APP_RATE_LIMITED"); })();
+        const result = await safeAction("t.nocause", async () => {
+            throw new AlertError("APP_RATE_LIMITED");
+        })();
         assert.equal(result.ok, false);
         assert.ok(!("err" in logs[0]));
     });
@@ -168,7 +185,9 @@ suite.test("AlertError without a cause does not add stack noise", async () => {
 
 suite.test("silent AlertError failures are converted without logging or a reference", async () => {
     await withCapturedLogs(async (logs) => {
-        const result = await safeAction("t.silent", async () => { throw new AlertError("APP_VALIDATION_FAILED"); })();
+        const result = await safeAction("t.silent", async () => {
+            throw new AlertError("APP_VALIDATION_FAILED");
+        })();
         assert.equal(result.ok, false);
         if (result.ok) return;
         assert.equal(logs.length, 0);

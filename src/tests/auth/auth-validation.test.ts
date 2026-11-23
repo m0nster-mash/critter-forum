@@ -5,10 +5,10 @@
 import {createAlert, isAlertCode} from "@/features/alerts/create-alert";
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
-import {Suite} from "@/tests/test-config";
-import assert from "node:assert/strict";
 import {isAuthApiError, readAuthError, resolveAuthAlertCode} from "@/features/auth/utilities/auth-errors";
 import {validateRegistration} from "@/features/auth/validation";
+import {Suite} from "@/tests/test-config";
+import assert from "node:assert/strict";
 
 const suite = new Suite("auth/validation", 8);
 const valid = {name: "Ada", email: "ada@example.com", password: "x".repeat(PASSWORD_MIN_LENGTH)};
@@ -45,7 +45,11 @@ suite.test("returns the first validation problem", () => {
 suite.test("normalizes client and server auth error shapes while rejecting unrelated values", () => {
     assert.deepEqual(readAuthError({code: "INVALID_EMAIL_OR_PASSWORD", status: 401, message: "private"}),
         {code: "INVALID_EMAIL_OR_PASSWORD", status: 401});
-    assert.deepEqual(readAuthError({status: "UNPROCESSABLE_ENTITY", statusCode: 422, body: {code: "USER_ALREADY_EXISTS"}}),
+    assert.deepEqual(readAuthError({
+            status: "UNPROCESSABLE_ENTITY",
+            statusCode: 422,
+            body: {code: "USER_ALREADY_EXISTS"}
+        }),
         {code: "USER_ALREADY_EXISTS", status: 422});
     for (const junk of [null, undefined, "boom", 42, new Error("connect ECONNREFUSED")]) {
         const result = readAuthError(junk);

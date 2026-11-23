@@ -3,14 +3,14 @@
  * @module          features/alerts
  */
 
+import {logClientAlert} from "@/features/alerts/client/log-alert";
+import {clientLogger, createClientLogger} from "@/features/alerts/client/logger";
 /* eslint-disable no-console -- These tests intentionally intercept console methods to verify logger output. */
 import {createAlert} from "@/features/alerts/create-alert";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
-import {logClientAlert} from "@/features/alerts/client/log-alert";
-import {clientLogger, createClientLogger} from "@/features/alerts/client/logger";
 
-type Call = {method: string; args: unknown[]};
+type Call = { method: string; args: unknown[] };
 const suite = new Suite("alerts/client-logger", 7);
 const methods = ["debug", "info", "warn", "error"] as const;
 
@@ -23,7 +23,9 @@ function runWithEnv(vars: Record<string, string | undefined>, fn: () => void): C
         else process.env[key] = value;
     }
     for (const method of methods) {
-        console[method] = ((...args: unknown[]) => { calls.push({method, args}); }) as never;
+        console[method] = ((...args: unknown[]) => {
+            calls.push({method, args});
+        }) as never;
     }
     try {
         fn();
@@ -58,7 +60,12 @@ suite.test("production defaults to warn and keeps only approved scalar fields", 
         clientLogger.debug("d");
         clientLogger.info("i");
         clientLogger.warn("w", {code: "APP_X", ref: "abc12345", status: 401, field: "email", note: "private"});
-        clientLogger.error("e", {err: secretError, password: "hunter2", user: {email: "a@b.c"}, scope: "route.render_error"});
+        clientLogger.error("e", {
+            err: secretError,
+            password: "hunter2",
+            user: {email: "a@b.c"},
+            scope: "route.render_error"
+        });
     });
     assert.deepEqual(calls.map((call) => call.method), ["warn", "error"]);
     assert.deepEqual(calls[0].args[1], {code: "APP_X", ref: "abc12345", status: 401, field: "email"});
