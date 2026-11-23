@@ -1,8 +1,10 @@
 /**
- * @fileOverview Verifies safe server-action results, error handling, logging, and Next control flow.
- * @module features/alerts
- * @remarks Next navigation functions are mocked before importing the action wrapper.
+ * @fileOverview    Verifies safe server-action results, error handling, logging, and Next control flow.
+ * @remarks         Next navigation functions are mocked before importing the action wrapper.
+ * @module          features/alerts
  */
+
+/* eslint-disable no-console -- These tests intentionally intercept console methods to verify logger output. */
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";

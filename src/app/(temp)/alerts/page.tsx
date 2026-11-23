@@ -69,7 +69,7 @@ export default function AlertTestPage() {
                 <h2>Inline banners</h2>
                 <p style={{fontSize: 13, color: "#555"}}>
                     One inline alert at a time. Clicking a banner button replaces the current
-                    one; "Clear inline" removes it.
+                    one; &quot;Clear inline&quot; removes it.
                 </p>
                 <div style={{display: "flex", flexWrap: "wrap", gap: 8}}>
                     <button type="button" onClick={() => raiseInline("AUTH_LOGIN_SUCCESS")}>

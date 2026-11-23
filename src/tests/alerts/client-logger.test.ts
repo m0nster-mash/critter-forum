@@ -1,7 +1,9 @@
 /**
- * @fileOverview Verifies browser logger filtering and production sanitization.
- * @module features/alerts
+ * @fileOverview    Verifies browser logger filtering and production sanitization.
+ * @module          features/alerts
  */
+
+/* eslint-disable no-console -- These tests intentionally intercept console methods to verify logger output. */
 import {createAlert} from "@/features/alerts/create-alert";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";

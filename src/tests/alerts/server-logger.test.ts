@@ -1,7 +1,9 @@
 /**
- * @fileOverview Verifies server logger formatting, redaction, serialization, and alert policy.
- * @module features/alerts
+ * @fileOverview    Verifies server logger formatting, redaction, serialization, and alert policy.
+ * @module          features/alerts
  */
+
+/* eslint-disable no-console -- These tests intentionally intercept console methods to verify logger output. */
 import {createAlert} from "@/features/alerts/create-alert";
 import {logAlert} from "@/features/alerts/server/log-alert";
 import {createLogger, logger} from "@/features/alerts/server/logger";
