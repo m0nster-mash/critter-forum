@@ -5,7 +5,7 @@
 
 import assert from "node:assert/strict";
 import {PERMISSIONS} from "@/features/permissions/constants/permissions";
-import {Suite} from "@/tests/test.config";
+import {Suite} from "@/tests/test-config";
 
 const suite = new Suite("permissions/constants", 5);
 

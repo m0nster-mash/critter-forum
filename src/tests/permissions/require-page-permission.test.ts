@@ -11,7 +11,7 @@ import assert from "node:assert/strict";
 import {mock} from "node:test";
 import {PERMISSIONS} from "@/features/permissions/constants/permissions";
 import type {Permission} from "@/features/permissions/types";
-import {Suite} from "@/tests/test.config";
+import {Suite} from "@/tests/test-config";
 
 /** Thrown by the stubbed `redirect()`, standing in for Next.js's redirect control-flow error. */
 class RedirectSignal extends Error {

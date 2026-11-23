@@ -10,7 +10,7 @@
  */
 
 import "dotenv/config";
-import {Suite} from "@/tests/test.config";
+import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {randomUUID} from "node:crypto";
 import {after} from "node:test";
