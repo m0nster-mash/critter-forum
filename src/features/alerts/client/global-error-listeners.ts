@@ -5,7 +5,7 @@
 
 "use client";
 
-import {useAlertContext} from "@/features/alerts/client/alert-provider";
+import {useAlertContext} from "@/features/alerts/client/provider";
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {
     BROWSER_ERROR_EVENTS,

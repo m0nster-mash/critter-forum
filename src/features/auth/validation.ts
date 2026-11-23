@@ -7,24 +7,7 @@ import {createAlert} from "@/features/alerts/create-alert";
 import type {PublicAlert} from "@/features/alerts/types";
 import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
-
-/**
- * Registration form values, already trimmed and normalized.
- *
- * @property    name        The display name
- * @property    email       The email address
- * @property    password    The plain-text password
- */
-export interface RegistrationInput {
-    name: string;
-    email: string;
-    password: string;
-}
-
-/**
- * @TODO    migrate to regex const file
- */
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import {RegistrationInput} from "@/features/auth/types";
 
 /**
  * Validates registration input.

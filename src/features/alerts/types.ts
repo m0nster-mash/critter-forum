@@ -9,7 +9,7 @@ import type {AlertVariant} from "@/features/alerts/constants/alert-types";
 import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
 import {LOG_FORMATS, LOG_LEVELS} from "@/features/alerts/constants/logger";
 import type {TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
-import type {ReactNode} from "react";
+import {ReactNode} from "react";
 
 /** Permissible severity levels for an alert. Covers failures, cautions, and positive outcomes alike. */
 export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
@@ -227,4 +227,78 @@ export interface SerializedError {
 export interface ToastViewportProps {
     toasts: ToastItem[];
     onDismiss: (id: string) => void;
+}
+
+/**
+ * Values provided by {@link AlertProvider}.
+ *
+ * @property    toasts      Toasts currently on screen
+ * @property    notify      Shows an alert as a toast and logs it per its registry policy
+ * @property    dismiss     Removes one toast by id
+ * @property    clear       Removes every toast
+ */
+export interface AlertContextValue {
+    toasts: ToastItem[];
+    notify: (alert: PublicAlert, detail?: LogContext) => void;
+    dismiss: (id: string) => void;
+    clear: () => void;
+}
+
+/**
+ * Providers properties for the alert provider UI.
+ *
+ * @property    children    Content to display within the UI element
+ * @property    value       Values provided by the {@link AlertProvider}
+ */
+export interface AlertProviderContentProps {
+    children: ReactNode;
+    value: AlertContextValue;
+}
+
+/**
+ * The alert presentation API returned by {@link useAlerts}.
+ *
+ * @remarks     Holds one inline alert at a time. Call {@code clear()} to reset it before a new attempt.
+ *
+ * @property    inline      The current inline alert, or null when none is shown
+ * @property    formAlert   The inline alert at form level (no field bound), or null
+ * @property    fieldAlert  Returns the inline alert for the given field, or null when none matches
+ * @property    present     Routes an alert by its registry-defined presentation (toast, inline, or none) and logs it
+ *                          per its client policy
+ * @property    clear       Clears the current inline alert
+ * @property    notify      Shows an alert as a toast and logs it per its registry policy
+ */
+export interface AlertsApi {
+    inline: PublicAlert | null;
+    formAlert: PublicAlert | null;
+    fieldAlert: (field: string) => PublicAlert | null;
+    present: (alert: PublicAlert, detail?: LogContext) => void;
+    clear: () => void;
+    notify: (alert: PublicAlert, detail?: LogContext) => void;
+}
+
+/**
+ * Successful outcome of a server action.
+ *
+ * @typeParam   T       Value used by this T operation.
+ *
+ * @property    ok          Discriminant
+ * @property    data        Payload returned to the caller. Must be serializable.
+ * @property    [alert]     Optional; a confirmation to show the user (ex. "Account created")
+ */
+export interface ActionSuccess<T> {
+    ok: true;
+    data: T;
+    alert?: PublicAlert;
+}
+
+/**
+ * Failed outcome of a server action.
+ *
+ * @property    ok      Discriminant
+ * @property    alert   What to tell the user. Never contains internal detail.
+ */
+export interface ActionFailure {
+    ok: false;
+    alert: PublicAlert;
 }

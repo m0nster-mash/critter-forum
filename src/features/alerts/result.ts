@@ -5,35 +5,7 @@
  * @status          Requires documentation
  */
 
-import type {PublicAlert} from "@/features/alerts/types";
-
-/**
- * Successful outcome of a server action.
- *
- * TODO         Migrate to `types.ts`
- *
- * @typeParam   T       Value used by this T operation.
- *
- * @property    ok          Discriminant
- * @property    data        Payload returned to the caller. Must be serializable.
- * @property    [alert]     Optional; a confirmation to show the user (ex. "Account created")
- */
-export interface ActionSuccess<T> {
-    ok: true;
-    data: T;
-    alert?: PublicAlert;
-}
-
-/**
- * Failed outcome of a server action.
- *
- * @property    ok      Discriminant
- * @property    alert   What to tell the user. Never contains internal detail.
- */
-export interface ActionFailure {
-    ok: false;
-    alert: PublicAlert;
-}
+import {ActionFailure, ActionSuccess, PublicAlert} from "@/features/alerts/types";
 
 /**
  * What every server action returns to the client: a discriminated union on `ok`.

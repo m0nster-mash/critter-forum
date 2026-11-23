@@ -40,7 +40,7 @@ src/lib/alerts/
   client/  logger.ts, log-alert.ts, alert-provider.tsx, use-alerts.ts,
            toast-state.ts, global-error-listeners.tsx
 src/components/alerts/  alert-banner.tsx, toast-viewport.tsx, alert-icon.tsx, alerts.module.css
-src/app/                error.tsx, global-error.tsx, not-found.tsx, layout.tsx (mounts <AlertProvider>)
+src/app/                error.tsx, global-error-display.tsx, not-found.tsx, layout.tsx (mounts <AlertProvider>)
 src/instrumentation.ts  logs unhandled server errors
 src/features/<feature>/constants/alerts.ts   each feature's registry entries
 ```
@@ -135,7 +135,7 @@ and removes bound query parameters from database error messages. Pass errors as 
   warning 8s, error 12s; hover or focus pauses the timer; Escape dismisses. Errors and warnings use `role="alert"`,
   success and info `role="status"`. Severity is shown by icon and a screen-reader label, never color alone.
 - **Provider** lives in the root layout, so a toast raised before `router.push()` still shows after navigation.
-- **Error boundaries**: `error.tsx` (inside the layout) and `global-error.tsx` (when the layout itself fails) show a
+- **Error boundaries**: `error.tsx` (inside the layout) and `global-error-display.tsx` (when the layout itself fails) show a
   generic alert with Next's `digest` as the reference; it matches the `request.unhandled_error` server log entry.
 - **Global listeners** turn uncaught errors and unhandled promise rejections into the same generic toast, ignoring
   browser-extension and cross-origin noise.

@@ -5,18 +5,8 @@
 
 import type {AlertCode} from "@/features/alerts/registry";
 import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
-import {AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";
+import {AUTH_ERROR_ALERT_CODES, AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
-
-/** better-auth error code -> alert code. Codes not listed here fall back to whatever the caller passes. */
-const AUTH_ERROR_ALERT_CODES: Record<string, AlertCode> = {
-    INVALID_EMAIL_OR_PASSWORD: "AUTH_LOGIN_INVALID_CREDENTIALS",
-    USER_ALREADY_EXISTS: "AUTH_REGISTER_EMAIL_TAKEN",
-    USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: "AUTH_REGISTER_EMAIL_TAKEN",
-    PASSWORD_TOO_SHORT: "AUTH_REGISTER_PASSWORD_TOO_SHORT",
-    INVALID_EMAIL: "AUTH_REGISTER_EMAIL_INVALID",
-    VALIDATION_ERROR: "APP_VALIDATION_FAILED",
-};
 
 /** Parameters some mapped components need to fill their message. */
 export const AUTH_ALERT_PARAMS = {min: PASSWORD_MIN_LENGTH};

@@ -24,5 +24,7 @@ export function alertFromThrown(error: unknown): PublicAlert {
     const offline = typeof navigator !== "undefined" && !navigator.onLine;
     const failedFetch = error instanceof TypeError && BROWSER_ERROR_PATTERNS.FAILED_FETCH.test(error.message);
 
-    return createAlert(offline || failedFetch ? APP_ALERT_CODES.NETWORK_ERROR : APP_ALERT_CODES.UNKNOWN_ERROR);
+    return createAlert(offline || failedFetch
+        ? APP_ALERT_CODES.NETWORK_ERROR
+        : APP_ALERT_CODES.UNKNOWN_ERROR);
 }

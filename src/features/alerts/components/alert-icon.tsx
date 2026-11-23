@@ -8,7 +8,6 @@ import type {AlertSeverity} from "@/features/alerts/types";
 import Icon from "@/features/icons/components/icon";
 import type {JSX} from "react";
 
-
 /**
  * Renders the decorative severity icon for the {@link AlertBanner}.
  *

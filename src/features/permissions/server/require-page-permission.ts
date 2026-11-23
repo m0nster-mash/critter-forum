@@ -26,6 +26,7 @@ export async function requirePagePermission(permission: Permission): Promise<voi
 
     const session = await auth.api.getSession({headers: await headers()});
 
+    // TODO:: create and use shared session checking/redirect function
     if (!session) {
         redirect(resolvePath(PUBLIC_ROUTES.LOGIN));
     }

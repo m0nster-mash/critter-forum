@@ -6,7 +6,7 @@
 import {ICON_SIZE, SIZE_MAP, VARIANT_CLASSES} from "@/features/icons/constants/groups";
 import {resolveIcon} from "@/features/icons/registry";
 import {IconProps} from "@/features/icons/types";
-import React from "react";
+import React, {JSX} from "react";
 
 /**
  * Renders a named or directly-supplied SVG icon with consistent sizing, variant styling, and optional accessibility
@@ -37,7 +37,7 @@ export function Icon({
                          label,
                          className = "",
                          ...props
-                     }: IconProps) {
+                     }: IconProps): JSX.Element {
 
     const IconComponent = icon ?? resolveIcon(name);
     const pixelSize = SIZE_MAP[size] ?? SIZE_MAP.md;

@@ -1,4 +1,6 @@
-/* PAGE HEADER STYLES */
+/* ====================================================================
+ * PAGE HEADER STYLES
+ * ==================================================================== */
 
 .pageHeaderArea {
     display: flex;
@@ -10,12 +12,10 @@
     margin-bottom: 0.5em;
 }
 
-.contentArea {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 2rem;
-}
+
+/* ====================================================================
+ * BREADCRUMB STYLES
+ * ==================================================================== */
 
 .breadcrumbs {
     display: flex;
@@ -23,4 +23,15 @@
 
 .breadcrumbs a {
     color: darkred;
+}
+
+/* ====================================================================
+ * CONTENT AREA STYLES
+ * ==================================================================== */
+
+.contentArea {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
 }

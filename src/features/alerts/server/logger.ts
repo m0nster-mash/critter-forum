@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Provides structured logging with environment-specific filtering and sanitization.
  * @module          features/alerts
- *
- * @status          Requires refactoring
  */
 
 import {
@@ -36,6 +34,7 @@ export type {LogContext, Logger};
  * @return      {boolean}   `true` if the `key` is found within the array, or else `false`.
  */
 function isReservedJsonKey(key: string): key is (typeof LOGGER_RESERVED_JSON_KEYS)[number] {
+
     return LOGGER_RESERVED_JSON_KEYS.includes(key as (typeof LOGGER_RESERVED_JSON_KEYS)[number]);
 }
 
@@ -59,10 +58,14 @@ function getConfig(): {
     return {
         minLevel: requestedLevel && Object.hasOwn(LOG_LEVEL_ORDER, requestedLevel)
             ? (requestedLevel as AlertLogLevel)
-            : isProduction ? LOGGER_DEFAULT_LEVELS.SERVER_PRODUCTION : LOGGER_DEFAULT_LEVELS.SERVER_DEVELOPMENT,
+            : isProduction
+                ? LOGGER_DEFAULT_LEVELS.SERVER_PRODUCTION
+                : LOGGER_DEFAULT_LEVELS.SERVER_DEVELOPMENT,
         format: requestedFormat === LOG_FORMATS.JSON || requestedFormat === LOG_FORMATS.PRETTY
             ? requestedFormat
-            : isProduction ? LOGGER_DEFAULT_FORMATS.PRODUCTION : LOGGER_DEFAULT_FORMATS.DEVELOPMENT,
+            : isProduction
+                ? LOGGER_DEFAULT_FORMATS.PRODUCTION
+                : LOGGER_DEFAULT_FORMATS.DEVELOPMENT,
     };
 }
 
@@ -235,7 +238,11 @@ function formatJson(
  *
  * @returns The value produced by this operation.
  */
-function describeError(error: SerializedError, indent: string): string[] {
+function describeError(
+    error: SerializedError,
+    indent: string
+): string[] {
+
     const {name, message, stack, cause, ...extras} = error;
     const lines = [`${indent}${stack ?? `${name}: ${message}`}`];
 
@@ -262,7 +269,12 @@ function describeError(error: SerializedError, indent: string): string[] {
 function colorEnabled(): boolean {
 
     const runtime = (globalThis as {
-        process?: { stdout?: { isTTY?: boolean }; env?: Record<string, string | undefined> }
+        process?: {
+            stdout?: {
+                isTTY?: boolean
+            };
+            env?: Record<string, string | undefined>
+        }
     }).process;
 
     return Boolean(runtime?.stdout?.isTTY) && !runtime?.env?.NO_COLOR;
@@ -311,7 +323,6 @@ function formatPretty(
  * @param   level       Severity level used to filter and emit the log entry.
  * @param   message     Human-readable event message written at the selected log level.
  * @param   bindings    Structured key-value data included with every log entry.
- *
  * @param   context     Optional structured data attached to this log entry.
  */
 function emit(
