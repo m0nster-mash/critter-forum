@@ -19,7 +19,10 @@ import {and, eq} from "drizzle-orm";
  *
  * @returns     {Promise<boolean>}  True if the user holds the permission.
  */
-export async function hasPermission(userId: string, permission: Permission): Promise<boolean> {
+export async function hasPermission(
+    userId: string,
+    permission: Permission
+): Promise<boolean> {
 
     const [grant] = await db
         .select({permission: userPermission.permission})
