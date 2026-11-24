@@ -4,21 +4,20 @@
  */
 
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
+import AdminDashboardPageView from "@/features/admin/views/admin-dashboard-page-view";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
+import {db} from "@/lib/db/auth/db";
+import {user} from "@/lib/db/auth/schema";
+import {asc} from "drizzle-orm";
+import Link from "next/link";
 
 /**
- * Displays the {@link UserManagementPageView}
+ * Displays the {@link UserManagementPage}
  *
  * @remarks     Requires the permission declared on {@link ADMIN_ROUTES.USERS}.
  */
 export default async function UserManagementPage() {
 
     await requirePagePermission(ADMIN_ROUTES.USERS.permission);
-
-    return (
-        <>
-            User management page
-            {/*<UserManagementPageView/>*/}
-        </>
-    );
+    return <AdminDashboardPageView/>;
 }

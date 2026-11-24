@@ -52,5 +52,7 @@ export interface DashboardPageProps {
  * @property    name    The display name of the authenticated user.
  */
 export type UserPropItems = {
+    id: string;
     name: string;
+    email: string;
 }

@@ -19,7 +19,10 @@ import {notFound} from "next/navigation";
  *
  * @param       permission      The exact permission required to view the page
  */
-export async function requirePagePermission(permission: Permission): Promise<void> {
+export async function requirePagePermission(
+    permission: Permission
+): Promise<void> {
+
     const session = await requireAuth();
 
     if (!(await hasPermission(session.user.id, permission))) {
