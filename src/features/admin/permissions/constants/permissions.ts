@@ -15,7 +15,7 @@
 export const PERMISSIONS = {
     ADMIN_ACCESS: "admin.access",
     ADMIN_USERS_ACCESS: "admin.users.access",
-    ADMIN_USERS_MANAGE: "admin.users.manage",
+    ADMIN_USERS_EDIT: "admin.users.edit",
 } as const;
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 
@@ -34,7 +34,7 @@ export const PERMISSION_DEFINITIONS = [
         description: "View the admin user list.",
     },
     {
-        key: PERMISSIONS.ADMIN_USERS_MANAGE,
+        key: PERMISSIONS.ADMIN_USERS_EDIT,
         label: "Manage Users",
         description: "Manage users and their directly granted permissions.",
     },

@@ -4,7 +4,6 @@
  */
 
 import {UserManagementPageProps} from "@/features/admin/permissions/types";
-import {ADMIN_ROUTES} from "@/lib/constants/routes";
 import Link from "next/link";
 import React from "react";
 
@@ -12,12 +11,8 @@ import React from "react";
  * Displays the {@link AdminUserManagementPanel}
  */
 export default async function AdminUserManagementPanel({users}: UserManagementPageProps) {
-
-
     return (
         <>
-            <h1>{ADMIN_ROUTES.USERS.title}</h1>
-
             <table>
                 <thead>
                 <tr>

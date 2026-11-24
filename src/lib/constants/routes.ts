@@ -82,6 +82,14 @@ export const ADMIN_ROUTES = {
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_USERS_ACCESS,
     } as const satisfies RouteMetadata,
+
+    USERS_EDIT: {
+        path: "/admin/users",
+        label: "Edit User",
+        title: "Edit User",
+        accessLevel: "admin",
+        permission: PERMISSIONS.ADMIN_USERS_EDIT,
+    } as const satisfies RouteMetadata,
 };
 
 /** Unified registry of all application routes. */

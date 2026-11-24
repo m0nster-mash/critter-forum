@@ -67,7 +67,7 @@ suite.test("redirects signed-out visitors through the shared auth guard", async 
     arrange({session: null});
 
     await assert.rejects(
-        () => requireActionPermission(PERMISSIONS.ADMIN_USERS_MANAGE),
+        () => requireActionPermission(PERMISSIONS.ADMIN_USERS_EDIT),
         (error) => error instanceof RedirectSignal && error.url === "/login",
     );
     assert.deepEqual(lookups, []);
@@ -77,24 +77,24 @@ suite.test("throws the registered alert exception when the exact grant is missin
     arrange({session: {user: {id: "user-1"}}});
 
     await assert.rejects(
-        () => requireActionPermission(PERMISSIONS.ADMIN_USERS_MANAGE),
+        () => requireActionPermission(PERMISSIONS.ADMIN_USERS_EDIT),
         (error) => isAlertError(error) && error.code === ADMIN_ALERT_CODES.PERMISSION_DENIED,
     );
 });
 
 suite.test("returns the authenticated session when the user holds the exact grant", async () => {
     const session = {user: {id: "user-1"}};
-    arrange({session, grants: {"user-1": [PERMISSIONS.ADMIN_USERS_MANAGE]}});
+    arrange({session, grants: {"user-1": [PERMISSIONS.ADMIN_USERS_EDIT]}});
 
-    assert.deepEqual(await requireActionPermission(PERMISSIONS.ADMIN_USERS_MANAGE), session);
-    assert.deepEqual(lookups, [["user-1", PERMISSIONS.ADMIN_USERS_MANAGE]]);
+    assert.deepEqual(await requireActionPermission(PERMISSIONS.ADMIN_USERS_EDIT), session);
+    assert.deepEqual(lookups, [["user-1", PERMISSIONS.ADMIN_USERS_EDIT]]);
 });
 
 suite.test("does not allow one admin permission to imply another", async () => {
     arrange({session: {user: {id: "user-1"}}, grants: {"user-1": [PERMISSIONS.ADMIN_USERS_ACCESS]}});
 
     await assert.rejects(
-        () => requireActionPermission(PERMISSIONS.ADMIN_USERS_MANAGE),
+        () => requireActionPermission(PERMISSIONS.ADMIN_USERS_EDIT),
         (error) => isAlertError(error) && error.code === ADMIN_ALERT_CODES.PERMISSION_DENIED,
     );
 });
@@ -103,5 +103,5 @@ suite.test("surfaces permission lookup failures instead of disguising them as de
     const failure = new Error("database unavailable");
     arrange({session: {user: {id: "user-1"}}, lookupError: failure});
 
-    await assert.rejects(() => requireActionPermission(PERMISSIONS.ADMIN_USERS_MANAGE), failure);
+    await assert.rejects(() => requireActionPermission(PERMISSIONS.ADMIN_USERS_EDIT), failure);
 });

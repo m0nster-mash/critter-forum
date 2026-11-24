@@ -15,12 +15,3 @@ export type {Permission} from "@/features/admin/permissions/constants/permission
 export interface UserManagementPageProps {
     users: UserPropItems[];
 }
-
-/**
- *
- */
-export type UsersPropItems = {
-    id: string;
-    name: string;
-    email: string;
-}

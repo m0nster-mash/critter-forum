@@ -17,7 +17,6 @@ import {asc} from "drizzle-orm";
  */
 export default async function AdminUserManagementView() {
 
-
     await requirePagePermission(ADMIN_ROUTES.USERS.permission);
 
     const users = await db
