@@ -1,9 +1,9 @@
 /**
  * @fileOverview    Verifies every protected route declares a valid permission, and that the admin routes stay independent.
- * @module          features/permissions
+ * @module          features/admin/permissions
  */
 
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {ADMIN_ROUTES, ALL_ROUTES, type RouteMetadata} from "@/lib/constants/routes";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";

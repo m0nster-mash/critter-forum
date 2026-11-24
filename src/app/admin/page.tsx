@@ -3,7 +3,7 @@
  * @module          features/admin
  */
 
-import {requirePagePermission} from "@/features/permissions/server/require-page-permission";
+import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 
 /**

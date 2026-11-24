@@ -1,9 +1,9 @@
 /**
  * @fileOverview    Checks whether a user has been granted a permission.
- * @module          features/permissions
+ * @module          features/admin/permissions
  */
 
-import type {Permission} from "@/features/permissions/types";
+import type {Permission} from "@/features/admin/permissions/types";
 import {db} from "@/lib/db/auth/db";
 import {userPermission} from "@/lib/db/auth/schema";
 import {and, eq} from "drizzle-orm";

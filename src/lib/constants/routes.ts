@@ -3,8 +3,8 @@
  * @module          core-application
  */
 
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
-import type {Permission} from "@/features/permissions/types";
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
+import type {Permission} from "@/features/admin/permissions/types";
 
 /** Access levels supported by application routes. */
 export type AccessLevel = "public" | "private" | "admin";

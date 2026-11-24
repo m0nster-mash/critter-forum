@@ -5,6 +5,7 @@
 
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {AlertDefinition} from "@/features/alerts/types";
+import {ADMIN_ALERTS} from "@/features/admin/constants/alerts";
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
 
 /**
@@ -55,6 +56,7 @@ const CORE_ALERTS = {
 export const ALERT_REGISTRY = {
     ...CORE_ALERTS,
     ...AUTH_ALERTS,
+    ...ADMIN_ALERTS,
 } as const satisfies Record<string, AlertDefinition>;
 
 /** Union of every valid alert code. Call sites are type-checked against this. */
