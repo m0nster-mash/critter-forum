@@ -7,9 +7,7 @@ import AdminDashboardView from "@/features/admin/views/admin-dashboard-view";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 
 /**
- * Displays the {@link AdminDashboardView}
- *
- * @remarks     Requires the permission declared on {@link ADMIN_ROUTES.DASHBOARD}.
+ * Displays the AdminDashboardView
  */
 export default async function AdminDashboardPage() {
 

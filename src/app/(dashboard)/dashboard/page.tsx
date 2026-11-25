@@ -6,7 +6,7 @@
 import DashboardPageView from "@/components/views/dashboard-page-view";
 
 /**
- * Displays the {@link DashboardPageView}
+ * Displays the DashboardPageView
  */
 export default function DashboardPage() {
     return <DashboardPageView/>;

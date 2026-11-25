@@ -7,9 +7,7 @@ import AdminUserManagementView from "@/features/admin/user-management/views/admi
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 
 /**
- * Displays the {@link UserManagementPage}
- *
- * @remarks     Requires the permission declared on {@link ADMIN_ROUTES.USERS_ACCESS}.
+ * Displays the UserManagementPage
  */
 export default async function UserManagementPage() {
 

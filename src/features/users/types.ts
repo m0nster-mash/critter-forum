@@ -1,4 +1,3 @@
-
 /**
  * @fileOverview    Defines shared types for user data used across application features.
  * @module          features/users

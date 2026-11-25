@@ -9,7 +9,11 @@ import {requireAuth} from "@/features/auth/server/session";
 import type {UserProfilePageProps} from "@/lib/types";
 import {notFound} from "next/navigation";
 
-/** Loads the signed-in user's profile and renders the profile view. */
+/**
+ * Loads the signed-in user's profile and renders the profile view.
+ *
+ * @param params    TODO:: document
+ */
 export default async function UserProfilePage({params}: UserProfilePageProps) {
     const session = await requireAuth();
     const {userId} = await params;

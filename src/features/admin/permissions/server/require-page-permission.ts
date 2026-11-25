@@ -3,8 +3,8 @@
  * @module          features/admin/permissions
  */
 
-import {hasPermission} from "@/features/admin/permissions/queries/has-permission";
 import type {Permission} from "@/features/admin/permissions/constants/permissions";
+import {hasPermission} from "@/features/admin/permissions/queries/has-permission";
 import {requireAuth} from "@/features/auth/server/session";
 import {notFound} from "next/navigation";
 
@@ -17,7 +17,7 @@ import {notFound} from "next/navigation";
  *              receive the standard not-found page, so a protected route's existence is not revealed.
  * @remarks     Next.js redirect and not-found control-flow errors must not be caught by the caller.
  *
- * @param       permission      The exact permission required to view the page
+ * @param       permission  The exact permission required to view the page
  */
 export async function requirePagePermission(
     permission: Permission

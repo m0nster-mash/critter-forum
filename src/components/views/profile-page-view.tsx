@@ -10,7 +10,11 @@ import type {UserProfileProps} from "@/lib/types";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 import type {JSX} from "react";
 
-/** Renders the already-authorized profile summary selected by the route. */
+/**
+ * Renders the already-authorized profile summary selected by the route.
+ *
+ * @param   TODO:: document
+ */
 export default function ProfilePageView({user}: UserProfileProps): JSX.Element {
     return (
         <>

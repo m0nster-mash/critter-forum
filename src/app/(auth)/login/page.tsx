@@ -6,7 +6,7 @@
 import {LoginPageView} from "@/features/auth/views/login-page-view";
 
 /**
- * Displays the {@link LoginPageView}
+ * Displays the LoginPageView
  */
 export default function LoginPage() {
     return <LoginPageView/>;

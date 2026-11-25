@@ -7,9 +7,9 @@
 
 import {DashboardPagePanel} from "@/components/panels/dashboard-page-panel";
 import {PageHeader} from "@/components/ui/page-header";
+import {useSession} from "@/lib/auth-client";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
-import {useSession} from "@/lib/auth-client";
 import {JSX} from "react";
 
 /**

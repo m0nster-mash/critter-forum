@@ -7,8 +7,8 @@
  *                  `src/lib/types.ts`.
  */
 
-import {LOG_FORMATS, LOG_LEVELS} from "@/features/alerts/constants/logger";
 import type {AlertPresentation, AlertSeverity, AlertVariant} from "@/features/alerts/constants/alert-types";
+import {LOG_FORMATS, LOG_LEVELS} from "@/features/alerts/constants/logger";
 import {TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
 import type {ReactNode} from "react";
 
@@ -51,12 +51,16 @@ export type LogContext = Record<string, unknown>;
 export interface Logger {
     /** Writes a debug-level event with optional structured context. */
     debug(message: string, context?: LogContext): void;
+
     /** Writes an informational event with optional structured context. */
     info(message: string, context?: LogContext): void;
+
     /** Writes a warning event with optional structured context. */
     warn(message: string, context?: LogContext): void;
+
     /** Writes an error event with optional structured context. */
     error(message: string, context?: LogContext): void;
+
     /** Creates a logger that adds bindings to every subsequent entry. */
     child(bindings: LogContext): Logger;
 }
@@ -197,9 +201,9 @@ export interface ToastItem {
  * @see         `toast-state.ts` in `src/features/alerts/client/`.
  */
 export type ToastAction =
-    | {type: typeof TOAST_ACTION_TYPES.ADD; id: string; alert: PublicAlert}
-    | {type: typeof TOAST_ACTION_TYPES.DISMISS; id: string}
-    | {type: typeof TOAST_ACTION_TYPES.CLEAR};
+    | { type: typeof TOAST_ACTION_TYPES.ADD; id: string; alert: PublicAlert }
+    | { type: typeof TOAST_ACTION_TYPES.DISMISS; id: string }
+    | { type: typeof TOAST_ACTION_TYPES.CLEAR };
 
 /**
  * Options for constructing an expected, registry-backed alert error.
@@ -236,6 +240,7 @@ export interface SerializedError {
     message: string;
     stack?: string;
     cause?: unknown;
+
     [extra: string]: unknown;
 }
 

@@ -10,7 +10,6 @@ import AdminEditUserView from "@/features/admin/user-management/views/admin-edit
  * TODO:: document
  *
  * @param       params   TODO:: document
- * @returns     TODO:: document
  */
 export default async function AdminEditUserPage({params}: AdminEditUserPageProps) {
 

@@ -16,7 +16,7 @@ class RedirectSignal extends Error {
     }
 }
 
-let currentSession: {user: {id: string}} | null = null;
+let currentSession: { user: { id: string } } | null = null;
 let sessionError: Error | null = null;
 
 mock.module("react", {

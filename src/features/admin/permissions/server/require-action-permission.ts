@@ -4,11 +4,11 @@
  */
 
 import {ADMIN_ALERT_CODES} from "@/features/admin/constants/alerts";
-import {hasPermission} from "@/features/admin/permissions/queries/has-permission";
 import type {Permission} from "@/features/admin/permissions/constants/permissions";
+import {hasPermission} from "@/features/admin/permissions/queries/has-permission";
 import {AlertError} from "@/features/alerts/server/alert-error";
-import {requireAuth} from "@/features/auth/server/session";
 import type {AuthSession} from "@/features/auth/server/session";
+import {requireAuth} from "@/features/auth/server/session";
 
 /**
  * Requires authentication and an exact permission grant before an action proceeds.
@@ -18,9 +18,10 @@ import type {AuthSession} from "@/features/auth/server/session";
  * @remarks     Permission lookup failures propagate as unexpected errors and are handled by `safeAction`; they are
  *              never treated as an authorization denial or as permission to proceed.
  *
- * @param       permission      The exact permission required to perform the action
+ * @param       permission  The exact permission required to perform the action
  *
  * @returns     The authenticated session, for use by the protected operation.
+ *
  * @throws      `AlertError` when the authenticated user lacks the permission.
  * @throws      A Next.js redirect control-flow error when the visitor is signed out.
  */

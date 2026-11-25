@@ -14,8 +14,8 @@ import type {ReactNode} from "react";
  * @remarks     This is a presentation contract, not a route definition. Use `href` only when the crumb is navigable;
  *              omit it for the current page or another non-interactive label.
  *
- * @property    label       Text displayed for this breadcrumb.
- * @property    [href]      Optional destination. When omitted, render the label as plain text.
+ * @property    label   Text displayed for this breadcrumb.
+ * @property    [href]  Optional destination. When omitted, render the label as plain text.
  *
  * @see         `Breadcrumbs` in `src/components/ui/breadcrumbs.tsx`.
  * @see         `PageHeaderProps` in this file.
@@ -33,8 +33,6 @@ export interface BreadcrumbItem {
  *
  * @property    title           Required title content; React nodes are accepted for composed headings.
  * @property    [breadcrumb]    Optional ordered breadcrumb entries.
- *
- * @see         `PageHeader` in `src/components/ui/page-header.tsx`.
  */
 export interface PageHeaderProps {
     title: ReactNode;
@@ -48,8 +46,6 @@ export interface PageHeaderProps {
  *              never has to infer navigation state.
  *
  * @property    breadcrumb  Ordered entries to render in the navigation trail.
- *
- * @see         `Breadcrumbs` in `src/components/ui/breadcrumbs.tsx`.
  */
 export interface BreadcrumbProps {
     breadcrumb: BreadcrumbItem[];
@@ -65,9 +61,6 @@ export interface BreadcrumbProps {
  * @property    id      Stable user identifier.
  * @property    name    Display name shown in the interface.
  * @property    email   User email address shown by account and profile interfaces.
- *
- * @see         `DashboardPageProps`, `AccountSettingsProps`, and `UserProfileProps` in this file.
- * @see         `UserManagementPageProps` in `src/features/admin/permissions/types.ts`.
  */
 export interface UserSummary {
     id: string;
@@ -89,8 +82,6 @@ export type UserPropItems = UserSummary;
  *              Better Auth session or raw database record directly.
  *
  * @property    user    User identity and contact details for the dashboard.
- *
- * @see         `DashboardPagePanel` in `src/components/panels/dashboard-page-panel.tsx`.
  */
 export interface DashboardPageProps {
     user: UserSummary;
@@ -103,8 +94,6 @@ export interface DashboardPageProps {
  *              form-specific values and mutation state belong in each panel's local props.
  *
  * @property    user    Current user's identity and contact details.
- *
- * @see         `ManageAccountPasswordPanel` and `ManageProfileDetailsPanel` in `src/components/panels/`.
  */
 export interface AccountSettingsProps {
     user: UserSummary;
@@ -117,8 +106,6 @@ export interface AccountSettingsProps {
  *              contract and may evolve independently even though both currently carry a user summary.
  *
  * @property    user    User whose public/profile details are being displayed.
- *
- * @see         `ProfilePagePanel` in `src/components/panels/profile-page-panel.tsx`.
  */
 export interface UserProfileProps {
     user: UserSummary;
@@ -131,10 +118,7 @@ export interface UserProfileProps {
  *              from feature-level resolved identifiers such as `UserIdParams`.
  *
  * @property    params  Promise resolving to the route's dynamic user identifier.
- *
- * @see         `UserProfilePage` in `src/app/(dashboard)/profile/[userId]/page.tsx`.
- * @see         `ProfilePageView` in `src/components/views/profile-page-view.tsx`.
  */
 export interface UserProfilePageProps {
-    params: Promise<{userId: string}>;
+    params: Promise<{ userId: string }>;
 }

@@ -1,4 +1,3 @@
-
 /**
  * @fileOverview    Defines shared types for application navigation and page header components.
  * @module          components/ui
@@ -24,7 +23,7 @@ export interface BreadcrumbItem {
  *
  * @remarks     Supplies the ordered breadcrumb items used to render the current navigation hierarchy.
  *
- * @property    breadcrumb   Ordered breadcrumb items to render.
+ * @property    breadcrumb  Ordered breadcrumb items to render.
  */
 export interface BreadcrumbProps {
     breadcrumb: BreadcrumbItem[];

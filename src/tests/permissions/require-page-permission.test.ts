@@ -7,8 +7,8 @@
  * @remarks         Requires `--experimental-test-module-mocks` (set in the `test:run` script).
  */
 
-import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import type {Permission} from "@/features/admin/permissions/constants/permissions";
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";
@@ -28,7 +28,7 @@ class NotFoundSignal extends Error {
 }
 
 /** Session returned by the shared auth helper; `null` means signed out. */
-let currentSession: {user: {id: string}} | null = null;
+let currentSession: { user: { id: string } } | null = null;
 /** Permissions held per user id. */
 let grants = new Map<string, Set<Permission>>();
 /** When set, the permission lookup throws this error. */
@@ -69,7 +69,7 @@ const {requirePagePermission} = await import("@/features/admin/permissions/serve
 
 /** Resets the doubles to a known state before each test. */
 function arrange(options: {
-    session?: {user: {id: string}} | null;
+    session?: { user: { id: string } } | null;
     grants?: Record<string, Permission[]>;
     lookupError?: Error;
 } = {}): void {

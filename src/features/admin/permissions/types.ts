@@ -18,8 +18,6 @@ export type {Permission} from "@/features/admin/permissions/constants/permission
  *              grants and mutation capabilities are enforced independently by server actions.
  *
  * @property    users   Users to display in the management interface.
- *
- * @see         `AdminUserManagementPanel` in `src/features/admin/user-management/components/admin-user-management-panel.tsx`.
  */
 export interface UserManagementPageProps {
     users: UserSummary[];
@@ -32,8 +30,6 @@ export interface UserManagementPageProps {
  *              `AdminEditUserViewProps`, which receives only an identifier and resolves the user itself.
  *
  * @property    user    User summary being edited.
- *
- * @see         `AdminEditUserPanel` in `src/features/admin/user-management/components/admin-edit-user-panel.tsx`.
  */
 export interface UserEditPageProps {
     user: UserSummary;
@@ -46,9 +42,6 @@ export interface UserEditPageProps {
  *              params or when calling a query that accepts a user ID.
  *
  * @property    userId  Identifier of the target user.
- *
- * @see         `getUserById` in `src/features/admin/user-management/queries/get-user-by-id.ts`.
- * @see         `AdminEditUserViewProps` in this file.
  */
 export interface UserIdParams {
     userId: string;
@@ -59,17 +52,15 @@ export interface UserIdParams {
  *
  * @remarks     Extends the resolved route identifier rather than embedding a user record. Use this at the view
  *              boundary when the view is responsible for loading the selected user.
- *
- * @see         `AdminEditUserView` in `src/features/admin/user-management/views/admin-edit-user-view.tsx`.
  */
-export interface AdminEditUserViewProps extends UserIdParams {}
+export interface AdminEditUserViewProps extends UserIdParams {
+}
 
 /**
  * Input for selecting/loading a user in the admin query layer.
  *
  * @remarks     Kept as a named query contract so query call sites describe intent rather than passing an anonymous
  *              object. It intentionally remains distinct from view props even though both currently contain `userId`.
- *
- * @see         `getUserById` in `src/features/admin/user-management/queries/get-user-by-id.ts`.
  */
-export interface GetSelectedUserProps extends UserIdParams {}
+export interface GetSelectedUserProps extends UserIdParams {
+}

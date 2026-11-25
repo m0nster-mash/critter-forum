@@ -15,7 +15,7 @@ import type {ReactNode} from "react";
  * @remarks     Use when an auth form component supports a caller-provided success notification or follow-up. The
  *              callback intentionally carries no payload because the forms own their result handling.
  *
- * @property    [onSuccess]  Optional callback invoked after the authentication flow succeeds.=
+ * @property    [onSuccess]     Optional callback invoked after the authentication flow succeeds.=
  */
 export interface AuthFlowProps {
     onSuccess?: () => void;
@@ -62,9 +62,9 @@ export interface LogoutProps {
  * @remarks     Values are trimmed/normalized before validation. `password` remains plain text only for the duration of
  *              the form/action request; never log it, persist it directly, or include it in alert/log context.
  *
- * @property    name      Normalized display name.
- * @property    email     Normalized email address.
- * @property    password  Submitted password, passed to Better Auth for secure handling.
+ * @property    name        Normalized display name.
+ * @property    email       Normalized email address.
+ * @property    password    Submitted password, passed to Better Auth for secure handling.
  */
 export interface RegistrationInput {
     name: string;

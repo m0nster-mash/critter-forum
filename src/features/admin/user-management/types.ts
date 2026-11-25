@@ -13,10 +13,7 @@
  *              pass the resolved `userId` to `AdminEditUserView`; do not use this type for ordinary components.
  *
  * @property    params  Promise resolving to the dynamic user identifier.
- *
- * @see         `src/app/admin/users/[userId]/edit/page.tsx`.
- * @see         `AdminEditUserViewProps` in `src/features/admin/permissions/types.ts`.
  */
 export interface AdminEditUserPageProps {
-    params: Promise<{userId: string}>;
+    params: Promise<{ userId: string }>;
 }

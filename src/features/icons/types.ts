@@ -18,13 +18,13 @@ import type {ComponentType, SVGProps} from "react";
  */
 export type IconAccessibilityProps =
     | {
-          semantic?: false;
-          label?: never;
-      }
+    semantic?: false;
+    label?: never;
+}
     | {
-          semantic: true;
-          label: string;
-      };
+    semantic: true;
+    label: string;
+};
 
 /**
  * Props accepted by the shared SVG `Icon` component.
@@ -44,11 +44,11 @@ export type IconAccessibilityProps =
 export type IconProps =
     Omit<SVGProps<SVGSVGElement>, "width" | "height"> &
     IconAccessibilityProps & {
-        icon?: ComponentType<SVGProps<SVGSVGElement>>;
-        name?: IconName | (string & {});
-        size?: IconSize;
-        variant?: IconVariant;
-    };
+    icon?: ComponentType<SVGProps<SVGSVGElement>>;
+    name?: IconName | (string & {});
+    size?: IconSize;
+    variant?: IconVariant;
+};
 
 /**
  * Supported icon display-size tokens.
