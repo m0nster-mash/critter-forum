@@ -3,8 +3,13 @@
  * @module          features/admin
  */
 
-import {UserEditPageProps} from "@/features/admin/permissions/types";
+import {UserPropItems} from "@/lib/types";
 import React from "react";
+
+
+export interface UserEditPageProps {
+    user: UserPropItems;
+}
 
 /**
  * Displays the AdminEditUserPanel, used by `admin/[userId]/edit`.

@@ -3,11 +3,17 @@
  * @module          features/admin
  */
 
-import {UserManagementPageProps} from "@/features/admin/permissions/types";
+// import {UserManagementPageProps} from "@/features/admin/permissions/types";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
+import {UserPropItems} from "@/lib/types";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import Link from "next/link";
 import React from "react";
+
+
+export interface UserManagementPageProps {
+    users: UserPropItems[];
+}
 
 /**
  * Displays the {@link AdminUserManagementPanel}

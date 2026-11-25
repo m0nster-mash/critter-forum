@@ -4,8 +4,8 @@
  */
 
 import {PageHeader} from "@/components/ui/page-header";
-import AdminUserManagementPanel from "@/features/admin/components/admin-user-management-panel";
-import {getAllUsers} from "@/features/admin/permissions/queries/get-all-users";
+import AdminUserManagementPanel from "@/features/admin/user-management/components/admin-user-management-panel";
+import {getAllUsers} from "@/features/admin/user-management/queries/get-all-users";
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";

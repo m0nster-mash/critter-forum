@@ -56,3 +56,21 @@ export type UserPropItems = {
     name: string;
     email: string;
 }
+
+export interface AccountSettingsProps{
+    user: UserPropItems;
+}
+
+
+export interface UserProfilePageProps {
+    params: Promise<{ userId: string }>;
+}
+
+export interface UserProfileProps {
+    user: UserPropItems;
+}
+
+
+export interface UserIdProps {
+    id: string;
+}

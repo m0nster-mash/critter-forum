@@ -3,8 +3,12 @@
  * @module          features/admin
  */
 
-import {AdminEditUserPageProps} from "@/features/admin/user-management/types";
-import AdminEditUserView from "@/features/admin/views/admin-edit-user-view";
+import AdminEditUserView from "@/features/admin/user-management/views/admin-edit-user-view";
+
+export interface AdminEditUserPageProps {
+    params: Promise<{ userId: string }>;
+}
+
 
 /**
  * TODO:: document

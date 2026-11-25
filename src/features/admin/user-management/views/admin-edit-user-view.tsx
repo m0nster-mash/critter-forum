@@ -4,13 +4,17 @@
  */
 
 import {PageHeader} from "@/components/ui/page-header";
-import AdminEditUserPanel from "@/features/admin/components/admin-edit-user-panel";
-import {getSelectedUser} from "@/features/admin/permissions/queries/get-selected-user";
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
-import {AdminEditUserViewProps} from "@/features/admin/permissions/types";
+import {UserIdParams} from "@/features/admin/permissions/types";
+import AdminEditUserPanel from "@/features/admin/user-management/components/admin-edit-user-panel";
+import {getUserById} from "@/features/admin/user-management/queries/get-user-by-id";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 import {notFound} from "next/navigation";
+
+
+export interface AdminEditUserViewProps extends UserIdParams {
+}
 
 /**
  * Displays the {@link AdminEditUserView}
@@ -18,7 +22,7 @@ import {notFound} from "next/navigation";
 export default async function AdminEditUserView({userId}: AdminEditUserViewProps) {
 
     await requirePagePermission(ADMIN_ROUTES.USERS_EDIT.permission);
-    const [selectedUser] = await getSelectedUser({userId});
+    const [selectedUser] = await getUserById({userId});
     if (!selectedUser) notFound();
 
     return (

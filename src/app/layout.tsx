@@ -44,12 +44,14 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
             <div className="layout">
                 <nav>
                     <h3>Navigation</h3>
+                    <h4>Public Pages</h4>
                     <Link href={resolvePath(PUBLIC_ROUTES.HOME)}>{PUBLIC_ROUTES.HOME.label}</Link>
-                    <Link href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>{PRIVATE_ROUTES.DASHBOARD.label}</Link>
-                    <h4>Authentication</h4>
                     <Link href={resolvePath(PUBLIC_ROUTES.REGISTER)}>{PUBLIC_ROUTES.REGISTER.label}</Link>
                     <Link href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</Link>
-                    <h4>Administration</h4>
+                    <h4>Private Pages</h4>
+                    <Link href={resolvePath(PRIVATE_ROUTES.DASHBOARD)}>{PRIVATE_ROUTES.DASHBOARD.label}</Link>
+                    <Link href={resolvePath(PRIVATE_ROUTES.SETTINGS)}>{PRIVATE_ROUTES.SETTINGS.label}</Link>
+                    <h4>Administration Pages</h4>
                     <Link href={resolvePath(ADMIN_ROUTES.DASHBOARD)}>{ADMIN_ROUTES.DASHBOARD.label}</Link>
                     <Link href={resolvePath(ADMIN_ROUTES.USERS_ACCESS)}>{ADMIN_ROUTES.USERS_ACCESS.label}</Link>
                     <h4>Test Routes</h4>

@@ -63,6 +63,20 @@ export const PRIVATE_ROUTES = {
         title: "Your Dashboard",
         accessLevel: "private",
     } as const satisfies RouteMetadata,
+
+    SETTINGS: {
+        path: "/settings",
+        label: "Settings",
+        title: "Settings",
+        accessLevel: "private",
+    } as const satisfies RouteMetadata,
+
+    PROFILE: {
+        path: (params) => `/profile/${params.userId}`,
+        label: "Profile",
+        title: "Profile",
+        accessLevel: "private",
+    } as const satisfies RouteMetadata,
 };
 
 /** Administrative routes. */
