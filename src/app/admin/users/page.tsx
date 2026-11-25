@@ -15,10 +15,9 @@ import Link from "next/link";
 /**
  * Displays the {@link UserManagementPage}
  *
- * @remarks     Requires the permission declared on {@link ADMIN_ROUTES.USERS}.
+ * @remarks     Requires the permission declared on {@link ADMIN_ROUTES.USERS_ACCESS}.
  */
 export default async function UserManagementPage() {
 
-    await requirePagePermission(ADMIN_ROUTES.USERS.permission);
     return <AdminUserManagementView/>;
 }

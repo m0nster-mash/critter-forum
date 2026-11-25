@@ -9,9 +9,5 @@ import {LoginPageView} from "@/features/auth/views/login-page-view";
  * Displays the {@link LoginPageView}
  */
 export default function LoginPage() {
-    return (
-        <>
-            <LoginPageView/>
-        </>
-    );
+    return <LoginPageView/>;
 }

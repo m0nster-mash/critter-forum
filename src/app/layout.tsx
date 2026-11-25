@@ -51,7 +51,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                     <Link href={resolvePath(PUBLIC_ROUTES.LOGIN)}>{PUBLIC_ROUTES.LOGIN.label}</Link>
                     <h4>Administration</h4>
                     <Link href={resolvePath(ADMIN_ROUTES.DASHBOARD)}>{ADMIN_ROUTES.DASHBOARD.label}</Link>
-                    <Link href={resolvePath(ADMIN_ROUTES.USERS)}>{ADMIN_ROUTES.USERS.label}</Link>
+                    <Link href={resolvePath(ADMIN_ROUTES.USERS_ACCESS)}>{ADMIN_ROUTES.USERS_ACCESS.label}</Link>
                     <h4>Test Routes</h4>
                     <Link href="/alerts">Alert Tests</Link>
                     <hr/>

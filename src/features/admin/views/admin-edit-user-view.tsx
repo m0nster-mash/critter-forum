@@ -23,7 +23,7 @@ export default async function AdminEditUserView({userId}: AdminEditUserViewProps
 
     return (
         <>
-            <PageHeader {...getPageHeaderProps(ADMIN_ROUTES.USERS_EDIT)}/>
+            <PageHeader {...getPageHeaderProps(ADMIN_ROUTES.USERS_EDIT, {userId})}/>
             <AdminEditUserPanel user={selectedUser}/>
         </>
     );

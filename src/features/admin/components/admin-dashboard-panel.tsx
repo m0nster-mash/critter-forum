@@ -21,7 +21,7 @@ export default async function AdminDashboardPanel() {
                     <Link href={resolvePath(ADMIN_ROUTES.DASHBOARD)}>{ADMIN_ROUTES.DASHBOARD.label}</Link>
                 </li>
                 <li>
-                    <Link href={resolvePath(ADMIN_ROUTES.USERS)}>{ADMIN_ROUTES.USERS.label}</Link>
+                    <Link href={resolvePath(ADMIN_ROUTES.USERS_ACCESS)}>{ADMIN_ROUTES.USERS_ACCESS.label}</Link>
                 </li>
             </ul>
         </>

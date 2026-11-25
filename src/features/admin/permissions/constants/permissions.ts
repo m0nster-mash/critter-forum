@@ -31,12 +31,12 @@ export const PERMISSION_DEFINITIONS = [
     {
         key: PERMISSIONS.ADMIN_USERS_ACCESS,
         label: "View Users",
-        description: "View the admin user list.",
+        description: "View the user list.",
     },
     {
         key: PERMISSIONS.ADMIN_USERS_EDIT,
-        label: "Manage Users",
-        description: "Manage users and their directly granted permissions.",
+        label: "Manage User",
+        description: "Manage user data.",
     },
 ] as const satisfies {
     key: Permission;

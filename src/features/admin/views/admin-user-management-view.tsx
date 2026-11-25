@@ -15,12 +15,12 @@ import {getPageHeaderProps} from "@/lib/utilities/route-utils";
  */
 export default async function AdminUserManagementView() {
 
-    await requirePagePermission(ADMIN_ROUTES.USERS.permission);
+    await requirePagePermission(ADMIN_ROUTES.USERS_ACCESS.permission);
     const users = await getAllUsers();
 
     return (
         <>
-            <PageHeader {...getPageHeaderProps(ADMIN_ROUTES.USERS)}/>
+            <PageHeader {...getPageHeaderProps(ADMIN_ROUTES.USERS_ACCESS)}/>
             <AdminUserManagementPanel users={users}/>
         </>
     );
