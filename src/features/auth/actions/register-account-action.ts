@@ -11,8 +11,9 @@ import {AlertError} from "@/features/alerts/server/alert-error";
 import {safeAction} from "@/features/alerts/server/safe-action";
 import {AUTH_ALERT_CODES, AUTH_ALERTS} from "@/features/auth/constants/alerts";
 import {AUTH_ACTION_NAMES} from "@/features/auth/constants/integration";
+import {RegistrationInput} from "@/features/auth/types";
 import {AUTH_ALERT_PARAMS, isAuthApiError, resolveAuthAlertCode,} from "@/features/auth/utilities/auth-errors";
-import {type RegistrationInput, validateRegistration} from "@/features/auth/validation";
+import {validateRegistration} from "@/features/auth/validation";
 import {auth} from "@/lib/db/auth/auth";
 import {headers} from "next/headers";
 

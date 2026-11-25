@@ -3,17 +3,11 @@
  * @module          features/admin
  */
 
-// import {UserManagementPageProps} from "@/features/admin/permissions/types";
+import {AdminUserManagementPanelProps} from "@/features/admin/user-management/types";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
-import {UserPropItems} from "@/lib/types";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import Link from "next/link";
 import React from "react";
-
-
-export interface UserManagementPageProps {
-    users: UserPropItems[];
-}
 
 /**
  * Displays the {@link AdminUserManagementPanel}
@@ -22,7 +16,7 @@ export interface UserManagementPageProps {
  *
  * @return    TODO:: document
  */
-export default async function AdminUserManagementPanel({users}: UserManagementPageProps) {
+export default async function AdminUserManagementPanel({users}: AdminUserManagementPanelProps) {
     return (
         <>
             <table>

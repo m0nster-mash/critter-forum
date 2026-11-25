@@ -3,13 +3,9 @@
  * @module          features/admin
  */
 
-import {UserPropItems} from "@/lib/types";
+import {AdminEditUserPanelProps} from "@/features/admin/user-management/types";
 import React from "react";
 
-
-export interface UserEditPageProps {
-    user: UserPropItems;
-}
 
 /**
  * Displays the AdminEditUserPanel, used by `admin/[userId]/edit`.
@@ -18,7 +14,7 @@ export interface UserEditPageProps {
  *
  * @returns     TODO:: document
  */
-export default async function AdminEditUserPanel({user}: UserEditPageProps) {
+export default async function AdminEditUserPanel({user}: AdminEditUserPanelProps) {
     return (
         <>
             <p>User ID: {user.id}</p>

@@ -8,7 +8,7 @@
 
 import layoutStyle from "@/components/styles/layout.module.css";
 import {Breadcrumbs} from "@/components/ui/breadcrumbs";
-import {PageHeaderProps} from "@/lib/types";
+import {PageHeaderProps} from "@/components/ui/types";
 import {JSX} from "react";
 
 /**

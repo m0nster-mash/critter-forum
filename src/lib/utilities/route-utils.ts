@@ -3,6 +3,7 @@
  * @module          core-application
  */
 
+import {PageHeaderProps} from "@/components/ui/types";
 import {MISSING_ROUTE_PARAMS, RouteMetadata} from "@/lib/constants/routes";
 import {getBreadcrumbs} from "@/lib/utilities/breadcrumb-utils";
 
@@ -46,13 +47,7 @@ export function getPageHeaderProps(
     route: RouteMetadata,
     params?: Record<string, string>,
     overrides?: { title?: string; }
-): {
-    title: string;
-    breadcrumb: Array<{
-        label: string;
-        href?: string
-    }>
-} {
+): PageHeaderProps {
 
     return {
         title: overrides?.title ?? route.title,

@@ -1,25 +1,28 @@
+
 /**
- @fileOverview    Defines shared types for alerts, logging, action results, and toast notifications.
- @module          features/auth
+ * @fileOverview    Defines shared types for authentication components and registration input.
+ * @module          features/auth
  */
 
-import {ReactNode} from "react";
+import type {ReactNode} from "react";
 
 /**
- * Properties for authentication (login and registration) handling.
+ * Properties accepted by authentication flow components.
  *
- * @property    [onSuccess]     Optional; behaviour on successful login attempt
+ * @remarks     Shared by the login and registration panels.
+ *
+ * @property    [onSuccess]     Optional; callback executed after a successful authentication flow.
  */
 export interface AuthFlowProps {
     onSuccess?: () => void;
 }
 
 /**
- * Properties for configuring the LogoutButton UI component.
+ * Properties accepted by the LogoutButton component.
  *
- * @property    [label]             Optional; custom text label rendered on the logout button
- * @property    [redirectTo]        Optional; navigation route path to redirect user to after logging out
- * @property    [onBeforeLogout]    Optional; pre-logout handler executed prior to sign-out execution
+ * @property    [label]             Optional; custom text displayed on the logout button.
+ * @property    [redirectTo]        Optional; route to navigate to after successful logout.
+ * @property    [onBeforeLogout]    Optional; callback executed before sign-out is requested.
  */
 export interface LogoutButtonProps {
     label?: string;
@@ -28,12 +31,12 @@ export interface LogoutButtonProps {
 }
 
 /**
- * Properties for configuring the Logout container wrapper component.
+ * Properties accepted by the Logout component.
  *
- * @property    [children]          Child components wrapped within the interactive logout container
- * @property    [redirectTo]        Target navigation path following successful sign-out
- * @property    [onSuccess]         Callback function executed upon successful session logout
- * @property    [onBeforeLogout]    Callback executed prior to invoking sign-out
+ * @property    [children]          Optional; child elements rendered inside the logout wrapper.
+ * @property    [redirectTo]        Optional; route to navigate to after successful logout.
+ * @property    [onSuccess]         Optional; callback executed after successful sign-out.
+ * @property    [onBeforeLogout]    Optional; callback executed before sign-out is requested.
  */
 export interface LogoutProps {
     children?: ReactNode;
@@ -43,11 +46,15 @@ export interface LogoutProps {
 }
 
 /**
- * Registration form values, already trimmed and normalized.
+ * Defines the normalized values required to register a user account.
  *
- * @property    name        The display name
- * @property    email       The email address
- * @property    password    The plain-text password
+ * @remarks     The name and email are trimmed and normalized before validation and account creation.
+ * @remarks     The password remains plain text while being passed through the registration action; it must not be
+ *              logged.
+ *
+ * @property    name        Display name supplied during registration.
+ * @property    email       Email address supplied during registration.
+ * @property    password    Plain-text password supplied for account creation.
  */
 export interface RegistrationInput {
     name: string;
