@@ -3,7 +3,7 @@
  * @module          features/admin/permissions
  */
 
-import type {Permission} from "@/features/admin/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {db} from "@/lib/db/auth/db";
 import {userPermission} from "@/lib/db/auth/schema";
 import {and, eq} from "drizzle-orm";

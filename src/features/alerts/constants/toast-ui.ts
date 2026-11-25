@@ -3,7 +3,7 @@
  * @module          features/alerts
  */
 
-import {AlertSeverity} from "@/features/alerts/types";
+import type {AlertSeverity} from "@/features/alerts/constants/alert-types";
 import {ALERT_ICONS} from "@/features/icons/constants/groups";
 
 /** Accessible labels used by toast components. */

@@ -24,11 +24,7 @@ export function getBreadcrumbs(
     href?: string
 }> {
 
-    const breadcrumbs: Array<{
-        label: string;
-        href?: string
-    }> = [];
-
+    const breadcrumbs: Array<{ label: string; href?: string }> = [];
     let current: RouteMetadata | undefined = route;
     const visited = new Set<string>();
 

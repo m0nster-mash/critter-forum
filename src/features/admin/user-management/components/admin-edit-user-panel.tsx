@@ -3,9 +3,8 @@
  * @module          features/admin
  */
 
-import {AdminEditUserPanelProps} from "@/features/admin/user-management/types";
+import type {UserEditPageProps} from "@/features/admin/permissions/types";
 import React from "react";
-
 
 /**
  * Displays the AdminEditUserPanel, used by `admin/[userId]/edit`.
@@ -14,7 +13,7 @@ import React from "react";
  *
  * @returns     TODO:: document
  */
-export default async function AdminEditUserPanel({user}: AdminEditUserPanelProps) {
+export default async function AdminEditUserPanel({user}: UserEditPageProps) {
     return (
         <>
             <p>User ID: {user.id}</p>

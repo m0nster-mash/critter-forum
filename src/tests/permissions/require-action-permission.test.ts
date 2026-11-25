@@ -9,7 +9,7 @@
 
 import {ADMIN_ALERT_CODES} from "@/features/admin/constants/alerts";
 import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
-import type {Permission} from "@/features/admin/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {isAlertError} from "@/features/alerts/server/alert-error";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";

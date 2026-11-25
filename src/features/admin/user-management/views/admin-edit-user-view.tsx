@@ -4,17 +4,13 @@
  */
 
 import {PageHeader} from "@/components/ui/page-header";
-import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
-import {UserIdParams} from "@/features/admin/permissions/types";
 import AdminEditUserPanel from "@/features/admin/user-management/components/admin-edit-user-panel";
 import {getUserById} from "@/features/admin/user-management/queries/get-user-by-id";
+import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
+import type {AdminEditUserViewProps} from "@/features/admin/permissions/types";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 import {notFound} from "next/navigation";
-
-
-export interface AdminEditUserViewProps extends UserIdParams {
-}
 
 /**
  * Displays the {@link AdminEditUserView}

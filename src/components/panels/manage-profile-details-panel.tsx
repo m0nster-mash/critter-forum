@@ -3,7 +3,7 @@
  * @module          core-application
  */
 
-import {UserSummary} from "@/features/users/types";
+import type {AccountSettingsProps} from "@/lib/types";
 import {JSX} from "react";
 
 /**
@@ -13,7 +13,7 @@ import {JSX} from "react";
  *
  * @returns     {JSX.Element}   The rendered account management panel JSX element.
  */
-export function ManageProfileDetailsPanel({id, name, email}: UserSummary): JSX.Element {
+export function ManageProfileDetailsPanel({user}: AccountSettingsProps): JSX.Element {
 
     return (
         <section>
@@ -25,7 +25,7 @@ export function ManageProfileDetailsPanel({id, name, email}: UserSummary): JSX.E
                     <input id="name"
                            name="name"
                            type="text"
-                           defaultValue={name}
+                           defaultValue={user.name}
                            required/>
                 </div>
 
@@ -34,7 +34,7 @@ export function ManageProfileDetailsPanel({id, name, email}: UserSummary): JSX.E
                     <input id="email"
                            name="email"
                            type="email"
-                           defaultValue={email}
+                           defaultValue={user.email}
                            required/>
                 </div>
 

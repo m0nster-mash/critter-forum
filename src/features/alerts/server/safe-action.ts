@@ -6,7 +6,8 @@
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import {createAlert, getAlertDefinition} from "@/features/alerts/create-alert";
-import {ActionResult, fail} from "@/features/alerts/result";
+import {fail} from "@/features/alerts/result";
+import type {ActionResult} from "@/features/alerts/result";
 import {isAlertError} from "@/features/alerts/server/alert-error";
 import {logAlert} from "@/features/alerts/server/log-alert";
 import type {LogContext} from "@/features/alerts/server/logger";

@@ -1,134 +1,76 @@
-
 /**
- * @fileOverview    Defines shared types for alerts, logging, action results, and toast notifications.
+ * @fileOverview    Defines shared alert, logging, action-result, and toast contracts.
  * @module          features/alerts
+ *
+ * @remarks         This is the shared type boundary for the alert feature. Keep serializable client/server payloads
+ *                  separate from server-only diagnostics, and keep UI props beside the feature rather than in
+ *                  `src/lib/types.ts`.
  */
 
-import type {AlertVariant} from "@/features/alerts/constants/alert-types";
-import {ALERT_PRESENTATIONS, ALERT_SEVERITIES} from "@/features/alerts/constants/alert-types";
 import {LOG_FORMATS, LOG_LEVELS} from "@/features/alerts/constants/logger";
-import type {TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
+import type {AlertPresentation, AlertSeverity, AlertVariant} from "@/features/alerts/constants/alert-types";
+import {TOAST_ACTION_TYPES} from "@/features/alerts/constants/toast";
 import type {ReactNode} from "react";
 
-/**
- * Permissible severity levels for an alert.
- *
- * @remarks     Derived from the canonical alert severity constants.
- *
- * @see         {@link createAlert} in `src/features/alerts/create-alert.ts`
- * @see         {@link AlertIcon} in `src/features/alerts/components/alert-icon.tsx`
- */
-export type AlertSeverity = (typeof ALERT_SEVERITIES)[number];
+export type {AlertPresentation, AlertSeverity, AlertVariant} from "@/features/alerts/constants/alert-types";
 
 /**
- * Defines where an alert is presented to the user.
+ * Logging level accepted by the server and client logger implementations.
  *
- * @remarks     `toast`: transient, non-blocking notification.
- * @remarks     `inline`: persistent alert rendered in page, form, or field context.
- * @remarks     `none`: alert is not presented to the user.
- *
- * @see         {@link createAlert} in `src/features/alerts/create-alert.ts`
- * @see         {@link useAlerts} in `src/features/alerts/hooks/use-alerts.ts`
- */
-export type AlertPresentation = (typeof ALERT_PRESENTATIONS)[number];
-
-/**
- * Permissible log levels shared by the server and client loggers.
- *
- * @remarks     Derived from the canonical logging level constants.
- *
- * @see         {@link createClientLogger} in `src/features/alerts/client/logger.ts`
- * @see         {@link createServerLogger} in `src/features/alerts/server/logger.ts`
+ * @remarks     This derives from the logger's canonical constants; use it for logger method contracts and alert log
+ *              policies rather than defining another string union.
  */
 export type AlertLogLevel = (typeof LOG_LEVELS)[keyof typeof LOG_LEVELS];
 
-/**
- * Supported output formats for structured logging.
- *
- * @remarks     Derived from the canonical logging format constants.
- *
- * @see         {@link createServerLogger} in `src/features/alerts/server/logger.ts`
- */
+/** Output format accepted by the server logger configuration. */
 export type LogFormat = (typeof LOG_FORMATS)[keyof typeof LOG_FORMATS];
 
 /**
- * Free-form structured data attached to a log entry.
+ * Structured, serializable context attached to a log event.
  *
- * @remarks     Used to provide contextual information to alert and logging operations.
- *
- * @see         {@link Logger} in this file
- * @see         {@link logClientAlert} in `src/features/alerts/client/log-alert.ts`
- * @see         {@link logServerAlert} in `src/features/alerts/server/log-alert.ts`
+ * @remarks     Use for diagnostic metadata, not arbitrary request objects. The server logger sanitizes sensitive keys;
+ *              client log context must remain safe for browser exposure.
  */
 export type LogContext = Record<string, unknown>;
 
 /**
- * Logging interface shared by the server and client loggers.
+ * Common logger interface implemented independently by the server and browser logger adapters.
  *
- * @remarks     Provides a consistent logging API across runtime environments.
+ * @remarks     This interface describes the shared call surface only. Implementations and environment-specific
+ *              sanitization remain in `server/logger.ts` and `client/logger.ts`.
  *
- * @property    debug       Writes a debug-level message.
- * @property    info        Writes an informational message.
- * @property    warn        Writes a warning message.
- * @property    error       Writes an error message.
- * @property    child       Creates a logger with persistent contextual bindings.
+ * @property    debug       Writes a debug-level event.
+ * @property    info        Writes an informational event.
+ * @property    warn        Writes a warning event.
+ * @property    error       Writes an error event.
+ * @property    child       Creates a logger with persistent structured bindings.
  *
- * @see         {@link createClientLogger} in `src/features/alerts/client/logger.ts`
- * @see         {@link createServerLogger} in `src/features/alerts/server/logger.ts`
+ * @see         `logger` in `src/features/alerts/server/logger.ts`.
+ * @see         `clientLogger` in `src/features/alerts/client/logger.ts`.
  */
 export interface Logger {
-
-    /**
-     * Writes a debug-level message.
-     *
-     * @param       message     Human-readable event message.
-     * @param       [context]   Optional; structured data attached to the log entry.
-     */
+    /** Writes a debug-level event with optional structured context. */
     debug(message: string, context?: LogContext): void;
-
-    /**
-     * Writes an informational message.
-     *
-     * @param       message     Human-readable event message.
-     * @param       [context]   Optional; structured data attached to the log entry.
-     */
+    /** Writes an informational event with optional structured context. */
     info(message: string, context?: LogContext): void;
-
-    /**
-     * Writes a warning message.
-     *
-     * @param       message     Human-readable event message.
-     * @param       [context]   Optional; structured data attached to the log entry.
-     */
+    /** Writes a warning event with optional structured context. */
     warn(message: string, context?: LogContext): void;
-
-    /**
-     * Writes an error message.
-     *
-     * @param       message     Human-readable event message.
-     * @param       [context]   Optional; structured data attached to the log entry.
-     */
+    /** Writes an error event with optional structured context. */
     error(message: string, context?: LogContext): void;
-
-    /**
-     * Creates a logger that includes the supplied bindings in every entry.
-     *
-     * @param       bindings    Structured key-value data included with every log entry.
-     *
-     * @returns     A logger with the supplied persistent bindings.
-     */
+    /** Creates a logger that adds bindings to every subsequent entry. */
     child(bindings: LogContext): Logger;
 }
 
 /**
- * Defines environment-specific logging rules for an alert.
+ * Per-environment logging policy attached to an alert definition.
  *
- * @remarks     A value of `false` means the alert is not logged in that environment.
+ * @remarks     Set a level to `false` to suppress logging in that environment. The registry, not the component, owns
+ *              this decision.
  *
- * @property    server  Log level used for terminal and server output.
- * @property    client  Log level used for browser console output.
+ * @property    server  Server log level, or `false` to suppress the server log.
+ * @property    client  Browser log level, or `false` to suppress the client log.
  *
- * @see         {@link AlertDefinition} in this file
+ * @see         `AlertDefinition` in this file.
  */
 export interface AlertLogPolicy {
     server: AlertLogLevel | false;
@@ -136,17 +78,18 @@ export interface AlertLogPolicy {
 }
 
 /**
- * Defines the canonical configuration for a registered alert.
+ * Canonical registry definition for one user-facing alert code.
  *
- * @remarks     Acts as the source of truth for alert messaging, presentation, severity, and logging policy.
+ * @remarks     Feature registries define these values and `registry.ts` combines them. Call sites select a code and
+ *              optional params; they must not supply free-form message text.
  *
- * @property    severity        Default severity assigned to the alert.
- * @property    message         User-safe message. May contain tokens substituted through `params`.
- * @property    presentation    Default presentation mode.
- * @property    log             Default environment-specific logging policy.
- * @property    [field]         Optional; default form field associated with the alert.
+ * @property    severity        Default severity for this alert.
+ * @property    message         User-safe template; named tokens may be substituted through `params`.
+ * @property    presentation    Default rendering mode.
+ * @property    log             Server/client logging policy.
+ * @property    [field]         Default form field associated with this alert.
  *
- * @see         Alert registry in `src/features/alerts/registry.ts`
+ * @see         `ALERT_REGISTRY` in `src/features/alerts/registry.ts`.
  */
 export interface AlertDefinition {
     severity: AlertSeverity;
@@ -157,21 +100,20 @@ export interface AlertDefinition {
 }
 
 /**
- * Defines the serializable alert representation passed between server and client.
+ * Serializable alert payload that may cross a server/client boundary.
  *
- * @remarks     Contains only public, user-safe information.
- * @remarks     Must not contain internal diagnostic details such as error causes, stack traces, or request context.
+ * @remarks     Contains only user-safe presentation data. Never attach an Error, stack, request, database row, or other
+ *              internal diagnostic object. Add diagnostic detail to logger context instead.
  *
- * @property    code            Registered alert identifier.
- * @property    severity        Severity used for styling and live-region behavior.
- * @property    message         Final user-safe message.
- * @property    presentation    Presentation mode for the alert.
- * @property    [field]         Optional; form field associated with a field-level alert.
- * @property    [ref]           Optional; reference identifier associated with a server log entry.
+ * @property    code            Stable key into the alert registry.
+ * @property    severity        Severity used for visual and accessibility treatment.
+ * @property    message         Final user-safe message after template substitution.
+ * @property    presentation    Where the alert should be presented.
+ * @property    [field]         Optional form field identifier for field-level inline alerts.
+ * @property    [ref]           Optional reference matching a server log entry.
  *
- * @see         {@link createAlert} in `src/features/alerts/create-alert.ts`
- * @see         {@link AlertBanner} in `src/features/alerts/components/alert-banner.tsx`
- * @see         {@link useAlerts} in `src/features/alerts/hooks/use-alerts.ts`
+ * @see         `createAlert` in `src/features/alerts/create-alert.ts`.
+ * @see         `ActionFailure` in this file.
  */
 export interface PublicAlert {
     code: string;
@@ -183,19 +125,18 @@ export interface PublicAlert {
 }
 
 /**
- * Defines optional adjustments applied when creating an alert.
+ * Optional per-call overrides when creating a registry-backed alert.
  *
- * @remarks     Message overrides are intentionally excluded. User-facing messages are maintained in the alert registry,
- *              with dynamic values supplied through `params`.
+ * @remarks     There is intentionally no `message` property. Keep user-facing copy in the registry and pass dynamic
+ *              interpolation values through `params`.
  *
- * @property    [severity]       Optional; overrides the registered severity.
- * @property    [presentation]  Optional; overrides the registered presentation mode.
- * @property    [field]          Optional; form field associated with the alert.
- * @property    [ref]            Optional; reference identifier associated with a server log entry.
- * @property    [params]         Optional; values substituted for message tokens.
+ * @property    [severity]       Override the registry severity.
+ * @property    [presentation]   Override the registry presentation.
+ * @property    [field]          Associate the alert with a form field.
+ * @property    [ref]            Reference to the corresponding server log entry.
+ * @property    [params]         Primitive values substituted into named message tokens.
  *
- * @see         {@link createAlert} in `src/features/alerts/create-alert.ts`
- * @see         {@link AlertErrorOptions} in this file
+ * @see         `createAlert` in `src/features/alerts/create-alert.ts`.
  */
 export interface AlertOverrides {
     severity?: AlertSeverity;
@@ -206,15 +147,18 @@ export interface AlertOverrides {
 }
 
 /**
- * Properties accepted by the AlertBanner component.
+ * Props for the reusable alert banner component.
  *
- * @property    alert       Alert to render; renders nothing if absent.
- * @property    [id]        Optional; element ID for accessibility references such as `aria-describedby`.
- * @property    [variant]   Optional; visual presentation variant.
- * @property    [count]     Optional; number of occurrences represented by the alert.
- * @property    [action]    Optional; trailing content such as a dismiss button.
+ * @remarks     Use for page-, form-, field-, and toast-level alert rendering. The component intentionally accepts an
+ *              absent alert so callers can render it conditionally without duplicating wrapper logic.
  *
- * @see         {@link AlertBanner} in `src/features/alerts/components/alert-banner.tsx`
+ * @property    alert       Alert to render; `null` or `undefined` renders no content.
+ * @property    [id]        DOM id, commonly referenced by a form control's `aria-describedby`.
+ * @property    [variant]   Layout variant; defaults to the banner presentation.
+ * @property    [count]     Number of merged occurrences represented by this banner.
+ * @property    [action]    Optional trailing React content, such as a dismiss control.
+ *
+ * @see         `AlertBanner` in `src/features/alerts/components/alert-banner.tsx`.
  */
 export interface AlertBannerProps {
     alert: PublicAlert | null | undefined;
@@ -225,15 +169,17 @@ export interface AlertBannerProps {
 }
 
 /**
- * Represents a toast currently displayed in the notification stack.
+ * One toast entry in the client notification stack.
  *
- * @property    id          Unique identifier of the toast.
- * @property    alert       Public alert represented by the toast.
- * @property    count       Number of occurrences represented by the toast.
- * @property    version     Incremented when the toast is updated, allowing its dismissal timer to restart.
+ * @remarks     `count` merges identical notifications. `version` changes whenever the entry is refreshed so the
+ *              viewport can restart its dismissal timer.
  *
- * @see         {@link toastReducer} in `src/features/alerts/toast-reducer.ts`
- * @see         {@link ToastViewport} in `src/features/alerts/components/toast-viewport.tsx`
+ * @property    id       Stable identifier used for dismissal.
+ * @property    alert    Serializable alert shown by this toast.
+ * @property    count    Number of occurrences represented.
+ * @property    version  Revision counter for timer refresh behaviour.
+ *
+ * @see         `toast-state.ts` and `ToastViewport` in `src/features/alerts/`.
  */
 export interface ToastItem {
     id: string;
@@ -243,30 +189,28 @@ export interface ToastItem {
 }
 
 /**
- * Defines the actions accepted by the toast stack reducer.
+ * Discriminated actions accepted by the toast-state reducer.
  *
- * @remarks     Action types are derived from the canonical toast action constants.
+ * @remarks     Use only in the toast reducer/state layer. UI components should call the provider API rather than
+ *              constructing reducer actions directly.
  *
- * @property    ADD       Adds a toast to the notification stack.
- * @property    DISMISS   Removes a toast by its identifier.
- * @property    CLEAR     Removes every toast from the notification stack.
- *
- * @see         {@link toastReducer} in `src/features/alerts/toast-reducer.ts`
+ * @see         `toast-state.ts` in `src/features/alerts/client/`.
  */
 export type ToastAction =
-    | { type: typeof TOAST_ACTION_TYPES.ADD; id: string; alert: PublicAlert }
-    | { type: typeof TOAST_ACTION_TYPES.DISMISS; id: string }
-    | { type: typeof TOAST_ACTION_TYPES.CLEAR };
+    | {type: typeof TOAST_ACTION_TYPES.ADD; id: string; alert: PublicAlert}
+    | {type: typeof TOAST_ACTION_TYPES.DISMISS; id: string}
+    | {type: typeof TOAST_ACTION_TYPES.CLEAR};
 
 /**
- * Options accepted by the AlertError class.
+ * Options for constructing an expected, registry-backed alert error.
  *
- * @remarks     Extends alert presentation overrides with diagnostic information for server-side error handling.
+ * @remarks     Extends alert creation overrides with server-only diagnostic information. `cause` and `detail` must
+ *              never be copied into `PublicAlert`.
  *
- * @property    [cause]     Optional; underlying error that caused the expected failure.
- * @property    [detail]    Optional; additional structured diagnostic context for server logging.
+ * @property    [cause]     Underlying error or value that caused the expected failure.
+ * @property    [detail]    Structured diagnostic context written to server logs.
  *
- * @see         {@link AlertError} in `src/features/alerts/server/alert-error.ts`
+ * @see         `AlertError` in `src/features/alerts/server/alert-error.ts`.
  */
 export interface AlertErrorOptions extends AlertOverrides {
     cause?: unknown;
@@ -274,32 +218,37 @@ export interface AlertErrorOptions extends AlertOverrides {
 }
 
 /**
- * Defines the normalized representation of an Error used by the server logger.
+ * Normalized error details retained by the server logger.
  *
- * @property    name        Name identifying the error.
- * @property    message     Error message retained for diagnostic logging.
- * @property    [stack]     Optional; stack trace captured for diagnostics.
- * @property    [cause]     Optional; nested cause associated with the error.
- * @property    [extra]     Additional enumerable error properties retained for logging.
+ * @remarks     This is a server diagnostic shape, not a transport type. Do not return it from server actions or expose
+ *              it to client components.
  *
- * @see         {@link serializeError} in `src/features/alerts/server/logger.ts`
+ * @property    name        Error name or diagnostic type.
+ * @property    message     Diagnostic message retained for logging.
+ * @property    [stack]     Optional stack trace.
+ * @property    [cause]     Optional nested cause.
+ * @property    [extra]     Additional enumerable diagnostic properties.
+ *
+ * @see         `SerializedError` handling in `src/features/alerts/server/logger.ts`.
  */
 export interface SerializedError {
     name: string;
     message: string;
     stack?: string;
     cause?: unknown;
-
     [extra: string]: unknown;
 }
 
 /**
- * Properties accepted by the ToastViewport component.
+ * Props for the toast viewport component.
  *
- * @property    toasts      Toasts to display, ordered oldest first.
- * @property    onDismiss   Callback invoked when a toast is dismissed or times out.
+ * @remarks     The viewport owns toast presentation and timeout behaviour; callers supply ordered state and a dismissal
+ *              callback.
  *
- * @see         {@link ToastViewport} in `src/features/alerts/components/toast-viewport.tsx`
+ * @property    toasts      Current toast entries, oldest first.
+ * @property    onDismiss   Callback receiving the identifier of the dismissed toast.
+ *
+ * @see         `ToastViewport` in `src/features/alerts/components/toast-viewport.tsx`.
  */
 export interface ToastViewportProps {
     toasts: ToastItem[];
@@ -307,15 +256,17 @@ export interface ToastViewportProps {
 }
 
 /**
- * Values provided through the alert context.
+ * Context value exposed by the alert provider.
  *
- * @property    toasts      Toasts currently displayed.
- * @property    notify      Displays an alert as a toast and logs it according to its registry policy.
+ * @remarks     This lower-level API manages toast notifications. Use `AlertsApi` from `useAlerts` for the combined
+ *              toast and inline presentation API.
+ *
+ * @property    toasts      Toast entries currently on screen.
+ * @property    notify      Adds a toast and logs according to the alert registry.
  * @property    dismiss     Removes one toast by identifier.
- * @property    clear       Removes every toast.
+ * @property    clear       Removes all toast entries.
  *
- * @see         {@link useAlertContext} in `src/features/alerts/client/provider.ts`
- * @see         {@link AlertProvider} in `src/features/alerts/client/provider.ts`
+ * @see         `AlertProvider` in `src/features/alerts/client/provider.ts`.
  */
 export interface AlertContextValue {
     toasts: ToastItem[];
@@ -325,12 +276,15 @@ export interface AlertContextValue {
 }
 
 /**
- * Properties accepted by the alert provider content component.
+ * Props for the provider's content component.
  *
- * @property    children    Application content rendered inside the provider.
- * @property    value       Alert context value supplied to descendants.
+ * @remarks     Internal composition contract: the provider supplies its context value and wraps application children.
+ *              Feature consumers should use `AlertProvider` rather than rendering this component directly.
  *
- * @see         {@link AlertProviderContent} in `src/features/alerts/client/provider.ts`
+ * @property    children  Application subtree rendered inside the provider.
+ * @property    value     Context value supplied by the provider.
+ *
+ * @see         `AlertProviderContent` in `src/features/alerts/components/alert-provider-content.tsx`.
  */
 export interface AlertProviderContentProps {
     children: ReactNode;
@@ -338,18 +292,19 @@ export interface AlertProviderContentProps {
 }
 
 /**
- * Defines the alert presentation API returned by the useAlerts hook.
+ * Combined inline-alert and toast API returned by the `useAlerts` hook.
  *
- * @remarks     Holds one inline alert at a time. Call `clear()` to reset it before a new attempt.
+ * @remarks     Holds at most one inline alert per hook instance. Clear the previous inline state before beginning a new
+ *              submission flow. Toast notifications are delegated to the provider.
  *
- * @property    inline      Current inline alert, or null when none is shown.
- * @property    formAlert   Inline alert associated with the form as a whole.
- * @property    fieldAlert  Returns the inline alert associated with the requested field.
- * @property    present     Routes an alert according to its registered presentation and logs it.
+ * @property    inline      Current inline alert, or `null`.
+ * @property    formAlert   Current inline alert when it has no field association.
+ * @property    fieldAlert  Returns the inline alert associated with a field, or `null`.
+ * @property    present     Routes an alert by its registry presentation and logs it per client policy.
  * @property    clear       Clears the current inline alert.
- * @property    notify      Displays an alert as a toast and logs it.
+ * @property    notify      Displays a toast and logs it per registry policy.
  *
- * @see         {@link useAlerts} in `src/features/alerts/hooks/use-alerts.ts`
+ * @see         `useAlerts` in `src/features/alerts/client/use-alerts.ts`.
  */
 export interface AlertsApi {
     inline: PublicAlert | null;
@@ -361,16 +316,17 @@ export interface AlertsApi {
 }
 
 /**
- * Defines the successful outcome of a server action.
+ * Successful result returned by a safe server action.
  *
- * @typeParam   T       Serializable payload returned by the server action.
+ * @typeParam   T   Serializable payload returned by the action.
  *
- * @property    ok      Discriminant identifying a successful action.
- * @property    data    Payload returned to the caller.
- * @property    [alert] Optional; user-facing confirmation associated with the result.
+ * @remarks     Use as one branch of `ActionResult<T>`. Keep `data` serializable because it crosses the server/client
+ *              boundary.
  *
- * @see         {@link succeed} in `src/features/alerts/result.ts`
- * @see         {@link ActionResult} in `src/features/alerts/result.ts`
+ * @property    ok      Literal success discriminant.
+ * @property    data    Serializable action payload.
+ * @property    [alert] Optional confirmation alert.
+
  */
 export interface ActionSuccess<T> {
     ok: true;
@@ -379,13 +335,12 @@ export interface ActionSuccess<T> {
 }
 
 /**
- * Defines the failed outcome of a server action.
+ * Failed result returned by a safe server action.
  *
- * @property    ok      Discriminant identifying a failed action.
- * @property    alert   User-safe alert describing the failure.
+ * @remarks     Expected failures carry a user-safe `PublicAlert`; internal causes and stack traces remain server-side.
  *
- * @see         {@link fail} in `src/features/alerts/result.ts`
- * @see         {@link ActionResult} in `src/features/alerts/result.ts`
+ * @property    ok      Literal failure discriminant.
+ * @property    alert   User-safe alert describing the expected failure.
  */
 export interface ActionFailure {
     ok: false;

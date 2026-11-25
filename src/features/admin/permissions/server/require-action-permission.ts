@@ -5,7 +5,7 @@
 
 import {ADMIN_ALERT_CODES} from "@/features/admin/constants/alerts";
 import {hasPermission} from "@/features/admin/permissions/queries/has-permission";
-import type {Permission} from "@/features/admin/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {AlertError} from "@/features/alerts/server/alert-error";
 import {requireAuth} from "@/features/auth/server/session";
 import type {AuthSession} from "@/features/auth/server/session";

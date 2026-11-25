@@ -3,7 +3,7 @@
  * @module          features/admin
  */
 
-import {AdminEditUserPageProps, UserIdParams} from "@/features/admin/user-management/types";
+import type {AdminEditUserPageProps} from "@/features/admin/user-management/types";
 import AdminEditUserView from "@/features/admin/user-management/views/admin-edit-user-view";
 
 /**

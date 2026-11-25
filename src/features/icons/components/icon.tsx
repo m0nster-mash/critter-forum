@@ -5,7 +5,7 @@
 
 import {ICON_SIZE, SIZE_MAP, VARIANT_CLASSES} from "@/features/icons/constants/groups";
 import {resolveIcon} from "@/features/icons/registry";
-import {IconProps} from "@/features/icons/types";
+import type {IconProps} from "@/features/icons/types";
 import React, {JSX} from "react";
 
 /**

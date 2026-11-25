@@ -4,7 +4,7 @@
  */
 
 import {ICON_PATHS} from "@/features/alerts/constants/toast-ui";
-import type {AlertSeverity} from "@/features/alerts/types";
+import type {AlertSeverity} from "@/features/alerts/constants/alert-types";
 import Icon from "@/features/icons/components/icon";
 import type {JSX} from "react";
 

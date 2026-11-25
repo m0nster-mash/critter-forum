@@ -1,28 +1,35 @@
-
 /**
- * @fileOverview    Defines shared types for authentication components and registration input.
+ * @fileOverview    Defines authentication form inputs and component contracts.
  * @module          features/auth
+ *
+ * @remarks         Keep auth-specific component props and normalized auth inputs here. Do not place session or
+ *                  authorization contracts here; those are owned by `server/session.ts` and the admin permission
+ *                  feature respectively.
  */
 
 import type {ReactNode} from "react";
 
 /**
- * Properties accepted by authentication flow components.
+ * Shared success callback contract for login and registration flows.
  *
- * @remarks     Shared by the login and registration panels.
+ * @remarks     Use when an auth form component supports a caller-provided success notification or follow-up. The
+ *              callback intentionally carries no payload because the forms own their result handling.
  *
- * @property    [onSuccess]     Optional; callback executed after a successful authentication flow.
+ * @property    [onSuccess]  Optional callback invoked after the authentication flow succeeds.=
  */
 export interface AuthFlowProps {
     onSuccess?: () => void;
 }
 
 /**
- * Properties accepted by the LogoutButton component.
+ * Props for the logout button component.
  *
- * @property    [label]             Optional; custom text displayed on the logout button.
- * @property    [redirectTo]        Optional; route to navigate to after successful logout.
- * @property    [onBeforeLogout]    Optional; callback executed before sign-out is requested.
+ * @remarks     Use for the button-level sign-out control. `onBeforeLogout` may perform synchronous or asynchronous
+ *              preparation; the button owns the actual sign-out operation and navigation.
+ *
+ * @property    [label]             Optional visible button label.
+ * @property    [redirectTo]        Optional route to navigate to after successful sign-out.
+ * @property    [onBeforeLogout]    Optional preparation hook invoked before sign-out.
  */
 export interface LogoutButtonProps {
     label?: string;
@@ -31,12 +38,16 @@ export interface LogoutButtonProps {
 }
 
 /**
- * Properties accepted by the Logout component.
+ * Props for the compositional logout container.
  *
- * @property    [children]          Optional; child elements rendered inside the logout wrapper.
- * @property    [redirectTo]        Optional; route to navigate to after successful logout.
- * @property    [onSuccess]         Optional; callback executed after successful sign-out.
- * @property    [onBeforeLogout]    Optional; callback executed before sign-out is requested.
+ * @remarks     Use when wrapping arbitrary child content with logout behaviour. This is intentionally separate from
+ *              `LogoutButtonProps`: the container supports children and an `onSuccess` callback, while the button
+ *              exposes its own label.
+ *
+ * @property    [children]          Optional content rendered inside the logout container.
+ * @property    [redirectTo]        Optional route to navigate to after successful sign-out.
+ * @property    [onSuccess]         Optional callback executed after successful logout.
+ * @property    [onBeforeLogout]    Optional handler executed before sign-out; may be asynchronous.
  */
 export interface LogoutProps {
     children?: ReactNode;
@@ -46,15 +57,14 @@ export interface LogoutProps {
 }
 
 /**
- * Defines the normalized values required to register a user account.
+ * Normalized registration values shared by client validation and the server action.
  *
- * @remarks     The name and email are trimmed and normalized before validation and account creation.
- * @remarks     The password remains plain text while being passed through the registration action; it must not be
- *              logged.
+ * @remarks     Values are trimmed/normalized before validation. `password` remains plain text only for the duration of
+ *              the form/action request; never log it, persist it directly, or include it in alert/log context.
  *
- * @property    name        Display name supplied during registration.
- * @property    email       Email address supplied during registration.
- * @property    password    Plain-text password supplied for account creation.
+ * @property    name      Normalized display name.
+ * @property    email     Normalized email address.
+ * @property    password  Submitted password, passed to Better Auth for secure handling.
  */
 export interface RegistrationInput {
     name: string;

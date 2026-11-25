@@ -4,7 +4,7 @@
  */
 
 import {hasPermission} from "@/features/admin/permissions/queries/has-permission";
-import type {Permission} from "@/features/admin/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {requireAuth} from "@/features/auth/server/session";
 import {notFound} from "next/navigation";
 

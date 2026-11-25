@@ -7,7 +7,7 @@
 
 import {GlobalErrorListeners} from "@/features/alerts/client/global-error-listeners";
 import {ToastViewport} from "@/features/alerts/components/toast-viewport";
-import {AlertContextValue, AlertProviderContentProps} from "@/features/alerts/types";
+import type {AlertContextValue, AlertProviderContentProps} from "@/features/alerts/types";
 import {createContext} from "react";
 
 /** Provides the alert context to application components. */

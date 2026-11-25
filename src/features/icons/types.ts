@@ -1,7 +1,9 @@
-
 /**
- * @fileOverview    Defines the shared types used by the icon system.
+ * @fileOverview    Defines the public type contracts for the shared SVG icon component.
  * @module          features/icons
+ *
+ * @remarks         Icon names are sourced from the icon registry and size values from the icon constants. Keep
+ *                  accessibility semantics explicit so decorative icons do not accidentally receive redundant labels.
  */
 
 import {ICON_SIZE} from "@/features/icons/constants/groups";
@@ -9,68 +11,61 @@ import type {IconName} from "@/features/icons/registry";
 import type {ComponentType, SVGProps} from "react";
 
 /**
- * Defines the accessibility properties required by an icon.
+ * Mutually exclusive accessibility settings for an icon.
  *
- * @remarks     Non-semantic icons must not receive an accessible label through this property.
- * @remarks     Semantic icons require a descriptive label.
- *
- * @property    semantic    Whether the icon conveys meaningful information to assistive technology.
- * @property    label       Accessible description required for semantic icons.
- *
- * @see         {@link IconProps} in this file
- * @see         {@link Icon} in `src/features/icons/components/icon.tsx`
+ * @remarks     Decorative icons use the default `semantic: false` branch and must not receive a label. Icons that
+ *              convey meaning set `semantic: true` and provide a non-empty accessible label.
  */
-type IconAccessibilityProps =
+export type IconAccessibilityProps =
     | {
-    semantic?: false;
-    label?: never;
-}
+          semantic?: false;
+          label?: never;
+      }
     | {
-    semantic: true;
-    label: string;
-};
+          semantic: true;
+          label: string;
+      };
 
 /**
- * Properties accepted by the Icon component.
+ * Props accepted by the shared SVG `Icon` component.
  *
- * @remarks     Extends native SVG properties while providing icon registry, size, variant, and accessibility options.
+ * @remarks     Inherits standard SVG attributes except explicit width/height, which are controlled by `size`. Prefer a
+ *              registered `name`; use `icon` only when a caller supplies a custom SVG component.
+ *              The string fallback in `name` is retained for compatibility with existing dynamic call sites; new code
+ *              should use `IconName`.
  *
- * @property    icon        Optional; custom SVG component rendered instead of a registry icon.
- * @property    name        Optional; registered icon name to resolve.
- * @property    size        Optional; configured display size.
- * @property    variant     Optional; visual style applied to the icon.
- *
- * @see         {@link Icon} in `src/features/icons/components/icon.tsx`
+ * @property    [icon]      Optional custom SVG component.
+ * @property    [name]      Optional registered icon name; legacy arbitrary strings remain accepted.
+ * @property    [size]      Optional size token from `ICON_SIZE`.
+ * @property    [variant]   Optional semantic colour treatment.
+ * @property    semantic    Whether the icon conveys meaning to assistive technology.
+ * @property    [label]     Required when `semantic` is true; prohibited for decorative icons.
  */
 export type IconProps =
     Omit<SVGProps<SVGSVGElement>, "width" | "height"> &
     IconAccessibilityProps & {
-    icon?: ComponentType<SVGProps<SVGSVGElement>>;
-    name?: IconName | string;
-    size?: IconSize;
-    variant?: IconVariant;
-};
+        icon?: ComponentType<SVGProps<SVGSVGElement>>;
+        name?: IconName | (string & {});
+        size?: IconSize;
+        variant?: IconVariant;
+    };
 
 /**
- * Defines the supported display sizes for icons.
+ * Supported icon display-size tokens.
  *
- * @remarks     Derived from the canonical icon size constants.
- *
- * @see         {@link SIZE_MAP} in `src/features/icons/constants/groups.ts`
- * @see         {@link Icon} in `src/features/icons/components/icon.tsx`
+ * @remarks     Use the constants from `ICON_SIZE` rather than raw dimensions. The icon component maps these tokens to
+ *              its rendered SVG dimensions.
  */
 export type IconSize =
-    typeof ICON_SIZE.SMALL |
-    typeof ICON_SIZE.MEDIUM |
-    typeof ICON_SIZE.LARGE |
-    typeof ICON_SIZE.X_LARGE;
+    | typeof ICON_SIZE.SMALL
+    | typeof ICON_SIZE.MEDIUM
+    | typeof ICON_SIZE.LARGE
+    | typeof ICON_SIZE.X_LARGE;
 
 /**
- * Defines the supported visual variants for icons.
+ * Semantic colour treatments supported by the icon component.
  *
- * @remarks     Used as the key contract for icon variant styling.
- *
- * @see         {@link VARIANT_CLASSES} in `src/features/icons/constants/groups.ts`
- * @see         {@link Icon} in `src/features/icons/components/icon.tsx`
+ * @remarks     This is a visual treatment, not an accessibility role or alert severity. Use `danger` for destructive
+ *              context, `success` for positive context, and `muted` for secondary decoration.
  */
 export type IconVariant = "default" | "accent" | "danger" | "success" | "muted";

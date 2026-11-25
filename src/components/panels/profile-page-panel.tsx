@@ -1,16 +1,16 @@
 /**
- * @fileOverview    The private dashboard panel content.
+ * @fileOverview    The private user profile panel content.
  * @module          core-application
  *
  * @status          Requires full replacement
  * @TODO            Replace content with proper dashboard page at a later date
  */
 
-import {UserSummary} from "@/features/users/types";
-import React, {JSX} from "react";
+import type {UserProfileProps} from "@/lib/types";
+import type {JSX} from "react";
 
 /**
- * Renders the private / members-only dashboard panel view.
+ * Renders the signed-in user profile panel.
  *
  * @TODO        Replace content with proper dashboard page at a later date
  *
@@ -18,20 +18,15 @@ import React, {JSX} from "react";
  *
  * @returns     {JSX.Element}   The rendered dashboard panel JSX element.
  */
-export function ProfilePagePanel({id, name, email}: UserSummary): JSX.Element {
+export function ProfilePagePanel({user}: UserProfileProps): JSX.Element {
 
     return (
         <main>
-            <h1>{name}</h1>
+            <h1>{user.name}</h1>
 
             <dl>
                 <dt>User ID</dt>
-                <dd>{id}</dd>
-            </dl>
-
-            <dl>
-                <dt>Email</dt>
-                <dd>{email}</dd>
+                <dd>{user.id}</dd>
             </dl>
         </main>
     );

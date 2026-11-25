@@ -3,7 +3,7 @@
  * @module          features/alerts
  */
 
-import type {AlertSeverity} from "@/features/alerts/types";
+import type {AlertSeverity} from "@/features/alerts/constants/alert-types";
 
 /** Maximum number of simultaneously visible toasts. The oldest is dropped. */
 export const MAX_VISIBLE_TOASTS = 4;

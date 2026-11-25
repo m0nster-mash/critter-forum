@@ -3,7 +3,7 @@
  * @module          core-application
  */
 
-import {UserSummary} from "@/features/users/types";
+import type {AccountSettingsProps} from "@/lib/types";
 import {JSX} from "react";
 
 /**
@@ -13,7 +13,7 @@ import {JSX} from "react";
  *
  * @returns     {JSX.Element}   The rendered dashboard panel JSX element.
  */
-export function ManageAccountPasswordPanel({id}: UserSummary): JSX.Element {
+export function ManageAccountPasswordPanel({user}: AccountSettingsProps): JSX.Element {
 
     return (
         <section>

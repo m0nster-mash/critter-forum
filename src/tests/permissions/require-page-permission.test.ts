@@ -8,7 +8,7 @@
  */
 
 import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
-import type {Permission} from "@/features/admin/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";

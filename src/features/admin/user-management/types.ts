@@ -1,51 +1,22 @@
-
 /**
- * @fileOverview    Defines shared types for the admin user-management feature.
+ * @fileOverview    Defines Next.js route props for admin user-management pages.
  * @module          features/admin/user-management
+ *
+ * @remarks         These types describe framework page boundaries only. Resolved identifiers and component props are
+ *                  declared in `src/features/admin/permissions/types.ts`.
  */
 
-import type {UserSummary} from "@/features/users/types";
-
 /**
- * Properties passed into the AdminUserManagementPanel component.
+ * Props supplied to the admin edit-user route.
  *
- * @remarks     Provides the collection of user records displayed in the admin user-management table.
+ * @remarks     Next.js provides dynamic route params asynchronously in this project. Await `params` in the page and
+ *              pass the resolved `userId` to `AdminEditUserView`; do not use this type for ordinary components.
  *
- * @property    users   User summary records rendered in the management table.
- */
-export interface AdminUserManagementPanelProps {
-    users: UserSummary[];
-}
-
-/**
- * Properties passed into the AdminEditUserPanel component.
+ * @property    params  Promise resolving to the dynamic user identifier.
  *
- * @remarks     Provides the selected user's summary data for the admin editing interface.
- *
- * @property    user    User summary record displayed by the edit panel.
- */
-export interface AdminEditUserPanelProps {
-    user: UserSummary;
-}
-
-/**
- * Dynamic route parameters identifying a user-management record.
- *
- * @remarks     Shared by the admin edit view and the user lookup query so both use the same parameter contract.
- *
- * @property    userId  Unique identifier of the user being retrieved or edited.
- */
-export interface UserIdParams {
-    userId: string;
-}
-
-/**
- * Properties accepted by the admin edit-user route page.
- *
- * @remarks     Next.js supplies route parameters asynchronously.
- *
- * @property    params  Promise resolving to the dynamic user route parameters.
+ * @see         `src/app/admin/users/[userId]/edit/page.tsx`.
+ * @see         `AdminEditUserViewProps` in `src/features/admin/permissions/types.ts`.
  */
 export interface AdminEditUserPageProps {
-    params: Promise<UserIdParams>;
+    params: Promise<{userId: string}>;
 }

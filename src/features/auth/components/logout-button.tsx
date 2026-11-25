@@ -11,10 +11,10 @@ import {alertFromThrown} from "@/features/alerts/from-thrown";
 import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {AUTH_REDIRECT} from "@/features/auth/constants/navigation";
 import {AUTH_LABELS} from "@/features/auth/constants/ui";
-import {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
+import type {LogoutButtonProps, LogoutProps} from "@/features/auth/types";
 import {signOut} from "@/lib/auth-client";
 import {useRouter} from "next/navigation";
-import {JSX, type MouseEvent, useState} from "react";
+import {type JSX, type MouseEvent, useState} from "react";
 
 /**
  * Renders a stylized button component that triggers user sign-out when clicked.

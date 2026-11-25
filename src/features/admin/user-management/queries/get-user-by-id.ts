@@ -3,18 +3,17 @@
  * @module          core-application
  */
 
-import {UserIdParams} from "@/features/admin/user-management/types";
+import type {GetSelectedUserProps} from "@/features/admin/permissions/types";
 import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
-
 
 /**
  * TODO:: document
  * @param       userId  TODO:: document
  * @return      TODO:: document
  */
-export async function getUserById({userId}: UserIdParams) {
+export async function getUserById({userId}: GetSelectedUserProps) {
 
     return await db
         .select({

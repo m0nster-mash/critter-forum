@@ -4,7 +4,7 @@
  */
 
 import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
-import type {Permission} from "@/features/admin/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
 
 /** Access levels supported by application routes. */
 export type AccessLevel = "public" | "private" | "admin";

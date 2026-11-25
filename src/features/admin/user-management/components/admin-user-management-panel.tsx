@@ -3,7 +3,7 @@
  * @module          features/admin
  */
 
-import {AdminUserManagementPanelProps} from "@/features/admin/user-management/types";
+import type {UserManagementPageProps} from "@/features/admin/permissions/types";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import Link from "next/link";
@@ -16,7 +16,7 @@ import React from "react";
  *
  * @return    TODO:: document
  */
-export default async function AdminUserManagementPanel({users}: AdminUserManagementPanelProps) {
+export default async function AdminUserManagementPanel({users}: UserManagementPageProps) {
     return (
         <>
             <table>
