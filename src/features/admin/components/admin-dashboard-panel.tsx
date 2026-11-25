@@ -9,7 +9,7 @@ import Link from "next/link";
 import React from "react";
 
 /**
- * Displays the {@link AdminDashboardPanel}
+ * Displays the AdminDashboardPanel, used by `/admin/`.
  */
 export default async function AdminDashboardPanel() {
 

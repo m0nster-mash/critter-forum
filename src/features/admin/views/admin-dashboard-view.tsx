@@ -9,9 +9,9 @@ import {ADMIN_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 
 /**
- * Displays the {@link AdminDashboardPageView}
+ * Displays the {@link AdminDashboardView}
  */
-export default async function AdminDashboardPageView() {
+export default async function AdminDashboardView() {
 
     return (
         <>

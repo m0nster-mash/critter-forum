@@ -4,7 +4,7 @@
  */
 
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
-import AdminDashboardPageView from "@/features/admin/views/admin-dashboard-page-view";
+import AdminDashboardView from "@/features/admin/views/admin-dashboard-view";
 import AdminUserManagementView from "@/features/admin/views/admin-user-management-view";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 import {db} from "@/lib/db/auth/db";

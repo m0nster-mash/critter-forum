@@ -84,7 +84,7 @@ export const ADMIN_ROUTES = {
     } as const satisfies RouteMetadata,
 
     USERS_EDIT: {
-        path: "/admin/users",
+        path: (params) => `/admin/${params.userId}/edit`,
         label: "Edit User",
         title: "Edit User",
         accessLevel: "admin",
