@@ -1,12 +1,10 @@
 /**
  * @fileOverview    Provides helpers for resolving route paths and page metadata.
  * @module          core-application
- *
- * @TODO            Migrate into navigation feature package
  */
 
 import {MISSING_ROUTE_PARAMS, RouteMetadata} from "@/lib/constants/routes";
-import {getBreadcrumbs} from "@/lib/utilities/breadcrumb-utils";
+import {getBreadcrumbs} from "@/features/navigation/utilities/breadcrumb-utils";
 
 /**
  * Resolves a route path definition into a static URL string.

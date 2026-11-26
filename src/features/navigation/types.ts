@@ -37,8 +37,6 @@ export interface PageHeaderProps {
  * @remarks     Use when rendering breadcrumbs independently of `PageHeader`. The list is required so the component
  *              never has to infer navigation state.
  *
- * @TODO         Migrate into feature package
- *
  * @property    breadcrumb  Ordered entries to render in the navigation trail.
  */
 export interface BreadcrumbProps {
