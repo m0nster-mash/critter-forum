@@ -1,30 +1,36 @@
 /**
  * @fileOverview    Admin user management panel component
- * @module          features/admin
+ * @module          features/admin/user-management
  */
 
 import type {UserManagementPageProps} from "@/features/admin/permissions/types";
-import {ADMIN_ROUTES} from "@/lib/constants/routes";
+import {ADMIN_LABELS} from "@/features/admin/user-management/constants/ui";
+import {ADMIN_ROUTES, PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import Link from "next/link";
-import React from "react";
+import React, {JSX} from "react";
 
 /**
- * Displays the {@link AdminUserManagementPanel}
+ * Renders the admin user-management panel showing a table of users with profile and edit links.
  *
- * @param users    TODO:: document
+ * @remarks     Each user row links to the user's profile and the admin edit page, separated by a divider;
+ *              when there are no users, an empty-state row is rendered instead.
+ * @remarks     This is a React Server Component: it receives resolved user summaries as props and performs
+ *              no data fetching itself.
  *
- * @return    TODO:: document
+ * @param       users  Users to display in the management table.
+ *
+ * @returns     {JSX.Element}   The user-management panel JSX element.
  */
-export default async function AdminUserManagementPanel({users}: UserManagementPageProps) {
+export default async function AdminUserManagementPanel({users}: UserManagementPageProps): Promise<JSX.Element> {
     return (
         <>
             <table>
                 <thead>
                 <tr>
-                    <th>User name</th>
-                    <th>Email</th>
-                    <th>Actions</th>
+                    <th>{ADMIN_LABELS.NAME}</th>
+                    <th>{ADMIN_LABELS.EMAIL}</th>
+                    <th>{ADMIN_LABELS.ACTIONS}</th>
                 </tr>
                 </thead>
 
@@ -35,10 +41,10 @@ export default async function AdminUserManagementPanel({users}: UserManagementPa
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>
-                                <Link href={`/admin/users/${encodeURIComponent(user.id)}/profile`}>
-                                    View
+                                <Link href={resolvePath(PRIVATE_ROUTES.PROFILE, {userId: user.id})}>
+                                    {PRIVATE_ROUTES.PROFILE.label}
                                 </Link>
-                                {" | "}
+                                {ADMIN_LABELS.DIVIDER}
                                 <Link href={resolvePath(ADMIN_ROUTES.USERS_EDIT, {userId: user.id})}>
                                     {ADMIN_ROUTES.USERS_EDIT.label}
                                 </Link>
@@ -47,7 +53,7 @@ export default async function AdminUserManagementPanel({users}: UserManagementPa
                     ))
                 ) : (
                     <tr>
-                        <td colSpan={4}>No users found.</td>
+                        <td colSpan={4}>{ADMIN_LABELS.NO_USERS}</td>
                     </tr>
                 )}
                 </tbody>

@@ -6,13 +6,15 @@
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import {LOGGER_MESSAGES} from "@/features/alerts/constants/observability";
 import {logger} from "@/features/alerts/server/logger";
-import {sendVerificationEmail} from "@/features/auth/server/email";
+import {AUTH_LOG_MESSAGES} from "@/features/auth/constants/logging";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
+import {AUTH_SCOPES} from "@/features/auth/constants/scope";
+import {sendVerificationEmail} from "@/features/auth/server/email";
 import {db} from "@/lib/db/auth/db";
 import {drizzleAdapter} from "@better-auth/drizzle-adapter";
 import {betterAuth} from "better-auth";
 
-const authEmailLogger = logger.child({scope: "auth.email"});
+const authEmailLogger = logger.child({scope: AUTH_SCOPES.AUTH_EMAIL});
 
 /**
  * Better Auth configuration.
@@ -37,7 +39,10 @@ export const auth = betterAuth({
         sendVerificationEmail: async ({user, url}) => {
             // Do not delay the authentication response while the email provider responds.
             void sendVerificationEmail(user.email, url).catch((err: unknown) => {
-                authEmailLogger.error("Failed to send email verification.", {err});
+                authEmailLogger.error(
+                    AUTH_LOG_MESSAGES.EMAIL_VERIFICATION_FAILED,
+                    {err},
+                );
             });
         },
     },

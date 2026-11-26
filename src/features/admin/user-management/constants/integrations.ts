@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines integration identifiers used by the admin feature.
- * @module          features/admin
+ * @module          features/admin/user-management
  */
 
 /** Stable identifiers for administrative server actions. */

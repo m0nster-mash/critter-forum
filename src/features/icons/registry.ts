@@ -12,6 +12,7 @@ import XCircleICon from "@/components/icons/x-circle-fill.svg";
 import XIcon from "@/components/icons/x.svg";
 import {clientLogger} from "@/features/alerts/client/logger";
 import {UI_ICONS} from "@/features/icons/constants/groups";
+import {ICON_ALERTS, ICON_SCOPES} from "@/features/icons/constants/observability";
 import {type ComponentType, type SVGProps} from "react";
 
 /**
@@ -54,18 +55,11 @@ export function resolveIcon(
     if (!iconName || !(iconName in ICON_REGISTRY)) {
         if (iconName) {
             clientLogger.warn(
-                `[IconRegistry] Icon name "${iconName}" not found in registry. Using fallback "${fallback}".`,
-                {scope: "icon.registry"}
+                ICON_ALERTS.ICON_NOT_FOUND.message(iconName, fallback),
+                {scope: ICON_SCOPES.ICON_REGISTRY}
             );
         }
         return ICON_REGISTRY[fallback];
     }
     return ICON_REGISTRY[iconName as IconName];
-}
-
-/**
- * Utility to retrieve an array of all registered icon names.
- */
-export function getAvailableIcons(): IconName[] {
-    return Object.keys(ICON_REGISTRY) as IconName[];
 }

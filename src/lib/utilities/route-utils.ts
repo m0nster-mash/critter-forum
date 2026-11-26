@@ -3,8 +3,8 @@
  * @module          core-application
  */
 
+import {getBreadcrumbs} from "@/features/navigation/utilities/breadcrumb-utils";
 import {MISSING_ROUTE_PARAMS, RouteMetadata} from "@/lib/constants/routes";
-import {getBreadcrumbs} from "@/lib/utilities/breadcrumb-utils";
 
 /**
  * Resolves a route path definition into a static URL string.

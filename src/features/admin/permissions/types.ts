@@ -7,7 +7,7 @@
  *                  feature.
  */
 
-import type {UserSummary} from "@/lib/types";
+import {UserSummary} from "@/features/users/types";
 
 export type {Permission} from "@/features/admin/permissions/constants/permissions";
 

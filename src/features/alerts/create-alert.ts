@@ -3,10 +3,10 @@
  * @module          features/alerts
  */
 
-import {ALERT_TEMPLATE_PATTERNS} from "@/features/alerts/constants/templates";
 import type {AlertCode} from "@/features/alerts/registry";
 import {ALERT_REGISTRY, FALLBACK_ALERT_CODE} from "@/features/alerts/registry";
 import type {AlertDefinition, AlertOverrides, PublicAlert} from "@/features/alerts/types";
+import {ALERT_TEMPLATE_PATTERNS} from "@/lib/constants/regex";
 
 /**
  * Type guard confirming a string is a registered alert code.

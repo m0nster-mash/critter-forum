@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Returns all users.
- * @module          core-application
+ * @module          features/admin/user-management
  */
 
 import {db} from "@/lib/db/auth/db";
@@ -8,8 +8,9 @@ import {user} from "@/lib/db/auth/schema";
 import {asc} from "drizzle-orm";
 
 /**
- * TODO:: document
- * @return      TODO:: document
+ * Returns all users.
+ *
+ * @returns      All users
  */
 export async function getAllUsers() {
 

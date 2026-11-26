@@ -1,6 +1,8 @@
 /**
  * @fileOverview    Defines route metadata, access levels, and the application route registry.
  * @module          core-application
+ *
+ * @TODO            We do not need both 'label' and 'title'; condense into single key
  */
 
 import type {Permission} from "@/features/admin/permissions/constants/permissions";
@@ -16,7 +18,7 @@ export type AccessLevel = "public" | "private" | "admin";
  * @property    label           Human-readable navigation label for the route.
  * @property    title           Page title associated with the route.
  * @property    accessLevel     Access classification required to visit the route.
- * @property    parent          Optional;   Value used by this parent operation.
+ * @property    parent          Optional; value used by this parent operation.
  * @property    [permission]    Optional; the permission required to visit the route. Enforced by the page itself with
  *                              `requirePagePermission`.
  */

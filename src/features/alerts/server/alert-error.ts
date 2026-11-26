@@ -45,7 +45,7 @@ export class AlertError extends Error {
 }
 
 /**
- * Type guard for AlertError.
+ * Type guard for {@link AlertError}.
  *
  * @remarks     Uses a brand property rather than `instanceof`, so it keeps working if the module is ever instantiated
  *              twice by the bundler.

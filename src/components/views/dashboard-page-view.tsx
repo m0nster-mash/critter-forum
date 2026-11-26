@@ -6,7 +6,7 @@
 "use client";
 
 import {DashboardPagePanel} from "@/components/panels/dashboard-page-panel";
-import {PageHeader} from "@/components/ui/page-header";
+import {PageHeader} from "@/features/navigation/components/page-header";
 import {useSession} from "@/lib/auth-client";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";

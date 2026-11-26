@@ -7,8 +7,8 @@
  */
 
 import layoutStyle from "@/components/styles/layout.module.css";
-import {BREADCRUMBS} from "@/lib/constants/breadcrumbs";
-import type {BreadcrumbProps} from "@/lib/types";
+import {BREADCRUMBS} from "@/features/navigation/constants/breadcrumbs";
+import {BreadcrumbProps} from "@/features/navigation/types";
 import Link from "next/link";
 import {Fragment, JSX} from "react";
 

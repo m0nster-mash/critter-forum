@@ -1,5 +1,5 @@
+import {getBreadcrumbs} from "@/features/navigation/utilities/breadcrumb-utils";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
-import {getBreadcrumbs} from "@/lib/utilities/breadcrumb-utils";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 

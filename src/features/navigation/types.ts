@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines shared types for application navigation and page header components.
- * @module          components/ui
+ * @module          features/navigation
  */
 
 import type {ReactNode} from "react";
@@ -29,4 +29,16 @@ export interface BreadcrumbItem {
 export interface PageHeaderProps {
     title: ReactNode;
     breadcrumb?: BreadcrumbItem[];
+}
+
+/**
+ * Props for the shared breadcrumbs component.
+ *
+ * @remarks     Use when rendering breadcrumbs independently of `PageHeader`. The list is required so the component
+ *              never has to infer navigation state.
+ *
+ * @property    breadcrumb  Ordered entries to render in the navigation trail.
+ */
+export interface BreadcrumbProps {
+    breadcrumb: BreadcrumbItem[];
 }

@@ -8,6 +8,7 @@
 import {ADMIN_ALERT_CODES} from "@/features/admin/constants/alerts";
 import type {UserEditPageProps} from "@/features/admin/permissions/types";
 import {updateUserAction} from "@/features/admin/user-management/actions/update-user-action";
+import {ADMIN_LABELS, FIELD_NAMES, USER_FORM_IDS} from "@/features/admin/user-management/constants/ui";
 import {validateUserUpdate} from "@/features/admin/user-management/validation";
 import {useAlerts} from "@/features/alerts/client/use-alerts";
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
@@ -15,14 +16,6 @@ import {createAlert} from "@/features/alerts/create-alert";
 import {alertFromThrown} from "@/features/alerts/from-thrown";
 import {useRouter} from "next/navigation";
 import {JSX, type SubmitEvent, useState} from "react";
-
-/** HTML IDs used by the edit-user form and its field alerts. */
-const USER_FORM_IDS = {
-    NAME: "edit-user-name",
-    EMAIL: "edit-user-email",
-    ALERT_NAME: "edit-user-name-alert",
-    ALERT_EMAIL: "edit-user-email-alert",
-} as const;
 
 /**
  * Displays the AdminEditUserPanel, used by `admin/[userId]/edit`.
@@ -40,8 +33,8 @@ export default function AdminEditUserPanel({user}: UserEditPageProps): JSX.Eleme
     const [email, setEmail] = useState(user.email);
     const [loading, setLoading] = useState(false);
 
-    const nameAlert = fieldAlert("name");
-    const emailAlert = fieldAlert("email");
+    const nameAlert = fieldAlert(FIELD_NAMES.NAME);
+    const emailAlert = fieldAlert(FIELD_NAMES.EMAIL);
 
     async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -90,7 +83,7 @@ export default function AdminEditUserPanel({user}: UserEditPageProps): JSX.Eleme
 
             <form onSubmit={handleSubmit} noValidate>
                 <div>
-                    <label htmlFor={USER_FORM_IDS.NAME}>Name</label>
+                    <label htmlFor={USER_FORM_IDS.NAME}>{ADMIN_LABELS.NAME}</label>
 
                     <input id={USER_FORM_IDS.NAME}
                            type="text"
@@ -108,7 +101,7 @@ export default function AdminEditUserPanel({user}: UserEditPageProps): JSX.Eleme
                 </div>
 
                 <div>
-                    <label htmlFor={USER_FORM_IDS.EMAIL}>Email</label>
+                    <label htmlFor={USER_FORM_IDS.EMAIL}>{ADMIN_LABELS.EMAIL}</label>
 
                     <input id={USER_FORM_IDS.EMAIL}
                            type="email"
@@ -128,7 +121,7 @@ export default function AdminEditUserPanel({user}: UserEditPageProps): JSX.Eleme
                 <div>
                     <button type="submit"
                             disabled={loading}>
-                        {loading ? "Saving..." : "Save Changes"}
+                        {loading ? ADMIN_LABELS.SAVING : ADMIN_LABELS.SAVE_CHANGES}
                     </button>
                 </div>
             </form>

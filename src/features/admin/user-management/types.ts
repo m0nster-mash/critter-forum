@@ -1,4 +1,9 @@
 /**
+ * @fileOverview    Defines admin-area type and interface exports
+ * @module          features/admin/user-management
+ */
+
+/**
  * Input used to update a user's editable account details.
  *
  * @property userId  Identifier of the user being updated.

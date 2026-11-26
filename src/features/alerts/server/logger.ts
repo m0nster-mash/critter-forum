@@ -31,7 +31,7 @@ export type {LogContext, Logger};
  *
  * @param       key         The logged JSON key to search for
  *
- * @return      {boolean}   `true` if the `key` is found within the array, or else `false`.
+ * @returns     {boolean}   `true` if the `key` is found within the array, or else `false`.
  */
 function isReservedJsonKey(key: string): key is (typeof LOGGER_RESERVED_JSON_KEYS)[number] {
 

@@ -20,7 +20,7 @@ import {headers} from "next/headers";
 /**
  * Server action that registers a new user account using email and password credentials.
  *
- * @return  The value produced by this operation.
+ * @returns The value produced by this operation.
  */
 export const registerAccountAction = safeAction(
     AUTH_ACTION_NAMES.REGISTER, async (input: RegistrationInput) => {

@@ -3,7 +3,6 @@
  * @module          core-application
  *
  * @status          Requires refactoring
- * @TODO            Migrate `metadata` content into global-level constants
  * @TODO            Replace content with proper layout at a later date
  */
 

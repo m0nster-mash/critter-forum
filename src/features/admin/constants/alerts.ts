@@ -7,8 +7,10 @@ import type {AlertDefinition} from "@/features/alerts/types";
 
 /** Stable identifiers for administrative alerts. */
 export const ADMIN_ALERT_CODES = {
+    // Permissions Codes
     PERMISSION_DENIED: "ADMIN_PERMISSION_DENIED",
 
+    // User Management Codes
     USER_UPDATED: "ADMIN_USER_UPDATED",
     USER_NAME_REQUIRED: "ADMIN_USER_NAME_REQUIRED",
     USER_EMAIL_INVALID: "ADMIN_USER_EMAIL_INVALID",

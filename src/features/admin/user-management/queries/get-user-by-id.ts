@@ -1,17 +1,19 @@
 /**
  * @fileOverview    Returns the user data for a selected user, based on the provider user ID.
- * @module          core-application
+ * @module          features/admin/user-management
  */
 
-import type {GetSelectedUserProps} from "@/features/admin/permissions/types";
+import {GetSelectedUserProps} from "@/features/admin/permissions/types";
 import {db} from "@/lib/db/auth/db";
 import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
 
 /**
- * TODO:: document
- * @param       userId  TODO:: document
- * @return      TODO:: document
+ * Returns the user data for a selected user, based on the provider user ID.
+ *
+ * @param       userId  The ID of the desired user
+ *
+ * @returns     The user data for a selected user, based on the provider user ID.
  */
 export async function getUserById({userId}: GetSelectedUserProps) {
 
