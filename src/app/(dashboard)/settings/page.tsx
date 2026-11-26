@@ -3,7 +3,7 @@
  * @module          features/auth
  */
 
-import SettingsPageView from "@/components/views/settings-page-view";
+import SettingsPageView from "@/features/users/views/settings-page-view";
 
 /**
  * Displays the SettingsPageView.

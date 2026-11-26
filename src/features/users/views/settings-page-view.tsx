@@ -5,8 +5,8 @@
 
 "use client";
 
-import {ManageAccountPasswordPanel} from "@/components/panels/manage-account-password-panel";
-import {ManageProfileDetailsPanel} from "@/components/panels/manage-profile-details-panel";
+import {ManageAccountPasswordPanel} from "@/features/users/components/manage-account-password-panel";
+import {ManageProfileDetailsPanel} from "@/features/users/components/manage-profile-details-panel";
 import {PageHeader} from "@/components/ui/page-header";
 import {useSession} from "@/lib/auth-client";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";

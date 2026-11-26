@@ -3,7 +3,7 @@
  * @module          core-application
  */
 
-import {ProfilePagePanel} from "@/components/panels/profile-page-panel";
+import {ProfilePagePanel} from "@/features/users/components/profile-page-panel";
 import {PageHeader} from "@/components/ui/page-header";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import type {UserProfileProps} from "@/lib/types";
