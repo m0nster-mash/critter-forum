@@ -8,10 +8,10 @@
 import {useAlerts} from "@/features/alerts/client/use-alerts";
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {createAlert} from "@/features/alerts/create-alert";
+import {AUTH_ERROR_CODES} from "@/features/auth/constants/errors";
 import {readAuthError} from "@/features/auth/utilities/auth-errors";
 import {USER_ALERT_CODES} from "@/features/users/constants/alerts";
 import {getUserAlertElementId, USER_ELEMENT_IDS} from "@/features/users/constants/elements";
-import {AUTH_ERROR_CODES} from "@/features/users/constants/errors";
 import {USER_FIELDS} from "@/features/users/constants/fields";
 import {USER_UI_TEXT} from "@/features/users/constants/ui";
 import type {UserSettingsPanelProps} from "@/features/users/types";

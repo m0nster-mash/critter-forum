@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Provides the breadcrumb utils functionality used by the application.
  * @module          core-application
- *
- * @TODO            Migrate into navigation feature package
  */
 
 import {ALL_ROUTES, RouteMetadata} from "@/lib/constants/routes";
