@@ -1,19 +1,23 @@
 /**
- * @fileOverview    Defines Next.js route props for admin user-management pages.
- * @module          features/admin/user-management
+ * Input used to update a user's editable account details.
  *
- * @remarks         These types describe framework page boundaries only. Resolved identifiers and component props are
- *                  declared in `src/features/admin/permissions/types.ts`.
+ * @property userId  Identifier of the user being updated.
+ * @property name    Updated username.
+ * @property email   Updated email address.
  */
+export interface UpdateUserInput {
+    userId: string;
+    name: string;
+    email: string;
+}
 
 /**
- * Props supplied to the admin edit-user route.
+ * Input used to find a user by email, optionally excluding one user.
  *
- * @remarks     Next.js provides dynamic route params asynchronously in this project. Await `params` in the page and
- *              pass the resolved `userId` to `AdminEditUserView`; do not use this type for ordinary components.
- *
- * @property    params  Promise resolving to the dynamic user identifier.
+ * @property email          Email address to look up.
+ * @property excludeUserId  User ID to exclude from the lookup.
  */
-export interface AdminEditUserPageProps {
-    params: Promise<{ userId: string }>;
+export interface GetUserByEmailProps {
+    email: string;
+    excludeUserId?: string;
 }

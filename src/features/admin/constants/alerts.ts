@@ -8,6 +8,12 @@ import type {AlertDefinition} from "@/features/alerts/types";
 /** Stable identifiers for administrative alerts. */
 export const ADMIN_ALERT_CODES = {
     PERMISSION_DENIED: "ADMIN_PERMISSION_DENIED",
+
+    USER_UPDATED: "ADMIN_USER_UPDATED",
+    USER_NAME_REQUIRED: "ADMIN_USER_NAME_REQUIRED",
+    USER_EMAIL_INVALID: "ADMIN_USER_EMAIL_INVALID",
+    USER_EMAIL_TAKEN: "ADMIN_USER_EMAIL_TAKEN",
+    USER_NOT_FOUND: "ADMIN_USER_NOT_FOUND",
 } as const;
 
 /**
@@ -21,6 +27,40 @@ export const ADMIN_ALERTS = {
         severity: "warn",
         message: "You don't have permission to perform this action.",
         presentation: "toast",
+        log: {server: false, client: false},
+    },
+
+    ADMIN_USER_UPDATED: {
+        severity: "success",
+        message: "User details have been updated.",
+        presentation: "toast",
+        log: {server: "info", client: false},
+    },
+    ADMIN_USER_NAME_REQUIRED: {
+        severity: "warn",
+        message: "Please enter a name.",
+        presentation: "inline",
+        field: "name",
+        log: {server: false, client: false},
+    },
+    ADMIN_USER_EMAIL_INVALID: {
+        severity: "warn",
+        message: "Please enter a valid email address.",
+        presentation: "inline",
+        field: "email",
+        log: {server: false, client: false},
+    },
+    ADMIN_USER_EMAIL_TAKEN: {
+        severity: "error",
+        message: "An account with that email address already exists.",
+        presentation: "inline",
+        field: "email",
+        log: {server: false, client: false},
+    },
+    ADMIN_USER_NOT_FOUND: {
+        severity: "warn",
+        message: "The selected user could not be found.",
+        presentation: "inline",
         log: {server: false, client: false},
     },
 } as const satisfies Record<string, AlertDefinition>;
