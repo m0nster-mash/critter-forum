@@ -9,7 +9,7 @@ import {user} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";
 
 /**
- * Updates a user's name and email address.
+ * Updates a user's display name. Email addresses are managed by Better Auth's verified change-email flow.
  *
  * @param input  The user identifier and updated account details.
  *
@@ -18,15 +18,11 @@ import {eq} from "drizzle-orm";
 export async function updateUser({
                                      userId,
                                      name,
-                                     email,
                                  }: UpdateUserInput) {
 
     const [updatedUser] = await db
         .update(user)
-        .set({
-            name,
-            email,
-        })
+        .set({name})
         .where(eq(user.id, userId))
         .returning({
             id: user.id,

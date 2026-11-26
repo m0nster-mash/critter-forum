@@ -4,10 +4,13 @@
  */
 
 import DashboardPageView from "@/components/views/dashboard-page-view";
+import {requireAuth} from "@/features/auth/server/session";
 
 /**
  * Displays the DashboardPageView
  */
-export default function DashboardPage() {
+export default async function DashboardPage() {
+
+    await requireAuth();
     return <DashboardPageView/>;
 }

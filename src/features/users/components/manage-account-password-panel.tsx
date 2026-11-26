@@ -15,7 +15,6 @@ import {USER_ALERT_CODES, USER_ALERTS} from "@/features/users/constants/alerts";
 import {getUserAlertElementId, USER_ELEMENT_IDS} from "@/features/users/constants/elements";
 import {USER_FIELDS} from "@/features/users/constants/fields";
 import {USER_UI_TEXT} from "@/features/users/constants/ui";
-import type {UserSettingsPanelProps} from "@/features/users/types";
 import {validatePasswordChange} from "@/features/users/validation";
 import {authClient} from "@/lib/auth-client";
 import {JSX, type SubmitEvent, useState} from "react";
@@ -23,13 +22,9 @@ import {JSX, type SubmitEvent, useState} from "react";
 /**
  * Renders the current user's password settings.
  *
- * @param _props - User settings panel properties.
- *
  * @returns      The rendered password settings panel.
  */
-export function ManageAccountPasswordPanel(
-    _props: UserSettingsPanelProps,
-): JSX.Element {
+export function ManageAccountPasswordPanel(): JSX.Element {
 
     const alerts = useAlerts();
 

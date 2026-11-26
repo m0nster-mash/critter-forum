@@ -28,7 +28,7 @@ export default function SettingsPageView(): JSX.Element | null {
         <>
             <PageHeader {...getPageHeaderProps(PRIVATE_ROUTES.DASHBOARD)}/>
             <ManageProfileDetailsPanel user={session.user}/>
-            <ManageAccountPasswordPanel user={session.user}/>
+            <ManageAccountPasswordPanel/>
         </>
     );
 }

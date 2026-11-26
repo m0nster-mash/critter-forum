@@ -59,7 +59,8 @@ export const AUTH_ALERTS = {
 
     AUTH_REGISTER_SUCCESS: {
         severity: "success",
-        message: "Your account has been created.",
+        message: "Your account has been created. Check your inbox for a verification link; " +
+            "if it does not arrive, check your spam folder.",
         presentation: "toast",
         log: {server: "info", client: false},
     },

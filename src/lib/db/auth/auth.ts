@@ -13,6 +13,7 @@ import {sendVerificationEmail} from "@/features/auth/server/email";
 import {db} from "@/lib/db/auth/db";
 import {drizzleAdapter} from "@better-auth/drizzle-adapter";
 import {betterAuth} from "better-auth";
+import {after} from "next/server";
 
 const authEmailLogger = logger.child({scope: AUTH_SCOPES.AUTH_EMAIL});
 
@@ -36,13 +37,19 @@ export const auth = betterAuth({
     },
 
     emailVerification: {
+        sendOnSignUp: true,
         sendVerificationEmail: async ({user, url}) => {
-            // Do not delay the authentication response while the email provider responds.
-            void sendVerificationEmail(user.email, url).catch((err: unknown) => {
-                authEmailLogger.error(
-                    AUTH_LOG_MESSAGES.EMAIL_VERIFICATION_FAILED,
-                    {err},
-                );
+            // Email delivery must not delay sign-up or expose provider timing. Next tracks this post-response task.
+            // Better Auth intentionally treats delivery failure as separate from successful account creation.
+            after(async () => {
+                try {
+                    await sendVerificationEmail(user.email, url);
+                } catch (err: unknown) {
+                    authEmailLogger.error(
+                        AUTH_LOG_MESSAGES.EMAIL_VERIFICATION_FAILED,
+                        {err},
+                    );
+                }
             });
         },
     },

@@ -30,11 +30,9 @@ export default function AdminEditUserPanel({user}: UserEditPageProps): JSX.Eleme
     const {present, clear, formAlert, fieldAlert} = useAlerts();
 
     const [name, setName] = useState(user.name);
-    const [email, setEmail] = useState(user.email);
     const [loading, setLoading] = useState(false);
 
     const nameAlert = fieldAlert(FIELD_NAMES.NAME);
-    const emailAlert = fieldAlert(FIELD_NAMES.EMAIL);
 
     async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -43,7 +41,6 @@ export default function AdminEditUserPanel({user}: UserEditPageProps): JSX.Eleme
         const input = {
             userId: user.id,
             name: name.trim(),
-            email: email.trim().toLowerCase(),
         };
 
         const invalid = validateUserUpdate(input);
@@ -100,23 +97,10 @@ export default function AdminEditUserPanel({user}: UserEditPageProps): JSX.Eleme
                                  variant="field"/>
                 </div>
 
-                <div>
-                    <label htmlFor={USER_FORM_IDS.EMAIL}>{ADMIN_LABELS.EMAIL}</label>
-
-                    <input id={USER_FORM_IDS.EMAIL}
-                           type="email"
-                           autoComplete="email"
-                           value={email}
-                           onChange={(event) => setEmail(event.target.value)}
-                           aria-invalid={emailAlert ? true : undefined}
-                           aria-describedby={emailAlert ? USER_FORM_IDS.ALERT_EMAIL : undefined}
-                           disabled={loading}
-                           required/>
-
-                    <AlertBanner alert={emailAlert}
-                                 id={USER_FORM_IDS.ALERT_EMAIL}
-                                 variant="field"/>
-                </div>
+                <p>
+                    {ADMIN_LABELS.EMAIL}: <strong>{user.email}</strong>
+                </p>
+                <p>Email addresses can only be changed by the account owner in Settings and are updated after Better Auth verification.</p>
 
                 <div>
                     <button type="submit"

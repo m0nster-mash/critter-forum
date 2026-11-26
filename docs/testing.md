@@ -3,7 +3,7 @@
 Node's built-in runner (`node:test`) executed through `tsx`, so tests are TypeScript and use the `@/` alias.
 
 ```
-npm test
+npm run test:run
 ```
 
 ## Layout
@@ -32,9 +32,11 @@ suite.skipUnlessEnabled("saves a thing", enabled, async () => { /* ... */ });
 They run only when `TEST_DATABASE_URL` is set, and they refuse to touch `DATABASE_URL`. Use a separate database:
 
 ```
-createdb critter_test            # or any empty database
-DATABASE_URL=<test url> npm run db:migrate
-TEST_DATABASE_URL=<test url> npm test
+docker compose up -d --wait
+docker compose exec postgres createdb -U critter_user critter_forum_test
+export TEST_DATABASE_URL=postgresql://critter_user:critter_password@localhost:5436/critter_forum_test
+DATABASE_URL="$TEST_DATABASE_URL" npm run db:migrate
+npm run test:run
 ```
 
 Each test creates its own rows with unique ids and removes them afterwards; nothing else is modified. Re-run
@@ -44,7 +46,7 @@ Each test creates its own rows with unique ids and removes them afterwards; noth
 
 Tests that need to replace a module (the Next.js request APIs, the auth instance) use `mock.module` from `node:test`.
 Install the mocks, then `await import(...)` the code under test, because a module imported earlier keeps its real
-dependencies. The `test` script already passes `--experimental-test-module-mocks`.
+dependencies. The `test:run` script already passes `--experimental-test-module-mocks`.
 
 ## Current coverage
 
@@ -54,3 +56,7 @@ dependencies. The `test` script already passes `--experimental-test-module-mocks
 | `permissions/route-permissions.test.ts` | Every admin route declares a valid permission; `/admin` and `/admin/users` differ |
 | `permissions/require-page-permission.test.ts` | Redirect, not-found, pass-through, per-user check, independence, fail-closed |
 | `permissions/has-permission.integration.test.ts` | Grant, revoke, per-user, independence, duplicate rejection, cascade (real database) |
+| `routes/page-guards.test.ts` | Server-side authentication and permission guards run at each protected route entry point |
+| `admin/user-update.test.ts` | Admin edit permission, normalized name-only updates, validation, and missing-user handling |
+| `auth/verification-email.test.ts` | Sign-up verification is enabled, delivery is scheduled after the response, and provider failures are logged |
+| `users/user-validation.test.ts` | Profile-name, email-address, and password-change form validation |
