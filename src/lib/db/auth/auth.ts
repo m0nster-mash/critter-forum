@@ -2,7 +2,7 @@
  * @fileOverview    Defines the authentication database schema and configuration.
  * @module          core-application
  *
- * TODO             Replace magic strings with consts
+ * @TODO            Replace magic strings with consts
  */
 
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";

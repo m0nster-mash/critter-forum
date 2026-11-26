@@ -2,8 +2,8 @@
  * @fileOverview    Sends authentication emails through Resend.
  * @module          features/auth
  *
- * TODO             Replace magic strings with consts
- * TODO             Pull DEFAULT_FROM from `.env`
+ * @TODO            Replace magic strings with consts
+ * @TODO            Pull DEFAULT_FROM from `.env`
  */
 
 import {Resend} from "resend";
