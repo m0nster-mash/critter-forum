@@ -10,7 +10,7 @@ import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {createAlert} from "@/features/alerts/create-alert";
 import {readAuthError} from "@/features/auth/utilities/auth-errors";
 import {USER_ALERT_CODES} from "@/features/users/constants/alerts";
-import {USER_ELEMENT_IDS, getUserAlertElementId} from "@/features/users/constants/elements";
+import {getUserAlertElementId, USER_ELEMENT_IDS} from "@/features/users/constants/elements";
 import {AUTH_ERROR_CODES} from "@/features/users/constants/errors";
 import {USER_FIELDS} from "@/features/users/constants/fields";
 import {USER_UI_TEXT} from "@/features/users/constants/ui";

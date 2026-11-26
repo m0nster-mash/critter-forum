@@ -3,10 +3,10 @@
  * @module          features/admin/user-management
  */
 
-import {PageHeader} from "@/features/navigation/components/page-header";
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
 import AdminUserManagementPanel from "@/features/admin/user-management/components/admin-user-management-panel";
 import {getAllUsers} from "@/features/admin/user-management/queries/get-all-users";
+import {PageHeader} from "@/features/navigation/components/page-header";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 import {getPageHeaderProps} from "@/lib/utilities/route-utils";
 

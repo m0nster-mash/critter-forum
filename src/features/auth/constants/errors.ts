@@ -1,4 +1,3 @@
-
 export const AUTH_ERROR_CODES = {
     INVALID_PASSWORD: "INVALID_PASSWORD",
 
