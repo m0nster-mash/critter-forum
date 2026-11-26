@@ -9,7 +9,7 @@ import {useAlerts} from "@/features/alerts/client/use-alerts";
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {createAlert} from "@/features/alerts/create-alert";
 import {AlertCode} from "@/features/alerts/registry";
-import {AlertOverrides} from "@/features/alerts/types";
+import type {AlertOverrides} from "@/features/alerts/types";
 
 /**
  * Manual test page for the alert and error workflows.

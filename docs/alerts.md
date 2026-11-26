@@ -33,14 +33,15 @@ One way to handle errors, warnings and successes, across three destinations:
 ## Files
 
 ```
-src/lib/alerts/
+src/features/alerts/
   types.ts, registry.ts, create-alert.ts, result.ts      shared and pure
   error-digest.ts, from-thrown.ts                        shared helpers
   server/  logger.ts, log-alert.ts, safe-action.ts, alert-error.ts, ref.ts
-  client/  logger.ts, log-alert.ts, alert-provider.tsx, use-alerts.ts,
-           toast-state.ts, global-error-listeners.tsx
-src/components/alerts/  alert-banner.tsx, toast-viewport.tsx, alert-icon.tsx, alerts.module.css
-src/app/                error.tsx, global-error-display.tsx, not-found.tsx, layout.tsx (mounts <AlertProvider>)
+  client/  logger.ts, log-alert.ts, provider.tsx, use-alerts.ts,
+           toast-state.ts, global-error-listeners.ts
+  components/  alert-banner.tsx, toast-viewport.tsx, alert-icon.tsx, etc.
+  styles/      alerts.module.css
+src/app/                error.tsx, global-error.tsx, not-found.tsx, layout.tsx (mounts <AlertProvider>)
 src/instrumentation.ts  logs unhandled server errors
 src/features/<feature>/constants/alerts.ts   each feature's registry entries
 ```
@@ -49,8 +50,9 @@ src/features/<feature>/constants/alerts.ts   each feature's registry entries
 
 ### Add an alert
 
-In the feature's `constants/alerts.ts` (see `../src/features/alerts/constants/alerts.ts`), then spread it into
-`ALERT_REGISTRY` in `src/lib/alerts/registry.ts`:
+In the feature's `constants/alerts.ts` (for example, `../src/features/auth/constants/alerts.ts` or
+`../src/features/admin/constants/alerts.ts`), then spread it into `ALERT_REGISTRY` in
+`src/features/alerts/registry.ts`:
 
 ```ts
 export const THINGS_ALERTS = {
@@ -74,7 +76,7 @@ alert that belongs to a form field, and `log: {server: false, client: false}` fo
 export const saveThing = safeAction("things.save", async (input: Input) => {
     const invalid = validate(input);
     if (invalid) return fail(invalid);              // expected failure: return it
-    await requireSession();                         // may throw AlertError(...) from deep inside
+    await requireAuth();                            // redirects signed-out visitors; safeAction preserves the redirect
     const thing = await db.insert(/* ... */);       // unexpected failures: just let them throw
     return succeed(thing, createAlert("THINGS_SAVED"));
 });
@@ -110,10 +112,10 @@ Validation shared by form and server action lives in one pure function (see `fea
 Use the loggers; `console.*` is a lint error everywhere else.
 
 ```ts
-import {logger} from "@/lib/alerts/server/logger";        // server
+import {logger} from "@/features/alerts/server/logger";    // server
 logger.child({scope: "seed"}).info("Created user.", {email});
 
-import {clientLogger} from "@/lib/alerts/client/logger";  // browser
+import {clientLogger} from "@/features/alerts/client/logger"; // browser
 ```
 
 The server logger redacts values under keys like `password`, `token`, `secret`, `authorization`, `cookie`, `apiKey`,

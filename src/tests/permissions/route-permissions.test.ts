@@ -1,9 +1,9 @@
 /**
  * @fileOverview    Verifies every protected route declares a valid permission, and that the admin routes stay independent.
- * @module          features/permissions
+ * @module          features/admin/permissions
  */
 
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {ADMIN_ROUTES, ALL_ROUTES, type RouteMetadata} from "@/lib/constants/routes";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
@@ -28,12 +28,12 @@ suite.test("every declared permission is a defined permission", () => {
 });
 
 suite.test("/admin and /admin/users require different permissions", () => {
-    assert.notEqual(ADMIN_ROUTES.DASHBOARD.permission, ADMIN_ROUTES.USERS.permission);
+    assert.notEqual(ADMIN_ROUTES.DASHBOARD.permission, ADMIN_ROUTES.USERS_ACCESS.permission);
 });
 
 suite.test("/admin requires admin.access and /admin/users requires admin.users.access", () => {
     assert.equal(ADMIN_ROUTES.DASHBOARD.path, "/admin");
     assert.equal(ADMIN_ROUTES.DASHBOARD.permission, PERMISSIONS.ADMIN_ACCESS);
-    assert.equal(ADMIN_ROUTES.USERS.path, "/admin/users");
-    assert.equal(ADMIN_ROUTES.USERS.permission, PERMISSIONS.ADMIN_USERS_ACCESS);
+    assert.equal(ADMIN_ROUTES.USERS_ACCESS.path, "/admin/users");
+    assert.equal(ADMIN_ROUTES.USERS_ACCESS.permission, PERMISSIONS.ADMIN_USERS_ACCESS);
 });

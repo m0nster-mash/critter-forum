@@ -3,8 +3,8 @@
  * @module          core-application
  */
 
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
-import type {Permission} from "@/features/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 
 /** Access levels supported by application routes. */
 export type AccessLevel = "public" | "private" | "admin";
@@ -63,24 +63,50 @@ export const PRIVATE_ROUTES = {
         title: "Your Dashboard",
         accessLevel: "private",
     } as const satisfies RouteMetadata,
+
+    SETTINGS: {
+        path: "/settings",
+        label: "Settings",
+        title: "Settings",
+        accessLevel: "private",
+        parent: "DASHBOARD",
+    } as const satisfies RouteMetadata,
+
+    PROFILE: {
+        path: (params) => `/profile/${params.userId}`,
+        label: "Profile",
+        title: "Profile",
+        accessLevel: "private",
+        parent: "HOME",
+    } as const satisfies RouteMetadata,
 };
 
 /** Administrative routes. */
 export const ADMIN_ROUTES = {
     DASHBOARD: {
         path: "/admin",
-        label: "Admin Dashboard",
+        label: "Administration",
         title: "Administration Dashboard",
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_ACCESS,
     } as const satisfies RouteMetadata,
 
-    USERS: {
+    USERS_ACCESS: {
         path: "/admin/users",
         label: "User Management",
         title: "User Management",
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_USERS_ACCESS,
+        parent: "ADMIN_DASHBOARD",
+    } as const satisfies RouteMetadata,
+
+    USERS_EDIT: {
+        path: (params) => `/admin/users/${params.userId}/edit`,
+        label: "Edit User",
+        title: "Edit User",
+        accessLevel: "admin",
+        permission: PERMISSIONS.ADMIN_USERS_EDIT,
+        parent: "USERS_ACCESS",
     } as const satisfies RouteMetadata,
 };
 
@@ -89,6 +115,7 @@ export const ALL_ROUTES = {
     ...PUBLIC_ROUTES,
     ...PRIVATE_ROUTES,
     ...ADMIN_ROUTES,
+    ADMIN_DASHBOARD: ADMIN_ROUTES.DASHBOARD,
 } as const;
 
 /** Prefix used when a route builder is called without required parameters. */

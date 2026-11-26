@@ -7,7 +7,7 @@ import {AlertIcon} from "@/features/alerts/components/alert-icon";
 import {ALERT_ROLES, SEVERITY_LABELS, VARIANT_TYPES} from "@/features/alerts/constants/alert-types";
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import styles from "@/features/alerts/styles/alerts.module.css";
-import {AlertBannerProps} from "@/features/alerts/types";
+import type {AlertBannerProps} from "@/features/alerts/types";
 import type {JSX} from "react";
 
 /**

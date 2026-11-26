@@ -6,32 +6,50 @@
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import {LOGGER_MESSAGES} from "@/features/alerts/constants/observability";
 import {logger} from "@/features/alerts/server/logger";
+import {sendVerificationEmail} from "@/features/auth/server/email";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
 import {db} from "@/lib/db/auth/db";
 import {drizzleAdapter} from "@better-auth/drizzle-adapter";
 import {betterAuth} from "better-auth";
 
+const authEmailLogger = logger.child({scope: "auth.email"});
+
 /**
- * Separates the auth configuration separate from the database connection, application modules, and route handlers.
+ * Better Auth configuration.
  */
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "pg",
     }),
+
     emailAndPassword: {
         enabled: true,
-        // Keep better-auth's rule identical to the one the forms enforce (its own default is 8).
         minPasswordLength: PASSWORD_MIN_LENGTH,
     },
-    // Route better-auth's own log output (failed sign-ins, etc.) through the shared server logger, so it gets the same
-    // format, level control and redaction as everything else. Sign-in goes browser -> better-auth directly, so this is
-    // where failed sign-ins reach the server log.
+
+    user: {
+        changeEmail: {
+            enabled: true,
+        },
+    },
+
+    emailVerification: {
+        sendVerificationEmail: async ({user, url}) => {
+            // Do not delay the authentication response while the email provider responds.
+            void sendVerificationEmail(user.email, url).catch((err: unknown) => {
+                authEmailLogger.error("Failed to send email verification.", {err});
+            });
+        },
+    },
+
     logger: {
         level: LOG_LEVELS.WARN,
         log: (level, message, ...args) => {
-            logger[level](`${LOGGER_MESSAGES.BETTER_AUTH_PREFIX} ${message}`, args.length > 0
-                ? {args}
-                : undefined
+            logger[level](
+                `${LOGGER_MESSAGES.BETTER_AUTH_PREFIX} ${message}`,
+                args.length > 0
+                    ? {args}
+                    : undefined,
             );
         },
     },

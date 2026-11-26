@@ -4,7 +4,7 @@
  */
 
 // Type-only import: drizzle-kit loads this file without resolving the `@/` alias, so no runtime imports from `@/`.
-import type {Permission} from "@/features/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {relations} from "drizzle-orm";
 import {boolean, index, pgTable, primaryKey, text, timestamp} from "drizzle-orm/pg-core";
 
@@ -87,8 +87,8 @@ export const verification = pgTable(
 /**
  * Permissions granted directly to a user, one row per grant.
  *
- * @remarks     The permissions themselves are defined in code (`features/permissions`), not in the database, so adding
- *              a permission needs no migration.
+ * @remarks     The permissions themselves are defined in code (`features/admin/permissions`), not in the database, so
+ *              adding a permission needs no migration.
  * @remarks     The composite primary key prevents duplicate grants and covers lookups by user.
  */
 export const userPermission = pgTable(

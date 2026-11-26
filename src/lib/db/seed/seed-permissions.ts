@@ -3,8 +3,8 @@
  * @module          core-application
  */
 
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {logger} from "@/features/alerts/server/logger";
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
 import {db} from "@/lib/db/auth/db";
 import {user, userPermission} from "@/lib/db/auth/schema";
 import {eq} from "drizzle-orm";

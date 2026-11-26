@@ -6,8 +6,11 @@
  * @TODO            Replace content with proper dashboard page at a later date
  */
 
-import {DashboardPageProps} from "@/lib/types";
-import {JSX} from "react";
+import {PRIVATE_ROUTES} from "@/lib/constants/routes";
+import type {DashboardPageProps} from "@/lib/types";
+import {resolvePath} from "@/lib/utilities/route-utils";
+import Link from "next/link";
+import React, {JSX} from "react";
 
 /**
  * Renders the private / members-only dashboard panel view.
@@ -22,7 +25,7 @@ export function DashboardPagePanel({user}: DashboardPageProps): JSX.Element {
 
     return (
         <>
-            <h3>Welcome, {user.name}</h3>
+            <h3>Welcome, <Link href={resolvePath(PRIVATE_ROUTES.PROFILE, {userId: user.id})}>{user.name}</Link></h3>
             <p>
                 This is the member-only dashboard.
             </p>

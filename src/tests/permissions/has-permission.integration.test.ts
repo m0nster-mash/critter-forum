@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Verifies permission grants against a real PostgreSQL database.
- * @module          features/permissions
+ * @module          features/admin/permissions
  *
  * @remarks         Runs only when `TEST_DATABASE_URL` is set; otherwise every test is skipped. Point it at a database
  *                  that is separate from development and has the migrations applied:
@@ -10,7 +10,7 @@
  */
 
 import "dotenv/config";
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {randomUUID} from "node:crypto";
@@ -31,7 +31,7 @@ async function loadDatabase() {
 
     const {db} = await import("@/lib/db/auth/db");
     const {user, userPermission} = await import("@/lib/db/auth/schema");
-    const {hasPermission} = await import("@/features/permissions/queries/has-permission");
+    const {hasPermission} = await import("@/features/admin/permissions/queries/has-permission");
     const {and, eq, inArray} = await import("drizzle-orm");
 
     return {db, user, userPermission, hasPermission, and, eq, inArray};

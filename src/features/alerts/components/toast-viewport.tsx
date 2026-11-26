@@ -10,7 +10,7 @@ import {VARIANT_TYPES} from "@/features/alerts/constants/alert-types";
 import {TOAST_DURATIONS} from "@/features/alerts/constants/toast";
 import {TOAST_KEYSTROKE, TOAST_LABELS} from "@/features/alerts/constants/toast-ui";
 import styles from "@/features/alerts/styles/alerts.module.css";
-import {ToastItem, ToastViewportProps} from "@/features/alerts/types";
+import type {ToastItem, ToastViewportProps} from "@/features/alerts/types";
 import Icon from "@/features/icons/components/icon";
 import {ICON_SIZE, UI_ICONS} from "@/features/icons/constants/groups";
 import {type JSX, type KeyboardEvent, useCallback, useEffect, useRef} from "react";

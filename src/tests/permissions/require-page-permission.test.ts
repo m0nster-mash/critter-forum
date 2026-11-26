@@ -1,19 +1,19 @@
 /**
  * @fileOverview    Verifies the page guard's redirect, not-found, and fail-closed behaviour.
- * @module          features/permissions
+ * @module          features/admin/permissions
  *
- * @remarks         The Next.js request APIs, the auth instance, and the database lookup are replaced with controllable
- *                  doubles, so this suite needs no running app or database.
- * @remarks         Requires `--experimental-test-module-mocks` (set in the `test` script).
+ * @remarks         The shared session helper, Next.js not-found control flow, and permission query are replaced with
+ *                  controllable doubles, so this suite needs no running app or database.
+ * @remarks         Requires `--experimental-test-module-mocks` (set in the `test:run` script).
  */
 
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
-import type {Permission} from "@/features/permissions/types";
+import type {Permission} from "@/features/admin/permissions/constants/permissions";
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";
 
-/** Thrown by the stubbed `redirect()`, standing in for Next.js's redirect control-flow error. */
+/** Thrown by the stubbed `requireAuth()`, standing in for its login redirect. */
 class RedirectSignal extends Error {
     constructor(readonly url: string) {
         super(`redirect:${url}`);
@@ -27,32 +27,33 @@ class NotFoundSignal extends Error {
     }
 }
 
-/** Session the stubbed auth instance returns; `null` means signed out. */
+/** Session returned by the shared auth helper; `null` means signed out. */
 let currentSession: { user: { id: string } } | null = null;
 /** Permissions held per user id. */
 let grants = new Map<string, Set<Permission>>();
-/** When set, the stubbed permission lookup throws this error. */
+/** When set, the permission lookup throws this error. */
 let lookupError: Error | null = null;
 /** Every `[userId, permission]` pair the guard asked about. */
 let lookups: Array<[string, Permission]> = [];
 
-mock.module("next/headers", {
-    namedExports: {headers: async () => new Headers()},
-});
 mock.module("next/navigation", {
     namedExports: {
-        redirect: (url: string): never => {
-            throw new RedirectSignal(url);
-        },
         notFound: (): never => {
             throw new NotFoundSignal();
         },
     },
 });
-mock.module("@/lib/db/auth/auth", {
-    namedExports: {auth: {api: {getSession: async () => currentSession}}},
+mock.module("@/features/auth/server/session", {
+    namedExports: {
+        requireAuth: async () => {
+            if (!currentSession) {
+                throw new RedirectSignal("/login");
+            }
+            return currentSession;
+        },
+    },
 });
-mock.module("@/features/permissions/queries/has-permission", {
+mock.module("@/features/admin/permissions/queries/has-permission", {
     namedExports: {
         hasPermission: async (userId: string, permission: Permission) => {
             lookups.push([userId, permission]);
@@ -64,7 +65,7 @@ mock.module("@/features/permissions/queries/has-permission", {
     },
 });
 
-const {requirePagePermission} = await import("@/features/permissions/server/require-page-permission");
+const {requirePagePermission} = await import("@/features/admin/permissions/server/require-page-permission");
 
 /** Resets the doubles to a known state before each test. */
 function arrange(options: {
@@ -80,7 +81,7 @@ function arrange(options: {
 
 const suite = new Suite("permissions/require-page-permission", 6);
 
-suite.test("redirects a signed-out visitor to the login page without checking permissions", async () => {
+suite.test("redirects a signed-out visitor to login without checking permissions", async () => {
     arrange({session: null});
 
     await assert.rejects(
@@ -99,7 +100,7 @@ suite.test("shows not-found to a signed-in user who lacks the permission", async
     );
 });
 
-suite.test("lets a user through when they hold the permission", async () => {
+suite.test("lets a user through when they hold the exact permission", async () => {
     arrange({session: {user: {id: "user-1"}}, grants: {"user-1": [PERMISSIONS.ADMIN_ACCESS]}});
 
     await assert.doesNotReject(() => requirePagePermission(PERMISSIONS.ADMIN_ACCESS));
@@ -115,7 +116,7 @@ suite.test("checks the signed-in user's own id against the permission the page r
     assert.deepEqual(lookups, [["user-1", PERMISSIONS.ADMIN_ACCESS]]);
 });
 
-suite.test("treats each permission independently: neither admin permission unlocks the other page", async () => {
+suite.test("keeps admin permissions independent in both directions", async () => {
     arrange({session: {user: {id: "user-1"}}, grants: {"user-1": [PERMISSIONS.ADMIN_ACCESS]}});
     await assert.doesNotReject(() => requirePagePermission(PERMISSIONS.ADMIN_ACCESS));
     await assert.rejects(() => requirePagePermission(PERMISSIONS.ADMIN_USERS_ACCESS), NotFoundSignal);
@@ -125,7 +126,7 @@ suite.test("treats each permission independently: neither admin permission unloc
     await assert.rejects(() => requirePagePermission(PERMISSIONS.ADMIN_ACCESS), NotFoundSignal);
 });
 
-suite.test("fails closed: an error during the permission lookup is surfaced, never treated as allowed", async () => {
+suite.test("surfaces permission lookup failures instead of treating them as access", async () => {
     const failure = new Error("database unavailable");
     arrange({session: {user: {id: "user-1"}}, lookupError: failure});
 

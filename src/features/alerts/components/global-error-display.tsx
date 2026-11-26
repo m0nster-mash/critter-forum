@@ -7,7 +7,7 @@
 
 import ErrorRetryBanner from "@/features/alerts/components/error-retry-banner";
 import style from "@/features/alerts/styles/alerts.module.css";
-import {PublicAlert} from "@/features/alerts/types";
+import type {PublicAlert} from "@/features/alerts/types";
 import {type JSX} from "react";
 
 /**

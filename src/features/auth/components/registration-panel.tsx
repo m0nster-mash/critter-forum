@@ -12,7 +12,7 @@ import {alertFromThrown} from "@/features/alerts/from-thrown";
 import {registerAccountAction} from "@/features/auth/actions/register-account-action";
 import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {AUTH_FIELDS, AUTH_FORM_IDS, AUTH_LABELS} from "@/features/auth/constants/ui";
-import {AuthFlowProps} from "@/features/auth/types";
+import type {AuthFlowProps} from "@/features/auth/types";
 import {validateRegistration} from "@/features/auth/validation";
 import {signIn} from "@/lib/auth-client";
 import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";

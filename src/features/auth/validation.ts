@@ -7,7 +7,8 @@ import {createAlert} from "@/features/alerts/create-alert";
 import type {PublicAlert} from "@/features/alerts/types";
 import {AUTH_ALERT_CODES} from "@/features/auth/constants/alerts";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
-import {RegistrationInput} from "@/features/auth/types";
+import type {RegistrationInput} from "@/features/auth/types";
+import {EMAIL_PATTERN} from "@/lib/constants/regex";
 
 /**
  * Validates registration input.

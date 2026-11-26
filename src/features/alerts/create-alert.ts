@@ -4,8 +4,9 @@
  */
 
 import {ALERT_TEMPLATE_PATTERNS} from "@/features/alerts/constants/templates";
-import {ALERT_REGISTRY, AlertCode, FALLBACK_ALERT_CODE} from "@/features/alerts/registry";
-import {AlertDefinition, AlertOverrides, PublicAlert} from "@/features/alerts/types";
+import type {AlertCode} from "@/features/alerts/registry";
+import {ALERT_REGISTRY, FALLBACK_ALERT_CODE} from "@/features/alerts/registry";
+import type {AlertDefinition, AlertOverrides, PublicAlert} from "@/features/alerts/types";
 
 /**
  * Type guard confirming a string is a registered alert code.

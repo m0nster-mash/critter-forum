@@ -5,7 +5,7 @@
  * @status          Requires documentation
  */
 
-import {ActionFailure, ActionSuccess, PublicAlert} from "@/features/alerts/types";
+import type {ActionFailure, ActionSuccess, PublicAlert} from "@/features/alerts/types";
 
 /**
  * What every server action returns to the client: a discriminated union on `ok`.

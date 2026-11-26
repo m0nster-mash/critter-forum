@@ -6,7 +6,7 @@
 "use client";
 
 import {AlertBanner} from "@/features/alerts/components/alert-banner";
-import {PublicAlert} from "@/features/alerts/types";
+import type {PublicAlert} from "@/features/alerts/types";
 import {type JSX} from "react";
 
 /**

@@ -1,9 +1,9 @@
 /**
  * @fileOverview    Verifies the permission identifiers are well-formed, unique, and stable.
- * @module          features/permissions
+ * @module          features/admin/permissions
  */
 
-import {PERMISSIONS} from "@/features/permissions/constants/permissions";
+import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 

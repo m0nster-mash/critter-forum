@@ -8,7 +8,7 @@ import {ALERT_REGISTRY, type AlertCode} from "@/features/alerts/registry";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 
-const suite = new Suite("alerts/registry", 8);
+const suite = new Suite("alerts/registry", 9);
 
 suite.test("every registry definition has a valid severity, presentation, and message", () => {
     for (const [code, definition] of Object.entries(ALERT_REGISTRY)) {
@@ -68,4 +68,14 @@ suite.test("default fields, presentation, lookup, and JSON serialization remain 
     assert.equal(isAlertCode("toString"), false);
     const alert = createAlert("APP_VALIDATION_FAILED", {field: "email", ref: "abc123"});
     assert.deepEqual(JSON.parse(JSON.stringify(alert)), alert);
+});
+
+suite.test("admin permission denial is registered as a safe expected warning", () => {
+    assert.deepEqual(createAlert("ADMIN_PERMISSION_DENIED"), {
+        code: "ADMIN_PERMISSION_DENIED",
+        severity: "warn",
+        message: "You don't have permission to perform this action.",
+        presentation: "toast",
+    });
+    assert.deepEqual(ALERT_REGISTRY.ADMIN_PERMISSION_DENIED.log, {server: false, client: false});
 });

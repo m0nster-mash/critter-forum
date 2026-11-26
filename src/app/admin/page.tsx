@@ -3,22 +3,13 @@
  * @module          features/admin
  */
 
-import {requirePagePermission} from "@/features/permissions/server/require-page-permission";
+import AdminDashboardView from "@/features/admin/views/admin-dashboard-view";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 
 /**
- * Displays the {@link AdminDashboardPageView}
- *
- * @remarks     Requires the permission declared on {@link ADMIN_ROUTES.DASHBOARD}.
+ * Displays the AdminDashboardView
  */
 export default async function AdminDashboardPage() {
 
-    await requirePagePermission(ADMIN_ROUTES.DASHBOARD.permission);
-
-    return (
-        <>
-            Admin dashboard page.
-            {/*<AdminDashboardPageView/>*/}
-        </>
-    );
+    return <AdminDashboardView/>;
 }

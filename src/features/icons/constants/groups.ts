@@ -4,7 +4,7 @@
  * @module          features/icons
  */
 
-import {IconSize, IconVariant} from "@/features/icons/types";
+import type {IconSize, IconVariant} from "@/features/icons/types";
 
 /** UI Chrome & Header Controls */
 export const UI_ICONS = {
