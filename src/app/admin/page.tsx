@@ -4,7 +4,6 @@
  */
 
 import AdminDashboardView from "@/features/admin/views/admin-dashboard-view";
-import {ADMIN_ROUTES} from "@/lib/constants/routes";
 
 /**
  * Displays the AdminDashboardView

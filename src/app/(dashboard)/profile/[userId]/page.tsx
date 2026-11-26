@@ -3,9 +3,9 @@
  * @module          features/user
  */
 
-import ProfilePageView from "@/features/users/views/profile-page-view";
 import {getUserById} from "@/features/admin/user-management/queries/get-user-by-id";
 import {requireAuth} from "@/features/auth/server/session";
+import ProfilePageView from "@/features/users/views/profile-page-view";
 import type {UserProfilePageProps} from "@/lib/types";
 import {notFound} from "next/navigation";
 

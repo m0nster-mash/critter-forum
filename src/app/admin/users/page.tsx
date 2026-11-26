@@ -4,7 +4,6 @@
  */
 
 import AdminUserManagementView from "@/features/admin/user-management/views/admin-user-management-view";
-import {ADMIN_ROUTES} from "@/lib/constants/routes";
 
 /**
  * Displays the UserManagementPage

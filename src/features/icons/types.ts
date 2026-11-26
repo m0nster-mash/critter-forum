@@ -42,7 +42,7 @@ export type IconAccessibilityProps =
  * @property    [label]     Required when `semantic` is true; prohibited for decorative icons.
  */
 export type IconProps =
-    // TODO:: replace magic strings with consts
+// TODO:: replace magic strings with consts
     Omit<SVGProps<SVGSVGElement>, "width" | "height"> &
     IconAccessibilityProps & {
     icon?: ComponentType<SVGProps<SVGSVGElement>>;
