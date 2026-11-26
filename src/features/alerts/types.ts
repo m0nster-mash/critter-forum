@@ -44,9 +44,6 @@ export type LogContext = Record<string, unknown>;
  * @property    warn        Writes a warning event.
  * @property    error       Writes an error event.
  * @property    child       Creates a logger with persistent structured bindings.
- *
- * @see         `logger` in `src/features/alerts/server/logger.ts`.
- * @see         `clientLogger` in `src/features/alerts/client/logger.ts`.
  */
 export interface Logger {
     /** Writes a debug-level event with optional structured context. */
@@ -73,8 +70,6 @@ export interface Logger {
  *
  * @property    server  Server log level, or `false` to suppress the server log.
  * @property    client  Browser log level, or `false` to suppress the client log.
- *
- * @see         `AlertDefinition` in this file.
  */
 export interface AlertLogPolicy {
     server: AlertLogLevel | false;
@@ -92,8 +87,6 @@ export interface AlertLogPolicy {
  * @property    presentation    Default rendering mode.
  * @property    log             Server/client logging policy.
  * @property    [field]         Default form field associated with this alert.
- *
- * @see         `ALERT_REGISTRY` in `src/features/alerts/registry.ts`.
  */
 export interface AlertDefinition {
     severity: AlertSeverity;
@@ -115,9 +108,6 @@ export interface AlertDefinition {
  * @property    presentation    Where the alert should be presented.
  * @property    [field]         Optional form field identifier for field-level inline alerts.
  * @property    [ref]           Optional reference matching a server log entry.
- *
- * @see         `createAlert` in `src/features/alerts/create-alert.ts`.
- * @see         `ActionFailure` in this file.
  */
 export interface PublicAlert {
     code: string;
@@ -139,8 +129,6 @@ export interface PublicAlert {
  * @property    [field]          Associate the alert with a form field.
  * @property    [ref]            Reference to the corresponding server log entry.
  * @property    [params]         Primitive values substituted into named message tokens.
- *
- * @see         `createAlert` in `src/features/alerts/create-alert.ts`.
  */
 export interface AlertOverrides {
     severity?: AlertSeverity;
@@ -161,8 +149,6 @@ export interface AlertOverrides {
  * @property    [variant]   Layout variant; defaults to the banner presentation.
  * @property    [count]     Number of merged occurrences represented by this banner.
  * @property    [action]    Optional trailing React content, such as a dismiss control.
- *
- * @see         `AlertBanner` in `src/features/alerts/components/alert-banner.tsx`.
  */
 export interface AlertBannerProps {
     alert: PublicAlert | null | undefined;
@@ -182,8 +168,6 @@ export interface AlertBannerProps {
  * @property    alert    Serializable alert shown by this toast.
  * @property    count    Number of occurrences represented.
  * @property    version  Revision counter for timer refresh behaviour.
- *
- * @see         `toast-state.ts` and `ToastViewport` in `src/features/alerts/`.
  */
 export interface ToastItem {
     id: string;
@@ -197,8 +181,6 @@ export interface ToastItem {
  *
  * @remarks     Use only in the toast reducer/state layer. UI components should call the provider API rather than
  *              constructing reducer actions directly.
- *
- * @see         `toast-state.ts` in `src/features/alerts/client/`.
  */
 export type ToastAction =
     | { type: typeof TOAST_ACTION_TYPES.ADD; id: string; alert: PublicAlert }
@@ -213,8 +195,6 @@ export type ToastAction =
  *
  * @property    [cause]     Underlying error or value that caused the expected failure.
  * @property    [detail]    Structured diagnostic context written to server logs.
- *
- * @see         `AlertError` in `src/features/alerts/server/alert-error.ts`.
  */
 export interface AlertErrorOptions extends AlertOverrides {
     cause?: unknown;
@@ -232,8 +212,6 @@ export interface AlertErrorOptions extends AlertOverrides {
  * @property    [stack]     Optional stack trace.
  * @property    [cause]     Optional nested cause.
  * @property    [extra]     Additional enumerable diagnostic properties.
- *
- * @see         `SerializedError` handling in `src/features/alerts/server/logger.ts`.
  */
 export interface SerializedError {
     name: string;
@@ -252,8 +230,6 @@ export interface SerializedError {
  *
  * @property    toasts      Current toast entries, oldest first.
  * @property    onDismiss   Callback receiving the identifier of the dismissed toast.
- *
- * @see         `ToastViewport` in `src/features/alerts/components/toast-viewport.tsx`.
  */
 export interface ToastViewportProps {
     toasts: ToastItem[];
@@ -270,8 +246,6 @@ export interface ToastViewportProps {
  * @property    notify      Adds a toast and logs according to the alert registry.
  * @property    dismiss     Removes one toast by identifier.
  * @property    clear       Removes all toast entries.
- *
- * @see         `AlertProvider` in `src/features/alerts/client/provider.ts`.
  */
 export interface AlertContextValue {
     toasts: ToastItem[];
@@ -288,8 +262,6 @@ export interface AlertContextValue {
  *
  * @property    children  Application subtree rendered inside the provider.
  * @property    value     Context value supplied by the provider.
- *
- * @see         `AlertProviderContent` in `src/features/alerts/components/alert-provider-content.tsx`.
  */
 export interface AlertProviderContentProps {
     children: ReactNode;
@@ -308,8 +280,6 @@ export interface AlertProviderContentProps {
  * @property    present     Routes an alert by its registry presentation and logs it per client policy.
  * @property    clear       Clears the current inline alert.
  * @property    notify      Displays a toast and logs it per registry policy.
- *
- * @see         `useAlerts` in `src/features/alerts/client/use-alerts.ts`.
  */
 export interface AlertsApi {
     inline: PublicAlert | null;
