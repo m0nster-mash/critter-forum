@@ -13,7 +13,7 @@ import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";
 
-/** Thrown by the stubbed `requireAuth()`, standing in for its login redirect. */
+/** Thrown by the stubbed `requireVerifiedAuth()`, standing in for its login redirect. */
 class RedirectSignal extends Error {
     constructor(readonly url: string) {
         super(`redirect:${url}`);
@@ -45,7 +45,7 @@ mock.module("next/navigation", {
 });
 mock.module("@/features/auth/server/session", {
     namedExports: {
-        requireAuth: async () => {
+        requireVerifiedAuth: async () => {
             if (!currentSession) {
                 throw new RedirectSignal("/login");
             }

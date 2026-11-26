@@ -3,7 +3,7 @@
  * @module          features/auth
  */
 
-import {requireAuth} from "@/features/auth/server/session";
+import {requireVerifiedAuth} from "@/features/auth/server/session";
 import SettingsPageView from "@/features/users/views/settings-page-view";
 
 /**
@@ -11,6 +11,6 @@ import SettingsPageView from "@/features/users/views/settings-page-view";
  */
 export default async function SettingsPage() {
 
-    await requireAuth();
+    await requireVerifiedAuth();
     return <SettingsPageView/>;
 }

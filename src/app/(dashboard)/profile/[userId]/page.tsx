@@ -4,7 +4,7 @@
  */
 
 import {getUserById} from "@/features/admin/user-management/queries/get-user-by-id";
-import {requireAuth} from "@/features/auth/server/session";
+import {requireVerifiedAuth} from "@/features/auth/server/session";
 import {UserProfilePageProps} from "@/features/users/types";
 import ProfilePageView from "@/features/users/views/profile-page-view";
 import {notFound} from "next/navigation";
@@ -28,7 +28,7 @@ export default async function UserProfilePage({params}: UserProfilePageProps) {
  * @returns     The use profile if authenticated, otherwise redirects the user to a 404 page.
  */
 async function sessionCheck(params: Promise<{ userId: string }>) {
-    const session = await requireAuth();
+    const session = await requireVerifiedAuth();
     const {userId} = await params;
     if (userId !== session.user.id) notFound();
 

@@ -59,6 +59,14 @@ export const PUBLIC_ROUTES = {
 
 /** Authenticated user routes. */
 export const PRIVATE_ROUTES = {
+    VERIFY_EMAIL: {
+        path: "/verify-email",
+        label: "Verify Email",
+        title: "Verify Your Email",
+        accessLevel: "private",
+        parent: "HOME",
+    } as const satisfies RouteMetadata,
+
     DASHBOARD: {
         path: "/dashboard",
         label: "Dashboard",

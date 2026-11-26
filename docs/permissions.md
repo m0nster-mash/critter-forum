@@ -26,7 +26,7 @@ src/features/admin/
     server/require-page-permission.ts         page guard; redirects guests and hides denied pages with notFound()
     server/require-action-permission.ts       action guard; throws a registered AlertError on denial
     types.ts                                  canonical Permission type re-export
-src/features/auth/server/session.ts           getSession() and requireAuth()
+src/features/auth/server/session.ts           getSession() and centralized verification-state guards
 src/features/alerts/registry.ts                combines feature alert registries
 src/lib/db/auth/schema.ts                      user_permission table
 src/lib/db/seed/seed-permissions.ts            direct grants for the development admin
@@ -65,8 +65,9 @@ export default async function ReportsPage() {
 }
 ```
 
-Call `requirePagePermission()` before rendering the page, using the permission declared on its route. Signed-out
-visitors are redirected to the login page by `requireAuth()`. Signed-in users without the exact grant receive the
+Call `requirePagePermission()` before rendering the page, using the permission declared on its route. The guard
+first requires a verified session through `requireVerifiedAuth()`: signed-out visitors are redirected to login and
+unverified users are redirected to the verification-pending page. Verified users without the exact grant receive the
 standard not-found page, so the protected route's existence is not revealed. Do not wrap the guard in `try/catch`:
 Next.js redirect and not-found signals are control-flow errors.
 
@@ -85,8 +86,9 @@ export const deleteThing = safeAction("things.delete", async (input: Input) => {
 });
 ```
 
-The action guard redirects signed-out visitors through `requireAuth()`. An authenticated user without the exact grant
-causes a registered `AlertError` (`ADMIN_PERMISSION_DENIED`), which `safeAction()` converts into the normal
+The action guard requires a verified session through `requireVerifiedAuth()`. Signed-out visitors are redirected to
+login and unverified users to the verification-pending page. A verified user without the exact grant causes a
+registered `AlertError` (`ADMIN_PERMISSION_DENIED`), which `safeAction()` converts into the normal
 `ActionResult` failure. Do not catch that exception inside the action. Unexpected permission-query failures propagate
 to `safeAction()` and are handled as unexpected errors; they are never converted into an authorization denial or
 allowed access.

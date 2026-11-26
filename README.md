@@ -71,6 +71,11 @@
 <Icon name={UI_ICONS.SUN} size={ICON_SIZE.SMALL}/>
 ```
 
+## Authentication
+
+See [docs/authentication.md](docs/authentication.md) for session states, verification guards, and the registration
+verification workflow.
+
 ## Alerts
 
 Errors, warnings and success messages all go through one system: a registry of alerts, one server logger, one browser
