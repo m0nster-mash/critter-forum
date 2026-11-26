@@ -12,13 +12,11 @@ import {notFound} from "next/navigation";
 /**
  * Loads the signed-in user's profile and renders the profile view.
  *
- * @param params    TODO:: document
+ * @param params    The user's ID, page parameter
  */
 export default async function UserProfilePage({params}: UserProfilePageProps) {
     const session = await requireAuth();
     const {userId} = await params;
-
-    // A private profile route must not expose another user's record.
     if (userId !== session.user.id) notFound();
 
     const [profile] = await getUserById({userId});
