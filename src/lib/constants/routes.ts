@@ -69,6 +69,7 @@ export const PRIVATE_ROUTES = {
         label: "Settings",
         title: "Settings",
         accessLevel: "private",
+        parent: "DASHBOARD",
     } as const satisfies RouteMetadata,
 
     PROFILE: {
@@ -76,6 +77,7 @@ export const PRIVATE_ROUTES = {
         label: "Profile",
         title: "Profile",
         accessLevel: "private",
+        parent: "HOME",
     } as const satisfies RouteMetadata,
 };
 
@@ -83,7 +85,7 @@ export const PRIVATE_ROUTES = {
 export const ADMIN_ROUTES = {
     DASHBOARD: {
         path: "/admin",
-        label: "Admin Dashboard",
+        label: "Administration",
         title: "Administration Dashboard",
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_ACCESS,
@@ -95,6 +97,7 @@ export const ADMIN_ROUTES = {
         title: "User Management",
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_USERS_ACCESS,
+        parent: "ADMIN_DASHBOARD",
     } as const satisfies RouteMetadata,
 
     USERS_EDIT: {
@@ -103,6 +106,7 @@ export const ADMIN_ROUTES = {
         title: "Edit User",
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_USERS_EDIT,
+        parent: "USERS_ACCESS",
     } as const satisfies RouteMetadata,
 };
 
@@ -111,6 +115,7 @@ export const ALL_ROUTES = {
     ...PUBLIC_ROUTES,
     ...PRIVATE_ROUTES,
     ...ADMIN_ROUTES,
+    ADMIN_DASHBOARD: ADMIN_ROUTES.DASHBOARD,
 } as const;
 
 /** Prefix used when a route builder is called without required parameters. */

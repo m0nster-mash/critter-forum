@@ -19,17 +19,6 @@ export interface BreadcrumbItem {
 }
 
 /**
- * Properties accepted by the Breadcrumbs component.
- *
- * @remarks     Supplies the ordered breadcrumb items used to render the current navigation hierarchy.
- *
- * @property    breadcrumb  Ordered breadcrumb items to render.
- */
-export interface BreadcrumbProps {
-    breadcrumb: BreadcrumbItem[];
-}
-
-/**
  * Properties accepted by the PageHeader component.
  *
  * @remarks     Provides the page title and optional breadcrumb navigation displayed above page content.
