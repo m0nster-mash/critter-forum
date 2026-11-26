@@ -20,6 +20,16 @@ import {after} from "node:test";
 const TEST_DATABASE_URL = process.env.TEST_DATABASE_URL;
 const enabled = Boolean(TEST_DATABASE_URL);
 
+if (TEST_DATABASE_URL) {
+    const testDatabaseName = new URL(TEST_DATABASE_URL).pathname.replace(/^\//, "");
+    if (!decodeURIComponent(testDatabaseName).endsWith("_test")) {
+        throw new Error("Refusing integration tests: TEST_DATABASE_URL database name must end in \"_test\".");
+    }
+    if (process.env.DATABASE_URL && process.env.DATABASE_URL === TEST_DATABASE_URL) {
+        // Equality is safe only because TEST_DATABASE_URL is independently validated above.
+    }
+}
+
 /**
  * Loads the database modules against the test database.
  *

@@ -11,5 +11,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  # Isolated PostgreSQL instance for integration tests, with its own port and volume.
+  postgres-test:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5437:5432"
+    environment:
+      POSTGRES_USER: critter_user
+      POSTGRES_PASSWORD: critter_password
+      POSTGRES_DB: critter_forum_test
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+
 volumes:
   postgres_data:
+  postgres_test_data:

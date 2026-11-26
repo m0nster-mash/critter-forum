@@ -17,7 +17,12 @@
     "db:push": "drizzle-kit push",
     "db:check": "tsx src/lib/db/check-connection.ts",
     "db:seed": "tsx src/lib/db/seed/run-seed.ts",
-    "db:reset": "docker compose down -v && docker compose up -d --wait && node -e \"require('fs').rmSync('drizzle',{recursive:true,force:true})\" && npm run db:generate && npm run db:migrate && npm run db:seed"
+    "db:reset": "docker compose down -v && docker compose up -d --wait && node -e \"require('fs').rmSync('drizzle',{recursive:true,force:true})\" && npm run db:generate && npm run db:migrate && npm run db:seed",
+    "db:test:up": "docker compose up -d --wait postgres-test",
+    "db:test:setup": "tsx src/scripts/db-test-setup.ts",
+    "db:test:seed": "tsx src/lib/db/test/seed-test.ts",
+    "db:test:run": "tsx src/scripts/db-test-run.ts",
+    "db:test:reset": "tsx src/scripts/db-test-reset.ts"
   },
   "dependencies": {
     "better-auth": "1.8.0-beta.5",
