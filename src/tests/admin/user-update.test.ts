@@ -14,13 +14,13 @@ import assert from "node:assert/strict";
 import {mock} from "node:test";
 
 let permissionCalls: string[] = [];
-let lookupResult: Array<{id: string}> = [{id: "user-1"}];
-let updateResult: {id: string; name: string; email: string} | undefined = {
+let lookupResult: Array<{ id: string }> = [{id: "user-1"}];
+let updateResult: { id: string; name: string; email: string } | undefined = {
     id: "user-1",
     name: "Updated Name",
     email: "user@example.com",
 };
-let updateCalls: Array<{userId: string; name: string}> = [];
+let updateCalls: Array<{ userId: string; name: string }> = [];
 
 mock.module("@/features/admin/permissions/server/require-action-permission", {
     namedExports: {
@@ -35,7 +35,7 @@ mock.module("@/features/admin/user-management/queries/get-user-by-id", {
 });
 mock.module("@/features/admin/user-management/queries/update-user", {
     namedExports: {
-        updateUser: async (input: {userId: string; name: string}) => {
+        updateUser: async (input: { userId: string; name: string }) => {
             updateCalls.push(input);
             return updateResult;
         },

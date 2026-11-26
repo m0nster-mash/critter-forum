@@ -1,12 +1,12 @@
 /** @fileOverview Tests the pending-registration expiration policy. */
 
-import {Suite} from "@/tests/test-config";
-import assert from "node:assert/strict";
 import {
     DEFAULT_UNVERIFIED_ACCOUNT_TTL_DAYS,
     getUnverifiedAccountExpirationCutoff,
     getUnverifiedAccountTtlDays,
 } from "@/features/auth/constants/expiration-policy";
+import {Suite} from "@/tests/test-config";
+import assert from "node:assert/strict";
 
 const suite = new Suite("auth/expiration-policy", 7);
 

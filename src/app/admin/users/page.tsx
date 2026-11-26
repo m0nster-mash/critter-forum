@@ -3,8 +3,8 @@
  * @module          features/admin
  */
 
-import AdminUserManagementView from "@/features/admin/user-management/views/admin-user-management-view";
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
+import AdminUserManagementView from "@/features/admin/user-management/views/admin-user-management-view";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 
 /**

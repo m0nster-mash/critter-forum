@@ -3,9 +3,9 @@
  * @module          core-application
  */
 
-import {Pool} from "pg";
-import {spawnSync} from "node:child_process";
 import {getTestDatabaseUrl, testDatabaseEnvironment} from "@/lib/db/test/test-database";
+import {spawnSync} from "node:child_process";
+import {Pool} from "pg";
 
 /** Drops and recreates the public schema after validating the target database name. */
 async function resetSchema(): Promise<void> {

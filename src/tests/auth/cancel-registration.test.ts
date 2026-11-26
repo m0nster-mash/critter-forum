@@ -10,7 +10,7 @@ import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";
 
-let currentSession: {user: {id: string; email: string; emailVerified: boolean}} | null = null;
+let currentSession: { user: { id: string; email: string; emailVerified: boolean } } | null = null;
 let passwordError: Error | null = null;
 let deleted = true;
 let verifiedPassword: string | null = null;
@@ -21,7 +21,7 @@ mock.module("@/lib/db/auth/auth", {
         auth: {
             api: {
                 getSession: async () => currentSession,
-                verifyPassword: async ({body}: {body: {password: string}}) => {
+                verifyPassword: async ({body}: { body: { password: string } }) => {
                     verifiedPassword = body.password;
                     if (passwordError) throw passwordError;
                     return {status: true};

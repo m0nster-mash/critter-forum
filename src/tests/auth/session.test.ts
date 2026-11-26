@@ -18,7 +18,7 @@ class RedirectSignal extends Error {
     }
 }
 
-type SessionFixture = {user: {id: string; emailVerified: boolean}};
+type SessionFixture = { user: { id: string; emailVerified: boolean } };
 let currentSession: SessionFixture | null = null;
 let sessionError: Error | null = null;
 
@@ -49,7 +49,7 @@ mock.module("@/lib/db/auth/auth", {
 });
 mock.module("@/lib/utilities/route-utils", {
     namedExports: {
-        resolvePath: (route: {path: string}) => route.path,
+        resolvePath: (route: { path: string }) => route.path,
     },
 });
 

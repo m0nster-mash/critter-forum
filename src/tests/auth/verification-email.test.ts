@@ -16,22 +16,22 @@ type VerificationEmailConfig = {
     sendOnSignUp?: boolean;
     expiresIn?: number;
     sendVerificationEmail: (
-        input: {user: {id: string; email: string}; url: string; token: string},
+        input: { user: { id: string; email: string }; url: string; token: string },
         request?: Request,
     ) => Promise<void>;
 };
 
 type AuthConfig = {
-    emailAndPassword: {requireEmailVerification: boolean};
+    emailAndPassword: { requireEmailVerification: boolean };
     emailVerification: VerificationEmailConfig;
 };
 
 let capturedConfig: AuthConfig | undefined;
 let scheduledTasks: Array<() => void | Promise<void>> = [];
-let deliveries: Array<{to: string; url: string}> = [];
+let deliveries: Array<{ to: string; url: string }> = [];
 let loggedErrors: unknown[][] = [];
 let deliveryFailure: Error | null = null;
-let storedTokens: Array<{userId: string; token: string; expiresAt: Date}> = [];
+let storedTokens: Array<{ userId: string; token: string; expiresAt: Date }> = [];
 
 mock.module("better-auth", {
     namedExports: {

@@ -5,11 +5,11 @@
  * @TODO            Replace magic strings with consts
  */
 
-import {timingSafeEqual} from "node:crypto";
+import {logger} from "@/features/alerts/server/logger";
 import {AUTH_LOG_MESSAGES} from "@/features/auth/constants/logging";
 import {AUTH_SCOPES} from "@/features/auth/constants/scope";
-import {logger} from "@/features/alerts/server/logger";
 import {cleanupExpiredUnverifiedAccounts} from "@/features/auth/server/cleanup-unverified-accounts";
+import {timingSafeEqual} from "node:crypto";
 
 const maintenanceLogger = logger.child({scope: AUTH_SCOPES.AUTH_MAINTENANCE});
 

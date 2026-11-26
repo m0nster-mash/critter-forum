@@ -100,7 +100,8 @@ export default function AdminEditUserPanel({user}: UserEditPageProps): JSX.Eleme
                 <p>
                     {ADMIN_LABELS.EMAIL}: <strong>{user.email}</strong>
                 </p>
-                <p>Email addresses can only be changed by the account owner in Settings and are updated after Better Auth verification.</p>
+                <p>Email addresses can only be changed by the account owner in Settings and are updated after Better
+                    Auth verification.</p>
 
                 <div>
                     <button type="submit" disabled={loading}>

@@ -10,8 +10,8 @@ import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";
 
-let currentSession: {user: {id: string; email: string; emailVerified: boolean}} | null = null;
-let resendReservation: {allowed: boolean; retryAfterSeconds: number; reason?: "cooldown" | "limit"} = {
+let currentSession: { user: { id: string; email: string; emailVerified: boolean } } | null = null;
+let resendReservation: { allowed: boolean; retryAfterSeconds: number; reason?: "cooldown" | "limit" } = {
     allowed: true,
     retryAfterSeconds: 0,
 };
@@ -123,7 +123,7 @@ suite.test("rejects restricted requests from unverified sessions before reaching
     });
 
     const response = await handler(new Request("https://example.com/api/auth/change-password", {method: "POST"}));
-    const body = await response.json() as {code: string; message: string};
+    const body = await response.json() as { code: string; message: string };
 
     assert.equal(response.status, 403);
     assert.equal(body.code, "EMAIL_NOT_VERIFIED");
@@ -177,14 +177,13 @@ suite.test("returns the persistent cooldown or attempt-limit decision as HTTP 42
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({email: "unverified@example.com"}),
     }));
-    const body = await response.json() as {code: string; retryAfter: number};
+    const body = await response.json() as { code: string; retryAfter: number };
 
     assert.equal(response.status, 429);
     assert.equal(response.headers.get("Retry-After"), "3600");
     assert.equal(body.code, "VERIFICATION_RESEND_LIMIT");
     assert.equal(body.retryAfter, 3600);
 });
-
 
 
 suite.test("rejects a verification link that was invalidated by a later resend", async () => {
@@ -200,7 +199,7 @@ suite.test("rejects a verification link that was invalidated by a later resend",
         "https://example.com/api/auth/verify-email?token=old-token",
         {method: "GET"},
     ));
-    const body = await response.json() as {code: string};
+    const body = await response.json() as { code: string };
 
     assert.equal(response.status, 400);
     assert.equal(body.code, "INVALID_VERIFICATION_TOKEN");
@@ -244,7 +243,7 @@ suite.test("returns the shorter resend cooldown as HTTP 429", async () => {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({email: "unverified@example.com"}),
     }));
-    const body = await response.json() as {code: string; retryAfter: number; message: string};
+    const body = await response.json() as { code: string; retryAfter: number; message: string };
 
     assert.equal(response.status, 429);
     assert.equal(response.headers.get("Retry-After"), "42");

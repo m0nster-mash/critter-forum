@@ -3,8 +3,8 @@
  * @module          features/alerts
  */
 
-import {requireVerifiedAuth} from "@/features/auth/server/session";
 import AlertTestPageView from "@/features/alerts/views/alert-test-page-view";
+import {requireVerifiedAuth} from "@/features/auth/server/session";
 
 /** Displays the alert test view to verified users. */
 export default async function AlertTestPage() {

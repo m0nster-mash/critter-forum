@@ -50,7 +50,7 @@ function getDatabase() {
     return database;
 }
 
-async function createUser(options: {verified?: boolean; createdAt?: Date} = {}) {
+async function createUser(options: { verified?: boolean; createdAt?: Date } = {}) {
     const {db, user} = getDatabase();
     const id = `lifecycle-test-${randomUUID()}`;
     const email = `${id}@test.local`;
@@ -67,7 +67,15 @@ async function createUser(options: {verified?: boolean; createdAt?: Date} = {}) 
 }
 
 async function addRegistrationRecords(userId: string, email: string) {
-    const {db, session, account, verification, emailVerificationResend, revokedVerificationToken, userPermission} = getDatabase();
+    const {
+        db,
+        session,
+        account,
+        verification,
+        emailVerificationResend,
+        revokedVerificationToken,
+        userPermission
+    } = getDatabase();
     const now = new Date();
     const suffix = randomUUID();
 
@@ -117,8 +125,10 @@ after(async () => {
 const suite = new Suite("auth/registration-lifecycle (database)", 4);
 
 suite.skipUnlessEnabled("cancellation deletes only the pending user and all registration-owned records", enabled, async () => {
-    const {db, user, session, account, verification, emailVerificationResend, revokedVerificationToken, userPermission,
-        cancelPendingRegistration, eq} = getDatabase();
+    const {
+        db, user, session, account, verification, emailVerificationResend, revokedVerificationToken, userPermission,
+        cancelPendingRegistration, eq
+    } = getDatabase();
     const fixture = await createUser();
     await addRegistrationRecords(fixture.id, fixture.email);
 
@@ -141,7 +151,15 @@ suite.skipUnlessEnabled("cancellation refuses to delete a verified account", ena
 });
 
 suite.skipUnlessEnabled("expiry cleanup deletes old unverified accounts and cascades registration records", enabled, async () => {
-    const {db, user, emailVerificationResend, revokedVerificationToken, verification, cleanupExpiredUnverifiedAccounts, eq} = getDatabase();
+    const {
+        db,
+        user,
+        emailVerificationResend,
+        revokedVerificationToken,
+        verification,
+        cleanupExpiredUnverifiedAccounts,
+        eq
+    } = getDatabase();
     const now = new Date("2026-11-26T12:00:00.000Z");
     const expired = await createUser({createdAt: new Date(now.getTime() - 8 * 24 * 60 * 60 * 1000)});
     await addRegistrationRecords(expired.id, expired.email);

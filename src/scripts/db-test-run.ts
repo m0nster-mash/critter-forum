@@ -3,8 +3,8 @@
  * @module          core-application
  */
 
-import {spawnSync} from "node:child_process";
 import {testDatabaseEnvironment} from "@/lib/db/test/test-database";
+import {spawnSync} from "node:child_process";
 
 /** Runs tests with the isolated test database as the only database target. */
 function main(): void {

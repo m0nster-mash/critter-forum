@@ -16,7 +16,7 @@ import {authClient} from "@/lib/auth-client";
 import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import {useRouter} from "next/navigation";
-import {useEffect, useState, type FormEvent} from "react";
+import {type FormEvent, useEffect, useState} from "react";
 
 interface VerificationResendPanelProps {
     email: string;
@@ -28,7 +28,7 @@ function getRetryAfter(error: unknown): number | null {
 
     const candidate = error as {
         retryAfter?: unknown;
-        body?: {retryAfter?: unknown};
+        body?: { retryAfter?: unknown };
         message?: unknown;
     };
     const retryAfter = candidate.retryAfter ?? candidate.body?.retryAfter;
@@ -81,15 +81,15 @@ export function VerificationResendPanel({email}: VerificationResendPanelProps) {
             if (result.error) {
                 const error = result.error as unknown;
                 const errorDetails = typeof error === "object" && error !== null
-                    ? error as {status?: number; statusCode?: number; code?: string; body?: {code?: string}}
+                    ? error as { status?: number; statusCode?: number; code?: string; body?: { code?: string } }
                     : {};
                 const code = errorDetails.code ?? errorDetails.body?.code;
                 const retryAfter = getRetryAfter(error);
 
                 if ((errorDetails.status ?? errorDetails.statusCode) === 429) {
                     setCooldown(retryAfter ?? 60);
-                    const errorMessage = typeof (error as {message?: unknown}).message === "string"
-                        ? (error as {message: string}).message.toLowerCase()
+                    const errorMessage = typeof (error as { message?: unknown }).message === "string"
+                        ? (error as { message: string }).message.toLowerCase()
                         : "";
                     setMessage(code === AUTH_API_ERRORS.VERIFICATION_RESEND_LIMIT || errorMessage.includes("maximum number")
                         ? VERIFICATION_RESEND_MESSAGES.LIMIT_REACHED
@@ -127,7 +127,7 @@ export function VerificationResendPanel({email}: VerificationResendPanelProps) {
                 },
                 body: JSON.stringify({password}),
             });
-            const result = await response.json() as {message?: string};
+            const result = await response.json() as { message?: string };
 
             if (!response.ok) {
                 setCancellationMessage(result.message ?? "We couldn't cancel this registration. Please try again.");

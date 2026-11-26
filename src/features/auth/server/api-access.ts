@@ -7,14 +7,11 @@
 
 import {
     AUTH_API_BASE_PATH,
-    AUTH_API_ERRORS,
     AUTH_API_ERROR_MESSAGES,
+    AUTH_API_ERRORS,
     UNVERIFIED_AUTH_API_ALLOWED_PATHS,
 } from "@/features/auth/constants/api";
-import {
-    isRevokedVerificationToken,
-    reserveVerificationEmailResend,
-} from "@/features/auth/server/verification-resend";
+import {isRevokedVerificationToken, reserveVerificationEmailResend,} from "@/features/auth/server/verification-resend";
 import {auth} from "@/lib/db/auth/auth";
 
 /** Request handler signature returned by Better Auth's Next.js adapter. */
@@ -94,7 +91,7 @@ export function withUnverifiedAuthApiRestriction(handler: AuthApiHandler): AuthA
 
             let requestedEmail: unknown;
             try {
-                const body = await request.clone().json() as {email?: unknown};
+                const body = await request.clone().json() as { email?: unknown };
                 requestedEmail = body.email;
             } catch {
                 // Better Auth owns malformed request validation; no resend attempt is reserved.

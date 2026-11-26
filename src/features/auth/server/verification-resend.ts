@@ -9,8 +9,8 @@
 import {evaluateVerificationResend} from "@/features/auth/server/verification-resend-policy";
 import {db} from "@/lib/db/auth/db";
 import {emailVerificationResend, revokedVerificationToken} from "@/lib/db/auth/schema";
-import {createHash} from "node:crypto";
 import {and, eq, gt} from "drizzle-orm";
+import {createHash} from "node:crypto";
 
 /**
  * Atomically checks and reserves one resend attempt for an account.
@@ -25,7 +25,7 @@ import {and, eq, gt} from "drizzle-orm";
 export async function reserveVerificationEmailResend(
     userId: string,
     now: Date = new Date(),
-): Promise<{allowed: boolean; retryAfterSeconds: number; reason?: "cooldown" | "limit"}> {
+): Promise<{ allowed: boolean; retryAfterSeconds: number; reason?: "cooldown" | "limit" }> {
     return db.transaction(async (tx) => {
         await tx
             .insert(emailVerificationResend)

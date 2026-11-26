@@ -3,9 +3,9 @@
  * @module          features/admin
  */
 
+import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
 import AdminEditUserView from "@/features/admin/user-management/views/admin-edit-user-view";
 import {UserProfilePageProps} from "@/features/users/types";
-import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";
 
 /**

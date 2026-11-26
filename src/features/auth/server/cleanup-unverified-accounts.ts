@@ -5,7 +5,10 @@
  * @TODO            Relocate into `/queries`
  */
 
-import {UNVERIFIED_ACCOUNT_CLEANUP_BATCH_SIZE, getUnverifiedAccountExpirationCutoff} from "@/features/auth/constants/expiration-policy";
+import {
+    getUnverifiedAccountExpirationCutoff,
+    UNVERIFIED_ACCOUNT_CLEANUP_BATCH_SIZE
+} from "@/features/auth/constants/expiration-policy";
 import {db} from "@/lib/db/auth/db";
 import {user, verification} from "@/lib/db/auth/schema";
 import {and, eq, inArray, lt} from "drizzle-orm";

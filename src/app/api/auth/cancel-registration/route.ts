@@ -3,7 +3,7 @@
  * @module          features/auth
  */
 
-import {AUTH_API_ERRORS, AUTH_API_ERROR_MESSAGES} from "@/features/auth/constants/api";
+import {AUTH_API_ERROR_MESSAGES, AUTH_API_ERRORS} from "@/features/auth/constants/api";
 import {cancelPendingRegistration} from "@/features/auth/server/cancel-registration";
 import {auth} from "@/lib/db/auth/auth";
 
@@ -49,7 +49,7 @@ export async function POST(request: Request): Promise<Response> {
 
     let password: unknown;
     try {
-        const body = await request.json() as {password?: unknown};
+        const body = await request.json() as { password?: unknown };
         password = body.password;
     } catch {
         return Response.json({
