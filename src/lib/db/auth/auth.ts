@@ -1,6 +1,8 @@
 /**
  * @fileOverview    Defines the authentication database schema and configuration.
  * @module          core-application
+ *
+ * TODO             Replace magic strings with consts
  */
 
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";
@@ -12,6 +14,7 @@ import {db} from "@/lib/db/auth/db";
 import {drizzleAdapter} from "@better-auth/drizzle-adapter";
 import {betterAuth} from "better-auth";
 
+// TODO:: convert into correct scope const
 const authEmailLogger = logger.child({scope: "auth.email"});
 
 /**
@@ -37,6 +40,7 @@ export const auth = betterAuth({
         sendVerificationEmail: async ({user, url}) => {
             // Do not delay the authentication response while the email provider responds.
             void sendVerificationEmail(user.email, url).catch((err: unknown) => {
+                // TODO migrate into correct alert const
                 authEmailLogger.error("Failed to send email verification.", {err});
             });
         },

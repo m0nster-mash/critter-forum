@@ -1,10 +1,14 @@
 /**
  * @fileOverview    Sends authentication emails through Resend.
  * @module          features/auth
+ *
+ * TODO             Replace magic strings with consts
+ * TODO             Pull DEFAULT_FROM from `.env`
  */
 
 import {Resend} from "resend";
 
+// TODO:: pull from .env (process.env.RESEND_FROM_EMAIL)
 const DEFAULT_FROM = "Critter Forum <onboarding@resend.dev>";
 
 /**

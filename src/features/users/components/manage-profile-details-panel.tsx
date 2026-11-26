@@ -1,6 +1,8 @@
 /**
  * @fileOverview    Allows users to update their profile and email address.
  * @module          features/users
+ * 
+ * TODO             Replace magic strings with consts
  */
 
 "use client";
@@ -20,9 +22,7 @@ import {JSX, type SubmitEvent, useEffect, useState} from "react";
 /**
  * Renders the current user's profile settings.
  */
-export function ManageProfileDetailsPanel({
-                                              user,
-                                          }: UserSettingsPanelProps): JSX.Element {
+export function ManageProfileDetailsPanel({user}: UserSettingsPanelProps): JSX.Element {
 
     const router = useRouter();
 

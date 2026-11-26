@@ -32,7 +32,7 @@ export function Icon({
                          icon,
                          name,
                          size = ICON_SIZE.MEDIUM,
-                         variant = "default",
+                         variant = "default", // TODO:: replace with const
                          semantic = false,
                          label,
                          className = "",

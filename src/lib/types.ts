@@ -4,6 +4,8 @@
  *
  * @remarks         Keep only genuinely cross-feature contracts here. Feature-specific props belong in their feature's
  *                  own `types.ts` file, even when their structure resembles a type defined elsewhere.
+ *
+ * @TODO            Migrate these into the correct feature packages (users and navigation)
  */
 
 import type {ReactNode} from "react";
@@ -13,6 +15,8 @@ import type {ReactNode} from "react";
  *
  * @remarks     This is a presentation contract, not a route definition. Use `href` only when the crumb is navigable;
  *              omit it for the current page or another non-interactive label.
+ *
+ * @TODO         Migrate into feature package
  *
  * @property    label   Text displayed for this breadcrumb.
  * @property    [href]  Optional destination. When omitted, render the label as plain text.
@@ -31,6 +35,8 @@ export interface BreadcrumbItem {
  * @remarks     Use for page-level headings that may include a breadcrumb trail. Feature-specific page metadata should
  *              be adapted to this presentation contract rather than added here.
  *
+ * @TODO         Migrate into feature package
+ *
  * @property    title           Required title content; React nodes are accepted for composed headings.
  * @property    [breadcrumb]    Optional ordered breadcrumb entries.
  */
@@ -45,6 +51,8 @@ export interface PageHeaderProps {
  * @remarks     Use when rendering breadcrumbs independently of `PageHeader`. The list is required so the component
  *              never has to infer navigation state.
  *
+ * @TODO         Migrate into feature package
+ *
  * @property    breadcrumb  Ordered entries to render in the navigation trail.
  */
 export interface BreadcrumbProps {
@@ -58,6 +66,8 @@ export interface BreadcrumbProps {
  *              Add fields only when they are safe and useful across the consumers listed below. Use feature-local
  *              types for richer admin or server-only user records.
  *
+ * @TODO         Migrate into feature package
+ *
  * @property    id      Stable user identifier.
  * @property    name    Display name shown in the interface.
  * @property    email   User email address shown by account and profile interfaces.
@@ -69,17 +79,12 @@ export interface UserSummary {
 }
 
 /**
- * @deprecated Use {@link UserSummary}. Retained as a compatibility alias for consumers outside this repository snapshot.
- *
- * @remarks     Do not use this legacy name in new code; migrate imports to `UserSummary`.
- */
-export type UserPropItems = UserSummary;
-
-/**
  * Props for the dashboard page panel.
  *
  * @remarks     Use at the view/panel boundary after the server has selected the user summary to display. Do not pass a
  *              Better Auth session or raw database record directly.
+ *
+ * @TODO         Migrate into feature package
  *
  * @property    user    User identity and contact details for the dashboard.
  */
@@ -88,22 +93,12 @@ export interface DashboardPageProps {
 }
 
 /**
- * Props for account-settings panels that edit the current user's own account.
- *
- * @remarks     Shared by the profile-details and account-password panels. Keep the payload to the common user summary;
- *              form-specific values and mutation state belong in each panel's local props.
- *
- * @property    user    Current user's identity and contact details.
- */
-export interface AccountSettingsProps {
-    user: UserSummary;
-}
-
-/**
  * Props for the profile page panel.
  *
  * @remarks     This is deliberately distinct from `DashboardPageProps`: profile rendering has its own component
  *              contract and may evolve independently even though both currently carry a user summary.
+ *
+ * @TODO         Migrate into feature package
  *
  * @property    user    User whose public/profile details are being displayed.
  */
@@ -116,6 +111,8 @@ export interface UserProfileProps {
  *
  * @remarks     Next.js page props expose `params` as a promise in this project. Keep this route-level shape separate
  *              from feature-level resolved identifiers such as `UserIdParams`.
+ *
+ * @TODO         Migrate into feature package
  *
  * @property    params  Promise resolving to the route's dynamic user identifier.
  */

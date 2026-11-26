@@ -1,6 +1,8 @@
 /**
  * @fileOverview    Defines route metadata, access levels, and the application route registry.
  * @module          core-application
+ *
+ * TODO             We do not need both 'label' and 'title'; condense into single key
  */
 
 import type {Permission} from "@/features/admin/permissions/constants/permissions";

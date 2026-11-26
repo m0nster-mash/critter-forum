@@ -53,6 +53,8 @@ export function resolveIcon(
 ): SVGComponent {
     if (!iconName || !(iconName in ICON_REGISTRY)) {
         if (iconName) {
+            // TODO:: migrate magic string to correct alert const
+            // TODO:: migrate scope string to correct scope const
             clientLogger.warn(
                 `[IconRegistry] Icon name "${iconName}" not found in registry. Using fallback "${fallback}".`,
                 {scope: "icon.registry"}
@@ -65,6 +67,8 @@ export function resolveIcon(
 
 /**
  * Utility to retrieve an array of all registered icon names.
+ *
+ * TODO     Not in use; delete?
  */
 export function getAvailableIcons(): IconName[] {
     return Object.keys(ICON_REGISTRY) as IconName[];

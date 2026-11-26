@@ -9,6 +9,7 @@ import {USER_ALERT_CODES} from "@/features/users/constants/alerts";
 import type {PasswordChangeInput} from "@/features/users/types";
 import type {PublicAlert} from "@/features/alerts/types";
 
+// TODO:: use regex email constant instead
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
