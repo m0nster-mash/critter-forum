@@ -15,6 +15,7 @@ import {JSX} from "react";
  * @returns {JSX.Element}   The registration page view JSX element.
  */
 export function RegistrationPageView(): JSX.Element {
+
     return (
         <>
             <PageHeader {...getPageHeaderProps(PUBLIC_ROUTES.REGISTER)}/>

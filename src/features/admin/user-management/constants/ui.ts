@@ -14,6 +14,7 @@ export const FIELD_NAMES = {
 } as const;
 
 export const ADMIN_LABELS = {
+    ID: "User ID",
     NAME: "Username",
     EMAIL: "Email",
     ACTIONS: "Actions",

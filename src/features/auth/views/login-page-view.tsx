@@ -15,6 +15,7 @@ import {JSX} from "react";
  * @returns     {JSX.Element}   The login page view JSX element.
  */
 export function LoginPageView(): JSX.Element {
+
     return (
         <>
             <PageHeader {...getPageHeaderProps(PUBLIC_ROUTES.LOGIN)}/>

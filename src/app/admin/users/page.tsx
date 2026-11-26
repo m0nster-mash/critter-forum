@@ -13,5 +13,6 @@ import {ADMIN_ROUTES} from "@/lib/constants/routes";
 export default async function UserManagementPage() {
 
     await requirePagePermission(ADMIN_ROUTES.USERS_ACCESS.permission);
+
     return <AdminUserManagementView/>;
 }

@@ -7,22 +7,31 @@
  * @remarks         Requires `--experimental-test-module-mocks` (set in the `test:run` script).
  */
 
+import {VERIFICATION_TOKEN_TTL_SECONDS} from "@/features/auth/constants/resend-policy";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 import {mock} from "node:test";
 
 type VerificationEmailConfig = {
     sendOnSignUp?: boolean;
-    sendVerificationEmail: (input: {user: {email: string}; url: string}) => Promise<void>;
+    expiresIn?: number;
+    sendVerificationEmail: (
+        input: {user: {id: string; email: string}; url: string; token: string},
+        request?: Request,
+    ) => Promise<void>;
 };
 
-type AuthConfig = {emailVerification: VerificationEmailConfig};
+type AuthConfig = {
+    emailAndPassword: {requireEmailVerification: boolean};
+    emailVerification: VerificationEmailConfig;
+};
 
 let capturedConfig: AuthConfig | undefined;
 let scheduledTasks: Array<() => void | Promise<void>> = [];
 let deliveries: Array<{to: string; url: string}> = [];
 let loggedErrors: unknown[][] = [];
 let deliveryFailure: Error | null = null;
+let storedTokens: Array<{userId: string; token: string; expiresAt: Date}> = [];
 
 mock.module("better-auth", {
     namedExports: {
@@ -42,6 +51,13 @@ mock.module("next/server", {
     namedExports: {
         after: (task: () => void | Promise<void>) => {
             scheduledTasks.push(task);
+        },
+    },
+});
+mock.module("@/features/auth/server/verification-resend", {
+    namedExports: {
+        storeActiveVerificationToken: async (userId: string, token: string, expiresAt: Date) => {
+            storedTokens.push({userId, token, expiresAt});
         },
     },
 });
@@ -70,28 +86,40 @@ function reset(): void {
     deliveries = [];
     loggedErrors = [];
     deliveryFailure = null;
+    storedTokens = [];
 }
 
 function getVerificationConfig(): VerificationEmailConfig {
-    assert.ok(capturedConfig, "Better Auth config should be captured during module initialization");
+    if (!capturedConfig) {
+        throw new Error("Better Auth config should be captured during module initialization");
+    }
+
     return capturedConfig.emailVerification;
 }
 
-const suite = new Suite("auth/verification-email", 3);
+const suite = new Suite("auth/verification-email", 6);
 
-suite.test("explicitly sends a verification email after every sign-up", () => {
+suite.test("allows unverified users to sign in with a restricted session", () => {
+    assert.equal(capturedConfig?.emailAndPassword.requireEmailVerification, false);
+});
+
+suite.test("explicitly sends a verification email after every sign-up with a one-hour token lifetime", () => {
     assert.equal(getVerificationConfig().sendOnSignUp, true);
+    assert.equal(getVerificationConfig().expiresIn, VERIFICATION_TOKEN_TTL_SECONDS);
 });
 
 suite.test("schedules provider delivery with Next.js after-response work", async () => {
     reset();
     await getVerificationConfig().sendVerificationEmail({
-        user: {email: "new-user@example.com"},
+        user: {id: "user-1", email: "new-user@example.com"},
         url: "https://example.com/verify?token=test",
+        token: "test-token",
     });
 
     assert.equal(deliveries.length, 0);
     assert.equal(scheduledTasks.length, 1);
+    assert.equal(storedTokens.length, 1);
+    assert.equal(storedTokens[0].token, "test-token");
 
     await scheduledTasks[0]();
     assert.deepEqual(deliveries, [{
@@ -105,11 +133,51 @@ suite.test("logs provider delivery failures inside the scheduled task", async ()
     deliveryFailure = new Error("provider unavailable");
 
     await getVerificationConfig().sendVerificationEmail({
-        user: {email: "new-user@example.com"},
+        user: {id: "user-1", email: "new-user@example.com"},
         url: "https://example.com/verify?token=test",
+        token: "test-token",
     });
     await scheduledTasks[0]();
 
     assert.equal(deliveries.length, 1);
     assert.equal(loggedErrors.length, 1);
+});
+
+
+suite.test("awaits resend delivery so provider failures are returned to the requesting user", async () => {
+    reset();
+    deliveryFailure = new Error("provider unavailable");
+    const request = new Request("https://example.com/api/auth/send-verification-email", {method: "POST"});
+
+    await assert.rejects(
+        () => getVerificationConfig().sendVerificationEmail({
+            user: {id: "user-1", email: "new-user@example.com"},
+            url: "https://example.com/verify?token=resend",
+            token: "resend-token",
+        }, request),
+        /provider unavailable/,
+    );
+
+    assert.equal(scheduledTasks.length, 0);
+    assert.equal(deliveries.length, 1);
+    assert.equal(storedTokens.length, 1);
+    assert.equal(storedTokens[0].token, "resend-token");
+    assert.equal(loggedErrors.length, 1);
+});
+
+suite.test("awaits successful resend delivery without scheduling another background task", async () => {
+    reset();
+    const request = new Request("https://example.com/api/auth/send-verification-email", {method: "POST"});
+
+    await getVerificationConfig().sendVerificationEmail({
+        user: {id: "user-1", email: "new-user@example.com"},
+        url: "https://example.com/verify?token=resend",
+        token: "resend-token",
+    }, request);
+
+    assert.equal(scheduledTasks.length, 0);
+    assert.equal(deliveries.length, 1);
+    assert.equal(storedTokens.length, 1);
+    assert.equal(storedTokens[0].token, "resend-token");
+    assert.equal(loggedErrors.length, 0);
 });

@@ -12,5 +12,6 @@ import SettingsPageView from "@/features/users/views/settings-page-view";
 export default async function SettingsPage() {
 
     await requireVerifiedAuth();
+
     return <SettingsPageView/>;
 }

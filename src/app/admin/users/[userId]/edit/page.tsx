@@ -16,5 +16,6 @@ import {ADMIN_ROUTES} from "@/lib/constants/routes";
 export default async function AdminEditUserPage({params}: UserProfilePageProps) {
 
     await requirePagePermission(ADMIN_ROUTES.USERS_EDIT.permission);
+
     return <AdminEditUserView userId={(await params).userId}/>
 }

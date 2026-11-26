@@ -15,8 +15,6 @@ import React, {JSX} from "react";
 /**
  * Renders the private / members-only dashboard panel view.
  *
- * @TODO        Replace content with proper dashboard page at a later date
- *
  * @param       user            Authenticated user data
  *
  * @returns     {JSX.Element}   The rendered dashboard panel JSX element.

@@ -1,12 +1,14 @@
 /**
  * @fileOverview    Defines the Drizzle tables and relations used by the authentication database.
  * @module          core-application
+ *
+ * @TODO            Replace magic strings with consts
  */
 
 // Type-only import: drizzle-kit loads this file without resolving the `@/` alias, so no runtime imports from `@/`.
 import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {relations} from "drizzle-orm";
-import {boolean, index, pgTable, primaryKey, text, timestamp} from "drizzle-orm/pg-core";
+import {boolean, index, integer, pgTable, primaryKey, text, timestamp} from "drizzle-orm/pg-core";
 
 /** Provides the user functionality. */
 export const user = pgTable("user", {
@@ -82,6 +84,42 @@ export const verification = pgTable(
             .notNull(),
     },
     (table) => [index("verification_identifier_idx").on(table.identifier)],
+);
+
+/**
+ * Persistent rate-limit state for verification-email resend requests.
+ *
+ * @remarks     One row per user. The user foreign key cascades so abandoned-account cleanup also removes this state.
+ */
+export const emailVerificationResend = pgTable(
+    "email_verification_resend",
+    {
+        userId: text("user_id")
+            .primaryKey()
+            .references(() => user.id, {onDelete: "cascade"}),
+        attempts: integer("attempts").default(0).notNull(),
+        windowStartedAt: timestamp("window_started_at").notNull(),
+        lastSentAt: timestamp("last_sent_at"),
+        tokenHash: text("token_hash"),
+        tokenExpiresAt: timestamp("token_expires_at"),
+        updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => /* @__PURE__ */ new Date()).notNull(),
+    },
+);
+
+/**
+ * Verification tokens replaced by a later resend. The token itself is never stored.
+ */
+export const revokedVerificationToken = pgTable(
+    "revoked_verification_token",
+    {
+        tokenHash: text("token_hash").primaryKey(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => user.id, {onDelete: "cascade"}),
+        expiresAt: timestamp("expires_at").notNull(),
+        createdAt: timestamp("created_at").defaultNow().notNull(),
+    },
+    (table) => [index("revoked_verification_token_userId_idx").on(table.userId)],
 );
 
 /**

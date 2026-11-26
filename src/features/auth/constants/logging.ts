@@ -10,4 +10,7 @@
  */
 export const AUTH_LOG_MESSAGES = {
     EMAIL_VERIFICATION_FAILED: "Failed to send email verification.",
+    VERIFICATION_TOKEN_STATE_FAILED: "Failed to update email verification token state.",
+    UNVERIFIED_ACCOUNT_CLEANUP_FAILED: "Failed to clean up expired unverified accounts.",
+    UNVERIFIED_ACCOUNT_CLEANUP_COMPLETED: "Expired unverified account cleanup completed.",
 } as const;

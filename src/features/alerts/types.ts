@@ -124,11 +124,11 @@ export interface PublicAlert {
  * @remarks     There is intentionally no `message` property. Keep user-facing copy in the registry and pass dynamic
  *              interpolation values through `params`.
  *
- * @property    [severity]       Override the registry severity.
- * @property    [presentation]   Override the registry presentation.
- * @property    [field]          Associate the alert with a form field.
- * @property    [ref]            Reference to the corresponding server log entry.
- * @property    [params]         Primitive values substituted into named message tokens.
+ * @property    [severity]      Override the registry severity.
+ * @property    [presentation]  Override the registry presentation.
+ * @property    [field]         Associate the alert with a form field.
+ * @property    [ref]           Reference to the corresponding server log entry.
+ * @property    [params]        Primitive values substituted into named message tokens.
  */
 export interface AlertOverrides {
     severity?: AlertSeverity;
@@ -164,10 +164,10 @@ export interface AlertBannerProps {
  * @remarks     `count` merges identical notifications. `version` changes whenever the entry is refreshed so the
  *              viewport can restart its dismissal timer.
  *
- * @property    id       Stable identifier used for dismissal.
- * @property    alert    Serializable alert shown by this toast.
- * @property    count    Number of occurrences represented.
- * @property    version  Revision counter for timer refresh behaviour.
+ * @property    id          Stable identifier used for dismissal.
+ * @property    alert       Serializable alert shown by this toast.
+ * @property    count       Number of occurrences represented.
+ * @property    version     Revision counter for timer refresh behaviour.
  */
 export interface ToastItem {
     id: string;
@@ -260,8 +260,8 @@ export interface AlertContextValue {
  * @remarks     Internal composition contract: the provider supplies its context value and wraps application children.
  *              Feature consumers should use `AlertProvider` rather than rendering this component directly.
  *
- * @property    children  Application subtree rendered inside the provider.
- * @property    value     Context value supplied by the provider.
+ * @property    children    Application subtree rendered inside the provider.
+ * @property    value       Context value supplied by the provider.
  */
 export interface AlertProviderContentProps {
     children: ReactNode;
@@ -298,9 +298,9 @@ export interface AlertsApi {
  * @remarks     Use as one branch of `ActionResult<T>`. Keep `data` serializable because it crosses the server/client
  *              boundary.
  *
- * @property    ok      Literal success discriminant.
- * @property    data    Serializable action payload.
- * @property    [alert] Optional confirmation alert.
+ * @property    ok          Literal success discriminant.
+ * @property    data        Serializable action payload.
+ * @property    [alert]     Optional confirmation alert.
 
  */
 export interface ActionSuccess<T> {

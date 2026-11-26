@@ -14,6 +14,16 @@ export const AUTH_LABELS = {
     USER_EMAIL: "Email Address",
     USER_NAME: "Username",
     USER_PASSWORD: "Password",
+    VERIFY_EMAIL_TITLE: "Verify your email address",
+    VERIFY_EMAIL_RESEND: "Resend verification email",
+    VERIFY_EMAIL_RESENDING: "Sending...",
+    VERIFY_EMAIL_RESEND_COUNTDOWN: "Resend available in {seconds}s",
+    CANCEL_REGISTRATION_TITLE: "Cancel registration",
+    CANCEL_REGISTRATION_DESCRIPTION: "If you no longer want this account, you can permanently delete this unverified registration.",
+    CANCEL_REGISTRATION_PASSWORD: "Confirm your password",
+    CANCEL_REGISTRATION_LABEL: "Cancel registration",
+    CANCEL_REGISTRATION_PROCESSING: "Cancelling...",
+    CANCEL_REGISTRATION_SUCCESS: "Your registration has been cancelled.",
 } as const;
 
 /** Authentication form field names used by validation and alert metadata. */
@@ -35,4 +45,6 @@ export const AUTH_FORM_IDS = {
     REGISTER_ALERT_NAME: "register-username-alert",
     REGISTER_ALERT_EMAIL: "register-email-alert",
     REGISTER_ALERT_PASSWORD: "register-password-alert",
+    VERIFY_EMAIL_TITLE: "verification-title",
+    CANCEL_REGISTRATION_PASSWORD: "cancel-registration-password",
 } as const;

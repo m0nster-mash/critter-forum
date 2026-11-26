@@ -12,7 +12,7 @@ function main(): void {
     const npm = process.platform === "win32" ? "npm.cmd" : "npm";
     const result = spawnSync(
         npm,
-        ["run", "test:run"],
+        ["run", "test:run:unsafe"],
         {
             stdio: "inherit",
             env,

@@ -18,6 +18,7 @@ import type {JSX} from "react";
  * @returns {JSX.Element}   The profile page JSX element.
  */
 export default function ProfilePageView({user}: UserProfileProps): JSX.Element {
+
     return (
         <>
             <PageHeader {...getPageHeaderProps(PRIVATE_ROUTES.DASHBOARD)}/>

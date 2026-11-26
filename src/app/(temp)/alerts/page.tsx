@@ -8,6 +8,8 @@ import AlertTestPageView from "@/features/alerts/views/alert-test-page-view";
 
 /** Displays the alert test view to verified users. */
 export default async function AlertTestPage() {
+
     await requireVerifiedAuth();
+
     return <AlertTestPageView/>;
 }

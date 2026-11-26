@@ -3,17 +3,15 @@
  * @module          features/auth
  */
 
+import {VerificationResendPanel} from "@/features/auth/components/verification-resend-panel";
 import {requireUnverifiedAuth} from "@/features/auth/server/session";
 
-/** Displays the verification-pending page to an authenticated, unverified user. */
+/**
+ * Displays the verification-pending page to an authenticated, unverified user.
+ */
 export default async function VerifyEmailPage() {
-    await requireUnverifiedAuth();
 
-    return (
-        <main>
-            <h1>Verify your email address</h1>
-            <p>Your account has been created. Verify your email address to access Critter Forum.</p>
-            <p>Check your inbox and spam folder for the verification link.</p>
-        </main>
-    );
+    const session = await requireUnverifiedAuth();
+
+    return <VerificationResendPanel email={session.user.email}/>;
 }

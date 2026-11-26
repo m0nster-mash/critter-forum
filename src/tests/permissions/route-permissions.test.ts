@@ -41,5 +41,5 @@ suite.test("/admin requires admin.access and /admin/users requires admin.users.a
 suite.test("verification-pending route is private and does not require an admin permission", () => {
     assert.equal(PRIVATE_ROUTES.VERIFY_EMAIL.path, "/verify-email");
     assert.equal(PRIVATE_ROUTES.VERIFY_EMAIL.accessLevel, "private");
-    assert.equal(PRIVATE_ROUTES.VERIFY_EMAIL.permission, undefined);
+    assert.equal("permission" in PRIVATE_ROUTES.VERIFY_EMAIL, false);
 });

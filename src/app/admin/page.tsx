@@ -13,5 +13,6 @@ import {ADMIN_ROUTES} from "@/lib/constants/routes";
 export default async function AdminDashboardPage() {
 
     await requirePagePermission(ADMIN_ROUTES.DASHBOARD.permission);
+
     return <AdminDashboardView/>;
 }

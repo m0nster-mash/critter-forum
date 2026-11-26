@@ -4,13 +4,6 @@
  */
 
 /**
- * Stable identifiers for authentication email types.
- */
-export const RESEND_EMAIL_TYPES = {
-    EMAIL_VERIFICATION: "EMAIL_VERIFICATION",
-} as const;
-
-/**
  * Resend email error messages.
  *
  * @remarks     Centralizes configuration and delivery errors originating

@@ -12,5 +12,6 @@ import {requireVerifiedAuth} from "@/features/auth/server/session";
 export default async function DashboardPage() {
 
     await requireVerifiedAuth();
+
     return <DashboardPageView/>;
 }

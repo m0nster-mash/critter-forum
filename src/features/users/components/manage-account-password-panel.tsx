@@ -22,7 +22,7 @@ import {JSX, type SubmitEvent, useState} from "react";
 /**
  * Renders the current user's password settings.
  *
- * @returns      The rendered password settings panel.
+ * @returns The rendered password settings panel.
  */
 export function ManageAccountPasswordPanel(): JSX.Element {
 
@@ -145,8 +145,7 @@ export function ManageAccountPasswordPanel(): JSX.Element {
                                newPasswordAlert
                                    ? getUserAlertElementId(USER_ELEMENT_IDS.NEW_PASSWORD)
                                    : undefined
-                           } required
-                    />
+                           } required/>
 
                     <AlertBanner alert={newPasswordAlert}
                                  id={getUserAlertElementId(USER_ELEMENT_IDS.NEW_PASSWORD)}

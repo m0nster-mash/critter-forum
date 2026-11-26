@@ -27,6 +27,7 @@ import {requireVerifiedAuth} from "@/features/auth/server/session";
  * @throws      A Next.js redirect control-flow error when the visitor is signed out.
  */
 export async function requireActionPermission(permission: Permission): Promise<AuthSession> {
+
     const session = await requireVerifiedAuth();
 
     if (!(await hasPermission(session.user.id, permission))) {

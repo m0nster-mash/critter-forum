@@ -48,6 +48,7 @@ for (const moduleName of [
     "@/features/admin/user-management/views/admin-user-management-view",
     "@/features/admin/user-management/views/admin-edit-user-view",
     "@/features/alerts/views/alert-test-page-view",
+    "@/features/users/views/profile-page-view",
 ]) {
     mock.module(moduleName, {defaultExport: () => null});
 }

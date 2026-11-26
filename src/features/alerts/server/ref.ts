@@ -9,6 +9,7 @@
  * @returns     The value produced by this operation.
  */
 export function generateRef(): string {
+
     return crypto
         .randomUUID()
         .replace(/-/g, "")
