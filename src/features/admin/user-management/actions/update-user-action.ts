@@ -15,7 +15,7 @@ import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {requireActionPermission} from "@/features/admin/permissions/server/require-action-permission";
 import {getUserByEmail} from "@/features/admin/user-management/queries/get-user-by-email";
 import {getUserById} from "@/features/admin/user-management/queries/get-user-by-id";
-import {updateUser} from "@/features/admin/user-management/mutations/update-user";
+import {updateUser} from "@/features/admin/user-management/queries/update-user";
 import type {UpdateUserInput} from "@/features/admin/user-management/types";
 import {validateUserUpdate} from "@/features/admin/user-management/validation";
 

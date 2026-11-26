@@ -1,6 +1,6 @@
 /**
- * @fileOverview    Admin dashboard view
- * @module          features/admin
+ * @fileOverview    Admin user management view
+ * @module          features/admin/user-management
  */
 
 import {PageHeader} from "@/components/ui/page-header";

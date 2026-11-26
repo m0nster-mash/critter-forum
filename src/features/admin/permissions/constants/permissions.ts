@@ -20,7 +20,7 @@ export const PERMISSIONS = {
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 
 /**
- *
+ * TODO     Document
  */
 export const PERMISSION_DEFINITIONS = [
     {
@@ -45,8 +45,11 @@ export const PERMISSION_DEFINITIONS = [
 }[];
 
 /**
+ * TODO:: document
  *
- * @param value
+ * TODO     This is never in use; delete?
+ *
+ * @param   value   TODO:: document
  */
 export function isPermission(
     value: string,
