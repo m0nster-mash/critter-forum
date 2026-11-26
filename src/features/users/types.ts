@@ -18,3 +18,19 @@ export interface UserSummary {
     name: string;
     email: string;
 }
+
+/**
+ * Props shared by the current user's settings panels.
+ */
+export interface UserSettingsPanelProps {
+    user: UserSummary;
+}
+
+/**
+ * Input used to validate a password change.
+ */
+export interface PasswordChangeInput {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}

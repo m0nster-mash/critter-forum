@@ -7,6 +7,7 @@ import {ADMIN_ALERTS} from "@/features/admin/constants/alerts";
 import {APP_ALERT_CODES} from "@/features/alerts/constants/alert-codes";
 import type {AlertDefinition} from "@/features/alerts/types";
 import {AUTH_ALERTS} from "@/features/auth/constants/alerts";
+import {USER_ALERTS} from "@/features/users/constants/alerts";
 
 /**
  * Application-wide components that don't belong to any single feature.
@@ -56,6 +57,7 @@ const CORE_ALERTS = {
 export const ALERT_REGISTRY = {
     ...CORE_ALERTS,
     ...AUTH_ALERTS,
+    ...USER_ALERTS,
     ...ADMIN_ALERTS,
 } as const satisfies Record<string, AlertDefinition>;
 
