@@ -2,7 +2,7 @@
  * @fileOverview    Allows users to change their account password.
  * @module          features/users
  *
- * TODO             Replace magic strings with consts
+ * @TODO            Replace magic strings with consts
  */
 
 "use client";

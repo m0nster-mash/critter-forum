@@ -2,7 +2,7 @@
  * @fileOverview    Provides helpers for resolving route paths and page metadata.
  * @module          core-application
  *
- * TODO             Migrate into navigation feature package
+ * @TODO            Migrate into navigation feature package
  */
 
 import {MISSING_ROUTE_PARAMS, RouteMetadata} from "@/lib/constants/routes";

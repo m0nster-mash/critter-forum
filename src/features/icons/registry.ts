@@ -68,7 +68,7 @@ export function resolveIcon(
 /**
  * Utility to retrieve an array of all registered icon names.
  *
- * TODO     Not in use; delete?
+ * @TODO    Not in use; delete?
  */
 export function getAvailableIcons(): IconName[] {
     return Object.keys(ICON_REGISTRY) as IconName[];
