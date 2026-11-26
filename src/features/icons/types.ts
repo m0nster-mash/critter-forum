@@ -42,7 +42,6 @@ export type IconAccessibilityProps =
  * @property    [label]     Required when `semantic` is true; prohibited for decorative icons.
  */
 export type IconProps =
-// TODO:: replace magic strings with consts
     Omit<SVGProps<SVGSVGElement>, "width" | "height"> &
     IconAccessibilityProps & {
     icon?: ComponentType<SVGProps<SVGSVGElement>>;
@@ -63,10 +62,22 @@ export type IconSize =
     | typeof ICON_SIZE.LARGE
     | typeof ICON_SIZE.X_LARGE;
 
+
+/**
+ * Supported icon colour variants.
+ */
+export const ICON_VARIANT = {
+    DEFAULT: "default",
+    ACCENT: "accent",
+    DANGER: "danger",
+    SUCCESS: "success",
+    MUTED: "muted",
+} as const;
+
 /**
  * Semantic colour treatments supported by the icon component.
  *
  * @remarks     This is a visual treatment, not an accessibility role or alert severity. Use `danger` for destructive
  *              context, `success` for positive context, and `muted` for secondary decoration.
  */
-export type IconVariant = "default" | "accent" | "danger" | "success" | "muted";
+export type IconVariant = typeof ICON_VARIANT[keyof typeof ICON_VARIANT];

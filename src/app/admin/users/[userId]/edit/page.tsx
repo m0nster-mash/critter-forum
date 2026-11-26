@@ -4,7 +4,7 @@
  */
 
 import AdminEditUserView from "@/features/admin/user-management/views/admin-edit-user-view";
-import {UserProfilePageProps} from "@/lib/types";
+import {UserProfilePageProps} from "@/features/users/types";
 
 /**
  * Loads the administrator's version  of the selected user's account settings page.

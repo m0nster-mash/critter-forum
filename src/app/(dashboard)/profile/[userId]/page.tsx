@@ -5,8 +5,8 @@
 
 import {getUserById} from "@/features/admin/user-management/queries/get-user-by-id";
 import {requireAuth} from "@/features/auth/server/session";
+import {UserProfilePageProps} from "@/features/users/types";
 import ProfilePageView from "@/features/users/views/profile-page-view";
-import type {UserProfilePageProps} from "@/lib/types";
 import {notFound} from "next/navigation";
 
 /**

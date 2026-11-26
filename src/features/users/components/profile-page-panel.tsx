@@ -6,7 +6,8 @@
  * @TODO            Replace content with proper dashboard page at a later date
  */
 
-import type {UserProfileProps} from "@/lib/types";
+import {USER_FIELDS} from "@/features/users/constants/fields";
+import {UserProfileProps} from "@/features/users/types";
 import type {JSX} from "react";
 
 /**
@@ -22,11 +23,21 @@ export function ProfilePagePanel({user}: UserProfileProps): JSX.Element {
 
     return (
         <main>
-            <h1>{user.name}</h1>
+            <h2>{user.name}</h2>
 
             <dl>
-                <dt>User ID</dt>
+                <dt>{USER_FIELDS.ID}</dt>
                 <dd>{user.id}</dd>
+            </dl>
+
+            <dl>
+                <dt>{USER_FIELDS.NAME}</dt>
+                <dd>{user.name}</dd>
+            </dl>
+
+            <dl>
+                <dt>{USER_FIELDS.EMAIL}</dt>
+                <dd>{user.email}</dd>
             </dl>
         </main>
     );

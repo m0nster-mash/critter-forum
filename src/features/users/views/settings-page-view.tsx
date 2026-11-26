@@ -5,7 +5,7 @@
 
 "use client";
 
-import {PageHeader} from "@/components/ui/page-header";
+import {PageHeader} from "@/features/navigation/components/page-header";
 import {ManageAccountPasswordPanel} from "@/features/users/components/manage-account-password-panel";
 import {ManageProfileDetailsPanel} from "@/features/users/components/manage-profile-details-panel";
 import {useSession} from "@/lib/auth-client";

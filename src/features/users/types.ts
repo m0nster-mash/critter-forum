@@ -34,3 +34,44 @@ export interface PasswordChangeInput {
     newPassword: string;
     confirmPassword: string;
 }
+
+/**
+ * Props for the profile page panel.
+ *
+ * @remarks     This is deliberately distinct from `DashboardPageProps`: profile rendering has its own component
+ *              contract and may evolve independently even though both currently carry a user summary.
+ *
+ * @property    user    User whose public/profile details are being displayed.
+ */
+export interface UserProfileProps {
+    user: UserSummary;
+}
+
+/**
+ * Props for the profile page route/view when its dynamic segment is still represented as an asynchronous params value.
+ *
+ * @remarks     Next.js page props expose `params` as a promise in this project. Keep this route-level shape separate
+ *              from feature-level resolved identifiers such as `UserIdParams`.
+ *
+ * @property    params  Promise resolving to the route's dynamic user identifier.
+ */
+export interface UserProfilePageProps {
+    params: Promise<{ userId: string }>;
+}
+
+/**
+ * Minimal user identity and contact data shared by user-facing panels.
+ *
+ * @remarks     This is a UI/read-model shape, not a database row, authentication session, or authorization record.
+ *              Add fields only when they are safe and useful across the consumers listed below. Use feature-local
+ *              types for richer admin or server-only user records.
+ *
+ * @property    id      Stable user identifier.
+ * @property    name    Display name shown in the interface.
+ * @property    email   User email address shown by account and profile interfaces.
+ */
+export interface UserSummary {
+    id: string;
+    name: string;
+    email: string;
+}

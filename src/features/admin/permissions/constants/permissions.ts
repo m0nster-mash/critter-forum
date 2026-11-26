@@ -17,10 +17,20 @@ export const PERMISSIONS = {
     ADMIN_USERS_ACCESS: "admin.users.access",
     ADMIN_USERS_EDIT: "admin.users.edit",
 } as const;
+
+/**
+ * Union of every valid permission string.
+ *
+ * @remarks     Derived from `PERMISSIONS` so the type and the canonical identifier list stay in sync.
+ */
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 
 /**
- * @TODO    Document
+ * Human-readable labels and descriptions for every defined permission.
+ *
+ * @remarks     Used by the admin permission-management UI to render each grant to administrators.
+ * @remarks     Each `key` must match a value in `PERMISSIONS`;
+ *              the `satisfies` constraint enforces this at compile time
  */
 export const PERMISSION_DEFINITIONS = [
     {
@@ -45,11 +55,16 @@ export const PERMISSION_DEFINITIONS = [
 }[];
 
 /**
- * TODO::    document
+ * Type guard that checks whether a string is a defined permission key.
  *
- * @TODO    This is never in use; delete?
+ * @remarks     Compares the value against every entry in `PERMISSION_DEFINITIONS`.
+ * @remarks     Returns a type predicate, so a `true` result narrows `string` to `Permission`.
  *
- * @param   value   TODO:: document
+ * @param       value      The string to validate.
+ *
+ * @returns     {boolean}  `true` when `value` matches a defined permission key.
+ *
+ * @TODO        This function is never in use; decide whether to keep or delete it.
  */
 export function isPermission(
     value: string,

@@ -3,7 +3,7 @@
  * @module          features/admin/user-management
  */
 
-import {PageHeader} from "@/components/ui/page-header";
+import {PageHeader} from "@/features/navigation/components/page-header";
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
 import type {AdminEditUserViewProps} from "@/features/admin/permissions/types";
 import AdminEditUserPanel from "@/features/admin/user-management/components/admin-edit-user-panel";

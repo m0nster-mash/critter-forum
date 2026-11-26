@@ -8,9 +8,7 @@ import type {PublicAlert} from "@/features/alerts/types";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
 import {USER_ALERT_CODES} from "@/features/users/constants/alerts";
 import type {PasswordChangeInput} from "@/features/users/types";
-
-// TODO:: use regex email constant instead
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import {EMAIL_PATTERN} from "@/lib/constants/regex";
 
 /**
  * Validates a profile name.

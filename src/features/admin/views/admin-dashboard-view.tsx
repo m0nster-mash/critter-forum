@@ -3,7 +3,7 @@
  * @module          features/admin
  */
 
-import {PageHeader} from "@/components/ui/page-header";
+import {PageHeader} from "@/features/navigation/components/page-header";
 import AdminDashboardPanel from "@/features/admin/components/admin-dashboard-panel";
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
 import {ADMIN_ROUTES} from "@/lib/constants/routes";

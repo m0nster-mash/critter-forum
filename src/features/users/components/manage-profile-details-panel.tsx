@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Allows users to update their profile and email address.
  * @module          features/users
- *
- * @TODO            Replace magic strings with consts
  */
 
 "use client";
@@ -12,8 +10,12 @@ import {AlertBanner} from "@/features/alerts/components/alert-banner";
 import {createAlert} from "@/features/alerts/create-alert";
 import {readAuthError} from "@/features/auth/utilities/auth-errors";
 import {USER_ALERT_CODES} from "@/features/users/constants/alerts";
+import {USER_ELEMENT_IDS, getUserAlertElementId} from "@/features/users/constants/elements";
+import {AUTH_ERROR_CODES} from "@/features/users/constants/errors";
+import {USER_FIELDS} from "@/features/users/constants/fields";
+import {USER_UI_TEXT} from "@/features/users/constants/ui";
 import type {UserSettingsPanelProps} from "@/features/users/types";
-import {validateEmailAddress, validateProfileName,} from "@/features/users/validation";
+import {validateEmailAddress, validateProfileName} from "@/features/users/validation";
 import {authClient} from "@/lib/auth-client";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {useRouter} from "next/navigation";
@@ -21,8 +23,14 @@ import {JSX, type SubmitEvent, useEffect, useState} from "react";
 
 /**
  * Renders the current user's profile settings.
+ *
+ * @param user - Current authenticated user's profile information.
+ *
+ * @returns    The rendered profile settings panel.
  */
-export function ManageProfileDetailsPanel({user}: UserSettingsPanelProps): JSX.Element {
+export function ManageProfileDetailsPanel(
+    {user}: UserSettingsPanelProps,
+): JSX.Element {
 
     const router = useRouter();
 
@@ -36,8 +44,8 @@ export function ManageProfileDetailsPanel({user}: UserSettingsPanelProps): JSX.E
     const [savingName, setSavingName] = useState(false);
     const [requestingEmail, setRequestingEmail] = useState(false);
 
-    const nameAlert = profileAlerts.fieldAlert("name");
-    const emailAlert = emailAlerts.fieldAlert("email");
+    const nameAlert = profileAlerts.fieldAlert(USER_FIELDS.NAME);
+    const emailAlert = emailAlerts.fieldAlert(USER_FIELDS.EMAIL);
 
     useEffect(() => {
         setName(user.name);
@@ -74,13 +82,14 @@ export function ManageProfileDetailsPanel({user}: UserSettingsPanelProps): JSX.E
             }
 
             setName(normalizedName);
+
             profileAlerts.present(
                 createAlert(USER_ALERT_CODES.PROFILE_UPDATED),
             );
 
             router.refresh();
 
-        } catch (err: unknown) {
+        } catch {
             profileAlerts.present(
                 createAlert(USER_ALERT_CODES.PROFILE_UPDATE_FAILED),
             );
@@ -121,8 +130,8 @@ export function ManageProfileDetailsPanel({user}: UserSettingsPanelProps): JSX.E
                 const {code} = readAuthError(result.error);
 
                 const alertCode = (
-                    code === "USER_ALREADY_EXISTS"
-                    || code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
+                    code === AUTH_ERROR_CODES.USER_ALREADY_EXISTS
+                    || code === AUTH_ERROR_CODES.USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL
                 )
                     ? USER_ALERT_CODES.EMAIL_ALREADY_IN_USE
                     : USER_ALERT_CODES.EMAIL_CHANGE_FAILED;
@@ -138,7 +147,7 @@ export function ManageProfileDetailsPanel({user}: UserSettingsPanelProps): JSX.E
                 createAlert(USER_ALERT_CODES.EMAIL_CHANGE_REQUESTED),
             );
 
-        } catch (err: unknown) {
+        } catch {
             emailAlerts.present(
                 createAlert(USER_ALERT_CODES.EMAIL_CHANGE_FAILED),
             );
@@ -149,68 +158,98 @@ export function ManageProfileDetailsPanel({user}: UserSettingsPanelProps): JSX.E
 
     return (
         <section>
-            <h2>Profile Details</h2>
+            <h2>{USER_UI_TEXT.PROFILE.TITLE}</h2>
 
             <form onSubmit={handleNameSubmit} noValidate>
                 <AlertBanner alert={profileAlerts.formAlert}/>
 
                 <div>
-                    <label htmlFor="profile-name">Name</label>
-                    <input id="profile-name"
-                           name="name"
-                           type="text"
-                           autoComplete="name"
-                           value={name}
-                           onChange={(event) => setName(event.target.value)}
-                           aria-invalid={nameAlert ? true : undefined}
-                           aria-describedby={nameAlert ? "profile-name-alert" : undefined}
-                           required/>
-                    <AlertBanner alert={nameAlert}
-                                 id="profile-name-alert"
-                                 variant="field"/>
+                    <label htmlFor={USER_ELEMENT_IDS.PROFILE_NAME}>
+                        {USER_UI_TEXT.PROFILE.NAME_LABEL}
+                    </label>
+
+                    <input
+                        id={USER_ELEMENT_IDS.PROFILE_NAME}
+                        name={USER_FIELDS.NAME}
+                        type="text"
+                        autoComplete="name"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
+                        aria-invalid={nameAlert ? true : undefined}
+                        aria-describedby={
+                            nameAlert
+                                ? getUserAlertElementId(USER_ELEMENT_IDS.PROFILE_NAME)
+                                : undefined
+                        }
+                        required
+                    />
+
+                    <AlertBanner
+                        alert={nameAlert}
+                        id={getUserAlertElementId(USER_ELEMENT_IDS.PROFILE_NAME)}
+                        variant="field"
+                    />
                 </div>
 
                 <button type="submit" disabled={savingName}>
-                    {savingName ? "Saving..." : "Update Name"}
+                    {savingName
+                        ? USER_UI_TEXT.PROFILE.NAME_SUBMITTING
+                        : USER_UI_TEXT.PROFILE.NAME_SUBMIT}
                 </button>
             </form>
 
             <div>
-                <h3>Email Address</h3>
+                <h3>{USER_UI_TEXT.EMAIL.TITLE}</h3>
 
-                <p>Current email: <strong>{user.email}</strong></p>
+                <p>
+                    {USER_UI_TEXT.EMAIL.CURRENT_LABEL}{" "}
+                    <strong>{user.email}</strong>
+                </p>
 
                 <form onSubmit={handleEmailSubmit} noValidate>
                     <AlertBanner alert={emailAlerts.formAlert}/>
 
                     <div>
-                        <label htmlFor="new-email">New Email Address</label>
-                        <input id="new-email"
-                               name="email"
-                               type="email"
-                               autoComplete="email"
-                               placeholder="you@example.com"
-                               value={newEmail}
-                               onChange={(event) => setNewEmail(event.target.value)}
-                               aria-invalid={emailAlert ? true : undefined}
-                               aria-describedby={emailAlert ? "new-email-alert" : undefined}
-                               required/>
-                        <AlertBanner alert={emailAlert}
-                                     id="new-email-alert"
-                                     variant="field"/>
+                        <label htmlFor={USER_ELEMENT_IDS.NEW_EMAIL}>
+                            {USER_UI_TEXT.EMAIL.NEW_LABEL}
+                        </label>
+
+                        <input
+                            id={USER_ELEMENT_IDS.NEW_EMAIL}
+                            name={USER_FIELDS.EMAIL}
+                            type="email"
+                            autoComplete="email"
+                            placeholder={USER_UI_TEXT.EMAIL.PLACEHOLDER}
+                            value={newEmail}
+                            onChange={(event) => setNewEmail(event.target.value)}
+                            aria-invalid={emailAlert ? true : undefined}
+                            aria-describedby={
+                                emailAlert
+                                    ? getUserAlertElementId(USER_ELEMENT_IDS.NEW_EMAIL)
+                                    : undefined
+                            }
+                            required
+                        />
+
+                        <AlertBanner
+                            alert={emailAlert}
+                            id={getUserAlertElementId(USER_ELEMENT_IDS.NEW_EMAIL)}
+                            variant="field"
+                        />
                     </div>
 
                     <button type="submit" disabled={requestingEmail}>
-                        {requestingEmail ? "Sending..." : "Change Email"}
+                        {requestingEmail
+                            ? USER_UI_TEXT.EMAIL.SUBMITTING
+                            : USER_UI_TEXT.EMAIL.SUBMIT}
                     </button>
                 </form>
 
                 {pendingEmail && (
                     <p role="status">
-                        A verification link has been requested for{" "}
-                        <strong>{pendingEmail}</strong>.
-                        Your current email remains active until the new address
-                        is verified.
+                        {USER_UI_TEXT.EMAIL.PENDING_VERIFICATION(pendingEmail)}
+                        {" "}
+                        {USER_UI_TEXT.EMAIL.PENDING_VERIFICATION_NOTICE}
                     </p>
                 )}
             </div>
