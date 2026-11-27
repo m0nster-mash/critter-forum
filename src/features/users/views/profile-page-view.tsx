@@ -21,7 +21,7 @@ export default function ProfilePageView({user}: UserProfileProps): JSX.Element {
 
     return (
         <>
-            <PageHeader {...getPageHeaderProps(PRIVATE_ROUTES.DASHBOARD)}/>
+            <PageHeader {...getPageHeaderProps(PRIVATE_ROUTES.PROFILE, {userId: user.id})}/>
             <ProfilePagePanel user={user}/>
         </>
     );

@@ -57,8 +57,10 @@ export function AlertProvider({children}: { children: React.ReactNode }) {
         [toasts, notify, dismiss, clear]
     );
 
-    // TODO:: fix this -- TS2769: No overload matches this call.
-    return createElement(AlertProviderContent, {value}, children);
+    return createElement(AlertProviderContent, {
+        value,
+        children,
+    });
 }
 
 /**
