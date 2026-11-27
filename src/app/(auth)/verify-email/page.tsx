@@ -3,8 +3,8 @@
  * @module          authentication
  */
 
-import {VerifyEmailView} from "@/features/auth/views/verify-email-view";
 import {requireUnverifiedAuth} from "@/features/auth/server/session";
+import {VerifyEmailView} from "@/features/auth/views/verify-email-view";
 
 /**
  * Displays the verification-pending page to an authenticated, unverified user.

@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Composes the page header and verification-resend panel.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {VerificationResendPanel} from "@/features/auth/components/verification-resend-panel";

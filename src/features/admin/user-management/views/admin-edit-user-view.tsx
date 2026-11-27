@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Admin edit user view
- * @module          features/admin/user-management
+ * @module          administration/user-management
  */
 
 import type {AdminEditUserViewProps} from "@/features/admin/permissions/types";

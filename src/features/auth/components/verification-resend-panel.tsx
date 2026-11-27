@@ -1,30 +1,32 @@
 /**
  * @fileOverview    Renders the verification-pending instructions and secure resend control.
  * @module          authentication
- *
- * @TODO            Document functions properly
- * @TODO            Swap out FormEvent for something that isn't deprecated
- * @TODO            Swap magic strings for consts
  */
 
 "use client";
 
+import {ALERT_ROLES} from "@/features/alerts/constants/alert-types";
 import {AUTH_API_ERRORS, AUTH_API_REQUEST, AUTH_API_ROUTES} from "@/features/auth/constants/api";
 import {AUTH_ERROR_CODES} from "@/features/auth/constants/errors";
 import {AUTH_HTTP_STATUS} from "@/features/auth/constants/integration";
 import {VERIFICATION_RESEND_MESSAGES, VERIFICATION_RESEND_UI} from "@/features/auth/constants/resend-policy";
-import {AUTH_FORM_IDS, AUTH_INPUT_ATTRIBUTES, AUTH_LABELS} from "@/features/auth/constants/ui";
+import {AUTH_FORM_IDS, AUTH_INPUT_ATTRIBUTES, AUTH_LABELS, POLITE_ARIA} from "@/features/auth/constants/ui";
 import type {VerificationResendPanelProps} from "@/features/auth/types";
 import {authClient} from "@/lib/auth-client";
 import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";
 import {resolvePath} from "@/lib/utilities/route-utils";
 import {useRouter} from "next/navigation";
-import {type FormEvent, useEffect, useState} from "react";
+import React, {JSX, useEffect, useState} from "react";
 
 /**
  * Reads the resend cooldown carried by the API error response, when the client exposes it.
  *
- * @param error  TODO:: document
+ * @remarks     Checks `error.retryAfter`, `error.body.retryAfter`, and a retry-after pattern in `error.message`.
+ *              Falls back to `null` when no usable value is found.
+ *
+ * @param       error   The API error object to inspect for a retry-after value.
+ *
+ * @returns     {number | null}  The cooldown in seconds, or `null` when none can be determined.
  */
 function getRetryAfter(error: unknown): number | null {
     if (typeof error !== "object" || error === null) return null;
@@ -55,11 +57,19 @@ function getRetryAfter(error: unknown): number | null {
 }
 
 /**
- * Renders the verification-pending page's resend interaction.
+ * Renders the verification-pending page's resend interaction: an email notice, a resend button with cooldown
+ * countdown, and an optional cancel-registration form.
  *
- * @param email TODO:: document
+ * @remarks     Handles resend errors including rate-limit (429) responses, applying a cooldown derived from the API
+ *              error when available.
+ * @remarks     The cancel-registration form submits a password to delete the session and then redirects to the login
+ *              page.
+ *
+ * @param       email  The user's email address shown in the verification notice.
+ *
+ * @returns     {JSX.Element}   The verification-resend panel JSX element.
  */
-export function VerificationResendPanel({email}: VerificationResendPanelProps) {
+export function VerificationResendPanel({email}: VerificationResendPanelProps): JSX.Element {
     const [loading, setLoading] = useState(false);
     const [cooldown, setCooldown] = useState(0);
     const [message, setMessage] = useState("");
@@ -118,9 +128,7 @@ export function VerificationResendPanel({email}: VerificationResendPanelProps) {
 
                     setMessage(
                         code === AUTH_API_ERRORS.VERIFICATION_RESEND_LIMIT ||
-                        errorMessage.includes(
-                            VERIFICATION_RESEND_UI.MAXIMUM_ATTEMPTS_ERROR_FRAGMENT,
-                        )
+                        errorMessage.includes(VERIFICATION_RESEND_UI.MAXIMUM_ATTEMPTS_ERROR_FRAGMENT,)
                             ? VERIFICATION_RESEND_MESSAGES.LIMIT_REACHED
                             : VERIFICATION_RESEND_MESSAGES.COOLDOWN,
                     );
@@ -145,10 +153,20 @@ export function VerificationResendPanel({email}: VerificationResendPanelProps) {
     }
 
     /**
-     * TODO:: document
-     * @param event TODO:: document
+     * Cancels the user's registration by submitting their password to the cancel-registration endpoint, then signs
+     * them out and redirects to the login page.
+     *
+     * @remarks     Prevents the default form submission.
+     *              On success, clears the password field, signs out via `authClient.signOut()`, and redirects to
+     *              `PUBLIC_ROUTES.LOGIN`. On failure, displays the registration-failed error message.
+     * @remark      Loading state is cleared in a `finally` block.
+     *
+     * @param       event  The form submission event for the cancel-registration form.
+     *
+     * @returns     {Promise<void>}  Resolves when the cancel-registration flow completes.
      */
-    async function handleCancelRegistration(event: FormEvent<HTMLFormElement>) {
+    async function handleCancelRegistration(event: React.SubmitEvent<HTMLFormElement>): Promise<void> {
+
         event.preventDefault();
         setCancelling(true);
         setCancellationMessage("");
@@ -220,7 +238,7 @@ export function VerificationResendPanel({email}: VerificationResendPanelProps) {
             </button>
 
             {message && (
-                <p role={messageIsError ? "alert" : "status"} aria-live="polite">
+                <p role={messageIsError ? ALERT_ROLES.ALERT : ALERT_ROLES.STATUS} aria-live={POLITE_ARIA}>
                     {message}
                 </p>
             )}
@@ -238,9 +256,7 @@ export function VerificationResendPanel({email}: VerificationResendPanelProps) {
 
                     <input id={AUTH_FORM_IDS.CANCEL_REGISTRATION_PASSWORD}
                            type={AUTH_INPUT_ATTRIBUTES.PASSWORD_TYPE}
-                           autoComplete={
-                               AUTH_INPUT_ATTRIBUTES.CURRENT_PASSWORD_AUTOCOMPLETE
-                           }
+                           autoComplete={AUTH_INPUT_ATTRIBUTES.CURRENT_PASSWORD_AUTOCOMPLETE}
                            value={password}
                            onChange={(event) => setPassword(event.target.value)}
                            disabled={cancelling}
@@ -255,8 +271,8 @@ export function VerificationResendPanel({email}: VerificationResendPanelProps) {
                 </form>
 
                 {cancellationMessage && (
-                    <p role={cancellationError ? "alert" : "status"}
-                       aria-live="polite">
+                    <p role={cancellationError ? ALERT_ROLES.ALERT : ALERT_ROLES.STATUS}
+                       aria-live={POLITE_ARIA}>
                         {cancellationMessage}
                     </p>
                 )}

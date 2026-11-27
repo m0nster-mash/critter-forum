@@ -62,3 +62,5 @@ export const AUTH_INPUT_ATTRIBUTES = {
     PASSWORD_TYPE: "password",
     CURRENT_PASSWORD_AUTOCOMPLETE: "current-password",
 } as const;
+
+export const POLITE_ARIA = "polite";
