@@ -10,7 +10,7 @@ export const PASSWORD_MIN_LENGTH = 7;
 export const DEFAULT_FROM = "Critter Forum <onboarding@resend.dev>";
 
 /** Encoding types */
-export const ENCODING ={
+export const ENCODING = {
     UTF8: "utf8",
     HEX: "hex"
 } as const;

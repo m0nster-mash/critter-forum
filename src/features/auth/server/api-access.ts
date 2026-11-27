@@ -6,7 +6,8 @@
 import {
     AUTH_API_BASE_PATH,
     AUTH_API_ERROR_MESSAGES,
-    AUTH_API_ERRORS, AUTH_PATHS,
+    AUTH_API_ERRORS,
+    AUTH_PATHS,
     UNVERIFIED_AUTH_API_ALLOWED_PATHS,
 } from "@/features/auth/constants/api";
 import {RESEND_REASON} from "@/features/auth/constants/resend";
