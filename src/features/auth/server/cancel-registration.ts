@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Deletes an authenticated account that has not completed email verification.
- * @module          features/auth
+ * @module          authentication
  *
  * @TODO            Relocate into `/queries`
  */

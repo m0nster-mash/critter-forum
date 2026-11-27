@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Renders the sign-out control and reports the result to the user.
- * @module          features/auth
+ * @module          authentication
  */
 
 "use client";

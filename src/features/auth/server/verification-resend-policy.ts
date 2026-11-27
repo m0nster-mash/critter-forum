@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Evaluates whether another email-verification message may be requested.
- * @module          features/auth
+ * @module          authentication
  *
  * @TODO            Migrate interfaces into `types.ts`
  * @                Replace magic strings witg const

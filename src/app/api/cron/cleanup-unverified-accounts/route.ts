@@ -1,14 +1,14 @@
 /**
  * @fileOverview    Authenticated scheduled endpoint for expired pending-registration cleanup.
- * @module          app-api
- *
- * @TODO            Replace magic strings with consts
+ * @module          authentication
  */
 
 import {logger} from "@/features/alerts/server/logger";
+import {AUTH_ERROR_CODES} from "@/features/auth/constants/errors";
 import {AUTH_LOG_MESSAGES} from "@/features/auth/constants/logging";
 import {AUTH_SCOPES} from "@/features/auth/constants/scope";
 import {cleanupExpiredUnverifiedAccounts} from "@/features/auth/server/cleanup-unverified-accounts";
+import {HEADERS} from "@/lib/constants/global";
 import {timingSafeEqual} from "node:crypto";
 
 const maintenanceLogger = logger.child({scope: AUTH_SCOPES.AUTH_MAINTENANCE});
@@ -20,7 +20,7 @@ export const runtime = "nodejs";
  */
 function hasValidCronAuthorization(request: Request): boolean {
     const configuredSecret = process.env.CRON_SECRET;
-    const authorization = request.headers.get("authorization");
+    const authorization = request.headers.get(HEADERS.AUTHORIZATION);
 
     if (!configuredSecret || !authorization?.startsWith("Bearer ")) return false;
 
@@ -36,7 +36,7 @@ function hasValidCronAuthorization(request: Request): boolean {
  */
 export async function GET(request: Request): Promise<Response> {
     if (!hasValidCronAuthorization(request)) {
-        return Response.json({error: "Unauthorized"}, {status: 401});
+        return Response.json({error: AUTH_ERROR_CODES.UNAUTHORIZED}, {status: 401});
     }
 
     try {
@@ -54,6 +54,6 @@ export async function GET(request: Request): Promise<Response> {
         });
     } catch (err: unknown) {
         maintenanceLogger.error(AUTH_LOG_MESSAGES.UNVERIFIED_ACCOUNT_CLEANUP_FAILED, {err});
-        return Response.json({error: "Pending-account cleanup failed."}, {status: 500});
+        return Response.json({error: AUTH_ERROR_CODES.CLEANUP_FAILED}, {status: 500});
     }
 }

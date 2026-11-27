@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines authentication form inputs and component contracts.
- * @module          features/auth
+ * @module          authentication
  *
  * @remarks         Keep auth-specific component props and normalized auth inputs here. Do not place session or
  *                  authorization contracts here; those are owned by `server/session.ts` and the admin permission

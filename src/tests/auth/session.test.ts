@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Verifies shared session retrieval and verified/unverified authentication guard behaviour.
- * @module          features/auth
+ * @module          authentication
  *
  * @remarks         Better Auth, Next.js request APIs, route resolution, and React's cache are replaced with controllable
  *                  doubles. This suite needs no running app or database.

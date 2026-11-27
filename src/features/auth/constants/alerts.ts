@@ -1,6 +1,6 @@
 /**
- @fileOverview    Provides the alerts functionality used by the application.
- @module          features/auth
+ * @fileOverview    Provides the alerts functionality used by the application.
+ * @module          authentication
  */
 
 import type {AlertDefinition} from "@/features/alerts/types";

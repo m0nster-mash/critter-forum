@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Verifies sign-up verification delivery is explicitly enabled and scheduled outside the response.
- * @module          features/auth
+ * @module          authentication
  *
  * @remarks         Better Auth, Next.js post-response work, database, logger, and provider modules are replaced with
  *                  controlled doubles; this suite does not contact external services.

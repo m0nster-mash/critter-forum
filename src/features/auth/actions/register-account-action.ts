@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Implements the server action that validates and creates a user account.
- * @module          features/auth
+ * @module          authentication
  */
 
 "use server";

@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Verifies the password-confirmed pending-registration cancellation endpoint.
- * @module          features/auth
+ * @module          authentication
  *
  * @remarks         Better Auth and the account-deletion service are controlled doubles; no database is contacted.
  * @remarks         Requires `--experimental-test-module-mocks` (set in the `test:run` script).

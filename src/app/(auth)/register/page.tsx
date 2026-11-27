@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Public -> Registration Page
- * @module          features/auth
+ * @module          authentication
  */
 
 import {RegistrationPageView} from "@/features/auth/views/registration-page-view";

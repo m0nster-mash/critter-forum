@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines the server-enforced email-verification resend policy.
- * @module          features/auth
+ * @module          authentication
  */
 
 /** Minimum time between verification-email resend requests. */

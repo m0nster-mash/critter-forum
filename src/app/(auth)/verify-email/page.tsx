@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Displays the restricted landing page for authenticated users awaiting email verification.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {VerificationResendPanel} from "@/features/auth/components/verification-resend-panel";

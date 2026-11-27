@@ -1,6 +1,6 @@
 /**
- @fileOverview    Provides the policy functionality used by the application.
- @module          features/auth
+ * @fileOverview    Provides the policy functionality used by the application.
+ * @module          authentication
  */
 
 /** Minimum password length shared by registration validation and Better Auth configuration. */

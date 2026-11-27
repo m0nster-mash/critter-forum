@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Provides shared server-side session access and verification-state authentication guards.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {PRIVATE_ROUTES, PUBLIC_ROUTES} from "@/lib/constants/routes";

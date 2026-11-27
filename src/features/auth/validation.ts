@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines and applies shared authentication form validation rules.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {createAlert} from "@/features/alerts/create-alert";

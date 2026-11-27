@@ -1,8 +1,8 @@
 /**
  * @fileOverview    Verifies authorization and responses for scheduled pending-account cleanup.
- * @module          features/auth
  * @remarks         The cleanup service is mocked; no database is contacted.
  * @remarks         Requires `--experimental-test-module-mocks` (set in the `test:run` script).
+ * @module          authentication
  */
 
 import {Suite} from "@/tests/test-config";

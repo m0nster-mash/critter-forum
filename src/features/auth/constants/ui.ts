@@ -1,6 +1,6 @@
 /**
- @fileOverview    Provides the ui functionality used by the application.
- @module          features/auth
+ * @fileOverview    Provides the ui functionality used by the application.
+ * @module          authentication
  */
 
 /** User-facing labels used by authentication components. */

@@ -16,3 +16,8 @@ export const METADATA: Metadata = {
     title: SITE_TITLE,
     description: SITE_TAG,
 };
+
+/** TODO:: document */
+export const HEADERS = {
+    AUTHORIZATION: "authorization",
+};

@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Composes the page header and login panel for the login route.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {LoginPanel} from "@/features/auth/components/login-panel";

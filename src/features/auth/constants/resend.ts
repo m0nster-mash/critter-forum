@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines email types, templates, and errors for Resend.
- * @module          features/auth
+ * @module          authentication
  */
 
 /**

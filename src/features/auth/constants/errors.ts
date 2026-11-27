@@ -3,4 +3,7 @@ export const AUTH_ERROR_CODES = {
 
     USER_ALREADY_EXISTS: "USER_ALREADY_EXISTS",
     USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL",
+
+    UNAUTHORIZED: "Unauthorized",
+    CLEANUP_FAILED: "Pending-account cleanup failed.",
 } as const;

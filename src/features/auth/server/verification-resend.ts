@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Reserves verification-email resend attempts using persistent PostgreSQL state.
- * @module          features/auth
+ * @module          authentication
  *
  * @TODO            Relocate into `/queries`
  * @TODO            Replace magic strings with const

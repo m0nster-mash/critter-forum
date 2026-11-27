@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines authentication-specific logging messages.
- * @module          features/auth
+ * @module          authentication
  */
 
 /**

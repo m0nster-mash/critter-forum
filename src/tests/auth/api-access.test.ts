@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Verifies Better Auth API access for signed-out, verified, and unverified sessions.
- * @module          features/auth
+ * @module          authentication
  *
  * @remarks         Better Auth is replaced with a controllable session lookup; no database or auth provider is used.
  * @remarks         Requires `--experimental-test-module-mocks` (set in the `test:run` script).

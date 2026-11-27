@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Restricts Better Auth API requests made by authenticated users with unverified email addresses.
- * @module          features/auth
+ * @module          authentication
  *
  * @TODO            Replace magic strings with const
  */

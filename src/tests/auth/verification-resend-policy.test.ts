@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Tests verification-email resend cooldown and attempt-limit policy.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {

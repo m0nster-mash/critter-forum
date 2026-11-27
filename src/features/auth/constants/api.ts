@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines the Better Auth API paths and access policy for unverified sessions.
- * @module          features/auth
+ * @module          authentication
  */
 
 /** Base path mounted by the application's Better Auth catch-all route. */

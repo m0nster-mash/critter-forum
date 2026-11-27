@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Composes the page header and registration panel for account creation.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {RegistrationPanel} from "@/features/auth/components/registration-panel";

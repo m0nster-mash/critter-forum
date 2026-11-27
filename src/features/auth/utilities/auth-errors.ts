@@ -1,6 +1,6 @@
 /**
- @fileOverview    Normalizes Better Auth errors and maps known conditions to registered alert codes.
- @module          features/auth
+ * @fileOverview    Normalizes Better Auth errors and maps known conditions to registered alert codes.
+ * @module          authentication
  */
 
 import type {AlertCode} from "@/features/alerts/registry";

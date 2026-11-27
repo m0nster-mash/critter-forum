@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Renders the verification-pending instructions and secure resend control.
- * @module          features/auth
+ * @module          authentication
  *
  * @TODO            Replace magic strings with consts
  * @TODO            Document functions properly

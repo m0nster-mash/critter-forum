@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Defines the retention policy for pending email-verification registrations.
- * @module          features/auth
+ * @module          authentication
  */
 
 /** Default lifetime of an unverified registration, in days. */

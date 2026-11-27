@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Verifies pending-registration cancellation and expiry against PostgreSQL.
- * @module          features/auth
+ * @module          authentication
  *
  * @remarks         Runs only when TEST_DATABASE_URL is set; otherwise tests are skipped. Apply migrations to the
  *                  isolated test database before running the suite with `npm run test:run`.

@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Removes expired, unverified registrations in bounded transactional batches.
- * @module          features/auth
+ * @module          authentication
  *
  * @TODO            Relocate into `/queries`
  */

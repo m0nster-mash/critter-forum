@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Handles password-confirmed cancellation of an unverified registration.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {AUTH_API_ERROR_MESSAGES, AUTH_API_ERRORS} from "@/features/auth/constants/api";
