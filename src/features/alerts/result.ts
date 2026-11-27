@@ -65,5 +65,6 @@ export function succeed<T>(
  * @returns {ActionFailure} The failure result.
  */
 export function fail(alert: PublicAlert): ActionFailure {
+
     return {ok: false, alert};
 }

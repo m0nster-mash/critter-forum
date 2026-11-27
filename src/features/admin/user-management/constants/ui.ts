@@ -6,17 +6,15 @@
 /** HTML IDs used by the edit-user form and its field alerts. */
 export const USER_FORM_IDS = {
     NAME: "edit-user-name",
-    EMAIL: "edit-user-email",
     ALERT_NAME: "edit-user-name-alert",
-    ALERT_EMAIL: "edit-user-email-alert",
 } as const;
 
 export const FIELD_NAMES = {
     NAME: "name",
-    EMAIL: "email",
 } as const;
 
 export const ADMIN_LABELS = {
+    ID: "User ID",
     NAME: "Username",
     EMAIL: "Email",
     ACTIONS: "Actions",

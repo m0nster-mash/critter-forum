@@ -1,6 +1,6 @@
 /**
- @fileOverview    Provides the alerts functionality used by the application.
- @module          features/auth
+ * @fileOverview    Provides the alerts functionality used by the application.
+ * @module          authentication
  */
 
 import type {AlertDefinition} from "@/features/alerts/types";
@@ -59,7 +59,8 @@ export const AUTH_ALERTS = {
 
     AUTH_REGISTER_SUCCESS: {
         severity: "success",
-        message: "Your account has been created.",
+        message: "Your account has been created. Check your inbox for a verification link; " +
+            "if it does not arrive, check your spam folder.",
         presentation: "toast",
         log: {server: "info", client: false},
     },

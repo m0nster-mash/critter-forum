@@ -14,6 +14,7 @@ import {EMAIL_PATTERN} from "@/lib/constants/regex";
  * Validates a profile name.
  */
 export function validateProfileName(name: string): PublicAlert | null {
+
     if (!name.trim()) {
         return createAlert(USER_ALERT_CODES.PROFILE_NAME_REQUIRED);
     }
@@ -25,6 +26,7 @@ export function validateProfileName(name: string): PublicAlert | null {
  * Validates a proposed email address.
  */
 export function validateEmailAddress(email: string): PublicAlert | null {
+
     if (!EMAIL_PATTERN.test(email)) {
         return createAlert(USER_ALERT_CODES.EMAIL_INVALID);
     }

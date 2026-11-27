@@ -53,8 +53,7 @@ export interface UserIdParams {
  * @remarks     Extends the resolved route identifier rather than embedding a user record. Use this at the view
  *              boundary when the view is responsible for loading the selected user.
  */
-export interface AdminEditUserViewProps extends UserIdParams {
-}
+export type AdminEditUserViewProps = UserIdParams;
 
 /**
  * Input for selecting/loading a user in the admin query layer.
@@ -62,5 +61,4 @@ export interface AdminEditUserViewProps extends UserIdParams {
  * @remarks     Kept as a named query contract so query call sites describe intent rather than passing an anonymous
  *              object. It intentionally remains distinct from view props even though both currently contain `userId`.
  */
-export interface GetSelectedUserProps extends UserIdParams {
-}
+export type GetSelectedUserProps = UserIdParams;

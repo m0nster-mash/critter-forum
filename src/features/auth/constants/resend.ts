@@ -1,14 +1,7 @@
 /**
  * @fileOverview    Defines email types, templates, and errors for Resend.
- * @module          features/auth
+ * @module          authentication
  */
-
-/**
- * Stable identifiers for authentication email types.
- */
-export const RESEND_EMAIL_TYPES = {
-    EMAIL_VERIFICATION: "EMAIL_VERIFICATION",
-} as const;
 
 /**
  * Resend email error messages.
@@ -19,6 +12,7 @@ export const RESEND_EMAIL_TYPES = {
 export const RESEND_ERRORS = {
     RESEND_KEY_NOT_CONFIG: "RESEND_API_KEY is not configured.",
     RESEND_EMAIL_FAILURE: "Resend email delivery failed: ",
+    VERIFICATION_RESEND_FAILURE: "Verification resend state could not be loaded.",
 } as const;
 
 /**
@@ -44,3 +38,9 @@ export const RESEND_EMAILS = {
         ].join("\n"),
     },
 } as const;
+
+/** Reason for triggering the verification email resend. */
+export const RESEND_REASON = {
+    COOLDOWN: "cooldown",
+    LIMIT: "limit",
+};

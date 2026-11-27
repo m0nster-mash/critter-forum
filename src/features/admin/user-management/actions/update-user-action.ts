@@ -9,7 +9,6 @@ import {ADMIN_ALERT_CODES} from "@/features/admin/constants/alerts";
 import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
 import {requireActionPermission} from "@/features/admin/permissions/server/require-action-permission";
 import {ADMIN_ACTION_NAMES} from "@/features/admin/user-management/constants/integrations";
-import {getUserByEmail} from "@/features/admin/user-management/queries/get-user-by-email";
 import {getUserById} from "@/features/admin/user-management/queries/get-user-by-id";
 import {updateUser} from "@/features/admin/user-management/queries/update-user";
 import type {UpdateUserInput} from "@/features/admin/user-management/types";
@@ -20,10 +19,9 @@ import {AlertError} from "@/features/alerts/server/alert-error";
 import {safeAction} from "@/features/alerts/server/safe-action";
 
 /**
- * Updates an existing user's name and email address.
+ * Updates an existing user's display name. Email changes use the account owner's verified Better Auth workflow.
  *
- * @remarks     The caller must hold the ADMIN_USERS_EDIT permission. The target user must exist and the email address
- *              must not belong to another user.
+ * @remarks     The caller must hold the ADMIN_USERS_EDIT permission. The target user must exist.
  *
  * @returns     A safe action result indicating success or failure.
  */
@@ -36,7 +34,6 @@ export const updateUserAction = safeAction(
         const normalized: UpdateUserInput = {
             userId: input.userId.trim(),
             name: input.name.trim(),
-            email: input.email.trim().toLowerCase(),
         };
 
         const invalid = validateUserUpdate(normalized);
@@ -54,15 +51,6 @@ export const updateUserAction = safeAction(
 
         if (!existingUser) {
             return fail(createAlert(ADMIN_ALERT_CODES.USER_NOT_FOUND));
-        }
-
-        const [emailOwner] = await getUserByEmail({
-            email: normalized.email,
-            excludeUserId: normalized.userId,
-        });
-
-        if (emailOwner) {
-            return fail(createAlert(ADMIN_ALERT_CODES.USER_EMAIL_TAKEN));
         }
 
         const updatedUser = await updateUser(normalized);

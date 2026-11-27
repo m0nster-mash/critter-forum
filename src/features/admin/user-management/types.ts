@@ -4,16 +4,14 @@
  */
 
 /**
- * Input used to update a user's editable account details.
+ * Input used to update a user's display name through the admin feature.
  *
  * @property userId  Identifier of the user being updated.
  * @property name    Updated username.
- * @property email   Updated email address.
  */
 export interface UpdateUserInput {
     userId: string;
     name: string;
-    email: string;
 }
 
 /**

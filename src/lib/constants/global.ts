@@ -16,3 +16,8 @@ export const METADATA: Metadata = {
     title: SITE_TITLE,
     description: SITE_TAG,
 };
+
+/** Request header types */
+export const HEADERS = {
+    AUTHORIZATION: "authorization",
+};

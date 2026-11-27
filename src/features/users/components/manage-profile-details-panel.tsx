@@ -19,7 +19,7 @@ import {validateEmailAddress, validateProfileName} from "@/features/users/valida
 import {authClient} from "@/lib/auth-client";
 import {PRIVATE_ROUTES} from "@/lib/constants/routes";
 import {useRouter} from "next/navigation";
-import {JSX, type SubmitEvent, useEffect, useState} from "react";
+import {JSX, type SubmitEvent, useState} from "react";
 
 /**
  * Renders the current user's profile settings.
@@ -38,6 +38,8 @@ export function ManageProfileDetailsPanel(
     const emailAlerts = useAlerts();
 
     const [name, setName] = useState(user.name);
+    const [previousUserName, setPreviousUserName] = useState(user.name);
+    const [previousUserEmail, setPreviousUserEmail] = useState(user.email);
     const [newEmail, setNewEmail] = useState("");
     const [pendingEmail, setPendingEmail] = useState<string | null>(null);
 
@@ -47,13 +49,20 @@ export function ManageProfileDetailsPanel(
     const nameAlert = profileAlerts.fieldAlert(USER_FIELDS.NAME);
     const emailAlert = emailAlerts.fieldAlert(USER_FIELDS.EMAIL);
 
-    useEffect(() => {
+    // Reset the editable name when refreshed server data changes for this user.
+    if (user.name !== previousUserName) {
+        setPreviousUserName(user.name);
         setName(user.name);
+    }
+
+    // Reconcile a pending email request when refreshed server data changes.
+    if (user.email !== previousUserEmail) {
+        setPreviousUserEmail(user.email);
 
         if (pendingEmail && user.email === pendingEmail) {
             setPendingEmail(null);
         }
-    }, [user.name, user.email, pendingEmail]);
+    }
 
     async function handleNameSubmit(event: SubmitEvent<HTMLFormElement>) {
         event.preventDefault();

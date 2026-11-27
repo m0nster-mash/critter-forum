@@ -21,7 +21,6 @@ export default ({alert, retry}: {
     alert: PublicAlert;
     retry: () => void
 }): JSX.Element => (
-
     <>
         <AlertBanner alert={alert}/>
         <p>

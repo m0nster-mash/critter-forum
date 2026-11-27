@@ -9,7 +9,7 @@
     "start": "next start -p 3102",
     "lint": "eslint",
     "noEmit": "npx tsc --noEmit",
-    "test:run": "tsx --test --experimental-test-module-mocks src/tests/*/*.test.ts",
+    "test:run": "tsx src/scripts/db-test-run.ts",
     "alerts:check": "tsx src/scripts/alerts-check.ts && tsx scripts/logger-check.ts && tsx scripts/safe-action-check.ts && tsx scripts/toast-state-check.ts && tsx scripts/client-logger-check.ts && tsx scripts/auth-check.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -17,7 +17,13 @@
     "db:push": "drizzle-kit push",
     "db:check": "tsx src/lib/db/check-connection.ts",
     "db:seed": "tsx src/lib/db/seed/run-seed.ts",
-    "db:reset": "docker compose down -v && docker compose up -d --wait && node -e \"require('fs').rmSync('drizzle',{recursive:true,force:true})\" && npm run db:generate && npm run db:migrate && npm run db:seed"
+    "db:reset": "docker compose down -v && docker compose up -d --wait && node -e \"require('fs').rmSync('drizzle',{recursive:true,force:true})\" && npm run db:generate && npm run db:migrate && npm run db:seed",
+    "db:test:up": "docker compose up -d --wait postgres-test",
+    "db:test:setup": "tsx src/scripts/db-test-setup.ts",
+    "db:test:seed": "tsx src/lib/db/test/seed-test.ts",
+    "db:test:run": "npm run test:run",
+    "db:test:reset": "tsx src/scripts/db-test-reset.ts",
+    "test:run:unsafe": "tsx --test --experimental-test-module-mocks src/tests/*/*.test.ts"
   },
   "dependencies": {
     "better-auth": "1.8.0-beta.5",
@@ -29,6 +35,7 @@
     "resend": "^6.40.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",
     "@types/pg": "^8.23.1",
     "@types/react": "^19",

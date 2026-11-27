@@ -1,56 +1,44 @@
 # Testing
 
-Node's built-in runner (`node:test`) executed through `tsx`, so tests are TypeScript and use the `@/` alias.
+Node's built-in runner (`node:test`) is executed through `tsx`; tests are TypeScript and use the `@/` alias.
 
-```
-npm test
-```
+## Quick start: isolated PostgreSQL integration tests
 
-## Layout
+The test database is a separate Docker Compose service with its own port, database, and persistent volume. It is
+never the development database. The normal `npm run test:run` command is intentionally pinned to this isolated test
+database; it refuses to run when `TEST_DATABASE_URL` is missing or does not end in `_test`.
 
-```
-tests/
-  test-config.ts                         Suite: numbered, deterministic test titles
-  <feature>/<subject>.test.ts            pure and mocked tests, always run
-  <feature>/<subject>.integration.test.ts  need a database, skipped unless TEST_DATABASE_URL is set
-```
+```sh
+# Start the dedicated test PostgreSQL service.
+npm run db:test:up
 
-## Writing a test file
+# Apply the current Drizzle migrations to TEST_DATABASE_URL and create deterministic test fixtures.
+npm run db:test:setup
 
-Create one `Suite` per file, with the exact number of tests it registers. `Suite` throws if you register more than
-`total`, which keeps the `[name: 1/5]` titles honest.
+# Run the complete suite with DATABASE_URL pinned to TEST_DATABASE_URL.
+npm run test:run
 
-```ts
-const suite = new Suite("things/validation", 2);
-
-suite.test("rejects an empty name", () => { /* ... */ });
-suite.skipUnlessEnabled("saves a thing", enabled, async () => { /* ... */ });
+# Destructively recreate only the test database schema, re-apply migrations, and re-seed fixtures.
+npm run db:test:reset
 ```
 
-## Database tests
+`npm run db:test:run` remains available as an explicit alias for `npm run test:run`.
 
-They run only when `TEST_DATABASE_URL` is set, and they refuse to touch `DATABASE_URL`. Use a separate database:
+## Integration test coverage
 
-```
-createdb critter_test            # or any empty database
-DATABASE_URL=<test url> npm run db:migrate
-TEST_DATABASE_URL=<test url> npm test
-```
+Database integration tests are skipped when `TEST_DATABASE_URL` is not configured. When enabled, they verify:
 
-Each test creates its own rows with unique ids and removes them afterwards; nothing else is modified. Re-run
-`db:migrate` against the test database whenever the schema changes.
+- Permission grant reads, independence, revocation, uniqueness, and user-delete cascades.
+- Pending-registration cancellation, including deletion of sessions, credentials, permissions, resend state, revoked
+  token hashes, and email verification records.
+- Refusal to cancel a verified account.
+- Expired unverified-account cleanup and preservation of verified or not-yet-expired accounts.
 
-## Mocking modules
+Each integration test creates uniquely identified rows and cleans them up afterwards. Use only the dedicated test
+PostgreSQL database; never point `TEST_DATABASE_URL` at development or production data.
 
-Tests that need to replace a module (the Next.js request APIs, the auth instance) use `mock.module` from `node:test`.
-Install the mocks, then `await import(...)` the code under test, because a module imported earlier keeps its real
-dependencies. The `test` script already passes `--experimental-test-module-mocks`.
+## Test runner escape hatch
 
-## Current coverage
-
-| File | What it covers |
-|---|---|
-| `permissions/permissions-constants.test.ts` | Permission values are unique, well-formed, mirrored by their keys, and pinned |
-| `permissions/route-permissions.test.ts` | Every admin route declares a valid permission; `/admin` and `/admin/users` differ |
-| `permissions/require-page-permission.test.ts` | Redirect, not-found, pass-through, per-user check, independence, fail-closed |
-| `permissions/has-permission.integration.test.ts` | Grant, revoke, per-user, independence, duplicate rejection, cascade (real database) |
+`npm run test:run:unsafe` invokes the raw Node test runner without validating or overriding `DATABASE_URL`. It exists
+for specialized debugging only. Prefer `npm run test:run`; the safe command validates `TEST_DATABASE_URL` and pins the
+child process to it, preventing database tests from accidentally connecting to the development database.

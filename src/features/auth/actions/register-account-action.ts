@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Implements the server action that validates and creates a user account.
- * @module          features/auth
+ * @module          authentication
  */
 
 "use server";
@@ -20,7 +20,7 @@ import {headers} from "next/headers";
 /**
  * Server action that registers a new user account using email and password credentials.
  *
- * @returns The value produced by this operation.
+ * @returns     The value produced by this operation.
  */
 export const registerAccountAction = safeAction(
     AUTH_ACTION_NAMES.REGISTER, async (input: RegistrationInput) => {

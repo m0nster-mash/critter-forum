@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Route-level error boundary.
- * @module          features/alerts
+ * @module          alerts
  */
 
 "use client";

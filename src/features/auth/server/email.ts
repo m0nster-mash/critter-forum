@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Sends authentication emails through Resend.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {DEFAULT_FROM} from "@/features/auth/constants/policy";

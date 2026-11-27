@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Defines route metadata, access levels, and the application route registry.
  * @module          core-application
- *
- * @TODO            We do not need both 'label' and 'title'; condense into single key
  */
 
 import type {Permission} from "@/features/admin/permissions/constants/permissions";
@@ -15,8 +13,7 @@ export type AccessLevel = "public" | "private" | "admin";
  * Metadata shared by static and parameterized application routes.
  *
  * @property    path            URL path associated with the route.
- * @property    label           Human-readable navigation label for the route.
- * @property    title           Page title associated with the route.
+ * @property    label           Page title associated with the route.
  * @property    accessLevel     Access classification required to visit the route.
  * @property    parent          Optional; value used by this parent operation.
  * @property    [permission]    Optional; the permission required to visit the route. Enforced by the page itself with
@@ -25,7 +22,6 @@ export type AccessLevel = "public" | "private" | "admin";
 export interface RouteMetadata {
     path: string | ((params: Record<string, string>) => string);
     label: string;
-    title: string;
     accessLevel: AccessLevel;
     parent?: string;
     permission?: Permission;
@@ -36,14 +32,12 @@ export const PUBLIC_ROUTES = {
     HOME: {
         path: "/",
         label: "Home",
-        title: "Roleplay Community",
         accessLevel: "public",
     } as const satisfies RouteMetadata,
 
     LOGIN: {
         path: "/login",
         label: "Sign In",
-        title: "Sign In",
         accessLevel: "public",
         parent: "HOME",
     } as const satisfies RouteMetadata,
@@ -51,25 +45,36 @@ export const PUBLIC_ROUTES = {
     REGISTER: {
         path: "/register",
         label: "Register",
-        title: "Create Account",
         accessLevel: "public",
         parent: "HOME",
+    } as const satisfies RouteMetadata,
+
+    VERIFY_EMAIL: {
+        path: "/verify-email",
+        label: "Verify your email address",
+        accessLevel: "public",
+        parent: "REGISTER",
     } as const satisfies RouteMetadata,
 };
 
 /** Authenticated user routes. */
 export const PRIVATE_ROUTES = {
+    VERIFY_EMAIL: {
+        path: "/verify-email",
+        label: "Verify Email",
+        accessLevel: "private",
+        parent: "HOME",
+    } as const satisfies RouteMetadata,
+
     DASHBOARD: {
         path: "/dashboard",
         label: "Dashboard",
-        title: "Your Dashboard",
         accessLevel: "private",
     } as const satisfies RouteMetadata,
 
     SETTINGS: {
         path: "/settings",
         label: "Settings",
-        title: "Settings",
         accessLevel: "private",
         parent: "DASHBOARD",
     } as const satisfies RouteMetadata,
@@ -77,7 +82,6 @@ export const PRIVATE_ROUTES = {
     PROFILE: {
         path: (params) => `/profile/${params.userId}`,
         label: "Profile",
-        title: "Profile",
         accessLevel: "private",
         parent: "HOME",
     } as const satisfies RouteMetadata,
@@ -88,7 +92,6 @@ export const ADMIN_ROUTES = {
     DASHBOARD: {
         path: "/admin",
         label: "Administration",
-        title: "Administration Dashboard",
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_ACCESS,
     } as const satisfies RouteMetadata,
@@ -96,7 +99,6 @@ export const ADMIN_ROUTES = {
     USERS_ACCESS: {
         path: "/admin/users",
         label: "User Management",
-        title: "User Management",
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_USERS_ACCESS,
         parent: "ADMIN_DASHBOARD",
@@ -105,7 +107,6 @@ export const ADMIN_ROUTES = {
     USERS_EDIT: {
         path: (params) => `/admin/users/${params.userId}/edit`,
         label: "Edit User",
-        title: "Edit User",
         accessLevel: "admin",
         permission: PERMISSIONS.ADMIN_USERS_EDIT,
         parent: "USERS_ACCESS",

@@ -5,7 +5,7 @@
 
 import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {hasPermission} from "@/features/admin/permissions/queries/has-permission";
-import {requireAuth} from "@/features/auth/server/session";
+import {requireVerifiedAuth} from "@/features/auth/server/session";
 import {notFound} from "next/navigation";
 
 /**
@@ -13,7 +13,7 @@ import {notFound} from "next/navigation";
  *
  * @remarks     Call it first in the page's server component. Do not rely on a layout: layouts are not re-run when
  *              navigating between pages that share them, and permissions are per page.
- * @remarks     Signed-out visitors are redirected to login by `requireAuth()`. Signed-in users without the permission
+ * @remarks     Signed-out visitors are redirected to login by `requireVerifiedAuth()`. Signed-in users without the permission
  *              receive the standard not-found page, so a protected route's existence is not revealed.
  * @remarks     Next.js redirect and not-found control-flow errors must not be caught by the caller.
  *
@@ -23,7 +23,7 @@ export async function requirePagePermission(
     permission: Permission
 ): Promise<void> {
 
-    const session = await requireAuth();
+    const session = await requireVerifiedAuth();
 
     if (!(await hasPermission(session.user.id, permission))) {
         notFound();

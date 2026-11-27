@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Composes the page header and login panel for the login route.
- * @module          features/auth
+ * @module          authentication
  */
 
 import {LoginPanel} from "@/features/auth/components/login-panel";
@@ -15,6 +15,7 @@ import {JSX} from "react";
  * @returns     {JSX.Element}   The login page view JSX element.
  */
 export function LoginPageView(): JSX.Element {
+
     return (
         <>
             <PageHeader {...getPageHeaderProps(PUBLIC_ROUTES.LOGIN)}/>

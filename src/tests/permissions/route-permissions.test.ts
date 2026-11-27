@@ -4,11 +4,11 @@
  */
 
 import {PERMISSIONS} from "@/features/admin/permissions/constants/permissions";
-import {ADMIN_ROUTES, ALL_ROUTES, type RouteMetadata} from "@/lib/constants/routes";
+import {ADMIN_ROUTES, ALL_ROUTES, PRIVATE_ROUTES, type RouteMetadata} from "@/lib/constants/routes";
 import {Suite} from "@/tests/test-config";
 import assert from "node:assert/strict";
 
-const suite = new Suite("permissions/routes", 4);
+const suite = new Suite("permissions/routes", 5);
 
 /** Every registered route, paired with its registry key for readable failures. */
 const routes = Object.entries(ALL_ROUTES) as Array<[string, RouteMetadata]>;
@@ -36,4 +36,10 @@ suite.test("/admin requires admin.access and /admin/users requires admin.users.a
     assert.equal(ADMIN_ROUTES.DASHBOARD.permission, PERMISSIONS.ADMIN_ACCESS);
     assert.equal(ADMIN_ROUTES.USERS_ACCESS.path, "/admin/users");
     assert.equal(ADMIN_ROUTES.USERS_ACCESS.permission, PERMISSIONS.ADMIN_USERS_ACCESS);
+});
+
+suite.test("verification-pending route is private and does not require an admin permission", () => {
+    assert.equal(PRIVATE_ROUTES.VERIFY_EMAIL.path, "/verify-email");
+    assert.equal(PRIVATE_ROUTES.VERIFY_EMAIL.accessLevel, "private");
+    assert.equal("permission" in PRIVATE_ROUTES.VERIFY_EMAIL, false);
 });

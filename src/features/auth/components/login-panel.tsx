@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Renders the interactive login form and handles its submission lifecycle.
- * @module          features/auth
+ * @module          authentication
  */
 
 "use client";

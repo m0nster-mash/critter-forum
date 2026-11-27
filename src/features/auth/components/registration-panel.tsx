@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Renders the account registration form and handles its submission lifecycle.
- * @module          features/auth
+ * @module          authentication
  */
 
 "use client";

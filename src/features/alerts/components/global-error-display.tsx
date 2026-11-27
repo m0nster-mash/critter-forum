@@ -22,7 +22,6 @@ export default ({alert, retry}: {
     alert: PublicAlert;
     retry: () => void
 }): JSX.Element => (
-
     <html lang="en">
     <body className={style.alertDisplay}>
     <ErrorRetryBanner alert={alert} retry={retry}/>

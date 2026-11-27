@@ -8,13 +8,14 @@ import type {Permission} from "@/features/admin/permissions/constants/permission
 import {hasPermission} from "@/features/admin/permissions/queries/has-permission";
 import {AlertError} from "@/features/alerts/server/alert-error";
 import type {AuthSession} from "@/features/auth/server/session";
-import {requireAuth} from "@/features/auth/server/session";
+import {requireVerifiedAuth} from "@/features/auth/server/session";
 
 /**
  * Requires authentication and an exact permission grant before an action proceeds.
  *
- * @remarks     Use inside a `safeAction` callback. A signed-out visitor is redirected to login by `requireAuth()`;
- *              an authenticated user without the grant receives the registered admin permission-denied alert.
+ * @remarks     Use inside a `safeAction` callback. Signed-out visitors are redirected to login and unverified users to
+ *              the verification-pending page by `requireVerifiedAuth()`; verified users without the grant receive the
+ *              registered admin permission-denied alert.
  * @remarks     Permission lookup failures propagate as unexpected errors and are handled by `safeAction`; they are
  *              never treated as an authorization denial or as permission to proceed.
  *
@@ -26,7 +27,8 @@ import {requireAuth} from "@/features/auth/server/session";
  * @throws      A Next.js redirect control-flow error when the visitor is signed out.
  */
 export async function requireActionPermission(permission: Permission): Promise<AuthSession> {
-    const session = await requireAuth();
+
+    const session = await requireVerifiedAuth();
 
     if (!(await hasPermission(session.user.id, permission))) {
         throw new AlertError(ADMIN_ALERT_CODES.PERMISSION_DENIED);

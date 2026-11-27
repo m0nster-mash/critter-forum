@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Global error handling boundary
- * @module          features/alerts
+ * @module          alerts
  */
 
 "use client";

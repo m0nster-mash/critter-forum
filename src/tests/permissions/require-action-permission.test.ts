@@ -28,7 +28,7 @@ let lookups: Array<[string, Permission]> = [];
 
 mock.module("@/features/auth/server/session", {
     namedExports: {
-        requireAuth: async () => {
+        requireVerifiedAuth: async () => {
             if (!currentSession) {
                 throw new RedirectSignal("/login");
             }

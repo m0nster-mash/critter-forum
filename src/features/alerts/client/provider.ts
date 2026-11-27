@@ -59,7 +59,7 @@ export function AlertProvider({children}: { children: React.ReactNode }) {
 
     return createElement(AlertProviderContent, {
         value,
-        children
+        children,
     });
 }
 

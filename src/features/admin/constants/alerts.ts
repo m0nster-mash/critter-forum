@@ -13,8 +13,6 @@ export const ADMIN_ALERT_CODES = {
     // User Management Codes
     USER_UPDATED: "ADMIN_USER_UPDATED",
     USER_NAME_REQUIRED: "ADMIN_USER_NAME_REQUIRED",
-    USER_EMAIL_INVALID: "ADMIN_USER_EMAIL_INVALID",
-    USER_EMAIL_TAKEN: "ADMIN_USER_EMAIL_TAKEN",
     USER_NOT_FOUND: "ADMIN_USER_NOT_FOUND",
 } as const;
 
@@ -43,20 +41,6 @@ export const ADMIN_ALERTS = {
         message: "Please enter a name.",
         presentation: "inline",
         field: "name",
-        log: {server: false, client: false},
-    },
-    ADMIN_USER_EMAIL_INVALID: {
-        severity: "warn",
-        message: "Please enter a valid email address.",
-        presentation: "inline",
-        field: "email",
-        log: {server: false, client: false},
-    },
-    ADMIN_USER_EMAIL_TAKEN: {
-        severity: "error",
-        message: "An account with that email address already exists.",
-        presentation: "inline",
-        field: "email",
         log: {server: false, client: false},
     },
     ADMIN_USER_NOT_FOUND: {

@@ -1,6 +1,6 @@
 /**
- @fileOverview    Provides the integration functionality used by the application.
- @module          features/auth
+ * @fileOverview    Provides the integration functionality used by the application.
+ * @module          authentication
  */
 
 import {AlertCode} from "@/features/alerts/registry";

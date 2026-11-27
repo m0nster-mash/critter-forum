@@ -55,7 +55,7 @@ export function getPageHeaderProps(
 } {
 
     return {
-        title: overrides?.title ?? route.title,
+        title: overrides?.title ?? route.label,
         breadcrumb: getBreadcrumbs(route, params),
     };
 }
