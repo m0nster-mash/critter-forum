@@ -6,12 +6,20 @@
 /** Base path mounted by the application's Better Auth catch-all route. */
 export const AUTH_API_BASE_PATH = "/api/auth";
 
+/** Authentication endpoint keys. */
+export const AUTH_PATHS = {
+    GET_SESSION: "/get-session",
+    SEND_VERIFICATION_EMAIL: "/send-verification-email",
+    SIGN_OUT: "/sign-out",
+    VERIFY_EMAIL: "/verify-email",
+};
+
 /** Better Auth endpoints that an authenticated user may use before verifying their email address. */
 export const UNVERIFIED_AUTH_API_ALLOWED_PATHS = [
-    "/get-session",
-    "/send-verification-email",
-    "/sign-out",
-    "/verify-email",
+    AUTH_PATHS.GET_SESSION,
+    AUTH_PATHS.SEND_VERIFICATION_EMAIL,
+    AUTH_PATHS.SIGN_OUT,
+    AUTH_PATHS.VERIFY_EMAIL,
 ] as const;
 
 /** Stable API error returned when an unverified session attempts a restricted Better Auth operation. */
@@ -42,6 +50,7 @@ export const AUTH_API_ERROR_MESSAGES = {
     CANCEL_REGISTRATION_INVALID_REQUEST: "Enter your password to cancel this registration.",
     CANCEL_REGISTRATION_INVALID_PASSWORD: "The password is incorrect. Your registration has not been cancelled.",
     CANCEL_REGISTRATION_NOT_AVAILABLE: "This registration can no longer be cancelled from this page.",
+    VERIFICATION_RESEND_RETRY_AFTER: "{message} Retry after {seconds} seconds.",
 } as const;
 
 /** Authentication API endpoints used by client-side requests. */
@@ -55,3 +64,9 @@ export const AUTH_API_REQUEST = {
     JSON_CONTENT_TYPE: "application/json",
     CONTENT_TYPE_HEADER: "Content-Type",
 } as const;
+
+/** Verification delivery methods. */
+export const VERIFICATION_DELIVERY_METHODS = {
+    SIGN_UP: "sign-up",
+    RESEND: "resend",
+}

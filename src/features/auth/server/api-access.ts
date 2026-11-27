@@ -1,17 +1,17 @@
 /**
  * @fileOverview    Restricts Better Auth API requests made by authenticated users with unverified email addresses.
  * @module          authentication
- *
- * @TODO            Replace magic strings with const
  */
 
 import {
     AUTH_API_BASE_PATH,
     AUTH_API_ERROR_MESSAGES,
-    AUTH_API_ERRORS,
+    AUTH_API_ERRORS, AUTH_PATHS,
     UNVERIFIED_AUTH_API_ALLOWED_PATHS,
 } from "@/features/auth/constants/api";
-import {isRevokedVerificationToken, reserveVerificationEmailResend,} from "@/features/auth/server/verification-resend";
+import {RESEND_REASON} from "@/features/auth/constants/resend";
+import {isRevokedVerificationToken} from "@/features/auth/queries/is-revoked-verification-token";
+import {reserveVerificationEmailResend} from "@/features/auth/queries/reserve-verification-email-resend";
 import {auth} from "@/lib/db/auth/auth";
 
 /** Request handler signature returned by Better Auth's Next.js adapter. */
@@ -24,6 +24,7 @@ export type AuthApiHandler = (request: Request) => Promise<Response>;
  * @returns     The Better Auth endpoint path, including its leading slash.
  */
 export function getBetterAuthApiPath(pathname: string): string {
+
     if (pathname === AUTH_API_BASE_PATH) {
         return "/";
     }
@@ -44,6 +45,7 @@ export function getBetterAuthApiPath(pathname: string): string {
  * @returns     True only for session inspection, sign-out, verification, and verification-email delivery.
  */
 export function isUnverifiedAuthApiPathAllowed(path: string): boolean {
+
     return (UNVERIFIED_AUTH_API_ALLOWED_PATHS as readonly string[]).includes(path);
 }
 
@@ -59,12 +61,13 @@ export function isUnverifiedAuthApiPathAllowed(path: string): boolean {
  * @returns     A handler enforcing the unverified-session allowlist
  */
 export function withUnverifiedAuthApiRestriction(handler: AuthApiHandler): AuthApiHandler {
+
     return async (request: Request): Promise<Response> => {
         const session = await auth.api.getSession({headers: request.headers});
         const requestUrl = new URL(request.url);
         const path = getBetterAuthApiPath(requestUrl.pathname);
 
-        if (path === "/verify-email" && request.method === "GET") {
+        if (path === AUTH_PATHS.VERIFY_EMAIL && request.method === "GET") {
             const token = requestUrl.searchParams.get("token");
             if (token && await isRevokedVerificationToken(token)) {
                 return Response.json({
@@ -74,7 +77,7 @@ export function withUnverifiedAuthApiRestriction(handler: AuthApiHandler): AuthA
             }
         }
 
-        if (path === "/send-verification-email") {
+        if (path === AUTH_PATHS.SEND_VERIFICATION_EMAIL) {
             if (!session) {
                 return Response.json({
                     code: AUTH_API_ERRORS.AUTH_REQUIRED,
@@ -108,7 +111,7 @@ export function withUnverifiedAuthApiRestriction(handler: AuthApiHandler): AuthA
 
             const reservation = await reserveVerificationEmailResend(session.user.id);
             if (!reservation.allowed) {
-                const limitedByCooldown = reservation.reason === "cooldown";
+                const limitedByCooldown = reservation.reason === RESEND_REASON.COOLDOWN;
                 const code = limitedByCooldown
                     ? AUTH_API_ERRORS.VERIFICATION_RESEND_COOLDOWN
                     : AUTH_API_ERRORS.VERIFICATION_RESEND_LIMIT;
@@ -118,7 +121,9 @@ export function withUnverifiedAuthApiRestriction(handler: AuthApiHandler): AuthA
 
                 return Response.json({
                     code,
-                    message: `${message} Retry after ${reservation.retryAfterSeconds} seconds.`,
+                    message: AUTH_API_ERROR_MESSAGES.VERIFICATION_RESEND_RETRY_AFTER
+                        .replace("{message}", message)
+                        .replace("{seconds}", String(reservation.retryAfterSeconds)),
                     retryAfter: reservation.retryAfterSeconds,
                 }, {
                     status: 429,

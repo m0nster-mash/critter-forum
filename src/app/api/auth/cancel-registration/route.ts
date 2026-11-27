@@ -4,7 +4,7 @@
  */
 
 import {AUTH_API_ERROR_MESSAGES, AUTH_API_ERRORS} from "@/features/auth/constants/api";
-import {cancelPendingRegistration} from "@/features/auth/server/cancel-registration";
+import {cancelPendingRegistration} from "@/features/auth/queries/cancel-registration";
 import {auth} from "@/lib/db/auth/auth";
 
 /**

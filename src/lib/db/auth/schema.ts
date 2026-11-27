@@ -1,11 +1,10 @@
 /**
  * @fileOverview    Defines the Drizzle tables and relations used by the authentication database.
+ * @remarks         Type-only import: drizzle-kit loads this file without resolving the `@/` alias, so no runtime
+ *                  imports from `@/`.
  * @module          core-application
- *
- * @TODO            Replace magic strings with consts
  */
 
-// Type-only import: drizzle-kit loads this file without resolving the `@/` alias, so no runtime imports from `@/`.
 import type {Permission} from "@/features/admin/permissions/constants/permissions";
 import {relations} from "drizzle-orm";
 import {boolean, index, integer, pgTable, primaryKey, text, timestamp} from "drizzle-orm/pg-core";

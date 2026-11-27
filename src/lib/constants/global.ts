@@ -17,7 +17,7 @@ export const METADATA: Metadata = {
     description: SITE_TAG,
 };
 
-/** TODO:: document */
+/** Request header types */
 export const HEADERS = {
     AUTHORIZATION: "authorization",
 };

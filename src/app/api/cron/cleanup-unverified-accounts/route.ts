@@ -6,8 +6,9 @@
 import {logger} from "@/features/alerts/server/logger";
 import {AUTH_ERROR_CODES} from "@/features/auth/constants/errors";
 import {AUTH_LOG_MESSAGES} from "@/features/auth/constants/logging";
+import {ENCODING} from "@/features/auth/constants/policy";
 import {AUTH_SCOPES} from "@/features/auth/constants/scope";
-import {cleanupExpiredUnverifiedAccounts} from "@/features/auth/server/cleanup-unverified-accounts";
+import {cleanupExpiredUnverifiedAccounts} from "@/features/auth/queries/cleanup-unverified-accounts";
 import {HEADERS} from "@/lib/constants/global";
 import {timingSafeEqual} from "node:crypto";
 
@@ -25,8 +26,8 @@ function hasValidCronAuthorization(request: Request): boolean {
     if (!configuredSecret || !authorization?.startsWith("Bearer ")) return false;
 
     const suppliedSecret = authorization.slice("Bearer ".length);
-    const expected = Buffer.from(configuredSecret, "utf8");
-    const supplied = Buffer.from(suppliedSecret, "utf8");
+    const expected = Buffer.from(configuredSecret, ENCODING.UTF8);
+    const supplied = Buffer.from(suppliedSecret, ENCODING.UTF8);
 
     return expected.length === supplied.length && timingSafeEqual(expected, supplied);
 }

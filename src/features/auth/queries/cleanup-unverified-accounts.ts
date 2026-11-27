@@ -1,23 +1,16 @@
 /**
  * @fileOverview    Removes expired, unverified registrations in bounded transactional batches.
  * @module          authentication
- *
- * @TODO            Relocate into `/queries`
  */
 
 import {
     getUnverifiedAccountExpirationCutoff,
     UNVERIFIED_ACCOUNT_CLEANUP_BATCH_SIZE
 } from "@/features/auth/constants/expiration-policy";
+import {UnverifiedAccountCleanupResult} from "@/features/auth/types";
 import {db} from "@/lib/db/auth/db";
 import {user, verification} from "@/lib/db/auth/schema";
 import {and, eq, inArray, lt} from "drizzle-orm";
-
-export interface UnverifiedAccountCleanupResult {
-    deletedCount: number;
-    hasMore: boolean;
-    cutoff: Date;
-}
 
 /**
  * Deletes pending registrations older than the configured retention period.
@@ -29,6 +22,7 @@ export interface UnverifiedAccountCleanupResult {
 export async function cleanupExpiredUnverifiedAccounts(
     now = new Date(),
 ): Promise<UnverifiedAccountCleanupResult> {
+
     const cutoff = getUnverifiedAccountExpirationCutoff(now);
 
     const cleanup = await db.transaction(async (tx) => {

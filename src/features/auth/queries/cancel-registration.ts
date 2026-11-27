@@ -1,8 +1,6 @@
 /**
  * @fileOverview    Deletes an authenticated account that has not completed email verification.
  * @module          authentication
- *
- * @TODO            Relocate into `/queries`
  */
 
 import {db} from "@/lib/db/auth/db";
@@ -17,8 +15,8 @@ import {and, eq} from "drizzle-orm";
  *              permissions are removed by their cascading foreign keys. Better Auth verification records use the
  *              user's email as their identifier and are deleted explicitly because that table has no user foreign key.
  *
- * @param userId    Authenticated Better Auth user ID.
- * @returns         True when the pending account was deleted; false when it no longer exists or is verified.
+ * @param       userId  Authenticated Better Auth user ID.
+ * @returns     True when the pending account was deleted; false when it no longer exists or is verified.
  */
 export async function cancelPendingRegistration(userId: string): Promise<boolean> {
     return db.transaction(async (tx) => {

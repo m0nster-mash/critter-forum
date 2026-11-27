@@ -1,19 +1,18 @@
 /**
  * @fileOverview    Defines the authentication database schema and configuration.
  * @module          core-application
- *
- * @TODO            Replace magic strings with consts
  */
 
 import {LOG_LEVELS} from "@/features/alerts/constants/logger";
 import {LOGGER_MESSAGES} from "@/features/alerts/constants/observability";
 import {logger} from "@/features/alerts/server/logger";
+import {AUTH_PATHS, VERIFICATION_DELIVERY_METHODS} from "@/features/auth/constants/api";
 import {AUTH_LOG_MESSAGES} from "@/features/auth/constants/logging";
 import {PASSWORD_MIN_LENGTH} from "@/features/auth/constants/policy";
 import {VERIFICATION_TOKEN_TTL_SECONDS} from "@/features/auth/constants/resend-policy";
 import {AUTH_SCOPES} from "@/features/auth/constants/scope";
+import {storeActiveVerificationToken} from "@/features/auth/queries/store-active-verification-token";
 import {sendVerificationEmail} from "@/features/auth/server/email";
-import {storeActiveVerificationToken} from "@/features/auth/server/verification-resend";
 import {db} from "@/lib/db/auth/db";
 import {drizzleAdapter} from "@better-auth/drizzle-adapter";
 import {betterAuth} from "better-auth";
@@ -49,7 +48,7 @@ export const auth = betterAuth({
             // The resend endpoint awaits this callback, allowing provider failures to reach the requesting user.
             // Sign-up delivery remains post-response so a provider outage does not interrupt account creation.
             const isResendRequest = request?.url !== undefined &&
-                new URL(request.url).pathname.endsWith("/send-verification-email");
+                new URL(request.url).pathname.endsWith(AUTH_PATHS.SEND_VERIFICATION_EMAIL);
 
             if (isResendRequest) {
                 try {
@@ -61,7 +60,7 @@ export const auth = betterAuth({
                 } catch (err: unknown) {
                     authEmailLogger.error(
                         AUTH_LOG_MESSAGES.VERIFICATION_TOKEN_STATE_FAILED,
-                        {err, delivery: "resend"},
+                        {err, delivery: VERIFICATION_DELIVERY_METHODS.RESEND},
                     );
                     throw err;
                 }
@@ -71,7 +70,7 @@ export const auth = betterAuth({
                 } catch (err: unknown) {
                     authEmailLogger.error(
                         AUTH_LOG_MESSAGES.EMAIL_VERIFICATION_FAILED,
-                        {err, delivery: "resend"},
+                        {err, delivery: VERIFICATION_DELIVERY_METHODS.RESEND},
                     );
                     throw err;
                 }
@@ -87,7 +86,7 @@ export const auth = betterAuth({
             } catch (err: unknown) {
                 authEmailLogger.error(
                     AUTH_LOG_MESSAGES.VERIFICATION_TOKEN_STATE_FAILED,
-                    {err, delivery: "sign-up"},
+                    {err, delivery: VERIFICATION_DELIVERY_METHODS.SIGN_UP},
                 );
                 throw err;
             }
@@ -98,7 +97,7 @@ export const auth = betterAuth({
                 } catch (err: unknown) {
                     authEmailLogger.error(
                         AUTH_LOG_MESSAGES.EMAIL_VERIFICATION_FAILED,
-                        {err, delivery: "sign-up"},
+                        {err, delivery: VERIFICATION_DELIVERY_METHODS.SIGN_UP},
                     );
                 }
             });

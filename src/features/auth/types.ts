@@ -7,6 +7,7 @@
  *                  feature respectively.
  */
 
+import {RESEND_REASON} from "@/features/auth/constants/resend";
 import type {ReactNode} from "react";
 
 /**
@@ -73,8 +74,57 @@ export interface RegistrationInput {
 }
 
 /**
- * TODO:: document
+ * Props for the verification-resend panel component.
+ *
+ * @remarks     Consumed by `VerificationResendPanel` and `VerifyEmailView` to render the resend UI for a given email.
+ *
+ * @property    email   The user's email address to resend the verification email to.
  */
 export interface VerificationResendPanelProps {
     email: string;
+}
+
+/**
+ * Persisted resend state used by the policy evaluator.
+ *
+ * @property    attempts            Number of resend attempts recorded in the current window.
+ * @property    windowStartedAt     Timestamp when the current resend window began.
+ * @property    lastSentAt          Timestamp of the last sent verification email, or `null` if none has been sent.
+ */
+export interface VerificationResendState {
+    attempts: number;
+    windowStartedAt: Date;
+    lastSentAt: Date | null;
+}
+
+/**
+ * Result of evaluating one verification-email resend request.
+ *
+ * @property    allowed             Whether the resend request is allowed.
+ * @property    attempts            Number of attempts recorded in the current window.
+ * @property    windowStartedAt     Timestamp when the current resend window began.
+ * @property    retryAfterSeconds   Seconds to wait before the next retry, when the request is not allowed.
+ * @property    reason              Optional denial reason: `RESEND_REASON.COOLDOWN` or `RESEND_REASON.LIMIT`.
+ */
+export interface VerificationResendDecision {
+    allowed: boolean;
+    attempts: number;
+    windowStartedAt: Date;
+    retryAfterSeconds: number;
+    reason?: typeof RESEND_REASON.COOLDOWN | typeof RESEND_REASON.LIMIT;
+}
+
+/**
+ * Result of cleaning up unverified accounts.
+ *
+ * @remarks     Returned by the account-cleanup job to report how many records were removed and whether more remain.
+ *
+ * @property    deletedCount    Number of unverified accounts deleted.
+ * @property    hasMore         Whether additional unverified accounts remain beyond the cutoff date.
+ * @property    cutoff          The cutoff date used to determine which accounts qualify as stale.
+ */
+export interface UnverifiedAccountCleanupResult {
+    deletedCount: number;
+    hasMore: boolean;
+    cutoff: Date;
 }

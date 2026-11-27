@@ -1,32 +1,16 @@
 /**
  * @fileOverview    Evaluates whether another email-verification message may be requested.
  * @module          authentication
- *
- * @TODO            Migrate interfaces into `types.ts`
- * @                Replace magic strings witg const
  */
 
+import {RESEND_REASON} from "@/features/auth/constants/resend";
 import {
     VERIFICATION_RESEND_COOLDOWN_MS,
     VERIFICATION_RESEND_MAX_ATTEMPTS,
     VERIFICATION_RESEND_WINDOW_MS,
 } from "@/features/auth/constants/resend-policy";
+import {VerificationResendDecision, VerificationResendState} from "@/features/auth/types";
 
-/** Persisted resend state used by the policy evaluator. */
-export interface VerificationResendState {
-    attempts: number;
-    windowStartedAt: Date;
-    lastSentAt: Date | null;
-}
-
-/** Result of evaluating one verification-email resend request. */
-export interface VerificationResendDecision {
-    allowed: boolean;
-    attempts: number;
-    windowStartedAt: Date;
-    retryAfterSeconds: number;
-    reason?: "cooldown" | "limit";
-}
 
 /**
  * Evaluates a resend request without mutating persisted state.
@@ -56,7 +40,7 @@ export function evaluateVerificationResend(
                 attempts,
                 windowStartedAt,
                 retryAfterSeconds: Math.max(1, Math.ceil((cooldownExpiresAt - now.getTime()) / 1000)),
-                reason: "cooldown",
+                reason: RESEND_REASON.COOLDOWN,
             };
         }
     }
@@ -67,7 +51,7 @@ export function evaluateVerificationResend(
             attempts,
             windowStartedAt,
             retryAfterSeconds: Math.max(1, Math.ceil((windowExpiresAt - now.getTime()) / 1000)),
-            reason: "limit",
+            reason: RESEND_REASON.LIMIT,
         };
     }
 

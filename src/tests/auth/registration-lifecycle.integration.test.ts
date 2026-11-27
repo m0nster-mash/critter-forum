@@ -34,8 +34,8 @@ async function loadDatabase() {
         import("drizzle-orm"),
     ]);
     const [{cancelPendingRegistration}, {cleanupExpiredUnverifiedAccounts}] = await Promise.all([
-        import("@/features/auth/server/cancel-registration"),
-        import("@/features/auth/server/cleanup-unverified-accounts"),
+        import("@/features/auth/queries/cancel-registration"),
+        import("@/features/auth/queries/cleanup-unverified-accounts"),
     ]);
 
     return {db, ...schema, eq, inArray, cancelPendingRegistration, cleanupExpiredUnverifiedAccounts};
