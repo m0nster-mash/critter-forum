@@ -43,3 +43,15 @@ export const AUTH_API_ERROR_MESSAGES = {
     CANCEL_REGISTRATION_INVALID_PASSWORD: "The password is incorrect. Your registration has not been cancelled.",
     CANCEL_REGISTRATION_NOT_AVAILABLE: "This registration can no longer be cancelled from this page.",
 } as const;
+
+/** Authentication API endpoints used by client-side requests. */
+export const AUTH_API_ROUTES = {
+    CANCEL_REGISTRATION: "/api/auth/cancel-registration",
+} as const;
+
+/** Request metadata used by authentication API calls. */
+export const AUTH_API_REQUEST = {
+    POST_METHOD: "POST",
+    JSON_CONTENT_TYPE: "application/json",
+    CONTENT_TYPE_HEADER: "Content-Type",
+} as const;

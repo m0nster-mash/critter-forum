@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Displays the protected alert and error handling test page.
- * @module          features/alerts
+ * @module          alerts
  */
 
 import AlertTestPageView from "@/features/alerts/views/alert-test-page-view";

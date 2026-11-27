@@ -1,6 +1,6 @@
 /**
  * @fileOverview    User -> Account Settings
- * @module          authentication
+ * @module          user
  */
 
 import {requireVerifiedAuth} from "@/features/auth/server/session";

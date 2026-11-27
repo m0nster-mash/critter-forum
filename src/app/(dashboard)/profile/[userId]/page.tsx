@@ -1,6 +1,6 @@
 /**
  * @fileOverview    User -> Profile
- * @module          features/user
+ * @module          user
  */
 
 import {getUserById} from "@/features/admin/user-management/queries/get-user-by-id";

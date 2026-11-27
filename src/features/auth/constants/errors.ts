@@ -6,4 +6,6 @@ export const AUTH_ERROR_CODES = {
 
     UNAUTHORIZED: "Unauthorized",
     CLEANUP_FAILED: "Pending-account cleanup failed.",
+
+    REGISTRATION_FAILED: "We couldn't cancel this registration. Please try again.",
 } as const;

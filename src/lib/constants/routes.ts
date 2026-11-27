@@ -55,6 +55,14 @@ export const PUBLIC_ROUTES = {
         accessLevel: "public",
         parent: "HOME",
     } as const satisfies RouteMetadata,
+
+    VERIFY_EMAIL: {
+        path: "/verify-email",
+        label: "Verify your email address",
+        title: "Verify your email address",
+        accessLevel: "public",
+        parent: "REGISTER",
+    } as const satisfies RouteMetadata,
 };
 
 /** Authenticated user routes. */

@@ -31,4 +31,388 @@ main {
     background: #fff;
     flex: 1;
     padding: 32px;
+    min-width: 500px;
+}
+
+/*=========================*/
+
+/* =========================================
+   Clean & Modern CSS Stylesheet
+   ========================================= */
+
+/* CSS Variables */
+:root {
+    --primary: #4169e1;
+    --primary-hover: #3154c7;
+    --background: #f6f8fb;
+    --surface: #ffffff;
+    --text: #243044;
+    --muted: #667085;
+    --border: #dce3ed;
+    --danger: #dc3545;
+    --radius: 10px;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    --font: Arial, Helvetica, sans-serif;
+}
+
+/* Global Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 24px;
+}
+
+/* Layout */
+.container,
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #182337;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1.1rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+/* Text */
+p {
+    margin-bottom: 1rem;
+}
+
+small {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+strong, b {
+    font-weight: 700;
+}
+
+em, i {
+    font-style: italic;
+}
+
+mark {
+    background: #fff1a8;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+/* Links */
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+a:focus-visible {
+    outline: 3px solid rgba(65, 105, 225, 0.3);
+    outline-offset: 3px;
+}
+
+/* Lists */
+ul, ol {
+    margin: 0 0 1rem 1.5rem;
+}
+
+li {
+    margin-bottom: 0.35rem;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+}
+
+/* Images and Media */
+img, video, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+img {
+    border-radius: var(--radius);
+}
+
+/* Blockquotes */
+blockquote {
+    background: #edf2ff;
+    border-left: 4px solid var(--primary);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    color: #34415a;
+}
+
+/* Code */
+code, pre {
+    font-family: Consolas, Monaco, monospace;
+}
+
+code {
+    background: #edf1f7;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+pre {
+    background: #172235;
+    color: #f4f7fb;
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+/* Forms */
+form {
+    width: 100%;
+}
+
+fieldset {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    background: var(--surface);
+}
+
+legend {
+    font-weight: bold;
+    padding: 0 8px;
+}
+
+label {
+    display: inline-block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #34415a;
+}
+
+/* Form Inputs */
+input,
+select,
+textarea {
+    display: block;
+    width: 100%;
+    padding: 11px 13px;
+    margin-bottom: 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #98a2b3;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15);
+}
+
+/* Checkboxes and Radio Buttons */
+input[type="checkbox"],
+input[type="radio"] {
+    display: inline-block;
+    width: auto;
+    margin-right: 8px;
+    accent-color: var(--primary);
+}
+
+/* Buttons */
+button,
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+    display: inline-block;
+    padding: 11px 22px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    background: var(--primary-hover);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+th, td {
+    padding: 13px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background: #edf2f9;
+    font-weight: 700;
+    color: #34415a;
+}
+
+tr:hover {
+    background: #f8faff;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Details and Summary */
+details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Footer */
+footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    text-align: center;
+}
+
+/* Selection */
+::selection {
+    background: #dce6ff;
+    color: #182337;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
 }

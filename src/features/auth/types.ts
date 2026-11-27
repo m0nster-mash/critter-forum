@@ -71,3 +71,10 @@ export interface RegistrationInput {
     email: string;
     password: string;
 }
+
+/**
+ * TODO:: document
+ */
+export interface VerificationResendPanelProps {
+    email: string;
+}

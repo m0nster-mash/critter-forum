@@ -3,15 +3,14 @@
  * @module          authentication
  */
 
-import {VerificationResendPanel} from "@/features/auth/components/verification-resend-panel";
+import {VerifyEmailView} from "@/features/auth/views/verify-email-view";
 import {requireUnverifiedAuth} from "@/features/auth/server/session";
 
 /**
  * Displays the verification-pending page to an authenticated, unverified user.
  */
 export default async function VerifyEmailPage() {
-
     const session = await requireUnverifiedAuth();
 
-    return <VerificationResendPanel email={session.user.email}/>;
+    return <VerifyEmailView email={session.user.email}/>;
 }

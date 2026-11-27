@@ -1,6 +1,6 @@
 /**
  * @fileOverview    Admin -> User Management
- * @module          features/admin
+ * @module          administraton
  */
 
 import {requirePagePermission} from "@/features/admin/permissions/server/require-page-permission";
